@@ -13,10 +13,10 @@ namespace Opozee.Models.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class opozeeDbEntities : DbContext
+    public partial class OpozeeDbEntities : DbContext
     {
-        public opozeeDbEntities()
-            : base("name=opozeeDbEntities")
+        public OpozeeDbEntities()
+            : base("name=OpozeeDbEntities")
         {
         }
     

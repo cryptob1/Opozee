@@ -13,7 +13,7 @@ namespace opozee.Controllers.Admin
 {
     public class QuestionsController : Controller
     {
-        private opozeeDbEntities db = new opozeeDbEntities();
+        private OpozeeDbEntities db = new OpozeeDbEntities();
 
         // GET: Questions
         public ActionResult Index(int? userId, string sortOrder, string currentFilter, string searchString, int? page)
@@ -133,7 +133,7 @@ namespace opozee.Controllers.Admin
         }
         private IEnumerable<SelectListItem> GetUsers()
         {
-            //opozeeDbEntities entities = new opozeeDbEntities();
+            //OpozeeDbEntities entities = new OpozeeDbEntities();
             //List<SelectListItem> userList = (from p in entities.Users.Where(p => p.IsAdmin == false).AsEnumerable()
             //                                     select new SelectListItem
             //                                     {
@@ -145,7 +145,7 @@ namespace opozee.Controllers.Admin
             ////Add Default Item at First Position.
             //userList.Insert(0, new SelectListItem { Text = "--Select User--", Value = "" });
             //return SelectList(userList);
-            using (var context = new opozeeDbEntities())
+            using (var context = new OpozeeDbEntities())
             {
                 List<SelectListItem> countries = context.Users.AsNoTracking()
                     .OrderBy(n => n.UserName)

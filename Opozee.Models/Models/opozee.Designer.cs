@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\code\OpozeeWeb\Models\Models\opozee.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\code\Opozee\Opozee.Models\Models\opozee.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

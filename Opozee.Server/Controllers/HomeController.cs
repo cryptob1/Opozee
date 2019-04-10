@@ -11,7 +11,7 @@ namespace opozee.Controllers
 {
     public class HomeController : Controller
     {
-        opozeeDbEntities db = new opozeeDbEntities();
+        OpozeeDbEntities db = new OpozeeDbEntities();
         public ActionResult Index()
         {
             ViewBag.Title = "Home Page";

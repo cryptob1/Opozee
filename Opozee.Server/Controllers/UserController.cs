@@ -50,7 +50,7 @@ namespace opozee.Controllers
                 //user.IsEmailVerified = false;
 
                 #region Save to Database
-                using (opozeeDbEntities dc = new opozeeDbEntities())
+                using (OpozeeDbEntities dc = new OpozeeDbEntities())
                 {
                     dc.Users.Add(user);
                     dc.SaveChanges();
@@ -78,7 +78,7 @@ namespace opozee.Controllers
         //public ActionResult VerifyAccount(string id)
         //{
         //    bool Status = false;
-        //    using (opozeeDbEntities db = new opozeeDbEntities())
+        //    using (OpozeeDbEntities db = new OpozeeDbEntities())
         //    {
         //        db.Configuration.ValidateOnSaveEnabled = false; // This line I have added here to avoid 
         //                                                        // Confirm password does not match issue on save changes
@@ -111,7 +111,7 @@ namespace opozee.Controllers
         public ActionResult Login(UserLogin login, string ReturnUrl = "")
         {
             string message = "";
-            using (opozeeDbEntities db = new opozeeDbEntities())
+            using (OpozeeDbEntities db = new OpozeeDbEntities())
             {
                 //if ("admin@gmail.com" != login.EmailID)
                 //// if ("salman@sdsol.com" != input.Email)
@@ -173,7 +173,7 @@ namespace opozee.Controllers
         [NonAction]
         public bool IsEmailExist(string emailID)
         {
-            using (opozeeDbEntities db = new opozeeDbEntities())
+            using (OpozeeDbEntities db = new OpozeeDbEntities())
             {
                 var v = db.Users.Where(a => a.Email == emailID).FirstOrDefault();
                 return v != null;

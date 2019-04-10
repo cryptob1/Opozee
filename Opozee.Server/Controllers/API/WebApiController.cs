@@ -26,8 +26,8 @@ namespace opozee.Controllers.API
     [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class WebApiController : ApiController
     {
-        public static string con = ConfigurationManager.ConnectionStrings["opozeeDbEntitiesSp"].ToString();
-        opozeeDbEntities db = new opozeeDbEntities();
+        public static string con = ConfigurationManager.ConnectionStrings["OpozeeDbEntitiesSp"].ToString();
+        OpozeeDbEntities db = new OpozeeDbEntities();
         // GET api/<controller>
         public IEnumerable<string> Get()
         {
@@ -162,7 +162,7 @@ namespace opozee.Controllers.API
         public UserLoginWeb Login(UserLoginWeb login)
         {
             UserLoginWeb ObjLogin = new UserLoginWeb();
-            using (opozeeDbEntities db = new opozeeDbEntities())
+            using (OpozeeDbEntities db = new OpozeeDbEntities())
             {
                 // UserLogin userlogin = new UserLogin();
                 var v1 = db.Users.Select(s => s).ToList();
@@ -584,7 +584,7 @@ namespace opozee.Controllers.API
             BookMarkQuestion questionDetail = new BookMarkQuestion();
             try
             {
-                using (opozeeDbEntities db = new opozeeDbEntities())
+                using (OpozeeDbEntities db = new OpozeeDbEntities())
                 {
                     if (!ModelState.IsValid)
                     {
@@ -1361,7 +1361,7 @@ namespace opozee.Controllers.API
 
                 // Save to DB
                 User Entry = null;
-                using (opozeeDbEntities db = new opozeeDbEntities())
+                using (OpozeeDbEntities db = new OpozeeDbEntities())
                 {
                     Entry = db.Users.Where(x => x.UserID == UserId).FirstOrDefault();
 

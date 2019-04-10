@@ -24,8 +24,8 @@ namespace opozee.Controllers.API
     [RoutePrefix("opozee")]
     public class MobileApiController : ApiController
     {
-        opozeeDbEntities db = new opozeeDbEntities();
-        public static string con = ConfigurationManager.ConnectionStrings["opozeeDbEntitiesSp"].ToString();
+        OpozeeDbEntities db = new OpozeeDbEntities();
+        public static string con = ConfigurationManager.ConnectionStrings["OpozeeDbEntitiesSp"].ToString();
         int _Imagethumbsize = 0;
         int _imageSize = 0;
         // GET: api/MobileApi
@@ -512,7 +512,7 @@ namespace opozee.Controllers.API
         {
             try
             {
-                using (opozeeDbEntities db = new opozeeDbEntities())
+                using (OpozeeDbEntities db = new OpozeeDbEntities())
                 {
                     if (!ModelState.IsValid)
                     {

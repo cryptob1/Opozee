@@ -16,7 +16,7 @@ namespace opozee.Controllers.Admin
 {
     public class UsersController : Controller
     {
-        private opozeeDbEntities db = new opozeeDbEntities();
+        private OpozeeDbEntities db = new OpozeeDbEntities();
 
         // GET: Users
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
