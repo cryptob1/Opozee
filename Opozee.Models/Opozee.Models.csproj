@@ -76,64 +76,67 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Models\oposee.Context.tt">
+    <Content Include="Models\Opozee.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>oposee.Context.cs</LastGenOutput>
-      <DependentUpon>opozee.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\oposee.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>opozee.edmx</DependentUpon>
-      <LastGenOutput>oposee.cs</LastGenOutput>
+      <DependentUpon>Opozee.edmx</DependentUpon>
+      <LastGenOutput>Opozee.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\opozee.edmx.sql" />
+    <Content Include="Models\Opozee.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Opozee.edmx</DependentUpon>
+      <LastGenOutput>Opozee.cs</LastGenOutput>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\BookMark.cs">
-      <DependentUpon>oposee.tt</DependentUpon>
+      <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Notification.cs">
-      <DependentUpon>oposee.tt</DependentUpon>
+      <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Opinion.cs">
-      <DependentUpon>oposee.tt</DependentUpon>
+      <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\oposee.Context.cs">
+    <Compile Include="Models\Opozee.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>oposee.Context.tt</DependentUpon>
+      <DependentUpon>Opozee.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\oposee.cs">
+    <Compile Include="Models\Opozee.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>oposee.tt</DependentUpon>
+      <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\opozee.Designer.cs">
+    <Compile Include="Models\Opozee.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>opozee.edmx</DependentUpon>
+      <DependentUpon>Opozee.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Question.cs">
-      <DependentUpon>oposee.tt</DependentUpon>
+      <DependentUpon>Opozee.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_GetTopLikes_Result.cs">
+      <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Token.cs">
-      <DependentUpon>oposee.tt</DependentUpon>
+      <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>oposee.tt</DependentUpon>
+      <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="Models\opozee.edmx">
+    <EntityDeploy Include="Models\Opozee.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>opozee.Designer.cs</LastGenOutput>
+      <LastGenOutput>Opozee.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\opozee.edmx.diagram">
-      <DependentUpon>opozee.edmx</DependentUpon>
+    <Content Include="Models\Opozee.edmx.diagram">
+      <DependentUpon>Opozee.edmx</DependentUpon>
     </Content>
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
