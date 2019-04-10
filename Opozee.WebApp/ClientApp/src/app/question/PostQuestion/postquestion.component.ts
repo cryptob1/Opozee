@@ -79,7 +79,7 @@ export class PostQuestionComponent implements OnInit {
     this.questionPostForm.value.hashtags = this.questionPostForm.value.hashtags.trim();
     let taggedUserTemp = this.Usertags
        
-    if (UsertagsTemp! == '' ||  postQuestionTemp == '') {
+    if (  postQuestionTemp == '') {
       postQuestionTemp = 0;
       this.toastr.error('', 'please Fill all Field', { timeOut: 2000 });
       return

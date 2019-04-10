@@ -13,28 +13,29 @@
 
           </div>
           <h2>{{userProfiledata?.FirstName }} {{userProfiledata?.LastName}}</h2>
+          <h4>@{{userProfiledata?.UserName}} </h4>
         </div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-8">
         <div class="tocken">
 
           <img src="../../../assets/images/coin.png" alt="coin" />
-          <label>Balance Token :</label>
+          <label>Tokens:</label>
           <strong>{{userProfiledata?.BalanceToken}}</strong>
         </div>
         <div class="tocken">
           <img src="../../../assets/images/iq.png" alt="coin" />
-          <label>Total Post Questions :</label>
+          <label>Questions Posted :</label>
           <strong>{{userProfiledata?.TotalPostedQuestion}}</strong>
         </div>
         <div class="tocken">
           <img src="../../../assets/images/like2.png" alt="coin" />
-          <label>Total Like :</label>
+          <label>Recieved Likes:</label>
           <strong>{{userProfiledata?.TotalLikes}}</strong>
         </div>
         <div class="tocken">
           <img src="../../../assets/images/unliek.png" alt="coin" />
-          <label>Totol Dislike :</label>
+          <label>Recieved Dislikes :</label>
           <strong>{{userProfiledata?.TotalDislikes}}</strong>
         </div>
       </div>

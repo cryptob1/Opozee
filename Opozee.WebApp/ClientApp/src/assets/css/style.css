@@ -60,7 +60,7 @@ header .container-fluid {
 
   .banner_text h2 {
     margin: 0;
-    text-transform: uppercase;
+    text-transform: capitalize;
     text-shadow: 4px 4px 12px rgba(0,0,0,.3);
     font-size: 42px;
     font-weight: bold;
@@ -112,12 +112,14 @@ header .container-fluid {
   padding: 20px 0px;
   margin-top: 25px;
   position: relative;
+  text-transform: capitalize;
 }
 
   .cover_heading h2 {
     margin: 0px;
     color: #333;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+    text-transform: capitalize;
   }
 
 .section_second ul {
@@ -148,7 +150,7 @@ nav.navbar.navbar-default.navbar-fixed-top {
   .cover_questions h3 {
     margin: 0px;
     font-size: 13px;
-    text-transform: uppercase;
+    text-transform: capitalize;
     letter-spacing: 2px;
     width: auto;
     float: left;

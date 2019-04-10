@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.loginForm.value)
       .pipe(first())
       .subscribe(data => {
-        debugger;
+        //debugger;
         if (data.Id != 0) {
 
           this.loading = false;
@@ -87,6 +87,7 @@ export class LoginComponent implements OnInit {
         error => {
           this.alertService.error(error);
           this.loading = false;
+          this.toastr.error('Error Logging in', error.message+'', { timeOut: 2000 });
         });
   }
 
@@ -126,6 +127,7 @@ export class LoginComponent implements OnInit {
             error => {
               this.alertService.error(error);
               this.loading = false;
+              this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000 });
             })
 
 
@@ -171,6 +173,7 @@ export class LoginComponent implements OnInit {
               alert()
               this.alertService.error(error);
               this.loading = false;
+              this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000 });
             })
 
           // Now sign-in with userData
@@ -180,6 +183,7 @@ export class LoginComponent implements OnInit {
           alert()
           this.alertService.error(error);
           this.loading = false;
+          this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000 });
         }
       )
     }
@@ -215,6 +219,7 @@ export class LoginComponent implements OnInit {
       error => {
         this.alertService.error(error);
         this.loading = false;
+        this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000 });
       })
 
 

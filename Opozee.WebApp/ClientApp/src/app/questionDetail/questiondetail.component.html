@@ -3,7 +3,7 @@
     <div class="cover_heading">
 
       <h2>
-        Question detail
+        Question Detail
 
         <span class="active_heart" (click)="saveBookmarkQuestion(PostQuestionDetailModel.postQuestionDetail?.IsBookmark)"><a style="cursor:pointer"><img src="../../assets/images/{{(PostQuestionDetailModel.postQuestionDetail?.IsBookmark == true) ? 'iconhert.png' : 'iconlinehert.png'}}" /></a></span>
       </h2>
@@ -22,7 +22,7 @@
               <span class="img"><img src="../../assets/images/user.png" alt="user"></span>
               <span class="text_profile">
 
-                <span class="user_123">{{PostQuestionDetailModel.postQuestionDetail?.OwnerUserName}}</span>
+                <span class="user_123">@{{PostQuestionDetailModel.postQuestionDetail?.OwnerUserName}}</span>
 
               </span>
               {{PostQuestionDetailModel.postQuestionDetail.HashTags}}
