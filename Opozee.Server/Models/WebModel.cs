@@ -60,7 +60,9 @@ namespace Opozee.Models.API
 
         public int PageSize { get; set; }
 
+        public bool IsChecked { get; set; }
 
+        public string CheckedTab { get; set; }
     }
 
     public class PostQuestionDetailWebModel

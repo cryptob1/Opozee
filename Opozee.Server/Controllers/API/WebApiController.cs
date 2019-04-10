@@ -289,8 +289,8 @@ namespace opozee.Controllers.API
                     objitem.OwnerUserName = reader["UserName"].ToString();
                     objitem.Question = reader["PostQuestion"].ToString();
                     objitem.HashTags = reader["HashTags"].ToString();
-                    objitem.ImageURL = string.IsNullOrEmpty(reader["ImageURL"].ToString())?"": reader["ImageURL"].ToString();
-                   
+                    objitem.ImageURL = string.IsNullOrEmpty(reader["ImageURL"].ToString()) ? "" : reader["ImageURL"].ToString();
+
                     Objlikdelist.Add(objitem);
                 }
 
@@ -392,11 +392,129 @@ namespace opozee.Controllers.API
                 {
                     return userNotifications2;
                 }
+                bool IsActive;
+                IsActive = Model.IsChecked;
+
+
+                if (IsActive)
+                {
+                    var TotalRecordNotification = (from q1 in db.Questions
+                                                   join n1 in db.Notifications on q1.Id equals n1.questId
+                                                   where q1.OwnerUserID == Model.UserId && q1.IsDeleted == false
+                                                   //     select new UserNotifications { TotalRecordcount = db.Notifications.Count(y1 => y1.Id == n1.Id) }).ToList();
+                                                   select new UserNotifications { TotalRecordcount = n1.Id }).ToList().Count();
+
+
+                    var userNotifications1 = (from q in db.Questions
+                                              join o in db.Opinions on q.Id equals o.QuestId
+                                              join n in db.Notifications on o.Id equals n.CommentId
+                                              join u in db.Users on o.CommentedUserId equals u.UserID
+                                              where q.OwnerUserID == Model.UserId && q.IsDeleted == false
+                                              select new UserNotifications
+                                              {
+                                                  UserId = q.OwnerUserID,
+                                                  QuestionId = q.Id,
+                                                  Question = q.PostQuestion,
+                                                  HashTags = q.HashTags,
+                                                  OpinionId = o.Id,
+                                                  Opinion = o.Comment,
+                                                  Image = u.ImageURL,
+                                                  CommentedUserId = o.CommentedUserId,
+                                                  UserName = u.UserName,
+                                                  Like = ((n.Like ?? false) ? true : false),
+                                                  Dislike = ((n.Dislike ?? false) ? true : false),
+                                                  Comment = ((n.Comment ?? false) ? true : false),
+                                                  IsAgree = ((o.IsAgree ?? false) ? true : false),
+                                                  CreationDate = n.CreationDate,
+                                                  ModifiedDate = n.ModifiedDate,
+                                                  TotalRecordcount = TotalRecordNotification,
+                                                  NotificationId = n.Id,
+                                              }).ToList().OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
+
+
+                    foreach (var data in userNotifications1)
+                    {
+                        data.Message = GenerateTags(data.Like, data.Dislike, data.Comment, data.UserName);
+                        data.Tag = (data.Like == true) ? "Like" : (data.Dislike == true) ? "Dislike" : (data.Comment == true) ? "Comment" : "";
+                    }
+                    return userNotifications1.Where(p => p.Message != "").ToList();
+                }
+                else
+                {
+                    var TotalRecordNotification = (from q1 in db.Questions
+                                                   join n1 in db.Notifications on q1.Id equals n1.questId
+                                                   where q1.OwnerUserID != Model.UserId
+                                                   //     select new UserNotifications { TotalRecordcount = db.Notifications.Count(y1 => y1.Id == n1.Id) }).ToList();
+                                                   select new UserNotifications { TotalRecordcount = n1.Id }).ToList().Count();
+
+                    var userNotifications1 = (from q in db.Questions
+                                              join o in db.Opinions on q.Id equals o.QuestId
+                                              join n in db.Notifications on o.Id equals n.CommentId
+                                              join u in db.Users on o.CommentedUserId equals u.UserID
+                                              where q.OwnerUserID != Model.UserId && q.IsDeleted == false
+                                              select new UserNotifications
+                                              {
+                                                  QuestionId = q.Id,
+                                                  Question = q.PostQuestion,
+                                                  HashTags = q.HashTags,
+                                                  OpinionId = o.Id,
+                                                  Opinion = o.Comment,
+                                                  Image = u.ImageURL,
+                                                  CommentedUserId = o.CommentedUserId,
+                                                  UserName = u.UserName,
+                                                  Like = ((n.Like ?? false) ? true : false),
+                                                  Dislike = ((n.Dislike ?? false) ? true : false),
+                                                  Comment = ((n.Comment ?? false) ? true : false),
+                                                  IsAgree = ((o.IsAgree ?? false) ? true : false),
+                                                  CreationDate = n.CreationDate,
+                                                  ModifiedDate = n.ModifiedDate,
+                                                  TotalRecordcount = TotalRecordNotification,
+                                                  NotificationId = n.Id,
+                                              }).ToList().OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
+
+
+                    foreach (var data in userNotifications1)
+                    {
+                        data.Message = GenerateTags(data.Like, data.Dislike, data.Comment, data.UserName);
+                        data.Tag = (data.Like == true) ? "Like" : (data.Dislike == true) ? "Dislike" : (data.Comment == true) ? "Comment" : "";
+                    }
+                    return userNotifications1.Where(p => p.Message != "").ToList();
+                }
+
+                // return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, userNotifications1, "AllOpinion"));
+            }
+            catch (Exception ex)
+            {
+                return userNotifications2;
+            }
+        }
+
+
+
+        [HttpPost]
+        [Route("api/WebApi/GetProfileNotificationByUser")]
+        public List<UserNotifications> GetProfileNotificationByUser(PagingModel Model)
+        {
+            List<UserNotifications> userNotifications2 = new List<UserNotifications>();
+            try
+            {
+
+
+                int Total = Model.TotalRecords;
+                int pageSize = 10; // set your page size, which is number of records per page
+                int page = Model.PageNumber;
+                int skip = pageSize * (page - 1);
+
+                UserNotifications userNotifications = new UserNotifications();
+                db.Configuration.LazyLoadingEnabled = false;
+                if (!ModelState.IsValid)
+                {
+                    return userNotifications2;
+                }
 
                 var TotalRecordNotification = (from q1 in db.Questions
                                                join n1 in db.Notifications on q1.Id equals n1.questId
                                                where q1.OwnerUserID == Model.UserId
-                                               //     select new UserNotifications { TotalRecordcount = db.Notifications.Count(y1 => y1.Id == n1.Id) }).ToList();
                                                select new UserNotifications { TotalRecordcount = n1.Id }).ToList().Count();
 
                 var userNotifications1 = (from q in db.Questions
@@ -436,6 +554,8 @@ namespace opozee.Controllers.API
                 return userNotifications2;
             }
         }
+
+
 
 
         public string GenerateTags(bool? like, bool? dislike, bool? comment, string UserName)
@@ -609,7 +729,7 @@ namespace opozee.Controllers.API
                                                              CreationDate = q.CreationDate,
                                                              IsBookmark = db.BookMarks.Where(b => b.UserId == UserId && b.QuestionId == id).Select(b => b.IsBookmark.HasValue ? b.IsBookmark.Value : false).FirstOrDefault(),
                                                          }).FirstOrDefault();
-                    
+
                     questionDetail.Comments = this.SortedComments(id, UserId);
 
                     return questionDetail;
@@ -1632,7 +1752,7 @@ namespace opozee.Controllers.API
 
 
 
-          
+
                 return questionDetail;
                 //return Request.CreateResponse(JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "AllUserQuestions"));
             }
@@ -1652,7 +1772,7 @@ namespace opozee.Controllers.API
         public PostQuestionModel GetPostedQuestionEditWeb(int QuestionId)
         {
 
-           PostQuestionModel questionDetail = new PostQuestionModel();
+            PostQuestionModel questionDetail = new PostQuestionModel();
             try
             {
                 db.Configuration.LazyLoadingEnabled = false;
@@ -1687,7 +1807,7 @@ namespace opozee.Controllers.API
         [Route("api/WebApi/EditPostQuestionWeb")]
         public Question EditPostQuestionWeb([FromBody] PostQuestionModel postQuestion)
         {
-       
+
             Question quest = null;
             try
             {
@@ -1696,20 +1816,20 @@ namespace opozee.Controllers.API
                 {
                     return quest; ;
                 }
-          
+
                 quest = db.Questions.Where(p => p.Id == postQuestion.Id && p.OwnerUserID == postQuestion.OwnerUserID).FirstOrDefault();
-                if(quest == null)
+                if (quest == null)
                 {
                     return quest;
                 }
                 //quest = new Question();
                 quest.PostQuestion = postQuestion.PostQuestion;
                 quest.HashTags = postQuestion.HashTags;
-                quest.ModifiedDate= DateTime.Now;
+                quest.ModifiedDate = DateTime.Now;
                 db.Entry(quest).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
- 
-               return quest;
+
+                return quest;
                 //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, quest, "Question"));
                 //}
             }
@@ -1726,7 +1846,7 @@ namespace opozee.Controllers.API
         #region "Post Question" 
         [HttpPost]
         [Route("api/WebApi/DeletePostQuestionWeb")]
-        public Question DeletePostQuestionWeb( PostQuestionModel postQuestion)
+        public Question DeletePostQuestionWeb(PostQuestionModel postQuestion)
         {
 
             Question quest = null;
@@ -1744,12 +1864,12 @@ namespace opozee.Controllers.API
                 db.SaveChanges();
 
                 return quest;
-              
+
             }
             catch (Exception ex)
             {
                 return quest;
-                
+
             }
         }
         #endregion

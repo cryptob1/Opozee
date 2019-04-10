@@ -19,33 +19,37 @@
   margin-bottom: 80px;
 }
 
-.profile_div .image_user {
-  width: 150px;
-  height: 150px;
-  margin: 0px auto;
-  text-align: center;
-  vertical-align: middle;
-  position: relative;
-  border-radius: 100%;
-  display: inline-block;
-  box-shadow: 2px -1px 2px rgba(0, 0, 0, 0.3);
-}
-  .profile_div .image_user img {
-    width: 150px !important;
-    border-radius: 100%;
+  .profile_div .image_user {
+    width: 150px;
     height: 150px;
-    margin: 0px !important;
+    margin: 0px auto;
+    text-align: center;
+    vertical-align: middle;
+    position: relative;
+    border-radius: 100%;
+    display: inline-block;
+    box-shadow: 2px -1px 2px rgba(0, 0, 0, 0.3);
   }
+
+    .profile_div .image_user img {
+      width: 150px !important;
+      border-radius: 100%;
+      height: 150px;
+      margin: 0px !important;
+    }
+
 span.upload_button {
   width: 100%;
   float: left;
   text-align: center;
   margin-top: 25px;
 }
+
   span.upload_button input {
     display: inline-block;
     float: none;
   }
+
   span.upload_button .btn-large.btn-submit {
     float: left;
     padding: 6px 13px;
@@ -68,11 +72,11 @@ span.upload_button {
   top: 0px;
 }
 
-.profile_div .image_user .edit i {
-  color: #fff;
-  line-height: 40px;
-  font-size: 16px;
-}
+  .profile_div .image_user .edit i {
+    color: #fff;
+    line-height: 40px;
+    font-size: 16px;
+  }
 
 .profile_div h2 {
   width: 150px;
@@ -87,33 +91,33 @@ span.upload_button {
 .tocken {
   width: 100%;
   float: left;
-  margin-bottom: 27px;
+  margin-bottom: 5px;
   border: 2px solid #ddd;
   border-radius: 4px;
-  padding: 24px;
+  padding: 8px;
   text-align: left;
 }
 
-.tocken img {
-  width: 70px;
-  margin-right: 25px;
-}
+  .tocken img {
+    width: 30px;
+    margin-right: 25px;
+  }
 
 .profile_images {
   width: 100%;
   float: left;
 }
 
-.profile_images h3 {
-  margin-bottom: 40px;
-}
+  .profile_images h3 {
+    margin-bottom: 40px;
+  }
 
-.profile_images img {
-  width: 250px;
-  display: inline-block;
-  margin-bottom: 60px;
-  border-radius: 5px;
-}
+  .profile_images img {
+    width: 250px;
+    display: inline-block;
+    margin-bottom: 60px;
+    border-radius: 5px;
+  }
 
 
 
@@ -122,7 +126,6 @@ span.upload_button {
   width: 100%;
   float: left;
   text-align: center;
-  
 }
 
 .profile_div .image_user img {
@@ -140,11 +143,11 @@ span.upload_button {
   top: 0px;
 }
 
-.profile_div .image_user .edit i {
-  color: #fff;
-  line-height: 40px;
-  font-size: 16px;
-}
+  .profile_div .image_user .edit i {
+    color: #fff;
+    line-height: 40px;
+    font-size: 16px;
+  }
 
 .inputs_fields {
   width: 100%;
@@ -161,43 +164,85 @@ span.upload_button {
   margin-bottom: 60px;
 }
 
-.inputs_fields form label {
-  width: 100%;
-  float: left;
-  text-align: left;
-  margin-bottom: 15px;
-}
+  .inputs_fields form label {
+    width: 100%;
+    float: left;
+    text-align: left;
+    margin-bottom: 15px;
+  }
 
-.inputs_fields form label input {
-  width: 100%;
-  float: left;
-  padding: 8px 15px;
-  border-radius: 4px;
-  background-color: #f2f2f2;
-  border: none;
-  margin-top: 6px;
-  font-weight: 400;
-}
+    .inputs_fields form label input {
+      width: 100%;
+      float: left;
+      padding: 8px 15px;
+      border-radius: 4px;
+      background-color: #f2f2f2;
+      border: none;
+      margin-top: 6px;
+      font-weight: 400;
+    }
 
-.inputs_fields form a {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 10px 50px;
-  border-radius: 4px;
-  background: rgb(12,130,220);
-  background: -moz-linear-gradient(45deg, rgba(12,130,220,1) 0%, rgba(16,177,169,1) 65%);
-  background: -webkit-linear-gradient(45deg, rgba(12,130,220,1) 0%,rgba(16,177,169,1) 65%);
-  background: linear-gradient(45deg, rgba(12,130,220,1) 0%,rgba(16,177,169,1) 65%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );
-  color: #fff;
-  font-size: 18px;
-  text-transform: uppercase;
-  margin-top: 35px;
-}
+  .inputs_fields form a {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 50px;
+    border-radius: 4px;
+    background: rgb(12,130,220);
+    background: -moz-linear-gradient(45deg, rgba(12,130,220,1) 0%, rgba(16,177,169,1) 65%);
+    background: -webkit-linear-gradient(45deg, rgba(12,130,220,1) 0%,rgba(16,177,169,1) 65%);
+    background: linear-gradient(45deg, rgba(12,130,220,1) 0%,rgba(16,177,169,1) 65%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );
+    color: #fff;
+    font-size: 18px;
+    text-transform: uppercase;
+    margin-top: 35px;
+  }
 
   .inputs_fields .form-group button {
     border: none;
     padding: 9px 24px;
     margin-top: 15px;
     border-radius: 3px;
+  }
+
+.questions-section {
+  margin-top: 20px;
+  width: 100%;
+  float: left
+}
+
+  .questions-section ul {
+    background: #e2e2e2;
+  }
+
+    .questions-section ul li {
+      width: auto;
+      padding: 0px;
+      box-shadow: none;
+      margin: 0px;
+    }
+
+      .questions-section ul li a {
+        color: #505050;
+        padding: 10px 40px;
+      }
+
+  .questions-section .nav-tabs > li > a.active, .nav-tabs > li > a.active:focus, .nav-tabs > li > a.active:hover {
+    color: #fff;
+    cursor: default;
+    background-color: #19b2b0;
+    border: 1px solid #18b1af;
+    border-bottom-color: transparent;
+  }
+
+  .questions-section .tab-content {
+    width: 100%;
+    padding: 15px;
+    float: left;
+    border: 1px solid #cecece;
+    border-top: 0px;
+  }
+
+  .questions-section .questions-field {
+    width: 100%;
   }

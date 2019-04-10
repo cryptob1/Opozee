@@ -93,6 +93,16 @@ export class UserService {
   }
 
 
+  getTabOneNotification(Model) {
+    return this.http.post<NotificationsModel[]>(this.myAppUrl + 'opozee/api/WebApi/GetProfileNotificationByUser', Model, {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
+  }
+
+
+
   //getAllQuestionlist(questionGetModel) {
   //  return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllPostsWeb?UserId=' + userId + '&Search=' + search +'&pageNumber'+, {
   //    headers: new HttpHeaders({

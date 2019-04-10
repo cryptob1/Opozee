@@ -38,7 +38,7 @@ namespace OpozeeLibrary.Utilities
         static AesCryptography()
         {
             //SecurityKey = "123456789abcdef";
-            byte[] passwordKey = EncodeDigest("Opozee99!!@#GreatLocation%^");
+            byte[] passwordKey = EncodeDigest("Oposee99!!@#GreatLocation%^");
             RijndaelManaged rijndael = new RijndaelManaged();
             rijndaelDecryptor = rijndael.CreateDecryptor(passwordKey, rawSecretKey);
             rijndaelEncryptor = rijndael.CreateEncryptor(passwordKey, rawSecretKey);

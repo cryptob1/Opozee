@@ -5,7 +5,7 @@
     </div>
     <div class="cover_profile">
 
-      <div class="col-sm-12">
+      <div class="col-xs-12 col-sm-6 col-md-4">
         <div class="profile_div">
           <div class="image_user">
             <img src="{{userProfiledata?.ImageURL}}" alt="user" />
@@ -14,50 +14,99 @@
           </div>
           <h2>{{userProfiledata?.FirstName }} {{userProfiledata?.LastName}}</h2>
         </div>
-        <div class="col-sm-6">
-     
-          <div class="tocken">
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-8">
+        <div class="tocken">
 
-            <img src="../../../assets/images/coin.png" alt="coin" />
-            <label>Balance Token :</label>
-            <strong>{{userProfiledata?.BalanceToken}}</strong>
-          </div>
+          <img src="../../../assets/images/coin.png" alt="coin" />
+          <label>Balance Token :</label>
+          <strong>{{userProfiledata?.BalanceToken}}</strong>
         </div>
-        <div class="col-sm-6">
-          <div class="tocken">
-            <img src="../../../assets/images/iq.png" alt="coin" />
-            <label>Total Post Questions :</label>
-            <strong>{{userProfiledata?.TotalPostedQuestion}}</strong>
-          </div>
+        <div class="tocken">
+          <img src="../../../assets/images/iq.png" alt="coin" />
+          <label>Total Post Questions :</label>
+          <strong>{{userProfiledata?.TotalPostedQuestion}}</strong>
         </div>
-        <div class="col-sm-6">
-          <div class="tocken">
-            <img src="../../../assets/images/like2.png" alt="coin" />
-            <label>Total Like :</label>
-            <strong>{{userProfiledata?.TotalLikes}}</strong>
-          </div>
+        <div class="tocken">
+          <img src="../../../assets/images/like2.png" alt="coin" />
+          <label>Total Like :</label>
+          <strong>{{userProfiledata?.TotalLikes}}</strong>
         </div>
-        <div class="col-sm-6">
-          <div class="tocken">
-            <img src="../../../assets/images/unliek.png" alt="coin" />
-            <label>Totol Dislike :</label>
-            <strong>{{userProfiledata?.TotalDislikes}}</strong>
-          </div>
+        <div class="tocken">
+          <img src="../../../assets/images/unliek.png" alt="coin" />
+          <label>Totol Dislike :</label>
+          <strong>{{userProfiledata?.TotalDislikes}}</strong>
         </div>
-
-        <div class="profile_images">
-          <h3>Choose An Option</h3>
-          <div class="col-sm-6" [routerLink]="['/postedQuestionEditList/',Id]" style="cursor:pointer">
-            <img src="../../../assets/images/posted.jpg" alt="posted" />
-          </div>
-          <div class="col-sm-6" [routerLink]="['/postquestion/']" style="cursor:pointer">
-            <img src="../../../assets/images/post.jpg" alt="posted" />
-          </div>
-        </div>
-
       </div>
 
-    </div>
+      <!--<div class="profile_images">
+        <h3>Choose An Option</h3>
+        <div class="col-sm-6" [routerLink]="['/postedQuestionEditList/',Id]" style="cursor:pointer">
+          <img src="../../../assets/images/posted.jpg" alt="posted" />
+        </div>
+        <div class="col-sm-6" [routerLink]="['/postquestion/']" style="cursor:pointer">
+          <img src="../../../assets/images/post.jpg" alt="posted" />
+        </div>
+      </div>-->
 
+    </div>
+    <div class="questions-section">
+      <ul class="nav nav-tabs">
+        <li><a class="active" data-toggle="tab" (click)="onchangeTab('mybeliefs')" href="#mybeliefs">My Beliefs</a></li>
+        <li><a data-toggle="tab" (click)="onchangeTab('myquestions')" href="#myquestions">My Questions</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div id="mybeliefs" class="tab-pane fade in active">
+          <span class="cover_ntfctn_border questions-field" *ngFor="let temp of notification">
+
+            <strong><a data-title="Q"> {{temp.Question}}</a></strong>
+            <strong class="text-success"><a data-title="B">{{temp.Opinion}}</a></strong>
+          </span>
+
+        </div>
+
+
+
+
+
+
+        <div id="myquestions" class="tab-pane fade in">
+          <span class="cover_ntfctn_border questions-field" *ngFor="let temp1 of notification">
+            <strong><a data-title="Q"> {{temp1.Question}}</a></strong>
+          </span>
+          <!--<span class="cover_ntfctn_border questions-field">
+        <strong><a data-title="Q">What Is .......?</a></strong>
+      </span>-->
+
+        </div>
+      </div>
+
+      <!--<div class="row">
+        <div class="navigation_cover">
+
+          <div class="container">
+            <div class="text-center" style="cursor:pointer">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                <li [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a (click)="setPage(  pager.currentPage - 1)">Previous</a>
+                </li>
+                <li *ngFor="let page of pager.pages;index as i" [ngClass]="{active:pager.currentPage === page}">
+                  <a (click)="setPage( page)">{{page}}</a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a (click)="setPage(  pager.currentPage + 1)">Next</a>
+                </li>
+
+              </ul>
+            </div>
+          </div>
+
+
+        </div>
+      </div>-->
+
+
+    </div>
   </div>
 </section>

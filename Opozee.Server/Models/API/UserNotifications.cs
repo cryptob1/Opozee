@@ -8,6 +8,7 @@ namespace Opozee.Models.API
 {
     public class UserNotifications
     {
+        public int UserId { get; set; }
         public int QuestionId { get; set; }
         public string Question { get; set; }
         public string HashTags { get; set; }
@@ -26,6 +27,7 @@ namespace Opozee.Models.API
         public DateTime? ModifiedDate { get; set; }
         public int TotalRecordcount { get; set; }
         public int NotificationId { get; set; }
+        public bool IsAgree { get; set; }
 
     }
     public class UserProfile

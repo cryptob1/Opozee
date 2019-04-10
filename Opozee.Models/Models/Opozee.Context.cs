@@ -12,6 +12,8 @@ namespace Opozee.Models.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class OpozeeDbEntities : DbContext
     {
@@ -28,8 +30,13 @@ namespace Opozee.Models.Models
         public virtual DbSet<BookMark> BookMarks { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Opinion> Opinions { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Question> Questions { get; set; }
+    
+        public virtual ObjectResult<SP_GetTopLikes_Result> SP_GetTopLikes()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetTopLikes_Result>("SP_GetTopLikes");
+        }
     }
 }

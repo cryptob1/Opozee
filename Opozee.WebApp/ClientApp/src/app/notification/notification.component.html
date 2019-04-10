@@ -4,8 +4,12 @@
 
   <section class="section_second">
     <div class="container">
-      <div class="cover_heading">
-        <h2>Notifications</h2>
+      <div class="cover_heading align-items-center justify-content-between d-flex">
+        <h2 class="mb-0">Notifications</h2>
+        <label class="custom-checkbox mb-0">
+          <input type="checkbox" checked (click)="changeNotification($event)" />
+          <span>My Notification</span>
+        </label>
       </div>
       <div class="cover_sections">
         <div class="col-sm-4">
@@ -26,12 +30,27 @@
         <div class="col-sm-12">
 
 
-          <div class="cover_right" *ngFor="let temp of notification">
-            <span class="profile"><img src="{{temp.Image}}" alt="user">{{temp.UserName}}</span>
-            <span class="cover_ntfctn_border">
-              <span class="name"><b>{{temp.Username}}</b><span class="text_sftr_star">{{temp.Username}}</span></span>
+          <!--<div class="cover_right" *ngFor="let temp of notification">
+        <span class="profile"><img src="{{temp.Image}}" alt="user">{{temp.UserName}}</span>
+        <span class="cover_ntfctn_border">
+          <span class="name"><b>{{temp.Username}}</b><span class="text_sftr_star">{{temp.Username}}</span></span>
 
-              <strong><a [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Message}}</a></strong>
+          <strong><a [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Message}}</a></strong>
+        </span>
+      </div>-->
+          <div class="cover_right" *ngFor="let temp of notification">
+            <span *ngIf="temp.IsAgree===true" class="profile"><img src="{{temp.Image}}" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Belief </span>
+            <span *ngIf="temp.IsAgree===false" class="profile"><img src="{{temp.Image}}" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Question </span>
+
+            <span class="cover_ntfctn_border questions-field">
+              <strong><a data-title="Q" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Question}}</a></strong>
+              <div *ngIf="temp.IsAgree===true">
+                <strong class="text-danger"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Opinion}}</a></strong>
+              </div>
+
+              <div *ngIf="temp.IsAgree===false">
+                <strong class="text-success"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Opinion}}</a></strong>
+              </div>
             </span>
             <!--<span>{{ temp.CreationDate | date:'medium' }}</span>-->
           </div>
