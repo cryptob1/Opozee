@@ -11,9 +11,7 @@ nav.navbar.navbar-default.navbar-fixed-top {
   background: #333;
   width: 100%;
   z-index: 9;
-  background-image: url(/assets/images/header_bk.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
+
 }
 a.navbar-brand.logo {
   max-width: 55px !important;

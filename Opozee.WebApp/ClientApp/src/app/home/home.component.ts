@@ -10,7 +10,7 @@ export class HomeComponent implements OnInit {
   currentUser: User;
   users: User[] = [];
   questionListing: QuestionListing[] = [];
-  searchTextModel: string = '';
+  
 
   constructor(private userService: UserService,private route: ActivatedRoute,
     private router: Router) {
@@ -39,20 +39,6 @@ export class HomeComponent implements OnInit {
   }
 
 
-  searchText(e) {
-    debugger;
-    if (e.keyCode == 13) {
-      this.router.navigate(['/questionlisting/', this.searchTextModel]);
-    }
-
-  }
-
-  searchTextButton(e) {
-    debugger;
-    this.router.navigate(['/questionlisting/', this.searchTextModel]);
-
-
-  }
 
 
 }

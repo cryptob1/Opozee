@@ -67,10 +67,11 @@ header .container-fluid {
   }
 
 .banner_search-form {
-  width: 60%;
-  margin: 0 auto;
-  display: inline-block;
-  margin-top: 0px;
+  width: 20%;
+  margin: auto;
+  float: left;
+  margin-top: 30px;
+  margin-left: 90px;
 }
 
 .search-input .form-control {
@@ -100,8 +101,15 @@ header .container-fluid {
     background: rgba(0,0,0,0.5);
 }*/
   .search-button a {
-    color: #fff;
-    font-weight: 500;
+    
+    font-weight: 300;
+     
+  }
+
+  .search-button a img{
+    margin-left: 5px;
+    width: 25px;
+    height: 25px;
   }
 /********banner css ends*******/
 /*--------------------popular_qustion---------*/

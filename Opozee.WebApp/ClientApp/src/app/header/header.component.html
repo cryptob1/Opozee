@@ -16,6 +16,19 @@
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+          <div class="banner_search-form">
+            <div class="search-input">
+              <input class="form-control my-0 py-1 red-border" type="text" placeholder="Search" aria-label="Search" (keydown)=searchText($event) [(ngModel)]="searchTextModel">
+            </div>
+            <div class="search-button">
+              <a (click)=searchTextButton($event) style="cursor:pointer">
+                <img src="../../assets/images/search.png" alt="Snow" sizes="1">
+              </a>
+            </div>
+          </div>
+
+
           <ul class="nav navbar-nav navbar-right">
             <li><a [routerLink]="['/']">Home</a></li>
             <li><a [routerLink]="['/questionlisting','']">Questions</a></li>
