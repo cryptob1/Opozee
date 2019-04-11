@@ -40,7 +40,7 @@
              
                   <div class="cover_analysis">
                     <div class="left">
-                      <span>Opinion</span>
+                      <span> </span>
                       <div class="anlysis_slider">
                         <span [style.width.%]="((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'" class="color yes_div"></span>
                         <span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>
