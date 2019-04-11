@@ -28,11 +28,13 @@
     "aspnet-prerendering": "^3.0.1",
     "auth0-js": "^9.10.1",
     "bootstrap": "^3.3.7",
+    "connect": "^3.6.6",
     "core-js": "^2.4.1",
     "ng-multiselect-dropdown": "^0.2.3",
     "ngx-spinner": "^2.0.0",
     "ngx-toastr": "^8.10.2",
     "rxjs": "^5.5.6",
+    "serve-static": "^1.13.2",
     "twitter-login-client": "^1.0.3",
     "zone.js": "^0.8.19"
   },
