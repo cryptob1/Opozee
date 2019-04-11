@@ -8,7 +8,7 @@
       <div class="col-xs-12 col-sm-6 col-md-4">
         <div class="profile_div">
           <div class="image_user">
-            <img src="{{userProfiledata?.ImageURL}}" alt="user" />
+            <img src="{{userProfiledata?.ImageURL}}" onError="this.src='../../../assets/images/user.png'" alt="user" />
             <div class="edit"><i class="fa fa-pencil" aria-hidden="true" [routerLink]="['/editprofile/',userProfiledata?.UserID]" style="cursor:pointer;"></i></div>
 
           </div>
@@ -41,14 +41,14 @@
       </div>
 
       <!--<div class="profile_images">
-        <h3>Choose An Option</h3>
-        <div class="col-sm-6" [routerLink]="['/postedQuestionEditList/',Id]" style="cursor:pointer">
-          <img src="../../../assets/images/posted.jpg" alt="posted" />
-        </div>
-        <div class="col-sm-6" [routerLink]="['/postquestion/']" style="cursor:pointer">
-          <img src="../../../assets/images/post.jpg" alt="posted" />
-        </div>
-      </div>-->
+      <h3>Choose An Option</h3>
+      <div class="col-sm-6" [routerLink]="['/postedQuestionEditList/',Id]" style="cursor:pointer">
+        <img src="../../../assets/images/posted.jpg" alt="posted" />
+      </div>
+      <div class="col-sm-6" [routerLink]="['/postquestion/']" style="cursor:pointer">
+        <img src="../../../assets/images/post.jpg" alt="posted" />
+      </div>
+    </div>-->
 
     </div>
     <div class="questions-section">
@@ -59,10 +59,13 @@
 
       <div class="tab-content">
         <div id="mybeliefs" class="tab-pane fade in active">
-          <span class="cover_ntfctn_border questions-field" *ngFor="let temp of notification">
+          <span class="cover_ntfctn_border questions-field" *ngFor="let temp of notification; let i=index">
 
-            <strong><a data-title="Q"> {{temp.Question}}</a></strong>
-            <strong class="text-success"><a data-title="B">{{temp.Opinion}}</a></strong>
+            <strong><a data-title="Q"> {{temp.Question}}</a><small style="color:grey;font-size:9px;font-weight:100">Posted by {{temp.UserName}}</small></strong>
+            <!--<strong class="text-success"><a data-title="B">{{temp.Opinion}}</a></strong>-->
+            <strong class="text-success" *ngFor="let opinion of temp.OpinionList; let ii=index">
+              <a data-title="B">{{opinion}}</a>
+            </strong>
           </span>
 
         </div>
@@ -73,41 +76,66 @@
 
 
         <div id="myquestions" class="tab-pane fade in">
-          <span class="cover_ntfctn_border questions-field" *ngFor="let temp1 of notification">
+          <span class="cover_ntfctn_border questions-field" *ngFor="let temp1 of notification; let i=index">
             <strong><a data-title="Q"> {{temp1.Question}}</a></strong>
           </span>
           <!--<span class="cover_ntfctn_border questions-field">
-        <strong><a data-title="Q">What Is .......?</a></strong>
-      </span>-->
+          <strong><a data-title="Q">What Is .......?</a></strong>
+        </span>-->
 
         </div>
       </div>
 
       <!--<div class="row">
-        <div class="navigation_cover">
+      <div class="navigation_cover">
 
-          <div class="container">
-            <div class="text-center" style="cursor:pointer">
-              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-                <li [ngClass]="{disabled:pager.currentPage === 1}">
-                  <a (click)="setPage(  pager.currentPage - 1)">Previous</a>
-                </li>
-                <li *ngFor="let page of pager.pages;index as i" [ngClass]="{active:pager.currentPage === page}">
-                  <a (click)="setPage( page)">{{page}}</a>
-                </li>
-                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-                  <a (click)="setPage(  pager.currentPage + 1)">Next</a>
-                </li>
+        <div class="container">
+          <div class="text-center" style="cursor:pointer">
+            <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+              <li [ngClass]="{disabled:pager.currentPage === 1}">
+                <a (click)="setPage(  pager.currentPage - 1)">Previous</a>
+              </li>
+              <li *ngFor="let page of pager.pages;index as i" [ngClass]="{active:pager.currentPage === page}">
+                <a (click)="setPage( page)">{{page}}</a>
+              </li>
+              <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                <a (click)="setPage(  pager.currentPage + 1)">Next</a>
+              </li>
 
-              </ul>
-            </div>
+            </ul>
           </div>
-
-
         </div>
-      </div>-->
+
+
+      </div>
+    </div>-->
 
 
     </div>
+
+    <!--<div class="navigation_cover">
+
+      <div class="container">
+        <div class="text-center" style="cursor:pointer">
+          <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+            <li [ngClass]="{disabled:pager.currentPage === 1}">
+              <a (click)="setPage(  pager.currentPage - 1)">Previous</a>
+            </li>
+            <li *ngFor="let page of pager.pages;index as i" [ngClass]="{active:pager.currentPage === page}">
+              <a (click)="setPage( page)">{{page}}</a>
+            </li>
+            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+              <a (click)="setPage(  pager.currentPage + 1)">Next</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+
+    </div>-->
+
+
   </div>
+
 </section>

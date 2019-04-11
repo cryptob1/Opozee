@@ -65,7 +65,9 @@ export class HeaderComponent implements OnInit {
   searchTextButton(e) {
     debugger;
     this.router.navigate(['/questionlisting/', this.searchTextModel]);
+  }
 
-
+  navbar() {
+    document.getElementById('bs-example-navbar-collapse-1').classList.remove('show');
   }
 }

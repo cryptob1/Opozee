@@ -5,15 +5,14 @@ import { QuestionListing } from '../_models/question';
 import { UserService } from '../_services';
 
 
-
-
-
 @Component({
   templateUrl: 'notification.component.html',
   styleUrls: ['./notification.component.css']
 })
+
 export class NotificationComponent implements OnInit {
-  currentUser: User
+  currentUser: User;
+  isRecordLoaded: boolean = false;
   notification: NotificationsModel[] = [];
   questionListing: QuestionListing[] = [];
   localStorageUser: LocalStorageUser;
@@ -30,15 +29,15 @@ export class NotificationComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
+    
     this.setPageonpageLoad(1, 50)
 
     this.PagingModel.UserId = this.localStorageUser.Id;
    this.PagingPagesload(1, 10)
   }
 
-  //
   changeNotification(event) {
+    
     this.PagingModel.IsChecked = event.target.checked;
     if (this.PagingModel.IsChecked) {
       this.setPageonpageLoad(1, 50)
@@ -52,42 +51,33 @@ export class NotificationComponent implements OnInit {
     }
   }
 
-
-
   private getAllNotification(PagingModel) {
-    debugger
     var Id = this.localStorageUser.Id;
     this.userService.getAllNotification(PagingModel).pipe(first()).subscribe(Notifications => {
-      debugger;
+      
       console.log(Notifications);
       this.notification = Notifications;
       this.PagingModel.TotalRecords = Notifications.length > 0 ? Notifications[0].TotalRecordcount : 0;
       //console.log(this.notification);
-
+      this.isRecordLoaded = true;
+    }, error => {
+      this.isRecordLoaded = false;
     });
   }
 
-
-
   PagingPagesload(PageNumber, PageSize) {
-    debugger;
-
-
     this.PagingModel.PageNumber = PageNumber;
     this.PagingModel.PageSize = PageSize
     this.getAllNotification(this.PagingModel);
-
-
-
   }
 
   setPageonpageLoad(page, TotalRecords) {
-    debugger;
+    
     this.pager = this.getPager(TotalRecords, page);
   }
 
   setPage(page, TotalRecords) {
-    debugger;
+    
     this.pager = this.getPager(this.PagingModel.TotalRecords, page);
 
     if (this.pager.totalPages >= page) {
@@ -95,8 +85,6 @@ export class NotificationComponent implements OnInit {
       this.PagingPagesload(this.pager.currentPage, this.pager.pageSize);
     }
   }
-
-
 
   getPager(totalItems: number, currentPage: number = 1, pageSize: number = 10) {
     // calculate total pages

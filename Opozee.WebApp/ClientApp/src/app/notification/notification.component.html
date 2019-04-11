@@ -38,29 +38,34 @@
           <strong><a [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Message}}</a></strong>
         </span>
       </div>-->
-          <div class="cover_right" *ngFor="let temp of notification">
-            <span *ngIf="temp.IsAgree===true" class="profile"><img src="{{temp.Image}}" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Belief </span>
-            <span *ngIf="temp.IsAgree===false" class="profile"><img src="{{temp.Image}}" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Question </span>
 
-            <span class="cover_ntfctn_border questions-field">
-              <strong><a data-title="Q" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Question}}</a></strong>
-              <div *ngIf="temp.IsAgree===true">
-                <strong class="text-danger"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Opinion}}</a></strong>
-              </div>
-
-              <div *ngIf="temp.IsAgree===false">
-                <strong class="text-success"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Opinion}}</a></strong>
-              </div>
-            </span>
-            <!--<span>{{ temp.CreationDate | date:'medium' }}</span>-->
+          <div class="scroller_cover" *ngIf="!isRecordLoaded">
+            <img src="../../../assets/images/reordloaderImages.gif" />
           </div>
 
+          <ng-container *ngIf="isRecordLoaded">
+            <div class="cover_right" *ngFor="let temp of notification">
+              <span *ngIf="temp.IsAgree===true" class="profile"><img src="{{temp.Image}}" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Belief </span>
+              <span *ngIf="temp.IsAgree===false" class="profile"><img src="{{temp.Image}}" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Question </span>
 
+              <span class="cover_ntfctn_border questions-field">
+                <strong><a data-title="Q" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Question}}</a></strong>
+                <div *ngIf="temp.IsAgree===true">
+                  <strong class="text-danger"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Opinion}}</a></strong>
+                </div>
 
+                <div *ngIf="temp.IsAgree===false">
+                  <strong class="text-success"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Opinion}}</a></strong>
+                </div>
+              </span>
+              <!--<span>{{ temp.CreationDate | date:'medium' }}</span>-->
+            </div>
+          </ng-container>
 
         </div>
       </div>
-      <div class="navigation_cover">
+
+      <div class="navigation_cover" *ngIf="isRecordLoaded">
 
         <div class="container">
           <div class="text-center" style="cursor:pointer">

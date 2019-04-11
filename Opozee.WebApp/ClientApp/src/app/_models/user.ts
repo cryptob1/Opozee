@@ -47,6 +47,7 @@ export class NotificationsModel {
   OpinionId: number;
   TotalRecordcount: number;
   IsAgree: boolean;
+  OpinionList: any;
 
 }
 

@@ -732,6 +732,7 @@ span.bell-icon i {
       font-weight: 400;
       font-family: 'Poppins', sans-serif;
       font-size: 17px;
+      word-break: break-word
     }
 
       .questions-field strong a:before {
@@ -822,6 +823,16 @@ span.bell-icon i {
 
   .user_left span {
     font-size: 12px;
+  }
+  .cover_heading.d-flex {
+    display: block;
+    text-align: left;
+    padding: 20px;
+  }
+
+  footer ul li {
+    width: auto;
+    padding: 6px 10px;
   }
 }
 

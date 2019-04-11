@@ -28,7 +28,7 @@ namespace Opozee.Models.API
         public int TotalRecordcount { get; set; }
         public int NotificationId { get; set; }
         public bool IsAgree { get; set; }
-
+        public List<string> OpinionList { get; set; }
     }
     public class UserProfile
     {
