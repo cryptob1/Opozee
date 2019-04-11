@@ -6,7 +6,11 @@ import { UserService } from '../../_services';
 import { } from '../../_models/question';
 
 
-@Component({ templateUrl: 'questionlisting.component.html' })
+
+  @Component({
+    selector: 'question-listing',
+    templateUrl: 'questionlisting.component.html'
+  })
 export class QuestionListingComponent implements OnInit {
   currentUser: User;
   localStorageUser: LocalStorageUser;

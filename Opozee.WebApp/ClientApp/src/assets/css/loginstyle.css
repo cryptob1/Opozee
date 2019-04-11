@@ -70,7 +70,7 @@ a, a:hover {
 
 /*Login page css*/
 #login {
-  background-image: url(../images/logi.jpg);
+  /*background-image: url(../images/logi.jpg);*/
   background-size: cover;
   background-repeat: no-repeat;
   min-height: 100vh;
