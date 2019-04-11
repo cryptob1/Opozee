@@ -9,6 +9,7 @@ import { QuestionListingComponent } from './question/QuestionListing';
 import { NotificationComponent } from './notification/notification.component';
 import { Questiondetail } from './questionDetail/questiondetail.component';
 import { ProfileComponent } from './user/profile/profile.component';
+import { ViewProfileComponent } from './user/viewProfile/viewprofile.component';
 import { EditProfileComponent } from './user/editprofile/editProfile.component';
 import { UserpostQuestion } from './user/userpostedQuestion/userpostQuestion.component';
 import { BookmarkQuestion } from './bookmark/bookmark.component';
@@ -26,6 +27,7 @@ const appRoutes: Routes = [
   // otherwise redirect to home
   { path: 'questiondetail/:Id', component: Questiondetail, canActivate: [AuthGuard] },
   { path: 'profile/:Id', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'viewprofile/:Id', component: ViewProfileComponent },
   { path: 'editprofile/:Id', component: EditProfileComponent, canActivate: [AuthGuard] },
   { path: 'mypostquestions', component: UserpostQuestion, canActivate: [AuthGuard] },
 

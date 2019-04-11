@@ -35,26 +35,30 @@ export class QuestionListingComponent implements OnInit {
           this.search = this.route.snapshot.params["search"];
     }
 
+    debugger
+    route.params.subscribe(data => {
+      this.initialize();
+    })
+
   }
 
   ngOnInit() {
-    debugger;
-
-
-    this.questionGetModel.Search = this.search;
-    if (this.localStorageUser) {
-      this.questionGetModel.UserId = this.localStorageUser.Id
-    }
-    else {
-      this.questionGetModel.UserId = 0;
-    }
-    this.questionGetModel.PageNumber = 1;
-    this.questionGetModel.TotalRecords = 5
-    this.getAllQuestionlist(this.questionGetModel);
-  
+   
   }
 
+    initialize() {
+      this.questionGetModel.Search = this.search;
+      if (this.localStorageUser) {
+        this.questionGetModel.UserId = this.localStorageUser.Id
+      }
+      else {
+        this.questionGetModel.UserId = 0;
+      }
+      this.questionGetModel.PageNumber = 1;
+      this.questionGetModel.TotalRecords = 5
+      this.getAllQuestionlist(this.questionGetModel);
 
+    }
 
   private getAllQuestionlist(questionGetModel) {
     debugger
@@ -62,8 +66,12 @@ export class QuestionListingComponent implements OnInit {
     this.userService.getAllQuestionlist(questionGetModel).subscribe(data => {
       debugger;
       if (data) {
-        this.PostQuestionDetailList = data;
-        this.questionGetModel.TotalRecords = data[0].TotalRecordcount
+        if (data.length > 0) {
+          this.PostQuestionDetailList = data;
+          this.questionGetModel.TotalRecords = data[0].TotalRecordcount
+        }
+        this.setPageonpageLoad(1, this.questionGetModel.TotalRecords)
+        this.isRecordLoaded = true
       }
       this.setPageonpageLoad(1, this.questionGetModel.TotalRecords)
       this.isRecordLoaded = true
@@ -80,8 +88,11 @@ export class QuestionListingComponent implements OnInit {
     this.userService.getAllQuestionlist(questionGetModel).subscribe(data => {
       debugger;
       if (data) {
-        this.PostQuestionDetailList = data;
-        this.questionGetModel.TotalRecords = data[0].TotalRecordcount
+        if (data.length > 0) {
+          this.PostQuestionDetailList = data;
+          this.questionGetModel.TotalRecords = data[0].TotalRecordcount
+        }
+        this.isRecordLoaded = true
       }
       this.isRecordLoaded = true
 

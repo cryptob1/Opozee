@@ -21,6 +21,7 @@ import { AppConfigService } from './appConfigService';
 import { HeaderComponent } from './header/header.component';
 import { Questiondetail } from './questionDetail/questiondetail.component';
 import { ProfileComponent } from './user/profile/profile.component';
+import { ViewProfileComponent } from './user/viewProfile/viewprofile.component';
 import { EditProfileComponent } from './user/editprofile/editProfile.component';
 import { DataSharingService } from './dataSharingService';
 import { ConfigsSocial } from './ConfigsSocial ';
@@ -88,6 +89,7 @@ export function getAuthServiceConfigs() {
     HeaderComponent,
     Questiondetail,
     ProfileComponent,
+    ViewProfileComponent,
     EditProfileComponent,
     UserpostQuestion, BookmarkQuestion, PostedQuestionEditList, EditPostquestion, termandConditionComponent
     , privatePolicyComponent

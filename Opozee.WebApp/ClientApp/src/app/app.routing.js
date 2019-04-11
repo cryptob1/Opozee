@@ -10,6 +10,7 @@ var QuestionListing_1 = require("./question/QuestionListing");
 var notification_component_1 = require("./notification/notification.component");
 var questiondetail_component_1 = require("./questionDetail/questiondetail.component");
 var profile_component_1 = require("./user/profile/profile.component");
+var viewprofile_component_1 = require("./user/viewProfile/viewprofile.component");
 var editProfile_component_1 = require("./user/editprofile/editProfile.component");
 var userpostQuestion_component_1 = require("./user/userpostedQuestion/userpostQuestion.component");
 var bookmark_component_1 = require("./bookmark/bookmark.component");
@@ -27,6 +28,7 @@ var appRoutes = [
     // otherwise redirect to home
     { path: 'questiondetail/:Id', component: questiondetail_component_1.Questiondetail, canActivate: [index_4.AuthGuard] },
     { path: 'profile/:Id', component: profile_component_1.ProfileComponent, canActivate: [index_4.AuthGuard] },
+    { path: 'viewprofile/:Id', component: viewprofile_component_1.ViewProfileComponent },
     { path: 'editprofile/:Id', component: editProfile_component_1.EditProfileComponent, canActivate: [index_4.AuthGuard] },
     { path: 'mypostquestions', component: userpostQuestion_component_1.UserpostQuestion, canActivate: [index_4.AuthGuard] },
     { path: 'bookmark/:questionId', component: bookmark_component_1.BookmarkQuestion, canActivate: [index_4.AuthGuard] },
