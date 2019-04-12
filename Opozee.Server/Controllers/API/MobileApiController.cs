@@ -1367,12 +1367,11 @@ namespace opozee.Controllers.API
                     return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
                 }
                 AllUserQuestions questionDetail = new AllUserQuestions();
-                //int id = Convert.ToInt32(userId);
-
+                int id = Convert.ToInt32(userId);
                 questionDetail.PostQuestionDetail = (from q in db.Questions
                                                      join b in db.BookMarks on q.Id equals b.QuestionId
-                                                     join u in db.Users on b.UserId equals u.UserID
-                                                     where q.IsDeleted == false && u.UserID == userId && b.IsBookmark == true
+                                                     join u in db.Users on q.OwnerUserID equals u.UserID
+                                                     where q.IsDeleted == false && b.UserId == userId && b.IsBookmark == true
                                                      select new PostQuestionDetail
                                                      {
                                                          Id = q.Id,
@@ -1388,7 +1387,6 @@ namespace opozee.Controllers.API
                                                          YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
                                                          NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count()
                                                      }).OrderByDescending(p => p.CreationDate).ToPagedList(Pageindex - 1, Pagesize).ToList();
-
 
                 return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "GetBookmarkQuestion"));
             }
@@ -1605,6 +1603,53 @@ namespace opozee.Controllers.API
             }
         }
         #endregion
+
+
+        #region "Get Beliefs by User Id"
+        
+        [Route("api/MobileApi/GetUserBeliefs")]
+        [HttpGet]
+        public HttpResponseMessage getUserBeliefs(int userId)
+        { 
+            try
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
+                }
+
+                List<Belief> beliefList = (from belief in db.Opinions
+                             join user in db.Users on belief.CommentedUserId equals user.UserID
+                             where user.UserID == userId
+                                        select new Belief
+                             {
+                                 Id = belief.Id,
+                                 questionId = belief.QuestId,
+                                 beliefText = belief.Comment,
+                                 userId = user.UserID,
+                                 UserFullName = user.FirstName + " " + user.LastName,
+                                 UserImage = string.IsNullOrEmpty(user.ImageURL) ? "" : user.ImageURL,
+                                 LikesCount = db.Notifications.Where(p => p.CommentId == belief.Id && p.Like == true).Count(),
+                                 DislikesCount = db.Notifications.Where(p => p.CommentId == belief.Id && p.Dislike == true).Count(),
+                                 userName = user.UserName,
+                                 IsAgree = belief.IsAgree,
+                                 CreationDate = belief.CreationDate
+                             }).OrderBy(p => p.CreationDate).ToList();
+
+              
+                return Request.CreateResponse(HttpStatusCode.OK, beliefList);
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+          
+               return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "GetUserBeliefs"));
+            }
+
+        }
+        #endregion
+
 
 
     }
