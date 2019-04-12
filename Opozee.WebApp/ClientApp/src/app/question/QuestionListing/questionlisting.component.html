@@ -19,11 +19,12 @@
             <li *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0">
 
               <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="['/questiondetail/', temp.Id]">
-                <div class="user_left">
+                <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
+
                   <span class="icon"><img src="{{temp.UserImage}}"></span>
-                  <span class="username">
+                   <span class="username">
                     {{temp.Name}}
-                  </span>
+                  </span> 
                 </div>
                 <div class="user_right">
 

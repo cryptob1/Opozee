@@ -6,7 +6,10 @@ import { LocalStorageUser, NotificationsModel } from '../../_models';
 import { UserProfileModel } from '../../_models/user';
 
 
-@Component({ templateUrl: 'viewProfile.component.html' })
+@Component({
+  templateUrl: 'viewProfile.component.html'
+
+})
 export class ViewProfileComponent implements OnInit {
 
   Id: number;

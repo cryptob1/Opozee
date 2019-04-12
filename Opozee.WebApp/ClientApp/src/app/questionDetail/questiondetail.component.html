@@ -18,11 +18,12 @@
 
 
 
-
-              <span class="img"><img src="../../assets/images/user.png" alt="user"></span>
+              <span class="img"><img src="{{PostQuestionDetailModel.postQuestionDetail.UserImage}}"></span>
+ 
               <span class="text_profile">
 
-                <span class="user_123">@{{PostQuestionDetailModel.postQuestionDetail?.OwnerUserName}}</span>
+                <span class="user_123" style="cursor:pointer"
+                      [routerLink]="['/viewprofile/',PostQuestionDetailModel.postQuestionDetail.OwnerUserID]">@{{PostQuestionDetailModel.postQuestionDetail?.OwnerUserName}}</span>
 
               </span>
               {{PostQuestionDetailModel.postQuestionDetail.HashTags}}

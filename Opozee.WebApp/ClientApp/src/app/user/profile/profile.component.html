@@ -61,7 +61,7 @@
         <div id="mybeliefs" class="tab-pane fade in active">
           <span class="cover_ntfctn_border questions-field" *ngFor="let temp of notification; let i=index">
 
-            <strong><a data-title="Q"> {{temp.Question}}</a><small style="color:grey;font-size:9px;font-weight:100">Posted by {{temp.UserName}}</small></strong>
+            <strong><a data-title="Q"> {{temp.Question}}</a><small style="color:grey;font-size:9px;font-weight:100">@{{temp.UserName}}</small></strong>
             <!--<strong class="text-success"><a data-title="B">{{temp.Opinion}}</a></strong>-->
             <strong class="text-success" *ngFor="let opinion of temp.OpinionList; let ii=index">
               <a data-title="B">{{opinion}}</a>
