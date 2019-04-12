@@ -214,7 +214,11 @@ export class Questiondetail implements OnInit {
         });
   }
 
-
+  searchForTag(hashtag) {
+    this.router.navigateByUrl('/questionlistings/' + hashtag, { skipLocationChange: true }).then(() =>
+      this.router.navigate(['/questions/', hashtag]));
+    //this.router.navigate(['/questions'], { queryParams: { tag: 1 } });
+  }
 
   SaveLikeDislike(dataModel) {
     debugger;

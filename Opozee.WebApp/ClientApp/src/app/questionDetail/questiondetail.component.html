@@ -16,17 +16,21 @@
           <div class="cover_profile">
             <span class="profile_left">
 
-
-
-              <span class="img"><img src="{{PostQuestionDetailModel.postQuestionDetail.UserImage}}"></span>
- 
-              <span class="text_profile">
-
-                <span class="user_123" style="cursor:pointer"
-                      [routerLink]="['/viewprofile/',PostQuestionDetailModel.postQuestionDetail.OwnerUserID]">@{{PostQuestionDetailModel.postQuestionDetail?.OwnerUserName}}</span>
-
+              <span class="img" [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
+                <img src="{{PostQuestionDetailModel?.postQuestionDetail?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user">
               </span>
-              {{PostQuestionDetailModel.postQuestionDetail.HashTags}}
+
+              <span class="text_profile" [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
+                <span class="user_123">@{{PostQuestionDetailModel.postQuestionDetail?.OwnerUserName}}</span>
+              </span>
+
+              <span>
+                <ng-container *ngFor="let tag of PostQuestionDetailModel?.postQuestionDetail?.HashTags?.split(',')">
+                  <a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a>
+                </ng-container>
+              </span>
+
+              <!--{{PostQuestionDetailModel.postQuestionDetail.HashTags}}-->
               <!--<span class="time">{{PostQuestionDetailModel.postQuestionDetail?.CreationDate | date:'medium'}}</span>-->
               <p>{{PostQuestionDetailModel.postQuestionDetail.Question}}</p>
               <div class="opiniuns">
@@ -55,8 +59,9 @@
                 <div [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']">
                   <p>{{temp?.Comment}}</p>
                   <span class="profile_bottom_cover">
-                    <span class="user_left">
-                      <img src="../../assets/images/user.png" alt="user"><span>@{{temp?.CommentedUserName}}</span>
+                    <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
+                      <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user" />
+                      <span>@{{temp?.CommentedUserName}}</span>
                     </span>
                     <div class="like_images">
                       <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp?.Likes == true)  ? 'like.png' : 'like-deactive.png'}}" alt="like" (click)="saveLikeclick(temp?.Likes,index)">{{temp?.LikesCount}}</span>

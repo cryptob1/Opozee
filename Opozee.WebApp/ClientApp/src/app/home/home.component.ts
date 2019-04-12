@@ -30,7 +30,6 @@ export class HomeComponent implements OnInit {
   }
 
   private getUserALLRecords() {
-    debugger;
     this.userService.getUserRecords().pipe(first()).subscribe(users => {
       debugger;
       this.questionListing = users;
@@ -38,7 +37,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
-
-
+  searchForTag(hashtag) {
+    this.router.navigateByUrl('/questionlistings/' + hashtag, { skipLocationChange: true }).then(() =>
+      this.router.navigate(['/questions/', hashtag]));
+    //this.router.navigate(['/questions'], { queryParams: { tag: 1 } });
+  }
 
 }

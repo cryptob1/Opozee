@@ -29,6 +29,8 @@ import { UserpostQuestion } from './user/userpostedQuestion/userpostQuestion.com
 import { PostedQuestionEditList } from './question/PostedQuestion/postedQuestionEditList.component';
 import { EditPostquestion } from './question/editPosttedQuestion/editPostquestion.component';
 
+import { TimeAgoPipe } from 'time-ago-pipe';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import {
@@ -92,7 +94,8 @@ export function getAuthServiceConfigs() {
     ViewProfileComponent,
     EditProfileComponent,
     UserpostQuestion, BookmarkQuestion, PostedQuestionEditList, EditPostquestion, termandConditionComponent
-    , privatePolicyComponent
+    , privatePolicyComponent,
+    TimeAgoPipe
   ],
   providers: [
     AuthGuard,

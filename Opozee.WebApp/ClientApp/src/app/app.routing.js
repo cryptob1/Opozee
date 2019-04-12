@@ -20,6 +20,8 @@ var termandCondition_component_1 = require("./legal/termandCondition.component")
 var privatePolicy_component_1 = require("./legal/privatePolicy.component");
 var appRoutes = [
     { path: 'questionlisting/:search', component: QuestionListing_1.QuestionListingComponent },
+    { path: 'questionlistings/:search', component: QuestionListing_1.QuestionListingComponent },
+    { path: 'questions/:tag', component: QuestionListing_1.QuestionListingComponent },
     { path: '', component: index_1.HomeComponent },
     { path: 'login', component: index_2.LoginComponent },
     { path: 'register', component: index_3.RegisterComponent },
@@ -38,5 +40,5 @@ var appRoutes = [
     { path: 'privatepolicy', component: privatePolicy_component_1.privatePolicyComponent, canActivate: [index_4.AuthGuard] },
     { path: '**', redirectTo: '' }
 ];
-exports.routing = router_1.RouterModule.forRoot(appRoutes);
+exports.routing = router_1.RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' });
 //# sourceMappingURL=app.routing.js.map

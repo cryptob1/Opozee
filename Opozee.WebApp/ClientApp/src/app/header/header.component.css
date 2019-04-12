@@ -69,12 +69,76 @@ header .container-fluid {
 }
 /********header css ends*******/
 
+/*.banner_search-form {
+  width: 25%;
+}
+.search-input {
+  width: 80%;
+}
+.search-button {
+  width: 20%;
+}
+  .search-button a img {
+    margin-left: 20%;
+  }*/
+@media(max-width:992px) and (min-width:768px) {
+  .banner_search-form {
+    margin-left: 20px;
+  }
+  .nav > li > a {
+    padding:10px;
+  }
+  .search-input {
+    width: calc(100% - 40px);
+    float: left;
+  }
+  .search-button {
+    width:40px
+  }
+}
 @media(max-width:767px) {
-  a.navbar-brand.logo {
+  a .navbar-brand.logo {
     margin-left: 15px;
   }
 
   .navbar-default .navbar-toggle {
     margin-top: 36px !important
+  }
+
+  .nav li {
+    cursor: pointer;
+  }
+
+  .banner_search-form {
+    margin: 20px 0 20px 25px;
+    width:100%;
+    float:left;
+  }
+  .navbar-nav{
+    float:left;
+    width:100%;
+    margin-top:0px;
+  }
+  .nav > li{
+    float:left;
+    width:100%;
+  }
+
+  .search-button {
+    width: 15%;
+  }
+
+    .search-button a img {
+      margin-left: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+  .search-button {
+    width: 15%;
+  }
+
+  .banner_search-form {
+    margin: 20px 0 20px 35px;
   }
 }
