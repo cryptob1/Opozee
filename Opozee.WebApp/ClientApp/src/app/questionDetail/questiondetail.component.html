@@ -2,11 +2,11 @@
   <div class="container">
     <div class="cover_heading">
 
-      <h2>
-        Question Detail
-
+      <h3>
+       
+         
         <span class="active_heart" (click)="saveBookmarkQuestion(PostQuestionDetailModel.postQuestionDetail?.IsBookmark)"><a style="cursor:pointer"><img src="../../assets/images/{{(PostQuestionDetailModel.postQuestionDetail?.IsBookmark == true) ? 'iconhert.png' : 'iconlinehert.png'}}" /></a></span>
-      </h2>
+      </h3>
     </div>
 
     <div class="cover_sections">
@@ -27,20 +27,20 @@
 
               </span>
               {{PostQuestionDetailModel.postQuestionDetail.HashTags}}
-              <!--<span class="time">{{PostQuestionDetailModel.postQuestionDetail?.CreationDate | date:'medium'}}</span>-->
+              <!--<span class="time">{{PostQuestionDetailModel.postQuestionDetail?.CreationDate |  timeAgo}}</span>-->
               <p>{{PostQuestionDetailModel.postQuestionDetail.Question}}</p>
               <div class="opiniuns">
                 <div class="left">
-                  <span>Analysis</span>
+                  <span> </span>
                   <div class="anlysis_slider">
 
                     <span [style.width.%]="(PostQuestionDetailModel.postQuestionDetail?.YesCount /  (PostQuestionDetailModel.postQuestionDetail?.YesCount + PostQuestionDetailModel.postQuestionDetail?.NoCount) * 100) | number:'1.0-0'" class="color yes_div"></span>
-                    <span class="percentage" *ngIf="PostQuestionDetailModel.postQuestionDetail?.NoCount > 0"> No : {{(PostQuestionDetailModel.postQuestionDetail.NoCount /  (PostQuestionDetailModel.postQuestionDetail.YesCount + PostQuestionDetailModel.postQuestionDetail.NoCount) * 100) | number:'1.0-0'}} %</span>
-                    <span class="percentage_yes" *ngIf="PostQuestionDetailModel.postQuestionDetail?.YesCount > 0"> Yes : {{(PostQuestionDetailModel.postQuestionDetail.YesCount /  (PostQuestionDetailModel.postQuestionDetail.YesCount + PostQuestionDetailModel.postQuestionDetail.NoCount) * 100) | number:'1.0-0'}}  %</span>
+                    <!--<span class="percentage" *ngIf="PostQuestionDetailModel.postQuestionDetail?.NoCount > 0"> No : {{(PostQuestionDetailModel.postQuestionDetail.NoCount /  (PostQuestionDetailModel.postQuestionDetail.YesCount + PostQuestionDetailModel.postQuestionDetail.NoCount) * 100) | number:'1.0-0'}} %</span>-->
+                    <span class="percentage_yes" *ngIf="PostQuestionDetailModel.postQuestionDetail?.YesCount > 0 || PostQuestionDetailModel.postQuestionDetail?.NoCount>0"> Yes : {{(PostQuestionDetailModel.postQuestionDetail.YesCount /  (PostQuestionDetailModel.postQuestionDetail.YesCount + PostQuestionDetailModel.postQuestionDetail.NoCount) * 100) | number:'1.0-0'}}  %</span>
 
                     <div *ngIf="PostQuestionDetailModel.postQuestionDetail?.YesCount == 0 && PostQuestionDetailModel.postQuestionDetail?.NoCount ==0">
-                      <span class="percentage">NO : 0 %</span>
-                      <span class="percentage_yes">Yes : 0 %</span>
+                      <!--<span class="percentage">NO : 0 %</span>-->
+     
                       <span class="empty_space"></span>
                     </div>
                   </div>

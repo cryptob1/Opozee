@@ -83,16 +83,16 @@ body {
   width: 100%;
   float: left;
   text-align: center;
-  padding: 20px 0px;
-  margin-top: 25px;
+  padding: 5px 0px;
+  margin-top: 5px;
   position: relative;
   text-transform: capitalize;
 }
 
-  .cover_heading h2 {
+  .cover_heading h3 {
     margin: 0px;
     color: #333;
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+    
     text-transform: capitalize;
   }
 
@@ -111,7 +111,7 @@ nav.navbar.navbar-default.navbar-fixed-top {
   width: 100%;
   float: left;
   display: block;
-  margin-top: 30px;
+   
   padding: 20px;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
 }
@@ -138,6 +138,11 @@ nav.navbar.navbar-default.navbar-fixed-top {
     margin: 0px 0px 35px 0px;
     float: left;
     width: 100%;
+  }
+
+  .cover_questions .strong  .a{
+    font-size: 38px;
+     
   }
 
 section.section_second {
@@ -191,9 +196,9 @@ section.section_second {
   padding: 3px 3px;
   font-size: 13px;
   float: left;
-  background: #528f24;
-  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );
-  color: #fff;
+  background: #D2F3C8;
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#10b1a9', endColorstr='#D2F3C8',GradientType=1 );
+  color: #000;
   font-weight: 500;
   border-radius: 3px;
 }
@@ -206,9 +211,9 @@ section.section_second {
   padding: 3px 3px;
   font-size: 13px;
   float: left;
-  background: #902424;
+  background: #FAC7C7;
   filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );
-  color: #fff;
+  color: #000;
   font-weight: 500;
   border-radius: 3px;
 }
@@ -611,7 +616,7 @@ span.bell-icon i {
   width: 90% !important;
   float: left !important;
   /*border: 2px solid #D2F3C8;*/
-  border: 2px solid #528f24;
+  border: 3px solid #D2F3C8;
   border-radius: 10px;
   padding: 15px !important;
   margin-top: 16px;
@@ -620,7 +625,7 @@ span.bell-icon i {
 .no_feedback {
   float: right !important;
   /*border: 2px solid #FAC7C7;*/
-  border: 2px solid #902424;
+  border: 3px solid #FAC7C7;
 }
 
 .cover_questions.image_question span.icon {

@@ -85,7 +85,7 @@ export class Questiondetail implements OnInit {
       this.imageShowDislike = -2;
       /////+
       this.dataModel.Likes = 1;
-      this.dataModel.Dislikes = 0;
+      //this.dataModel.Dislikes = 0;
       this.dataModel.QuestId = this.Id;
       this.dataModel.Comment = this.comment;
       this.dataModel.CommentedUserId = this.localStorageUser.Id;
@@ -100,7 +100,7 @@ export class Questiondetail implements OnInit {
       this.imageShowLike = -1;
 
       this.dataModel.Likes = 0;
-      this.dataModel.Dislikes = 1;
+      //this.dataModel.Dislikes = 1;
       this.dataModel.QuestId = this.Id;
       this.dataModel.Comment = this.comment;
       this.dataModel.CommentedUserId = this.localStorageUser.Id;
@@ -120,7 +120,7 @@ export class Questiondetail implements OnInit {
     debugger;
     if (!DisLikes) {
       this.imageShowDislike = index;
-      this.imageShowLike = -2;
+      //this.imageShowLike = -2;
 
       this.dataModel.Dislikes = 1;
 
@@ -139,7 +139,7 @@ export class Questiondetail implements OnInit {
       this.imageShowDislike = -1;
 
       this.dataModel.Dislikes = 0;
-      this.dataModel.Likes = 1;
+      //this.dataModel.Likes = 1;
       this.dataModel.QuestId = this.Id;
       this.dataModel.Comment = this.comment;
       this.dataModel.CommentedUserId = this.localStorageUser.Id;
@@ -229,7 +229,7 @@ export class Questiondetail implements OnInit {
         debugger;
         this.loading = false;
         this.getQuestionDetail();
-        this.toastr.success('Data save successfully', '');
+        //this.toastr.success('Data save successfully', '');
         this.dataModel = {
           'QuestId': 0, 'Comment': '',
           'CommentedUserId': 0,
