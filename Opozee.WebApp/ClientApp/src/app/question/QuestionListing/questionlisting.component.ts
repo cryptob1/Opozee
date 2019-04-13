@@ -9,7 +9,8 @@ import { } from '../../_models/question';
 
   @Component({
     selector: 'question-listing',
-    templateUrl: 'questionlisting.component.html'
+    templateUrl: 'questionlisting.component.html',
+    
   })
 export class QuestionListingComponent implements OnInit {
   currentUser: User;

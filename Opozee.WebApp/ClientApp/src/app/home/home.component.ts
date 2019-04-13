@@ -29,6 +29,7 @@ export class HomeComponent implements OnInit {
     //});
   }
 
+  //seemes to be getting popular questions
   private getUserALLRecords() {
     debugger;
     this.userService.getUserRecords().pipe(first()).subscribe(users => {
