@@ -37,7 +37,7 @@ var appRoutes = [
     { path: 'postedQuestionEditList/:questionId', component: postedQuestionEditList_component_1.PostedQuestionEditList, canActivate: [index_4.AuthGuard] },
     { path: 'editpostedquestion/:qId', component: editPostquestion_component_1.EditPostquestion, canActivate: [index_4.AuthGuard] },
     { path: 'termcondition', component: termandCondition_component_1.termandConditionComponent, canActivate: [index_4.AuthGuard] },
-    { path: 'privatepolicy', component: privatePolicy_component_1.privatePolicyComponent, canActivate: [index_4.AuthGuard] },
+    { path: 'privatepolicy', component: privatePolicy_component_1.privatePolicyComponent },
     { path: '**', redirectTo: '' }
 ];
 exports.routing = router_1.RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' });

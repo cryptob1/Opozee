@@ -18,8 +18,9 @@
 
                   <div class="form-group">
                     <label for="postQuestion">Question</label>
+                    <div  class="QuestionComment">Opozee is designed to answer questions in a yes or no format.</div>
                     <textarea rows="4" cols="50" formControlName="postQuestion" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.postQuestion.errors }"></textarea>
-                    <i class="fa fa-inbox"></i>
+                    
 
                     <div *ngIf="postQuestionTemp == 0">question required</div>
                     {{postQuestionTemp}}

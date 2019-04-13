@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
   @Component({
     selector: 'question-listing',
     templateUrl: 'questionlisting.component.html',
+    styleUrls: ['questionlisting.component.css']
     
   })
   export class QuestionListingComponent implements OnInit, OnDestroy  {

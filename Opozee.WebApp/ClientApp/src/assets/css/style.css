@@ -292,7 +292,7 @@ section.section_second {
 
 
   .cover_questions .user_right .hash_tag {
-    font-size: 13px;
+    font-size: 11px;
     float: right;
   }
   .cover_questions .user_right .date i {
@@ -306,7 +306,7 @@ section.section_second {
   }
 
 .inners {
-  padding-top: 130px !important;
+  padding-top: 30px !important;
 }
 
 .mains {
@@ -872,3 +872,4 @@ span.bell-icon i {
     width: 100% !important;
   }
 }
+

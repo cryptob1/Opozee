@@ -52,7 +52,7 @@ export function getAuthServiceConfigs() {
       {
         //600720573732817
         id: FacebookLoginProvider.PROVIDER_ID,
-        provider: new FacebookLoginProvider("600720573732817")
+        provider: new FacebookLoginProvider("2286238128100867")
       },
       {
         id: GoogleLoginProvider.PROVIDER_ID,

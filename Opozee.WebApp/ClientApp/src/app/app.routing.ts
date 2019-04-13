@@ -37,7 +37,7 @@ const appRoutes: Routes = [
   { path: 'postedQuestionEditList/:questionId', component: PostedQuestionEditList, canActivate: [AuthGuard] },
   { path: 'editpostedquestion/:qId', component: EditPostquestion, canActivate: [AuthGuard] },
   { path: 'termcondition', component: termandConditionComponent, canActivate: [AuthGuard] },
-  { path: 'privatepolicy', component: privatePolicyComponent, canActivate: [AuthGuard] },
+  { path: 'privatepolicy', component: privatePolicyComponent },
   { path: '**', redirectTo: '' }
 ];
 
