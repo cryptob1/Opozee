@@ -18,26 +18,29 @@
             
             <li *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0">
 
-              <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="['/questiondetail/', temp.Id]">
+              <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList">
                 <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
 
-                  <span class="icon"><img src="{{temp.UserImage}}"></span>
+                  <span class="icon"><img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
                    <span class="username">
                     {{temp.Name}}
                   </span> 
                 </div>
                 <div class="user_right">
 
-                  <div class="date"><i>{{temp.CreationDate | date:'medium'}}</i></div>
+                  <div class="date"><i style="font-size: 10px;">{{temp.CreationDate | timeAgo}}</i></div>
                   <br />
-                  <div class="hash_tag"> <a>{{temp.HashTags}}</a></div>
+                  <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
+                    <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></div>
+                  </ng-container>
+
                 </div>
-                <strong><a>{{temp.Question}}</a></strong>
+                <strong><a [routerLink]="['/questiondetail/', temp.Id]">{{temp.Question}}</a></strong>
 
                 <div class="cover_analysis">
                   <div class="left">
                     <span> </span>
-                    <div class="anlysis_slider">
+                    <div class="anlysis_slider" style="width:100%">
                       <span [style.width.%]="((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'" class="color yes_div"></span>
                       <span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>
 
@@ -56,12 +59,11 @@
                   <p>{{temp.MostYesLiked?.Comment}}</p>
                   <div class="row">
                     <div class="col-sm-6 text-left">
-                      <div class="opinionsList">
+                      <div class="opinionsList"  [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
 
-                        <span class="icon"><img src="{{temp.MostYesLiked?.UserImage}}" alt="user"></span>
+                        <span class="icon"><img src="{{temp.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
                         <span class="username">
-                          @
-                          {{temp.MostYesLiked?.CommentedUserName}}
+                          @ {{temp.MostYesLiked?.CommentedUserName}}
                         </span>
                       </div>
                     </div>
@@ -88,9 +90,9 @@
 
                     </div>
                     <div class="col-sm-6 text-left">
-                      <div class="opinionsList">
+                      <div class="opinionsList"  [routerLink]="['/viewprofile/', temp?.MostNoLiked?.CommentedUserId]">
 
-                        <span class="icon"><img src="{{temp.MostNoLiked?.UserImage}}"></span>
+                        <span class="icon"><img src="{{temp.MostNoLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';"></span>
                         <!--<span class="icon"><img src="./images/user.png" alt=""></span>-->
                         <span class="username">
                           @

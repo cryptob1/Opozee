@@ -19,6 +19,8 @@ import { termandConditionComponent } from './legal/termandCondition.component';
 import { privatePolicyComponent } from './legal/privatePolicy.component';
 const appRoutes: Routes = [
   { path: 'questionlisting/:search', component: QuestionListingComponent },
+  { path: 'questionlistings/:search', component: QuestionListingComponent },
+  { path: 'questions/:tag', component: QuestionListingComponent },
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
@@ -39,4 +41,4 @@ const appRoutes: Routes = [
   { path: '**', redirectTo: '' }
 ];
 
-export const routing = RouterModule.forRoot(appRoutes);
+export const routing = RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' });

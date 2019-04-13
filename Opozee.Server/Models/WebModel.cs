@@ -15,15 +15,11 @@ namespace Opozee.Models.API
     {
         public int Id { get; set; }
         public string OwnerUserName { get; set; }
-
         public string Question { get; set; }
-
         public string HashTags { get; set; }
-
         public int Like { get; set; }
-
         public string ImageURL { get; set; }
-
+        public int UserID { get; set; } 
     }
 
 
@@ -43,26 +39,19 @@ namespace Opozee.Models.API
 
         public bool LikeOrDislke { get; set; }
 
-
-
     }
 
 
     public class PagingModel
     {
         public int UserId { get; set; }
-
         public string Search { get; set; }
-
         public int PageNumber { get; set; }
-
         public int TotalRecords { get; set; }
-
         public int PageSize { get; set; }
-
         public bool IsChecked { get; set; }
-
         public string CheckedTab { get; set; }
+        public Boolean IsHashTag { get; set; }
     }
 
     public class PostQuestionDetailWebModel

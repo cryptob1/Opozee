@@ -32,6 +32,7 @@ span.profile_left img {
     height:100%;
     padding: 0px;
     border-radius: 100%;
+    height:26px;
   }
 
 .text_profile {
@@ -207,6 +208,7 @@ span.profile_left p {
     border: 1px solid #333;
     padding: 0px;
     border-radius: 50%;
+    height:23px;
   }
 
   .user_left span {
@@ -338,6 +340,8 @@ span.profile_left p {
     margin-right: 7px;
   }
 
+}
 
-
+.user_left, .img, .text_profile {
+  cursor: pointer !important;
 }

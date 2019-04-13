@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User, LocalStorageUser, PostQuestionDetail } from '../../_models';
 import { UserService } from '../../_services';
 import { } from '../../_models/question';
+import { Subscription } from 'rxjs';
 
 
 
@@ -12,42 +13,51 @@ import { } from '../../_models/question';
     templateUrl: 'questionlisting.component.html',
     
   })
-export class QuestionListingComponent implements OnInit {
-  currentUser: User;
-  localStorageUser: LocalStorageUser;
-  search: string ;
-  //questionListing: QuestionListing[] = [];
-  PostQuestionDetailList: PostQuestionDetail[] = [];
-  isRecordLoaded: boolean = false;
-  questionGetModel = { 'UserId': 0, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0,'PageSize': 0 }
+  export class QuestionListingComponent implements OnInit, OnDestroy  {
+    private paramsSub: Subscription;
+    currentUser: User;
+    localStorageUser: LocalStorageUser;
+    search: string;
+    hashTag: boolean = false;
+    //questionListing: QuestionListing[] = [];
+    PostQuestionDetailList: PostQuestionDetail[] = [];
+    isRecordLoaded: boolean = false;
+    questionGetModel = { 'UserId': 0, 'isHashTag':false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0,'PageSize': 0 }
 
-  private allItems: any[];
+    private allItems: any[];
 
-  // pager object
-  pager: any = {};
+    // pager object
+    pager: any = {};
+    // paged items
+    pagedItems: any[];
 
-  // paged items
-  pagedItems: any[];
-
-  constructor(private userService: UserService, private route: ActivatedRoute) {
+    constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
-
+    this.hashTag = false;
     if (this.route.snapshot.params["search"]) {
-          this.search = this.route.snapshot.params["search"];
+      this.search = this.route.snapshot.params["search"];
+    }
+    else if (this.route.snapshot.params["tag"]) {
+      this.hashTag = true;
+      this.search = this.route.snapshot.params["tag"];
     }
 
-    debugger
-    route.params.subscribe(data => {
+    this.paramsSub = route.params.subscribe(params => {
       this.initialize();
-    })
-
+    });
   }
 
-  ngOnInit() {
-   
-  }
+    ngOnInit() {
+
+    }
+
+    ngOnDestroy() {
+      this.paramsSub.unsubscribe();
+    }
 
     initialize() {
+      this.questionGetModel.isHashTag = this.hashTag;
+      
       this.questionGetModel.Search = this.search;
       if (this.localStorageUser) {
         this.questionGetModel.UserId = this.localStorageUser.Id
@@ -62,10 +72,9 @@ export class QuestionListingComponent implements OnInit {
     }
 
   private getAllQuestionlist(questionGetModel) {
-    debugger
 
     this.userService.getAllQuestionlist(questionGetModel).subscribe(data => {
-      debugger;
+     
       if (data) {
         if (data.length > 0) {
           this.PostQuestionDetailList = data;
@@ -84,10 +93,9 @@ export class QuestionListingComponent implements OnInit {
   }
 
   private getAllQuestionlistPaging(questionGetModel) {
-    debugger
 
     this.userService.getAllQuestionlist(questionGetModel).subscribe(data => {
-      debugger;
+     
       if (data) {
         if (data.length > 0) {
           this.PostQuestionDetailList = data;
@@ -99,42 +107,35 @@ export class QuestionListingComponent implements OnInit {
 
     }, error => {
       this.isRecordLoaded = false;
-
     });
-  }
-  
+    }
+
+    searchForTag(hashtag) {
+      this.router.navigateByUrl('/questionlistings/' + hashtag, { skipLocationChange: true }).then(() =>
+        this.router.navigate(['/questions/', hashtag]));
+      //this.router.navigate(['/questions'], { queryParams: { tag: 1 } });
+    }  
 
   PagingPagesload(PageNumber, PageSize) {
-    debugger;
   
     this.questionGetModel.Search = this.search;
     this.questionGetModel.PageNumber = PageNumber;
     this.questionGetModel.PageSize = PageSize
     this.getAllQuestionlistPaging(this.questionGetModel);
 
-
-
   }
 
-
-
-
   setPageonpageLoad(page,TotalRecords) {
-    debugger;
     this.pager = this.getPager(TotalRecords, page);
   }
 
-  setPage(page, TotalRecords) {
-    debugger;
-    this.pager = this.getPager(this.questionGetModel.TotalRecords, page);
+    setPage(page, TotalRecords) {
+      this.pager = this.getPager(this.questionGetModel.TotalRecords, page);
 
-    if (this.pager.totalPages >= page) {
-
-      this.PagingPagesload(this.pager.currentPage, this.pager.pageSize);
+      if (this.pager.totalPages >= page) {
+        this.PagingPagesload(this.pager.currentPage, this.pager.pageSize);
+      }
     }
-  }
-
-
 
   getPager(totalItems: number, currentPage: number = 1, pageSize: number = 10) {
     // calculate total pages

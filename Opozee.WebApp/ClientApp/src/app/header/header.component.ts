@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataSharingService } from '../dataSharingService';
 import { User, LocalStorageUser, PostQuestionDetail } from '../_models/user';
@@ -28,43 +28,45 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  logout() {
+  @HostListener('document:click', ['$event.target'])
+  documentClick(target: any) {
+    try {
+      if (!target.className.endsWith("nav navbar-nav navbar-right")
+        && !target.className.endsWith("ng-untouched ng-pristine ng-valid")
+        && !target.className.endsWith("ng-valid ng-touched ng-dirty")        
+        && !target.className.endsWith("ng-pristine ng-valid ng-touched")) {
+        this.navbar();
+      }
+    } catch (err) {  }
+  }
 
+  logout() {
     localStorage.removeItem('currentUser');
     window.location.reload();
-
   }
 
   ngOnInit() {
 
-    debugger;
     this.dataSharingService.loginget.subscribe(data => {
-      debugger;
       this.loginData = data
     })
 
     if (this.localStorageUser && this.localStorageUser.Id > 0) {
-      debugger;
       this.isAuthenticateUserId = this.localStorageUser.Id;
       this.loginData = this.localStorageUser
-
-
     }
-
   }
 
-
-  searchText(e) {
-    debugger;
+  searchText(e) {    
     if (e.keyCode == 13) {
-      this.router.navigate(['/questionlisting/', this.searchTextModel]);
+      this.router.navigateByUrl('/questionlistings/'+ this.searchTextModel, { skipLocationChange: true }).then(() =>
+        this.router.navigate(['/questionlisting/', this.searchTextModel]));
     }
-
   }
 
   searchTextButton(e) {
-    debugger;
-    this.router.navigate(['/questionlisting/', this.searchTextModel]);
+    this.router.navigateByUrl('/questionlistings/' + this.searchTextModel, { skipLocationChange: true }).then(() =>
+      this.router.navigate(['/questionlisting/', this.searchTextModel]));
   }
 
   navbar() {

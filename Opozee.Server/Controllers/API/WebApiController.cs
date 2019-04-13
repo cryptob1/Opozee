@@ -290,6 +290,7 @@ namespace opozee.Controllers.API
                     objitem.Question = reader["PostQuestion"].ToString();
                     objitem.HashTags = reader["HashTags"].ToString();
                     objitem.ImageURL = string.IsNullOrEmpty(reader["ImageURL"].ToString()) ? "" : reader["ImageURL"].ToString();
+                    objitem.UserID = Convert.ToInt32(reader["UserID"]);
 
                     Objlikdelist.Add(objitem);
                 }
@@ -668,30 +669,53 @@ namespace opozee.Controllers.API
             {
                 db.Configuration.LazyLoadingEnabled = false;
 
+                if (model.IsHashTag)
+                {
+                    questionDetail = (from q in db.Questions
+                                      join u in db.Users on q.OwnerUserID equals u.UserID
+                                      where q.IsDeleted == false && q.HashTags.Contains(model.Search)
+                                      select new PostQuestionDetailWebModel
+                                      {
+                                          Id = q.Id,
+                                          Question = q.PostQuestion,
+                                          OwnerUserID = q.OwnerUserID,
+                                          OwnerUserName = u.UserName,
+                                          Name = u.FirstName + " " + u.LastName,
+                                          UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
+                                          HashTags = q.HashTags,
+                                          CreationDate = q.CreationDate,
+                                          YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
+                                          NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
+                                          TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
+                                          TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
+                                          TotalRecordcount = db.Questions.Count(x => x.IsDeleted == false && x.PostQuestion.Contains(model.Search))
 
-                questionDetail = (from q in db.Questions
-                                  join u in db.Users on q.OwnerUserID equals u.UserID
-                                  where q.IsDeleted == false && q.PostQuestion.Contains(model.Search)
-                                  select new PostQuestionDetailWebModel
-                                  {
-                                      Id = q.Id,
-                                      Question = q.PostQuestion,
-                                      OwnerUserID = q.OwnerUserID,
-                                      OwnerUserName = u.UserName,
-                                      Name = u.FirstName + " " + u.LastName,
-                                      UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
-                                      HashTags = q.HashTags,
-                                      CreationDate = q.CreationDate,
-                                      YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
-                                      NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
-                                      TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
-                                      TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
-                                      TotalRecordcount = db.Questions.Count(x => x.IsDeleted == false && x.PostQuestion.Contains(model.Search))
+                                      }).OrderByDescending(p => p.Id).Skip(skip).Take(pageSize).ToList();
+                }
+                else
+                {
+                    questionDetail = (from q in db.Questions
+                                      join u in db.Users on q.OwnerUserID equals u.UserID
+                                      where q.IsDeleted == false && q.PostQuestion.Contains(model.Search)
+                                      select new PostQuestionDetailWebModel
+                                      {
+                                          Id = q.Id,
+                                          Question = q.PostQuestion,
+                                          OwnerUserID = q.OwnerUserID,
+                                          OwnerUserName = u.UserName,
+                                          Name = u.FirstName + " " + u.LastName,
+                                          UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
+                                          HashTags = q.HashTags,
+                                          CreationDate = q.CreationDate,
+                                          YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
+                                          NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
+                                          TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
+                                          TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
+                                          TotalRecordcount = db.Questions.Count(x => x.IsDeleted == false && x.PostQuestion.Contains(model.Search))
 
-                                  }).OrderByDescending(p => p.Id).Skip(skip).Take(pageSize).ToList();
+                                      }).OrderByDescending(p => p.Id).Skip(skip).Take(pageSize).ToList();
 
-
-
+                }
 
                 foreach (var data in questionDetail)
                 {

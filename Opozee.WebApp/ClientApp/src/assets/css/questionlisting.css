@@ -67,6 +67,7 @@ border-radius: 50%;
   margin-bottom: 5px;
   font-size: 16px;
   font-weight: 400;
+  word-break:break-word
 }
 .thumbs img {
   width: 16px;
@@ -184,7 +185,6 @@ border-radius: 50%;
 {
     .inner_pages .opinionsList .icon img {
 	max-width: 100%;
-	padding: 8px;
 }
     .inner_pages .icon {
 	width: 33px !important;

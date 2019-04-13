@@ -6,6 +6,7 @@ export class QuestionListing {
   hashtags: string;
   creationdate: string;
   ImageURL: string;
+  UserID: number;
 }
 
 
