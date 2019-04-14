@@ -59,7 +59,7 @@
                       <img src="../../assets/images/user.png" alt="user"><span>@{{temp?.CommentedUserName}}</span>
                     </span>
                     <div class="like_images">
-                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp?.Likes == true)  ? 'like.png' : 'like-deactive.png'}}" alt="like" (click)="saveLikeclick(temp?.Likes,index)">{{temp?.LikesCount}}</span>
+                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp?.Likes,index)">{{temp?.LikesCount}}</span>
                       <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp?.DisLikes,index)" />{{temp?.DislikesCount}}</span>
                     </div>
                     <div class="date_like">
@@ -75,7 +75,7 @@
                       <img src="../../assets/images/user.png" alt="user"><span>@{{temp.CommentedUserName}}</span>
                     </span>
                     <div class="like_images">
-                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.Likes == true)  ? 'like.png' : 'like-deactive.png'}}" alt="like" (click)="saveLikeclick(temp.Likes,index)">{{temp.LikesCount}}</span>
+                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp.Likes,index)">{{temp.LikesCount}}</span>
                       <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp.DisLikes,index)" />{{temp.DislikesCount}}</span>
 
                     </div>

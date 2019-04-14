@@ -68,7 +68,7 @@ export class Questiondetail implements OnInit {
   }
     
   getQuestionDetail() {
-    //debugger;
+    debugger;
     this.userService.getquestionDetails(this.Id, this.localStorageUser.Id).subscribe(data => {
       //debugger;
       this.PostQuestionDetailModel = data as BookMarkQuestion;
@@ -80,12 +80,12 @@ export class Questiondetail implements OnInit {
 
   saveLikeclick(Likes, index) {
     debugger;
-    if (!Likes) {
+    if (!Likes) { //hitting like
       this.imageShowLike = index;
-      this.imageShowDislike = -2;
+      //this.imageShowDislike = -2;
       /////+
       this.dataModel.Likes = 1;
-      //this.dataModel.Dislikes = 0;
+      this.dataModel.Dislikes = 0;
       this.dataModel.QuestId = this.Id;
       this.dataModel.Comment = this.comment;
       this.dataModel.CommentedUserId = this.localStorageUser.Id;
@@ -100,7 +100,7 @@ export class Questiondetail implements OnInit {
       this.imageShowLike = -1;
 
       this.dataModel.Likes = 0;
-      //this.dataModel.Dislikes = 1;
+      this.dataModel.Dislikes = 0;
       this.dataModel.QuestId = this.Id;
       this.dataModel.Comment = this.comment;
       this.dataModel.CommentedUserId = this.localStorageUser.Id;
@@ -118,7 +118,7 @@ export class Questiondetail implements OnInit {
 
   saveDislikeclick(DisLikes, index) {
     debugger;
-    if (!DisLikes) {
+    if (!DisLikes) { //clicking dislike
       this.imageShowDislike = index;
       //this.imageShowLike = -2;
 
@@ -139,7 +139,7 @@ export class Questiondetail implements OnInit {
       this.imageShowDislike = -1;
 
       this.dataModel.Dislikes = 0;
-      //this.dataModel.Likes = 1;
+      this.dataModel.Likes = 0;
       this.dataModel.QuestId = this.Id;
       this.dataModel.Comment = this.comment;
       this.dataModel.CommentedUserId = this.localStorageUser.Id;
