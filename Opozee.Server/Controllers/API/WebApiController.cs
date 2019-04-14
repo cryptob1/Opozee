@@ -1444,6 +1444,14 @@ namespace opozee.Controllers.API
 
                 }
 
+                //give or take tokens 
+
+                Token userToken = db.Tokens.Where(x => x.UserId == Model.CommentedUserId).FirstOrDefault();
+
+                userToken.BalanceToken = userToken.BalanceToken + Model.Likes - Model.Dislikes;
+                db.Entry(userToken).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
 
 
             }
