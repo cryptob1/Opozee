@@ -79,7 +79,26 @@ namespace Opozee.Models.API
         public bool Likes { get; set; }
         public bool DisLikes { get; set; }
         public bool? IsAgree { get; set; }
+    }
 
+
+    public class Belief
+    {
+        public int Id { get; set; }
+        public int questionId { get; set; }
+        public string beliefText { get; set; }
+        public int userId { get; set; }
+        public string userName { get; set; }
+        public string UserFullName { get; set; }
+        public string UserImage { get; set; }
+        public int LikesCount { get; set; }
+        public int DislikesCount { get; set; }
+        public DateTime? CreationDate { get; set; }
+        public bool? IsAgree { get; set; }
+        public String questionText { get; set; }
 
     }
+
+
+
 }
