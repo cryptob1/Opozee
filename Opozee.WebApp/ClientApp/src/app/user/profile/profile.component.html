@@ -61,7 +61,12 @@
         <div id="mybeliefs" class="tab-pane fade in active">
           <span class="cover_ntfctn_border questions-field" *ngFor="let temp of notification; let i=index">
 
-            <strong><a data-title="Q"> {{temp.Question}}</a><small style="color:grey;font-size:9px;font-weight:100">@{{temp.UserName}}</small></strong>
+            <strong>
+              <a data-title="Q">
+                <div class="message-container" [innerHTML]="temp?.Question | emojis"></div>
+              </a>
+              <small style="color:grey;font-size:10px;font-weight:100">@{{temp.Name}}</small>
+            </strong>
             <!--<strong class="text-success"><a data-title="B">{{temp.Opinion}}</a></strong>-->
             <strong class="text-success" *ngFor="let opinion of temp.OpinionList; let ii=index">
               <a data-title="B">{{opinion}}</a>
@@ -72,16 +77,17 @@
 
 
 
-
-
-
         <div id="myquestions" class="tab-pane fade in">
           <span class="cover_ntfctn_border questions-field" *ngFor="let temp1 of notification; let i=index">
-            <strong><a data-title="Q"> {{temp1.Question}}</a></strong>
+            <strong>
+              <a data-title="Q">
+                <div class="message-container" [innerHTML]="temp1?.Question | emojis"></div>
+              </a>
+            </strong>
           </span>
           <!--<span class="cover_ntfctn_border questions-field">
-          <strong><a data-title="Q">What Is .......?</a></strong>
-        </span>-->
+            <strong><a data-title="Q">What Is .......?</a></strong>
+          </span>-->
 
         </div>
       </div>

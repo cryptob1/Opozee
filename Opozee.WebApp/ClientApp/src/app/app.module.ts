@@ -30,6 +30,7 @@ import { PostedQuestionEditList } from './question/PostedQuestion/postedQuestion
 import { EditPostquestion } from './question/editPosttedQuestion/editPostquestion.component';
 
 import { TimeAgoPipe } from 'time-ago-pipe';
+import { Ng2EmojiModule } from 'ng2-emoji';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -75,8 +76,7 @@ export function getAuthServiceConfigs() {
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(),
     SocialLoginModule,
-
-  
+    Ng2EmojiModule.forRoot()  
   ],
   declarations: [
     AppComponent,

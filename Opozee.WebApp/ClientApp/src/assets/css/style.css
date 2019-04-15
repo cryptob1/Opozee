@@ -1,7 +1,14 @@
 body {
   font-family: 'Poppins', sans-serif;
 }
+* {
+  outline: none;
+}
 
+.emoji {
+  display: inline-block;
+  vertical-align: middle;
+}
 /********banner css start*******/
 .banner {
   min-height: 310px;

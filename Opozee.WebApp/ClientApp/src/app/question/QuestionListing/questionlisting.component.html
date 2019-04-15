@@ -2,8 +2,7 @@
 <div class="inner_pages"  >
   <section class="section_second"  >
     <div class="container" >
-      <div class="cover_heading">
-        
+      <div class="cover_heading">        
       </div>
 
       <div *ngIf="!isRecordLoaded" class="scroller_cover" style="margin:40px 0px 40px 0px">
@@ -11,30 +10,32 @@
       </div>
 
       <div class="container mb-5" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded">No record found</div>
-
-      
+            
         <div class="col-sm-12"  >
-          <ul   >
+          <ul>
             
               <li *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0"   style=" box-shadow:none" >
                 
                 <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="['/questiondetail/', temp.Id]">
                   <div class="question_box">
                     <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
-
                       <span class="icon"><img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
                       <span class="username">
                         {{temp.Name}}
                       </span>
                     </div>
                     <div class="user_right">
-
                       <div class="date"><i style="font-size: 10px;">{{temp.CreationDate | timeAgo}}</i></div>
                       <br />
-
-
                     </div>
-                    <strong><a style="font-size: 18px;" [routerLink]="['/questiondetail/', temp.Id]">Q: {{temp.Question}}</a></strong>
+
+                    <strong>
+                      <a href="javascript:void(0)"  style="font-size: 18px;" [routerLink]="['/questiondetail/', temp.Id]">
+                        <div class="message-container" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
+                      </a>
+                    </strong>
+
+                    <strong><!--<a style="font-size: 18px;" [routerLink]="['/questiondetail/', temp.Id]">Q: {{temp.Question}}</a>--></strong>
 
                     <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
                       <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></div>
@@ -75,12 +76,10 @@
                             <span><img src="../../../assets/images/like.png" alt="user">{{temp.MostYesLiked?.LikesCount}}</span>
                             <span><img src="../../../assets/images/unlike.png" alt="user">{{temp.MostYesLiked?.DislikesCount}}</span>
                           </div>
-
                         </div>
-
                       </div>
-
                     </div>
+
                     <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
                       <p>{{temp.MostNoLiked?.Comment}}</p>
                       <div class="row">

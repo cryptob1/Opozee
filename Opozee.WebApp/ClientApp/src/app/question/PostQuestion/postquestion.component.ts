@@ -63,9 +63,8 @@ export class PostQuestionComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.questionPostForm.controls; }
 
-  //PostQuestionWeb
-
-
+  //
+ 
   onSubmit() {
     this.submitted = true;
     debugger;
@@ -98,7 +97,7 @@ export class PostQuestionComponent implements OnInit {
         }
         else {
           this.alertService.success('Question Posted', true);
-          this.router.navigate(['/questionlisting', 0]);
+          this.router.navigate(['/questionlisting']);
         }
         this.loading = false;
         debugger;
@@ -109,6 +108,7 @@ export class PostQuestionComponent implements OnInit {
           this.loading = false;
         });
   }
+
   onItemSelect(e) {
     debugger;
     this.Usertags += e.UserID + ','
@@ -127,9 +127,6 @@ export class PostQuestionComponent implements OnInit {
     for (let i = 0; i < e.length; i++) {
       this.Usertags += e[i].UserID + ','
     }
-    debugger
-   
-
   }
 
 

@@ -47,14 +47,18 @@
             <div class="cover_right" *ngFor="let temp of notification">
               
               <span *ngIf="temp.IsAgree===true" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                <img src="{{temp.Image}}" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Belief
+                <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Belief
               </span>
               <span *ngIf="temp.IsAgree===false" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                <img src="{{temp.Image}}" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Question
+                <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Question
               </span>
 
               <span class="cover_ntfctn_border questions-field">
-                <strong><a data-title="Q" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Question}}</a></strong>
+                <strong>
+                  <a data-title="Q" [routerLink]="['/questiondetail/', temp.QuestionId]">
+                    <div class="message-container" [innerHTML]="temp?.Question | emojis"></div>
+                  </a>
+                </strong>
                 <div *ngIf="temp.IsAgree===true">
                   <strong class="text-danger"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Opinion}}</a></strong>
                 </div>

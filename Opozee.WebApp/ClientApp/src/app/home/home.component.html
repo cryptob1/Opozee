@@ -5,7 +5,7 @@
     <question-listing></question-listing>
 
   </div>
-  
+
 
   <!--<section class="section_second">
     <div class="container">
@@ -28,7 +28,7 @@
                   </div>
                 </div>-
 
-                <div class="user_left">
+                <div class="user_left"  [routerLink]="['/viewprofile/', temp?.UserID]">
                   <span class="icon"><img src="../../assets/images/user.png" alt="user" /></span>
                   <span class="icon"><img src="{{temp.ImageURL}}" alt="user" /></span>
                   <span class="username">
@@ -36,7 +36,11 @@
                   </span>
 
                 </div>
-                <span class="cover_span">{{temp.HashTags}}</span>
+                <span class="cover_span">
+                  <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
+                    <a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a>
+                  </ng-container>
+                </span>
                 <div class="user_right"><div class="date"><i>{{ temp.CreationDate | date:'medium' }}</i></div></div>
               </div>
             </li>
@@ -53,25 +57,25 @@
   </section>-->
 
 
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <!--<ul>
-          <li><a href="#">All Questions</a></li>
-          <li><a href="#">Post Questions</a></li>
-          <li><a href="#">All Questions</a></li>
-          <li><a href="#">Register</a></li>
-        </ul>-->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <!--<ul>
+            <li><a href="#">All Questions</a></li>
+            <li><a href="#">Post Questions</a></li>
+            <li><a href="#">All Questions</a></li>
+            <li><a href="#">Register</a></li>
+          </ul>-->
+        </div>
       </div>
     </div>
-  </div>
-  <div class="copywrite"><p>Copyright Opozee Inc 2019</p></div>
-  <div class="privatePolicy">
-    <!--<a [routerLink]="['/privatepolicy/']">Privacy Policy</a>-->
-   
-  </div>
-</footer>
+    <div class="copywrite"><p>Copyright Opozee Inc 2019</p></div>
+    <div class="privatePolicy">
+      <!--<a [routerLink]="['/privatepolicy/']">Privacy Policy</a>-->
+
+    </div>
+  </footer>
 
 </div>
 

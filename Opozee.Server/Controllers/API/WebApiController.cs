@@ -538,6 +538,7 @@ namespace opozee.Controllers.API
                                             OpinionList = (from p in db.Opinions where p.QuestId == q.Id && p.CommentedUserId == Model.UserId select p.Comment).ToList(),
                                             Image = u.ImageURL,
                                             CommentedUserId = o.CommentedUserId,
+                                            Name = (from p in db.Users where p.UserID == o.CommentedUserId select p.UserName).ToString(),
                                             UserName = u.UserName,
                                             Like = ((n.Like ?? false) ? true : false),
                                             Dislike = ((n.Dislike ?? false) ? true : false),
@@ -570,42 +571,41 @@ namespace opozee.Controllers.API
                 if (Model.CheckedTab == "myquestions")
                 {
 
-                     LoggeduserBelief = (from q in db.Questions
-                                            join o in db.Opinions on q.Id equals o.QuestId
-                                            join n in db.Notifications on o.Id equals n.CommentId
-                                            join u in db.Users on o.CommentedUserId equals u.UserID
-                                            where q.OwnerUserID == Model.UserId && q.IsDeleted == false
-                                            select new UserNotifications
-                                            {
-                                                QuestionId = q.Id,
-                                                Question = q.PostQuestion,
-                                                HashTags = q.HashTags,
-                                                OpinionId = o.Id,
-                                                OpinionList = (from p in db.Opinions where p.QuestId == q.Id select p.Comment).ToList(),
-                                                Image = u.ImageURL,
-                                                CommentedUserId = o.CommentedUserId,
-                                                UserName = u.UserName,
-                                                Like = ((n.Like ?? false) ? true : false),
-                                                Dislike = ((n.Dislike ?? false) ? true : false),
-                                                Comment = ((n.Comment ?? false) ? true : false),
-                                                IsAgree = ((o.IsAgree ?? false) ? true : false),
-                                                CreationDate = n.CreationDate,
-                                                ModifiedDate = n.ModifiedDate,
-                                                TotalRecordcount = TotalRecord,
-                                                NotificationId = n.Id,
-                                            }).ToList().OrderByDescending(x => x.NotificationId).ToList(); //.Skip(skip).Take(pageSize).ToList();
+                    LoggeduserBelief = (from q in db.Questions
+                                        join o in db.Opinions on q.Id equals o.QuestId into op
+                                        from o in op.DefaultIfEmpty()
+                                        join n in db.Notifications on o.Id equals n.CommentId into noti
+                                        from n in noti.DefaultIfEmpty()
+                                        join u in db.Users on q.OwnerUserID equals u.UserID
+                                        where q.OwnerUserID == Model.UserId && q.IsDeleted == false
+                                        select new UserNotifications
+                                        {
+                                            QuestionId = q.Id,
+                                            Question = q.PostQuestion,
+                                            HashTags = q.HashTags,
+                                            OpinionId = 0,//o == null ? 0 : o.Id,
+                                            //OpinionList = null,//o == null ? null : (from p in db.Opinions where p.QuestId == q.Id select p.Comment).ToList(),
+                                            Image = u.ImageURL,
+                                            CommentedUserId = 0, //o == null ? 0 : o.CommentedUserId,
+                                            Name = string.Empty, //o == null ? string.Empty : this.commentedUser(o.CommentedUserId),
+                                            UserName = u.UserName,
+                                            //Like = ((n.Like ?? false) ? true : false),
+                                            //Dislike = ((n.Dislike ?? false) ? true : false),
+                                            //Comment = ((n.Comment ?? false) ? true : false),
+                                            IsAgree = false,//o == null ? false : ((o.IsAgree ?? false) ? true : false),
+                                            CreationDate = n.CreationDate,
+                                            // ModifiedDate = n.ModifiedDate,
+                                            TotalRecordcount = TotalRecord,
+                                            //NotificationId = n.Id,
+                                        }).ToList().OrderByDescending(x => x.NotificationId).ToList(); //.Skip(skip).Take(pageSize).ToList();
 
+                }               
 
-                }
-
-
-               
-
-                foreach (var data in LoggeduserBelief)
-                {
-                    data.Message = GenerateTags(data.Like, data.Dislike, data.Comment, data.UserName);
-                    data.Tag = (data.Like == true) ? "Like" : (data.Dislike == true) ? "Dislike" : (data.Comment == true) ? "Comment" : "";
-                }
+                //foreach (var data in LoggeduserBelief)
+                //{
+                //    data.Message = GenerateTags(data.Like, data.Dislike, data.Comment, data.UserName);
+                //    data.Tag = (data.Like == true) ? "Like" : (data.Dislike == true) ? "Dislike" : (data.Comment == true) ? "Comment" : "";
+                //}
                 return LoggeduserBelief.Where(p => p.Message != "").ToList();
                 // return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, userNotifications1, "AllOpinion"));
             }
@@ -1452,7 +1452,7 @@ namespace opozee.Controllers.API
                 db.Entry(userToken).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-
+                //Task.Run(() => this.LikeDislikeNotification(Model, notification));
 
             }
             catch (Exception ex)
@@ -1460,6 +1460,205 @@ namespace opozee.Controllers.API
 
             }
         }
+
+        public Boolean LikeDislikeNotification(PostLikeDislikeModel Model, Notification notification)
+        {
+            string action = "";
+            PushNotifications pNoty = new PushNotifications();
+            if (notification == null)
+            {
+                //notification = new Notification();
+                //notification.CommentedUserId = Model.CommentedUserId;
+                //notification.CommentId = Model.CommentId;
+                //notification.questId = Model.QuestId;
+                //notification.Like = Convert.ToBoolean(Model.Likes);
+                //notification.Dislike = Convert.ToBoolean(Model.Dislikes);
+                //notification.CreationDate = Model.CreationDate;
+                //db.Notifications.Add(notification);
+                //db.SaveChanges();
+
+                ///notification to mobile app
+                if (Model.Likes == 0)
+                {
+                    notification.Dislike = true;
+                    notification.Like = false;
+                    action = "dislike";
+                }
+                else if (Model.Likes == 1)
+                {
+                    notification.Like = true;
+                    notification.Dislike = false;
+                    action = "like";
+                }
+                List<Opinion> opinion = db.Opinions.Where(p => p.Id == Model.CommentId).ToList();
+                int questId = opinion[0].QuestId;
+                Question ques = db.Questions.Where(p => p.Id == questId).FirstOrDefault();
+                User questOwner = db.Users.Where(u => u.UserID == ques.OwnerUserID).FirstOrDefault();
+                User user = db.Users.Where(u => u.UserID == notification.CommentedUserId).FirstOrDefault();
+                int OpinionUserID = opinion[0].CommentedUserId;
+                User commentOwner = db.Users.Where(u => u.UserID == OpinionUserID).FirstOrDefault();
+                if (questOwner != null && (!action.Contains("remove")))
+                {
+                    if (ques.OwnerUserID != notification.CommentedUserId)
+                    {
+                        //***** Notification to question owner
+                        string finalMessage = GenerateTagsForQuestionWeb(notification.Like, notification.Dislike, false, user.FirstName + " " + user.LastName);
+
+                        pNoty.SendNotification_Android(questOwner.DeviceToken, finalMessage, "QD", questId.ToString());
+
+                        //***** Notification to Tagged Users
+                        string taggedUser = ques.TaggedUser;
+
+                        if (!string.IsNullOrEmpty(taggedUser))
+                        {
+                            var roleIds = taggedUser.Split(',').Select(s => int.Parse(s));
+                            foreach (int items in roleIds)
+                            {
+                                if (notification.CommentedUserId != items)
+                                {
+                                    User data = db.Users.Find(items);
+                                    if (data != null)
+                                    {
+                                        string finalMessage1 = user.FirstName + " " + user.LastName + " has " + action + " question in which you're tagged in.";
+
+                                        pNoty.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", questId.ToString());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (ques.OwnerUserID == notification.CommentedUserId)
+                    {
+                        //in this block notification will send to tagged users
+                        string taggedUser = ques.TaggedUser;
+
+                        if (!string.IsNullOrEmpty(taggedUser))
+                        {
+                            var roleIds = taggedUser.Split(',').Select(s => int.Parse(s));
+                            foreach (int items in roleIds)
+                            {
+                                User data = db.Users.Find(items);
+                                if (data != null)
+                                {
+                                    string finalMessage = user.FirstName + " " + user.LastName + " has " + action + " question in which you're tagged in.";
+
+                                    pNoty.SendNotification_Android(data.DeviceToken, finalMessage, "QD", questId.ToString());
+                                }
+                            }
+                        }
+                    }
+                    if (commentOwner.UserID != notification.CommentedUserId)
+                    {
+                        //***** Notification to question owner
+                        string finalMessage = GenerateTagsForOpinionWeb(notification.Like, notification.Dislike, false, user.FirstName + " " + user.LastName);
+
+                        pNoty.SendNotification_Android(commentOwner.DeviceToken, finalMessage, "QD", questId.ToString());
+                    }
+                }
+            }
+            else
+            {
+
+                //notification.CommentedUserId = Model.CommentedUserId;
+                //notification.CommentId = Model.CommentId;
+                //notification.questId = Model.QuestId;
+                ////if (Model.LikeOrDislke){
+                ////    notification.Like = Convert.ToBoolean(Model.Likes);
+                ////}
+                ////else{
+                ////    notification.Dislike = Convert.ToBoolean(Model.Dislikes);
+                ////}
+                //notification.Like = Convert.ToBoolean(Model.Likes);
+                //notification.Dislike = Convert.ToBoolean(Model.Dislikes);
+                //notification.CreationDate = Model.CreationDate;
+                //db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
+
+                ///notification to mobile app
+                if (Model.Likes == 0)
+                {
+                    notification.Dislike = true;
+                    notification.Like = false;
+                    action = "dislike";
+                }
+                else if (Model.Likes == 1)
+                {
+                    notification.Like = true;
+                    notification.Dislike = false;
+                    action = "like";
+                }
+
+                List<Opinion> opinion = db.Opinions.Where(p => p.Id == Model.CommentId).ToList();
+                int questId = opinion[0].QuestId;
+                Question ques = db.Questions.Where(p => p.Id == questId).FirstOrDefault();
+                User questOwner = db.Users.Where(u => u.UserID == ques.OwnerUserID).FirstOrDefault();
+                User user = db.Users.Where(u => u.UserID == notification.CommentedUserId).FirstOrDefault();
+                int OpinionUserID = opinion[0].CommentedUserId;
+                User commentOwner = db.Users.Where(u => u.UserID == OpinionUserID).FirstOrDefault();
+                if (questOwner != null && (!action.Contains("remove")))
+                {
+                    if (ques.OwnerUserID != notification.CommentedUserId)
+                    {
+                        //***** Notification to question owner
+                        string finalMessage = GenerateTagsForQuestionWeb(notification.Like, notification.Dislike, false, user.FirstName + " " + user.LastName);
+
+                        pNoty.SendNotification_Android(questOwner.DeviceToken, finalMessage, "QD", questId.ToString());
+
+                        //***** Notification to Tagged Users
+                        string taggedUser = ques.TaggedUser;
+
+                        if (!string.IsNullOrEmpty(taggedUser))
+                        {
+                            var roleIds = taggedUser.Split(',').Select(s => int.Parse(s));
+                            foreach (int items in roleIds)
+                            {
+                                if (notification.CommentedUserId != items)
+                                {
+                                    User data = db.Users.Find(items);
+                                    if (data != null)
+                                    {
+                                        string finalMessage1 = user.FirstName + " " + user.LastName + " has " + action + " question in which you're tagged in.";
+
+                                        pNoty.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", questId.ToString());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (ques.OwnerUserID == notification.CommentedUserId)
+                    {
+                        //in this block notification will send to tagged users
+                        string taggedUser = ques.TaggedUser;
+
+                        if (!string.IsNullOrEmpty(taggedUser))
+                        {
+                            var roleIds = taggedUser.Split(',').Select(s => int.Parse(s));
+                            foreach (int items in roleIds)
+                            {
+                                User data = db.Users.Find(items);
+                                if (data != null)
+                                {
+                                    string finalMessage = user.FirstName + " " + user.LastName + " has " + action + " question in which you're tagged in.";
+
+                                    pNoty.SendNotification_Android(data.DeviceToken, finalMessage, "QD", questId.ToString());
+                                }
+                            }
+                        }
+                    }
+                    if (commentOwner.UserID != notification.CommentedUserId)
+                    {
+                        //***** Notification to question owner
+                        string finalMessage = GenerateTagsForOpinionWeb(notification.Like, notification.Dislike, false, user.FirstName + " " + user.LastName);
+
+                        pNoty.SendNotification_Android(commentOwner.DeviceToken, finalMessage, "QD", questId.ToString());
+                    }
+                }
+
+            }
+
+            return true;
+        }
+
 
         public string GenerateTagsForQuestionWeb(bool? like, bool? dislike, bool? comment, string UserName)
         {
