@@ -62,7 +62,7 @@ export class ProfileComponent implements OnInit {
     var Id = this.localStorageUser.Id;
     this.userService.getTabOneNotification(PagingModel).pipe(first()).subscribe(Notifications => {
      // debugger;
-      console.log(Notifications);
+      console.log('Notifications',Notifications);
       this.notification = Notifications;
     });
   }

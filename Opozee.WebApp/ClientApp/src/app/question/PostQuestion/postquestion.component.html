@@ -18,15 +18,16 @@
 
                   <div class="form-group">
                     <label for="postQuestion">Question</label>
-                    <div  class="QuestionComment">Opozee is designed to answer questions in a yes or no format.</div>
-                    <textarea rows="4" cols="50" formControlName="postQuestion" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.postQuestion.errors }"></textarea>
-                    
+                    <div class="QuestionComment">Opozee is designed to answer questions in a yes or no format.</div>
+                    <textarea rows="4" cols="50" style="padding-left: 15px;" formControlName="postQuestion" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.postQuestion.errors }"></textarea>
 
                     <div *ngIf="postQuestionTemp == 0">question required</div>
                     {{postQuestionTemp}}
+
+                    <small style="float:right;font-size:12px;margin-top:2px;">
+                      Press <i style="position:static;opacity: 0.6;" class="fa fa-windows" aria-hidden="true"></i> + Period for Emoji.
+                    </small>
                   </div>
-
-
 
                   <!--<ng-multiselect-dropdown [placeholder]="'TAG USERS'"
                                            [data]="dropdownList"
@@ -42,7 +43,7 @@
 
                   <div class="form-group">
                     <label for="hashtagss">Hashtags</label>
-                    <input type="text" formControlName="hashtags" class="form-control form-control pl-5"  />
+                    <input type="text" style="padding-left: 15px;" formControlName="hashtags" class="form-control form-control pl-5"  />
 
                   </div>
                 </div>

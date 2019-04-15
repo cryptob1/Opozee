@@ -5,7 +5,7 @@
     <question-listing></question-listing>
 
   </div>
-  
+
 
   <!--<section class="section_second">
     <div class="container">
@@ -28,7 +28,7 @@
                   </div>
                 </div>-
 
-                <div class="user_left">
+                <div class="user_left"  [routerLink]="['/viewprofile/', temp?.UserID]">
                   <span class="icon"><img src="../../assets/images/user.png" alt="user" /></span>
                   <span class="icon"><img src="{{temp.ImageURL}}" alt="user" /></span>
                   <span class="username">
@@ -36,7 +36,11 @@
                   </span>
 
                 </div>
-                <span class="cover_span">{{temp.HashTags}}</span>
+                <span class="cover_span">
+                  <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
+                    <a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a>
+                  </ng-container>
+                </span>
                 <div class="user_right"><div class="date"><i>{{ temp.CreationDate | date:'medium' }}</i></div></div>
               </div>
             </li>
@@ -53,6 +57,7 @@
   </section>-->
 
 
+<footer>
 <footer>
   <div class="container">
     <div class="row">
@@ -76,6 +81,7 @@
   <script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=tO7ndZkEUXZNnbHsOziOEYXzlu2s0mKH9rgu1WUzFXZbUYexoQKcFMLqv54v"></script></span>
 
 </footer>
+
 
 </div>
 

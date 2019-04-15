@@ -18,6 +18,7 @@ import { EditPostquestion } from './question/editPosttedQuestion/editPostquestio
 import { termandConditionComponent } from './legal/termandCondition.component';
 import { privatePolicyComponent } from './legal/privatePolicy.component';
 const appRoutes: Routes = [
+  { path: 'questionlisting', component: QuestionListingComponent },
   { path: 'questionlisting/:search', component: QuestionListingComponent },
   { path: 'questionlistings/:search', component: QuestionListingComponent },
   { path: 'questions/:tag', component: QuestionListingComponent },

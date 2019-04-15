@@ -5,13 +5,15 @@ import { User } from '../_models';
 import { UserService } from '../_services';
 import { QuestionListing } from '../_models/question';
 
+//import { Emoji } from 'emoji-mart'
+
+
 @Component({ templateUrl: 'home.component.html' })
 export class HomeComponent implements OnInit {
   currentUser: User;
   users: User[] = [];
   questionListing: QuestionListing[] = [];
   
-
   constructor(private userService: UserService,private route: ActivatedRoute,
     private router: Router) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
