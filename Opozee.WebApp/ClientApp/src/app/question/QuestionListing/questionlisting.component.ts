@@ -126,11 +126,13 @@ import { Subscription } from 'rxjs';
 
   }
 
-  setPageonpageLoad(page,TotalRecords) {
+    setPageonpageLoad(page, TotalRecords) {
+    
     this.pager = this.getPager(TotalRecords, page);
   }
 
     setPage(page, TotalRecords) {
+      
       this.pager = this.getPager(this.questionGetModel.TotalRecords, page);
 
       if (this.pager.totalPages >= page) {

@@ -19,6 +19,7 @@ var editPostquestion_component_1 = require("./question/editPosttedQuestion/editP
 var termandCondition_component_1 = require("./legal/termandCondition.component");
 var privatePolicy_component_1 = require("./legal/privatePolicy.component");
 var appRoutes = [
+    { path: 'questionlisting', component: QuestionListing_1.QuestionListingComponent },
     { path: 'questionlisting/:search', component: QuestionListing_1.QuestionListingComponent },
     { path: 'questionlistings/:search', component: QuestionListing_1.QuestionListingComponent },
     { path: 'questions/:tag', component: QuestionListing_1.QuestionListingComponent },

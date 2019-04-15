@@ -7,8 +7,8 @@ import { LocalStorageUser } from '../_models/user';
 import { PostQuestionDetail, BookMarkQuestion } from '../_models/user';
 import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
-
-
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { PostDailogBelief } from '../questionDetail/postdialogbelief/postdialogbelief.component'
 @Component({
   selector: 'questiondetail-component',
   templateUrl: './questiondetail.component.html',
@@ -29,6 +29,11 @@ export class Questiondetail implements OnInit {
   imageShowDislike: number = -1;
   isWanttoSentComment: boolean = false;
 
+  animal: string;
+  name: string;
+
+
+
   dataModel = {
     'QuestId': 0, 'Comment': '',
     'CommentedUserId': 0,
@@ -45,7 +50,7 @@ export class Questiondetail implements OnInit {
   PostQuestionDetailModel: BookMarkQuestion = new BookMarkQuestion();
   // isExpanded = false;
   constructor(private route: ActivatedRoute, private userService: UserService, private formBuilder: FormBuilder, private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService, public dialog: MatDialog
   ) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -54,7 +59,26 @@ export class Questiondetail implements OnInit {
     }
   }
 
-  //logout() { }
+  openDialog(): void {
+   
+    const dialogRef = this.dialog.open(PostDailogBelief, {
+      width: '300px',
+      data: { name: this.name, animal: this.animal },
+      position: {
+        top: '-100px',
+        left: '540px',
+       
+      }
+    });
+   
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.animal = result;
+    });
+  }
+
+
+  //logout() { } 
   //toggle() {
   //  this.isExpanded = !this.isExpanded;
   //}
@@ -307,6 +331,7 @@ export class Questiondetail implements OnInit {
   }
 
   commentSend() {
+    //this.openDialog();
     this.isWanttoSentComment = true
 
   }

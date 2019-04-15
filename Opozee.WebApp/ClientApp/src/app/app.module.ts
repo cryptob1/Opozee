@@ -45,7 +45,8 @@ import { BookmarkQuestion } from './bookmark/bookmark.component';
 import { termandConditionComponent } from './legal/termandCondition.component';
 
 import { privatePolicyComponent } from './legal/privatePolicy.component';
-
+import { PostDailogBelief } from './questionDetail/postdialogbelief/postdialogbelief.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -76,7 +77,8 @@ export function getAuthServiceConfigs() {
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(),
     SocialLoginModule,
-    Ng2EmojiModule.forRoot()  
+    Ng2EmojiModule.forRoot(),
+    MatDialogModule
   ],
   declarations: [
     AppComponent,
@@ -95,8 +97,10 @@ export function getAuthServiceConfigs() {
     EditProfileComponent,
     UserpostQuestion, BookmarkQuestion, PostedQuestionEditList, EditPostquestion, termandConditionComponent
     , privatePolicyComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    PostDailogBelief
   ],
+  entryComponents: [PostDailogBelief],
   providers: [
     AuthGuard,
     AlertService,
