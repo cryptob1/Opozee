@@ -41,14 +41,14 @@
       </div>
 
       <!--<div class="profile_images">
-      <h3>Choose An Option</h3>
-      <div class="col-sm-6" [routerLink]="['/postedQuestionEditList/',Id]" style="cursor:pointer">
-        <img src="../../../assets/images/posted.jpg" alt="posted" />
-      </div>
-      <div class="col-sm-6" [routerLink]="['/postquestion/']" style="cursor:pointer">
-        <img src="../../../assets/images/post.jpg" alt="posted" />
-      </div>
-    </div>-->
+        <h3>Choose An Option</h3>
+        <div class="col-sm-6" [routerLink]="['/postedQuestionEditList/',Id]" style="cursor:pointer">
+          <img src="../../../assets/images/posted.jpg" alt="posted" />
+        </div>
+        <div class="col-sm-6" [routerLink]="['/postquestion/']" style="cursor:pointer">
+          <img src="../../../assets/images/post.jpg" alt="posted" />
+        </div>
+      </div>-->
 
     </div>
     <div class="questions-section">
@@ -89,59 +89,45 @@
             <strong><a data-title="Q">What Is .......?</a></strong>
           </span>-->
 
-        </div>
-      </div>
+          <div class="row">
+            <div class="navigation_cover" *ngIf="notification?.length>0">
 
-      <!--<div class="row">
-      <div class="navigation_cover">
+              <div class="container">
+                <div class="text-center" style="cursor:pointer">
+                  <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                    <li [ngClass]="{disabled:pager.currentPage === 1}">
+                      <a (click)="setPage(  pager.currentPage - 1)">Previous</a>
+                    </li>
+                    <li *ngFor="let page of pager.pages;index as i" [ngClass]="{active:pager.currentPage === page }">
+                      <a (click)="setPage(page)">{{page}}</a>
+                    </li>
+                    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                      <a (click)="setPage(  pager.currentPage + 1)">Next</a>
+                    </li>
 
-        <div class="container">
-          <div class="text-center" style="cursor:pointer">
-            <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-              <li [ngClass]="{disabled:pager.currentPage === 1}">
-                <a (click)="setPage(  pager.currentPage - 1)">Previous</a>
-              </li>
-              <li *ngFor="let page of pager.pages;index as i" [ngClass]="{active:pager.currentPage === page}">
-                <a (click)="setPage( page)">{{page}}</a>
-              </li>
-              <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-                <a (click)="setPage(  pager.currentPage + 1)">Next</a>
-              </li>
+                  </ul>
+                </div>
+              </div>
 
-            </ul>
+
+            </div>
           </div>
+
         </div>
 
-
       </div>
-    </div>-->
+
+
 
 
     </div>
 
-    <!--<div class="navigation_cover">
 
-      <div class="container">
-        <div class="text-center" style="cursor:pointer">
-          <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-            <li [ngClass]="{disabled:pager.currentPage === 1}">
-              <a (click)="setPage(  pager.currentPage - 1)">Previous</a>
-            </li>
-            <li *ngFor="let page of pager.pages;index as i" [ngClass]="{active:pager.currentPage === page}">
-              <a (click)="setPage( page)">{{page}}</a>
-            </li>
-            <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-              <a (click)="setPage(  pager.currentPage + 1)">Next</a>
-            </li>
-
-          </ul>
-        </div>
-      </div>
-
-
-    </div>-->
 
 
   </div>
 
 </section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<script src="js/bootstrap.min.js"></script>

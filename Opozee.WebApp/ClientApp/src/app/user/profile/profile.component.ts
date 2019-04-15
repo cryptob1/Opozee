@@ -16,28 +16,39 @@ export class ProfileComponent implements OnInit {
 
   notification: NotificationsModel[] = [];
 
+  pager: any = {};
+  // paged items
+  pagedItems: any[];
+  isRecordLoaded: boolean = false;
+
   PagingModel = { 'UserId': 0, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, IsChecked: true, CheckedTab: "mybeliefs" }
 
 
   constructor(private route: ActivatedRoute, private userService: UserService ) {
     if (this.route.snapshot.params["Id"]) {
       this.Id = this.route.snapshot.params["Id"];
-
+      
       this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
       this.onchangeTab('mybeliefs')
-      this.getTabOneNotification(this.PagingModel)
+      //this.getTabOneNotification(this.PagingModel)
+      this.PagingModel.PageNumber = 1;
+      this.PagingModel.TotalRecords = 5
     }
   }
 
   onchangeTab(data) {
-    debugger
+    
     this.PagingModel.UserId = this.localStorageUser.Id;
     this.PagingModel.CheckedTab = data;
     if (this.PagingModel.CheckedTab ==='mybeliefs') {
       this.getTabOneNotification(this.PagingModel)
+      this.PagingModel.PageNumber = 1;
+      this.PagingModel.TotalRecords = 5
     }
     else {
       this.getTabOneNotification(this.PagingModel)
+      this.PagingModel.PageNumber = 1;
+      this.PagingModel.TotalRecords = 5
     }
    
   }
@@ -45,7 +56,7 @@ export class ProfileComponent implements OnInit {
   getUserProfile() {
     //var Id = this.localStorageUser.Id;
     this.userService.getUserProfileWeb(this.localStorageUser.Id).pipe(first()).subscribe(data => {
-      debugger;
+      ;
       this.userProfiledata = data
       console.log(data);
     });
@@ -58,15 +69,108 @@ export class ProfileComponent implements OnInit {
   }
 
   private getTabOneNotification(PagingModel) {
-    debugger
+    
     var Id = this.localStorageUser.Id;
     this.userService.getTabOneNotification(PagingModel).pipe(first()).subscribe(Notifications => {
-     // debugger;
-      console.log('Notifications',Notifications);
-      this.notification = Notifications;
+    
+      //console.log('Notifications',Notifications);
+      //this.notification = Notifications;
+
+      if (Notifications) {
+        if (Notifications.length > 0) {
+          this.notification = Notifications;
+          this.PagingModel.TotalRecords = Notifications[0].TotalRecordcount
+        }
+        this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
+        this.isRecordLoaded = true
+      }
+      this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
+      this.isRecordLoaded = true
+
+    }, error => {
+      this.isRecordLoaded = false;
+
     });
-  }
   
+  }
+
+  ///
+  PagingPagesload(PageNumber, PageSize) {
+    
+   //his.questionGetModel.Search = this.search;
+    this.PagingModel.PageNumber = PageNumber;
+    this.PagingModel.PageSize = PageSize
+    this.getTabOneNotification(this.PagingModel);
+
+  }
+
+  setPageonpageLoad(page, TotalRecords) {
+    this.pager = this.getPager(TotalRecords, page);
+  }
+
+  setPage(page, TotalRecords) {
+    
+
+    this.pager = this.getPager(this.PagingModel.TotalRecords, page);
+
+    if (this.pager.totalPages >= page) {
+      this.PagingPagesload(this.pager.currentPage, this.pager.pageSize);
+    }
+
+  }
+
+  getPager(totalItems: number, currentPage: number = 1, pageSize: number = 10) {
+    // calculate total pages
+    
+    let totalPages = Math.ceil(totalItems / pageSize);
+
+    // ensure current page isn't out of range
+    if (currentPage < 1) {
+      currentPage = 1;
+    } else if (currentPage > totalPages) {
+      currentPage = totalPages;
+    }
+
+    let startPage: number, endPage: number;
+    if (totalPages <= 10) {
+      // less than 10 total pages so show all
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      // more than 10 total pages so calculate start and end pages
+      if (currentPage <= 6) {
+        startPage = 1;
+        endPage = 10;
+      } else if (currentPage + 4 >= totalPages) {
+        startPage = totalPages - 9;
+        endPage = totalPages;
+      } else {
+        startPage = currentPage - 5;
+        endPage = currentPage + 4;
+      }
+    }
+
+    // calculate start and end item indexes
+    let startIndex = (currentPage - 1) * pageSize;
+    let endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
+
+    // create an array of pages to ng-repeat in the pager control
+    let pages = Array.from(Array((endPage + 1) - startPage).keys()).map(i => startPage + i);
+
+    // return object with all pager properties required by the view
+    return {
+      totalItems: totalItems,
+      currentPage: currentPage,
+      pageSize: pageSize,
+      totalPages: totalPages,
+      startPage: startPage,
+      endPage: endPage,
+      startIndex: startIndex,
+      endIndex: endIndex,
+      pages: pages
+    };
+  }
+
 
 
 
