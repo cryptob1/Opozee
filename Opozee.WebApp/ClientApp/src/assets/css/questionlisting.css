@@ -164,7 +164,7 @@ border-radius: 50%;
 }
     .navbar-default .navbar-toggle
     {
-        margin-top: 50px;
+        margin-top: 3px;
     }
     .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
 	background-color: transparent;

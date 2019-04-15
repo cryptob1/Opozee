@@ -204,9 +204,13 @@ header .container-fluid {
 
 @media screen and (max-width: 480px) {
    
-  .banner_search-form {
-    margin: 20px 0 20px 35px;
-  }
+ 
 
+  .banner_search-form {
+    padding-top: 3px;
+    margin: 20px 0 20px 25px;
+    width: 90%;
+    float: left;
+  }
   
 }
