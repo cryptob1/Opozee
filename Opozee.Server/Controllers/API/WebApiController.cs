@@ -1184,6 +1184,8 @@ namespace opozee.Controllers.API
 
             
             Notification notification = null;
+            Opinion opinion;
+            
             string action = "";
             PushNotifications pNoty = new PushNotifications();
             try
@@ -1227,7 +1229,7 @@ namespace opozee.Controllers.API
                     notification.CreationDate = Model.CreationDate;
                     db.Notifications.Add(notification);
                     db.SaveChanges();
-                    List<Opinion> opinion = db.Opinions.Where(p => p.Id == Model.CommentId).ToList();
+                    opinion = db.Opinions.Where(p => p.Id == Model.CommentId).FirstOrDefault();
 
                     /////notification to mobile app
                     //if (Model.Likes == 0)
@@ -1321,13 +1323,12 @@ namespace opozee.Controllers.API
                     //        pNoty.SendNotification_Android(commentOwner.DeviceToken, finalMessage, "QD", questId.ToString());
                     //    } }
 
-                    foreach (Opinion orderID in opinion)
-                        {
-                            orderID.Likes = db.Notifications.Where(p => p.CommentId == orderID.Id && p.Like == true).Count();
-                            orderID.Dislikes = db.Notifications.Where(p => p.CommentId == orderID.Id && p.Dislike == true).Count();
-                            db.Entry(orderID).State = System.Data.Entity.EntityState.Modified;
-                            db.SaveChanges();
-                        }
+ 
+                    opinion.Likes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Like == true).Count();
+                    opinion.Dislikes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Dislike == true).Count();
+                    db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                       
 
                     
                 }
@@ -1349,7 +1350,7 @@ namespace opozee.Controllers.API
                     notification.CreationDate = Model.CreationDate;
                     db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
-                    List<Opinion> opinion = db.Opinions.Where(p => p.Id == Model.CommentId).ToList();
+                    opinion = db.Opinions.Where(p => p.Id == Model.CommentId).FirstOrDefault();
 
                     ///notification to mobile app
                     //if (Model.Likes == 0)
@@ -1433,20 +1434,19 @@ namespace opozee.Controllers.API
                     //    }
                     //}
 
-                    foreach (Opinion orderID in opinion)
-                    {
-                        orderID.Likes = db.Notifications.Where(p => p.CommentId == orderID.Id && p.Like == true).Count();
-                        orderID.Dislikes = db.Notifications.Where(p => p.CommentId == orderID.Id && p.Dislike == true).Count();
-                        db.Entry(orderID).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
-                    }
+ 
+                    opinion.Likes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Like == true).Count();
+                    opinion.Dislikes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Dislike == true).Count();
+                    db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    
 
 
                 }
 
                 //give or take tokens 
 
-                Token userToken = db.Tokens.Where(x => x.UserId == Model.CommentedUserId).FirstOrDefault();
+                Token userToken = db.Tokens.Where(x => x.UserId == opinion.CommentedUserId).FirstOrDefault();
 
                 userToken.BalanceToken = userToken.BalanceToken + Model.Likes - Model.Dislikes;
                 db.Entry(userToken).State = System.Data.Entity.EntityState.Modified;
