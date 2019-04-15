@@ -95,6 +95,7 @@ namespace Opozee.Models.API
         public int DislikesCount { get; set; }
         public DateTime? CreationDate { get; set; }
         public bool? IsAgree { get; set; }
+        public String questionText { get; set; }
 
     }
 

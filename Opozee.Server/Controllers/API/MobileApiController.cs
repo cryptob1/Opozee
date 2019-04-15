@@ -1606,7 +1606,6 @@ namespace opozee.Controllers.API
 
 
         #region "Get Beliefs by User Id"
-        
         [Route("api/MobileApi/GetUserBeliefs")]
         [HttpGet]
         public HttpResponseMessage getUserBeliefs(int userId)
@@ -1619,25 +1618,27 @@ namespace opozee.Controllers.API
                     return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
                 }
 
-                List<Belief> beliefList = (from belief in db.Opinions
-                             join user in db.Users on belief.CommentedUserId equals user.UserID
-                             where user.UserID == userId
-                                        select new Belief
-                             {
-                                 Id = belief.Id,
-                                 questionId = belief.QuestId,
-                                 beliefText = belief.Comment,
-                                 userId = user.UserID,
-                                 UserFullName = user.FirstName + " " + user.LastName,
-                                 UserImage = string.IsNullOrEmpty(user.ImageURL) ? "" : user.ImageURL,
-                                 LikesCount = db.Notifications.Where(p => p.CommentId == belief.Id && p.Like == true).Count(),
-                                 DislikesCount = db.Notifications.Where(p => p.CommentId == belief.Id && p.Dislike == true).Count(),
-                                 userName = user.UserName,
-                                 IsAgree = belief.IsAgree,
-                                 CreationDate = belief.CreationDate
-                             }).OrderBy(p => p.CreationDate).ToList();
+        
 
-              
+                List<Belief> beliefList = (from belief in db.Opinions
+                                           join user in db.Users on belief.CommentedUserId equals user.UserID
+                                           where user.UserID == userId
+                                           select new Belief
+                                           {
+                                               Id = belief.Id,
+                                               questionId = belief.QuestId,
+                                               beliefText = belief.Comment,
+                                               userId = user.UserID,
+                                               UserFullName = user.FirstName + " " + user.LastName,
+                                               UserImage = string.IsNullOrEmpty(user.ImageURL) ? "" : user.ImageURL,
+                                               LikesCount = db.Notifications.Where(p => p.CommentId == belief.Id && p.Like == true).Count(),
+                                               DislikesCount = db.Notifications.Where(p => p.CommentId == belief.Id && p.Dislike == true).Count(),
+                                               userName = user.UserName,
+                                               IsAgree = belief.IsAgree,
+                                               CreationDate = belief.CreationDate,
+                                               questionText = db.Questions.Where(question => question.Id == belief.QuestId).FirstOrDefault().PostQuestion
+            }).OrderByDescending(p => p.CreationDate).ToList();
+
                 return Request.CreateResponse(HttpStatusCode.OK, beliefList);
             }
             catch (Exception ex)
@@ -1649,6 +1650,9 @@ namespace opozee.Controllers.API
 
         }
         #endregion
+
+
+
 
 
 
