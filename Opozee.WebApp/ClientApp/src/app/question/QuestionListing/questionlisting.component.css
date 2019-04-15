@@ -8,3 +8,16 @@
   border: thick;
   border-color: aqua;
 }
+
+.container {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+
+
+.section_second  {
+
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
