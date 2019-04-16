@@ -25,17 +25,17 @@
                       </span>
                     </div>
                     <div class="user_right">
-                      <div class="date"><i >{{temp.CreationDate | timeAgo}}</i></div>
+                      <div class="date"><i>{{temp.CreationDate | timeAgo}}</i></div>
                       <br />
                     </div>
 
                     <strong>
-                      <a href="javascript:void(0)"  style="font-size: 18px;" [routerLink]="['/questiondetail/', temp.Id]">
+                      <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp.Id]">
                         <div class="message-container" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
                       </a>
                     </strong>
 
-                    
+
 
                     <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
                       <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></div>
@@ -44,7 +44,7 @@
                     <div class="cover_analysis">
                       <div class="left">
                         <span> </span>
-                        <div class="anlysis_slider" style="width:100%">
+                        <div class="anlysis_slider" style="width:100%;   ">
                           <span [style.width.%]="((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'" class="color yes_div"></span>
                           <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
 
@@ -108,7 +108,11 @@
                     </div>
                   </div>
                 </div>
+        
             </li>
+               
+                
+                    
           </ul>
           
         </div>

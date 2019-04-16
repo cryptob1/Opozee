@@ -129,23 +129,27 @@ section.section_second {
 
 .cover_questions .cover_analysis .left .anlysis_slider {
   width: 100%;
-  height: 5px;
+  height: 8px;
   float: left;
-  background-image: url('../images/redline.png');
+  /*background-image: url('../images/redline.png');*/
+  background-color: #FAC7C7;
   border-radius: 5px;
   position: relative;
+  border: 1px solid #333;
 }
 
   .cover_questions .cover_analysis .left .anlysis_slider .color {
     float: left;
-    height: 5px;
+    height: 7px;
     width: 50%;
-    background-image: url('../images/greenline.png');
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );
+    background-color: #D2F3C8;
+    /*background-image: url('../images/greenline.png');*/
+    /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );*/
     position: absolute;
     left: 0px;
     top: 0px;
     border-radius: 5px;
+    border-bottom: 1px solid #333;
   }
 
 .anlysis_slider .percentage_yes {
@@ -157,7 +161,7 @@ section.section_second {
   font-size: 13px;
   float: left;
   background: #D2F3C8;
-  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#10b1a9', endColorstr='#D2F3C8',GradientType=1 );
+  /*filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#10b1a9', endColorstr='#D2F3C8',GradientType=1 );*/
   color: #000;
   font-weight: 500;
   border-radius: 3px;
@@ -172,7 +176,7 @@ section.section_second {
   font-size: 13px;
   float: left;
   background: #FAC7C7;
-  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );
+  /*filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );*/
   color: #000;
   font-weight: 500;
   border-radius: 3px;
