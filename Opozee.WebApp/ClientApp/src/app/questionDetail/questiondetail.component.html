@@ -19,7 +19,8 @@
             <span class="profile_left">
 
               <span class="img" [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
-                <img src="{{PostQuestionDetailModel?.postQuestionDetail?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user">
+                <img src="{{PostQuestionDetailModel?.postQuestionDetail?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user">
+
               </span>
               <!--<span class="img"><img src="{{PostQuestionDetailModel.postQuestionDetail.UserImage}}"></span>-->
 
@@ -27,16 +28,24 @@
                 <span class="user_123">@{{PostQuestionDetailModel?.postQuestionDetail?.OwnerUserName}}</span>
               </span>
 
-              <span>
-                <ng-container *ngFor="let tag of PostQuestionDetailModel?.postQuestionDetail?.HashTags?.split(',')">
-                  <a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a>
-                </ng-container>
-              </span>
+
+
+
 
               <!--<span class="time">{{PostQuestionDetailModel.postQuestionDetail?.CreationDate |  timeAgo}}</span>-->
               <!--<p>{{PostQuestionDetailModel.postQuestionDetail.Question}}</p>-->
 
               <p class="message-container" [innerHTML]="PostQuestionDetailModel?.postQuestionDetail?.Question | emojis"></p>
+
+              <div class="hash_tag">
+                <span>
+                  <ng-container *ngFor="let tag of PostQuestionDetailModel?.postQuestionDetail?.HashTags?.split(',')">
+                    <a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a>
+
+                  </ng-container>
+                </span>
+              </div>
+
 
               <div class="opiniuns">
                 <div class="left">
@@ -56,8 +65,10 @@
 
                 </div>
               </div>
+              
             </span>
 
+            
             <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
               <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
 
@@ -66,7 +77,7 @@
                   <span class="profile_bottom_cover">
                     
                     <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                      <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user" />
+                      <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
                       <span>@{{temp?.CommentedUserName}}</span>
                     </span>
 

@@ -1,4 +1,5 @@
 
+
 .hash_tag a {
   font-size: 13px;
   float: right;
@@ -20,4 +21,48 @@
 
   margin-bottom: 0px;
   margin-top: 0px;
+}
+
+
+
+.cover_questions .user_right {
+  float: right;
+  width: 50%;
+}
+
+.hash_tag {
+    font-size: 11px;
+    float: right;
+  }
+
+.cover_questions .user_right .date i {
+  font-size: 11px;
+  color: grey;
+  padding: 0px 0px 0px 0px;
+}
+
+
+@media screen and (max-width: 480px) {
+
+  .cover_questions .user_right .date i {
+    font-size: 9px;
+    color: grey;
+    padding: 0px 0px 0px 0px;
+    float: left;
+
+  }
+
+  .col-sm-12 {
+    padding-left: 1px;
+    padding-right: 1px;
+  }
+
+
+  .section_second ul li {
+    width: 100%;
+    float: left;
+    display: block;
+    padding: 1px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+  }
 }

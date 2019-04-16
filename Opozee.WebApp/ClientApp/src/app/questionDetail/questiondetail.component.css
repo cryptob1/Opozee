@@ -20,7 +20,7 @@ span.profile_left img {
   width: 30px;
   float: left;
   height: 30px;
-  border: 2px solid #0c82dc;
+  /*border: 2px solid #333;*/
   text-align: center;
   border-radius: 50%;
 }
@@ -344,4 +344,10 @@ span.profile_left p {
 
 .user_left, .img, .text_profile {
   cursor: pointer !important;
+}
+
+
+.hash_tag {
+  font-size: 11px;
+  float: right;
 }
