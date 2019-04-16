@@ -129,7 +129,7 @@ section.section_second {
 
 .cover_questions .cover_analysis .left .anlysis_slider {
   width: 100%;
-  height: 8px;
+  height: 15px;
   float: left;
   /*background-image: url('../images/redline.png');*/
   background-color: #FAC7C7;
@@ -140,7 +140,7 @@ section.section_second {
 
   .cover_questions .cover_analysis .left .anlysis_slider .color {
     float: left;
-    height: 7px;
+    height: 14px;
     width: 50%;
     background-color: #D2F3C8;
     /*background-image: url('../images/greenline.png');*/
