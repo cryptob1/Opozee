@@ -7,15 +7,10 @@
 }
 
 .profile_div {
-  width: 150px;
+  /*width: 150px;*/
   margin: 0 auto;
-  height: 150px;
-  background: rgb(12,130,220);
-  background: -moz-linear-gradient(45deg, rgba(12,130,220,1) 0%, rgba(16,177,169,1) 65%);
-  background: -webkit-linear-gradient(45deg, rgba(12,130,220,1) 0%,rgba(16,177,169,1) 65%);
-  background: linear-gradient(45deg, rgba(12,130,220,1) 0%,rgba(16,177,169,1) 65%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );
-  border-radius: 100%;
+  /*height: 150px;*/
+ 
   margin-bottom: 80px;
 }
 
@@ -29,6 +24,12 @@
     border-radius: 100%;
     display: inline-block;
     box-shadow: 2px -1px 2px rgba(0, 0, 0, 0.3);
+    background: rgb(12,130,220);
+    background: -moz-linear-gradient(45deg, rgba(12,130,220,1) 0%, rgba(16,177,169,1) 65%);
+    background: -webkit-linear-gradient(45deg, rgba(12,130,220,1) 0%,rgba(16,177,169,1) 65%);
+    background: linear-gradient(45deg, rgba(12,130,220,1) 0%,rgba(16,177,169,1) 65%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );
+    border-radius: 100%;
   }
 
     .profile_div .image_user img {
@@ -79,7 +80,7 @@ span.upload_button {
   }
 
 .profile_div h2 {
-  width: 150px;
+  width: 100%;
   float: left;
   text-align: center;
   color: #333;
