@@ -32,7 +32,7 @@ export class Questiondetail implements OnInit {
   animal: string;
   name: string;
 
-
+   countReactionScore: number;
 
   dataModel = {
     'QuestId': 0, 'Comment': '',
@@ -94,11 +94,22 @@ export class Questiondetail implements OnInit {
   getQuestionDetail() {
     debugger;
     this.userService.getquestionDetails(this.Id, this.localStorageUser.Id).subscribe(data => {
-      //debugger;
+      debugger
       this.PostQuestionDetailModel = data as BookMarkQuestion;
       this.PostQuestionDetailModel.comments = data['Comments'];
+
+      let _countLike = data['Comments'].map(c => c.LikesCount);
+      var sumLike = _countLike.reduce(function (a, b) { return a + b; }, 0);
+
+      let _countDislike = data['Comments'].map(c => c.DislikesCount);
+      var sumDisLike = _countDislike.reduce(function (a, b) { return a + b; }, 0);
+
+      let _count = data['Comments'].length;
+
+      this.countReactionScore = sumLike + sumDisLike + _count;
+     
       this.PostQuestionDetailModel.postQuestionDetail = data['PostQuestionDetail'];
-      //console.log('data',this.PostQuestionDetailModel);
+     
     });
   }
 

@@ -28,10 +28,7 @@
                 <span class="user_123">@{{PostQuestionDetailModel?.postQuestionDetail?.OwnerUserName}}</span>
               </span>
 
-
-
-
-
+              <span class="time"> Reaction Score : {{countReactionScore}}</span>
               <!--<span class="time">{{PostQuestionDetailModel.postQuestionDetail?.CreationDate |  timeAgo}}</span>-->
               <!--<p>{{PostQuestionDetailModel.postQuestionDetail.Question}}</p>-->
 
@@ -41,7 +38,6 @@
                 <span>
                   <ng-container *ngFor="let tag of PostQuestionDetailModel?.postQuestionDetail?.HashTags?.split(',')">
                     <a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a>
-
                   </ng-container>
                 </span>
               </div>
@@ -65,7 +61,7 @@
 
                 </div>
               </div>
-              
+
             </span>
 
             
