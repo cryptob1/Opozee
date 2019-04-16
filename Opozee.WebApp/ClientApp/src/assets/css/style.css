@@ -138,6 +138,7 @@ section.section_second {
   border: 1px solid #333;
 }
 
+ 
   .cover_questions .cover_analysis .left .anlysis_slider .color {
     float: left;
     height: 14px;
@@ -564,11 +565,6 @@ span.bell-icon i {
   float: left;
 }
 
-.cover_questions .cover_analysis .left .anlysis_slider {
-  width: 90%;
-  float: left;
-  margin-top: 10px;
-}
 
 .yes_feedback, .no_feedback {
   width: 90% !important;
@@ -737,7 +733,7 @@ span.bell-icon i {
   @media screen and (max-width: 991px) {
     .anlysis_slider {
       width: 100% !important;
-      margin-top: 36px !important;
+      margin-top: 26px !important;
     }
 
     .cover_profile p {
