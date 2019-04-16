@@ -495,12 +495,11 @@ namespace opozee.Controllers.API
 
         [HttpPost]
         [Route("api/WebApi/GetProfileNotificationByUser")]
-        public async Task<List<UserNotifications>> GetProfileNotificationByUser(PagingModel Model)
+        public List<UserNotifications> GetProfileNotificationByUser(PagingModel Model)
         {
-            List<UserNotifications> userNotifications2 = new List<UserNotifications>();
+            List<UserNotifications> _userProfileData = new List<UserNotifications>();
             try
             {
-
 
                 int Total = Model.TotalRecords;
                 int pageSize = 10; // set your page size, which is number of records per page
@@ -511,23 +510,19 @@ namespace opozee.Controllers.API
                 db.Configuration.LazyLoadingEnabled = false;
                 if (!ModelState.IsValid)
                 {
-                    return userNotifications2;
+                    return _userProfileData;
                 }
 
                 var TotalRecord = (from q1 in db.Questions
-                                               join o1 in db.Opinions on q1.Id equals o1.QuestId
-                                               where q1.OwnerUserID == Model.UserId
-                                               select new UserNotifications { TotalRecordcount = q1.Id }).ToList().Count();
+                                   join o1 in db.Opinions on q1.Id equals o1.QuestId
+                                   where q1.OwnerUserID == Model.UserId
+                                   select new UserNotifications { TotalRecordcount = q1.Id }).ToList().Count();
 
-                var LoggeduserBelief=new List<UserNotifications>();
 
                 if (Model.CheckedTab == "mybeliefs")
                 {
 
-        
-
-
-                    LoggeduserBelief = (from q in db.Questions
+                    _userProfileData = (from q in db.Questions
                                         join o in db.Opinions on q.Id equals o.QuestId
                                         join n in db.Notifications on o.Id equals n.CommentId
                                         join u in db.Users on o.CommentedUserId equals u.UserID
@@ -552,10 +547,10 @@ namespace opozee.Controllers.API
                                             ModifiedDate = n.ModifiedDate,
                                             TotalRecordcount = TotalRecord,
                                             NotificationId = n.Id,
-                                        }).ToList().OrderByDescending(x => x.NotificationId).ToList(); //.Skip(skip).Take(pageSize).ToList();
+                                        }).ToList().OrderByDescending(x => x.NotificationId).ToList().Skip(skip).Take(pageSize).ToList();
 
                     List<UserNotifications> NewLoggeduserBelief = new List<UserNotifications>();
-                    foreach (var data in LoggeduserBelief)
+                    foreach (var data in _userProfileData)
                     {
                         var count = NewLoggeduserBelief.Where(x => x.QuestionId == data.QuestionId).Count();
                         if (count > 0)
@@ -568,11 +563,11 @@ namespace opozee.Controllers.API
                         }
                     }
 
-                    LoggeduserBelief = NewLoggeduserBelief;
+                    _userProfileData = NewLoggeduserBelief;
 
+                    return _userProfileData;
                 }
-
-                if (Model.CheckedTab == "myquestions")
+                else if (Model.CheckedTab == "myquestions")
                 {
                     TotalRecord = (from q in db.Questions
                                    join o in db.Opinions on q.Id equals o.QuestId into op
@@ -584,7 +579,7 @@ namespace opozee.Controllers.API
                                    select q
                     ).ToList().Count();
 
-                    LoggeduserBelief = (from q in db.Questions
+                    _userProfileData = (from q in db.Questions
                                         join o in db.Opinions on q.Id equals o.QuestId into op
                                         from o in op.DefaultIfEmpty()
                                         join n in db.Notifications on o.Id equals n.CommentId into noti
@@ -612,23 +607,22 @@ namespace opozee.Controllers.API
                                             //NotificationId = n.Id,
                                         }).ToList().OrderByDescending(x => x.NotificationId).ToList().Skip(skip).Take(pageSize).ToList();
 
-                }               
+                    return _userProfileData;
+                }
 
                 //foreach (var data in LoggeduserBelief)
                 //{
                 //    data.Message = GenerateTags(data.Like, data.Dislike, data.Comment, data.UserName);
                 //    data.Tag = (data.Like == true) ? "Like" : (data.Dislike == true) ? "Dislike" : (data.Comment == true) ? "Comment" : "";
                 //}
-                return LoggeduserBelief.Where(p => p.Message != "").ToList();
                 // return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, userNotifications1, "AllOpinion"));
             }
             catch (Exception ex)
             {
-                return userNotifications2;
+                
             }
+            return _userProfileData;
         }
-
-
 
 
         public string GenerateTags(bool? like, bool? dislike, bool? comment, string UserName)
@@ -796,7 +790,7 @@ namespace opozee.Controllers.API
         [HttpGet]
         [Route("api/WebApi/GetAllOpinionWeb")]
         public BookMarkQuestion GetAllOpinionWeb(string questId, int UserId)
-        {
+       {
             BookMarkQuestion questionDetail = new BookMarkQuestion();
             try
             {

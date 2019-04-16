@@ -59,7 +59,7 @@
 
       <div class="tab-content">
         <div id="mybeliefs" class="tab-pane fade in active">
-          <span class="cover_ntfctn_border questions-field" *ngFor="let temp of notification; let i=index">
+          <span class="cover_ntfctn_border questions-field" *ngFor="let temp of profileData; let i=index">
 
             <strong style="border-color: #D2F3C8">
               <!--<a data-title="Q">-->
@@ -77,20 +77,21 @@
         </div>
 
         <div id="myquestions" class="tab-pane fade in">
-          <span class="cover_ntfctn_border questions-field" *ngFor="let temp1 of notification; let i=index">
-            <strong>
-              <!--<a data-title="Q">-->
-             <a data-title="Q" href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp1.QuestionId]">
-                <div class="message-container" [innerHTML]="temp1?.Question | emojis"></div>
-              </a>
-            </strong>
-          </span>
-          <!--<span class="cover_ntfctn_border questions-field">
-            <strong><a data-title="Q">What Is .......?</a></strong>
-          </span>-->
+
+          <span *ngIf="profileData?.length==0">No Record Found.</span>
+          <div *ngIf="profileData?.length>0">
+            <span class="cover_ntfctn_border questions-field" *ngFor="let temp1 of profileData; let i=index">
+              <strong>
+                <!--<a data-title="Q">-->
+                <a data-title="Q" href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp1.QuestionId]">
+                  <div class="message-container" [innerHTML]="temp1?.Question | emojis"></div>
+                </a>
+              </strong>
+            </span>
+          </div>
 
           <div class="row">
-            <div class="navigation_cover" *ngIf="notification?.length>0">
+            <div class="navigation_cover" *ngIf="profileData?.length>0">
 
               <div class="container">
                 <div class="text-center" style="cursor:pointer">
@@ -114,17 +115,8 @@
           </div>
 
         </div>
-
-      </div>
-
-
-
-
+      </div>      
     </div>
-
-
-
-
   </div>
 
 </section>

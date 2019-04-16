@@ -15,6 +15,7 @@ export class ProfileComponent implements OnInit {
   localStorageUser: LocalStorageUser
 
   notification: NotificationsModel[] = [];
+  profileData: NotificationsModel[] = [];
 
   pager: any = {};
   // paged items
@@ -61,25 +62,27 @@ export class ProfileComponent implements OnInit {
       console.log(data);
     });
   }
-
-
+  
   ngOnInit() {
     this.getUserProfile();
     this.PagingModel.UserId = this.localStorageUser.Id;
   }
 
   private getTabOneNotification(PagingModel) {
-    
+    this.profileData = [];
     var Id = this.localStorageUser.Id;
-    this.userService.getTabOneNotification(PagingModel).pipe(first()).subscribe(Notifications => {
+    this.userService.getTabOneNotification(PagingModel).pipe(first()).subscribe(data => {
     
-      //console.log('Notifications',Notifications);
-      //this.notification = Notifications;
-
-      if (Notifications) {
-        if (Notifications.length > 0) {
-          this.notification = Notifications;
-          this.PagingModel.TotalRecords = Notifications[0].TotalRecordcount
+      this.profileData = [];
+      
+      if (data) {
+        if (data.length > 0) {
+          this.profileData = data;
+          //console.log("dt",this.profileData);
+          this.PagingModel.TotalRecords = data[0].TotalRecordcount
+        }
+        else {
+          this.PagingModel.TotalRecords = 0;
         }
         this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
         this.isRecordLoaded = true
