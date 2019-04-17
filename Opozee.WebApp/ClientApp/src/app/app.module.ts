@@ -45,9 +45,9 @@ import { BookmarkQuestion } from './bookmark/bookmark.component';
 import { termandConditionComponent } from './legal/termandCondition.component';
 
 import { privatePolicyComponent } from './legal/privatePolicy.component';
-import { PostDailogBelief } from './questionDetail/postdialogbelief/postdialogbelief.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { aboutusComponent } from './aboutus/aboutus.component';
+import { ModalModule, BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { DialogPostBelief } from './questionDetail/dialogPostBelief/dialogPostBelief.component';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -79,7 +79,7 @@ export function getAuthServiceConfigs() {
     ToastrModule.forRoot(),
     SocialLoginModule,
     Ng2EmojiModule.forRoot(),
-    MatDialogModule
+    ModalModule.forRoot()
   ],
   declarations: [
     AppComponent,
@@ -99,16 +99,20 @@ export function getAuthServiceConfigs() {
     UserpostQuestion, BookmarkQuestion, PostedQuestionEditList, EditPostquestion, termandConditionComponent
     , privatePolicyComponent,
     TimeAgoPipe,
-    PostDailogBelief,
+    DialogPostBelief,
     aboutusComponent
   ],
-  entryComponents: [PostDailogBelief],
+  entryComponents: [
+    DialogPostBelief
+  ],
   providers: [
     AuthGuard,
     AlertService,
     AuthenticationService,
     AppConfigService,
     UserService,
+    //BsModalService,
+    //BsModalRef,
     DataSharingService,
     {
       provide: HTTP_INTERCEPTORS,

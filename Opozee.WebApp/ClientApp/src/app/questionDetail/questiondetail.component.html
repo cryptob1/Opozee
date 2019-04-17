@@ -65,14 +65,14 @@
 
             </span>
 
-            
+
             <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
               <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
 
                 <div [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']">
                   <p>{{temp?.Comment}}</p>
                   <span class="profile_bottom_cover">
-                    
+
                     <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
                       <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
                       <span>@{{temp?.CommentedUserName}}</span>
@@ -106,9 +106,10 @@
 
               </span>
             </span>
-            <div class="cover_hello">
-              <i class="fa fa-plus" aria-hidden="true" (click)="commentSend()"></i>
+            <div class="cover_hello" *ngIf="Id">
+              <i class="fa fa-plus" aria-hidden="true" (click)="openBeliefModal()"></i>
             </div>
+
             <div class="cover_buttons" *ngIf="isWanttoSentComment">
               <div class="conatiner">
                 <div class="row">
@@ -143,3 +144,5 @@
   </div>
 
 </section>
+
+<dialog-post-belief #dialogPostBelief (save)="getQuestionDetail()"></dialog-post-belief>

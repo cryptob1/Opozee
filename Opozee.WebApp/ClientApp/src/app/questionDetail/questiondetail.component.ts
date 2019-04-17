@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../_services/user.service';
@@ -7,8 +7,7 @@ import { LocalStorageUser } from '../_models/user';
 import { PostQuestionDetail, BookMarkQuestion } from '../_models/user';
 import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { PostDailogBelief } from '../questionDetail/postdialogbelief/postdialogbelief.component'
+import { DialogPostBelief } from '../questionDetail/dialogPostBelief/dialogPostBelief.component';
 @Component({
   selector: 'questiondetail-component',
   templateUrl: './questiondetail.component.html',
@@ -16,6 +15,9 @@ import { PostDailogBelief } from '../questionDetail/postdialogbelief/postdialogb
 })
 
 export class Questiondetail implements OnInit {
+
+  @ViewChild('dialogPostBelief') dialogPostBelief: DialogPostBelief;
+
   model: any = {};
   postOpinionForm: FormGroup;
   loading = false;
@@ -32,7 +34,9 @@ export class Questiondetail implements OnInit {
   animal: string;
   name: string;
 
-   countReactionScore: number;
+  countReactionScore: number;
+
+  public _emitter: EventEmitter<any> = new EventEmitter();
 
   dataModel = {
     'QuestId': 0, 'Comment': '',
@@ -49,8 +53,9 @@ export class Questiondetail implements OnInit {
   // PostQuestionDetailModel: { 'Comments': [], 'PostQuestionDetail':{}};
   PostQuestionDetailModel: BookMarkQuestion = new BookMarkQuestion();
   // isExpanded = false;
+
   constructor(private route: ActivatedRoute, private userService: UserService, private formBuilder: FormBuilder, private router: Router,
-    private toastr: ToastrService, public dialog: MatDialog
+    private toastr: ToastrService
   ) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -58,26 +63,7 @@ export class Questiondetail implements OnInit {
       this.Id = this.route.snapshot.params["Id"];
     }
   }
-
-  openDialog(): void {
-   
-    const dialogRef = this.dialog.open(PostDailogBelief, {
-      width: '300px',
-      data: { name: this.name, animal: this.animal },
-      position: {
-        top: '-100px',
-        left: '540px',
-       
-      }
-    });
-   
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.animal = result;
-    });
-  }
-
-
+  
   //logout() { } 
   //toggle() {
   //  this.isExpanded = !this.isExpanded;
@@ -325,25 +311,19 @@ export class Questiondetail implements OnInit {
         error => {
           this.loading = false;
         });
-
-
+    
   }
-
-
-
-
-
-
-
-
+  
   showSuccess() {
-
     this.toastr.success('Hello world!', '');
   }
 
-  commentSend() {
-    //this.openDialog();
-    this.isWanttoSentComment = true
+  openBeliefModal() {
+    //this.isWanttoSentComment = true
+    this.dataModel.QuestId = this.Id;
+    this.dataModel.CommentedUserId = +this.localStorageUser.Id;
 
+    console.log('data22', this.dataModel);
+    this.dialogPostBelief.show(this.dataModel);
   }
 }

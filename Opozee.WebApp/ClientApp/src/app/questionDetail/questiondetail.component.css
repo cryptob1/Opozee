@@ -357,3 +357,34 @@ span.profile_left p {
   font-size: 11px;
   float: right;
 }
+.post-yes-no-option .input-switch-items .form-check {
+  width:50%;
+  float:left
+}
+.post-yes-no-option .input-switch-items .form-check label {
+  width:100%;
+  margin-bottom:0px;
+  position:relative
+}
+.post-yes-no-option .input-switch-items .form-check label input{
+  display:none
+}
+.post-yes-no-option .input-switch-items .form-check label span {
+  border: 1px solid #ccc;
+  width: 100%;
+  padding: 10px 0;
+  color: #313131;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+}
+  .post-yes-no-option .input-switch-items .form-check label input:checked + span.no {
+    border-color: rgba(255, 0, 0, 0.76);
+    background: rgba(255, 0, 0, 0.76);
+    color: #fff;
+  }
+  .post-yes-no-option .input-switch-items .form-check label input:checked + span.yes {
+    border-color: #50881c;
+    background: #50881c;
+    color: #fff;
+  }
