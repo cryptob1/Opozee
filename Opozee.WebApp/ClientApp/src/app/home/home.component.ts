@@ -33,11 +33,11 @@ export class HomeComponent implements OnInit {
 
   //seemes to be getting popular questions
   private getUserALLRecords() {
-    this.userService.getUserRecords().pipe(first()).subscribe(users => {
-      debugger;
-      this.questionListing = users;
-      console.log(this.questionListing);
-    });
+    //this.userService.getUserRecords().pipe(first()).subscribe(users => {
+    //  debugger;
+    //  this.questionListing = users;
+    //  console.log(this.questionListing);
+    //});
   }
 
   searchForTag(hashtag) {

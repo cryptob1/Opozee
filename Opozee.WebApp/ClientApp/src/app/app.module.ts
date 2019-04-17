@@ -47,6 +47,7 @@ import { termandConditionComponent } from './legal/termandCondition.component';
 import { privatePolicyComponent } from './legal/privatePolicy.component';
 import { PostDailogBelief } from './questionDetail/postdialogbelief/postdialogbelief.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { aboutusComponent } from './aboutus/aboutus.component';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -98,7 +99,8 @@ export function getAuthServiceConfigs() {
     UserpostQuestion, BookmarkQuestion, PostedQuestionEditList, EditPostquestion, termandConditionComponent
     , privatePolicyComponent,
     TimeAgoPipe,
-    PostDailogBelief
+    PostDailogBelief,
+    aboutusComponent
   ],
   entryComponents: [PostDailogBelief],
   providers: [

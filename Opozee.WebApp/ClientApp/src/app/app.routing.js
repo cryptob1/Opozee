@@ -18,6 +18,7 @@ var postedQuestionEditList_component_1 = require("./question/PostedQuestion/post
 var editPostquestion_component_1 = require("./question/editPosttedQuestion/editPostquestion.component");
 var termandCondition_component_1 = require("./legal/termandCondition.component");
 var privatePolicy_component_1 = require("./legal/privatePolicy.component");
+var aboutus_component_1 = require("./aboutus/aboutus.component");
 var appRoutes = [
     { path: 'questionlisting', component: QuestionListing_1.QuestionListingComponent },
     { path: 'questionlisting/:search', component: QuestionListing_1.QuestionListingComponent },
@@ -39,6 +40,7 @@ var appRoutes = [
     { path: 'editpostedquestion/:qId', component: editPostquestion_component_1.EditPostquestion, canActivate: [index_4.AuthGuard] },
     { path: 'termcondition', component: termandCondition_component_1.termandConditionComponent, canActivate: [index_4.AuthGuard] },
     { path: 'privatepolicy', component: privatePolicy_component_1.privatePolicyComponent },
+    { path: 'aboutus', component: aboutus_component_1.aboutusComponent },
     { path: '**', redirectTo: '' }
 ];
 exports.routing = router_1.RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' });

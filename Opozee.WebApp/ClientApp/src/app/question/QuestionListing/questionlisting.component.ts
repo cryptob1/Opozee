@@ -90,7 +90,8 @@ import { Subscription } from 'rxjs';
     }, error => {
       this.isRecordLoaded = false;
 
-    });
+      });
+    this.isRecordLoaded = false;
   }
 
   private getAllQuestionlistPaging(questionGetModel) {
