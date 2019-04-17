@@ -13,7 +13,9 @@ import { UserService } from '../_services';
 export class NotificationComponent implements OnInit {
   currentUser: User;
   isRecordLoaded: boolean = false;
+  
   notification: NotificationsModel[] = [];
+  NotificationData: NotificationsModel[] = [];
   questionListing: QuestionListing[] = [];
   localStorageUser: LocalStorageUser;
   PagingModel = { 'UserId': 0, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, IsChecked: true }
@@ -31,35 +33,45 @@ export class NotificationComponent implements OnInit {
   ngOnInit() {
     
     this.setPageonpageLoad(1, 50)
-
     this.PagingModel.UserId = this.localStorageUser.Id;
-   this.PagingPagesload(1, 10)
+    this.PagingPagesload(1, 10)
   }
 
   changeNotification(event) {
-    
+    debugger
     this.PagingModel.IsChecked = event.target.checked;
     if (this.PagingModel.IsChecked) {
-      this.setPageonpageLoad(1, 50)
+      this.setPageonpageLoad(this.PagingModel.PageNumber, 50)
       this.PagingModel.UserId = this.localStorageUser.Id;
-      this.PagingPagesload(1, 10)
+      this.PagingPagesload(this.PagingModel.PageNumber, 10)
     }
     else {
-      this.setPageonpageLoad(1, 50)
+      this.setPageonpageLoad(this.PagingModel.PageNumber, 50)
       this.PagingModel.UserId = this.localStorageUser.Id;
-      this.PagingPagesload(1, 10)
+      this.PagingPagesload(this.PagingModel.PageNumber, 10)
     }
   }
 
   private getAllNotification(PagingModel) {
+    
+    this.NotificationData = [];
+    this.isRecordLoaded = false;
     var Id = this.localStorageUser.Id;
     this.userService.getAllNotification(PagingModel).pipe(first()).subscribe(Notifications => {
-      
-      console.log(Notifications);
-      this.notification = Notifications;
-      this.PagingModel.TotalRecords = Notifications.length > 0 ? Notifications[0].TotalRecordcount : 0;
-      //console.log(this.notification);
-      this.isRecordLoaded = true;
+      this.NotificationData = [];
+      if (Notifications) {
+        if (Notifications.length > 0) {
+          this.NotificationData = Notifications;
+          this.PagingModel.TotalRecords = Notifications[0].TotalRecordcount
+        }
+        else {
+          this.PagingModel.TotalRecords = 0;
+        }
+        this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
+        this.isRecordLoaded = true
+      }
+      this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
+      this.isRecordLoaded = true
     }, error => {
       this.isRecordLoaded = false;
     });
