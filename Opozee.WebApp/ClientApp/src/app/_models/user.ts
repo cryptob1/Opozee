@@ -92,6 +92,9 @@ export class PostQuestionDetail {
   TotalLikes: number;
   UserImage: string;
 
+  YesCount: number;
+  NoCount: number;
+
   constructor() {
     //this.IsBookmark = false;
   }

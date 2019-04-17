@@ -25,7 +25,12 @@
                   </span>
                 </div>
                 <div class="user_right">
-                  <div class="date"><i>{{temp.CreationDate | timeAgo}}</i></div>
+                  <div class="date">
+                    <i>{{temp.CreationDate | timeAgo}}</i>
+                    <br />
+                    <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
+                  </div>
+                  
                   <br />
                 </div>
 
@@ -111,9 +116,7 @@
             </div>
 
           </li>
-
-
-
+                   
         </ul>
 
       </div>
