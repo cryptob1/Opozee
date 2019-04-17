@@ -3,7 +3,7 @@ import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../_models';
 import { UserService } from '../_services';
-import { QuestionListing } from '../_models/question';
+import { QuestionListing, PopularHasTags } from '../_models/question';
 
 //import { Emoji } from 'emoji-mart'
 
@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit {
   currentUser: User;
   users: User[] = [];
   questionListing: QuestionListing[] = [];
+  popularhastags: PopularHasTags[] = [];
   
   constructor(private userService: UserService,private route: ActivatedRoute,
     private router: Router) {
@@ -20,9 +21,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
     //this.loadAllUsers();
-    this.getUserALLRecords();
+    //this.getUserALLRecords();
+    this.getHastagsRecords();
   }
 
   deleteUser(id: number) {
@@ -33,12 +34,28 @@ export class HomeComponent implements OnInit {
 
   //seemes to be getting popular questions
   private getUserALLRecords() {
-    //this.userService.getUserRecords().pipe(first()).subscribe(users => {
-    //  debugger;
-    //  this.questionListing = users;
-    //  console.log(this.questionListing);
-    //});
+    this.userService.getUserRecords().pipe(first()).subscribe(users => {
+      this.questionListing = users;
+      console.log(this.questionListing);
+    });
   }
+
+  // getting popular Hastags
+  private getHastagsRecords() {
+    this.userService.getPopularHasTags().pipe(first()).subscribe(data => {
+
+      this.popularhastags = data.reduce((arr, _item) => {
+        let exists = !!arr.find(x => x.HashTag === _item.HashTag);
+        if (!exists) {
+          arr.push(_item);
+        }
+        return arr;
+      }, []);
+
+    });
+  }
+
+
 
   searchForTag(hashtag) {
     this.router.navigateByUrl('/questionlistings/' + hashtag, { skipLocationChange: true }).then(() =>

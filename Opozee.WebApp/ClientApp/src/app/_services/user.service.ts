@@ -5,7 +5,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { HttpHeaders } from '@angular/common/http';
 import { User, Question, NotificationsModel, PostQuestionDetail, BookMarkQuestion, UserProfileModel } from '../_models';
 import { UserEditProfileModel } from '../_models/user';
-import { QuestionListing } from '../_models/question';
+import { QuestionListing, PopularHasTags } from '../_models/question';
 import { config } from 'process';
 import { AppConfigService } from '../appConfigService';
 import { Notification, Observable } from 'rxjs';
@@ -64,6 +64,16 @@ export class UserService {
 
   getUserRecords() {
     return this.http.get<QuestionListing[]>(this.myAppUrl + 'opozee/api/WebApi/GetUserALLRecords', {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
+  }
+
+
+  //Get Popularhastag
+  getPopularHasTags() {
+    return this.http.get<any[]>(this.myAppUrl + 'opozee/api/WebApi/GetPopularHashTags', {
       headers: new HttpHeaders({
         'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
       })

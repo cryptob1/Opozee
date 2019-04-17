@@ -6,11 +6,31 @@
 
   </div>
 
+  <section class="section_second">
+    <div class="container">
+      <div class="cover_heading">
+        <h2>Popular Hastags</h2>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="d-flex">
+            <ng-container *ngFor="let tag of popularhastags;let i=index">
+              <div class="taglist" *ngIf="i<5">
+                <h4><a href="javascript:void(0)" (click)="searchForTag(tag.HashTag)">{{tag.HashTag}}</a></h4>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
 
   <!--<section class="section_second">
     <div class="container">
       <div class="cover_heading">
-        <h2>Popular Questions</h2>
+        <h2>Popular Hastags</h2>
       </div>
       <div class="row">
         <div class="col-sm-6" *ngFor="let temp of questionListing">
@@ -58,43 +78,54 @@
 
 
 
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <ul>
-          <li>   <a [routerLink]="['/aboutus/']">FAQ</a></li>
-          <li>   <a [routerLink]="['/aboutus/']">About Us</a></li>
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <ul>
+            <li>   <a [routerLink]="['/aboutus/']">FAQ</a></li>
+            <li>   <a [routerLink]="['/aboutus/']">About Us</a></li>
 
-          <li><a href="#">Blog</a></li>
-          <li><a href="mailto:contactus@opozee.com">Contact Us</a></li>
-          <!--<li >   <a [routerLink]="['/aboutus/']">About Us</a></li>-->
-        </ul>
-        <!--<li> <a [routerLink]="['/aboutus/']">About Us</a></li>
-          
-          <li><a href="#">Register</a></li>
-        -->
+            <li><a href="#">Blog</a></li>
+            <li><a href="mailto:contactus@opozee.com">Contact Us</a></li>
+            <!--<li >   <a [routerLink]="['/aboutus/']">About Us</a></li>-->
+          </ul>
+          <!--<li> <a [routerLink]="['/aboutus/']">About Us</a></li>
+
+            <li><a href="#">Register</a></li>
+          -->
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="copywrite"><p>Copyright Opozee Inc 2019</p></div>
-  <div class="privatePolicy">
-    <!--<a [routerLink]="['/privatepolicy/']">Privacy Policy</a>-->
+    <div class="copywrite"><p>Copyright Opozee Inc 2019</p></div>
+    <div class="privatePolicy">
+      <!--<a [routerLink]="['/privatepolicy/']">Privacy Policy</a>-->
 
-  </div>
+    </div>
 
-  <div class="aboutus">
+    <div class="aboutus">
+    </div>
 
+    <span id="siteseal">
+      <script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=tO7ndZkEUXZNnbHsOziOEYXzlu2s0mKH9rgu1WUzFXZbUYexoQKcFMLqv54v"></script>
+    </span>
 
-  </div>
-
-  <span id="siteseal">
-    <script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=tO7ndZkEUXZNnbHsOziOEYXzlu2s0mKH9rgu1WUzFXZbUYexoQKcFMLqv54v"></script>
-  </span>
-
-</footer>
-
-
+  </footer>
 </div>
 
+
+<style>
+  .d-flex{
+    display:block;
+    margin:0px auto;
+    max-width:100%;
+    text-align:center;
+    justify-content:center;
+    width:100%;
+  }
+  .taglist{
+    display:inline-block;
+    padding:6px 20px;
+  }
+</style>

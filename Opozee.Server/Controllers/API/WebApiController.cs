@@ -1128,6 +1128,67 @@ namespace opozee.Controllers.API
 
 
 
+        #region Get Popular Hashtags
+        [HttpGet]
+        [Route("api/WebApi/GetPopularHashTags")]
+        public List<PopularTag> GetPopularHashTags()
+        {
+            List<PopularTag> TopPopularHashTags = new List<PopularTag>();
+            try
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+
+
+                var PopularHashTagsList = (from q in db.Questions
+                                               //join u in db.Users on q.OwnerUserID equals u.UserID
+                                           where q.IsDeleted == false
+                                           select new
+                                           {
+                                               HashTag = q.HashTags,
+                                               QuestionId = q.Id
+                                           }).ToList();
+
+
+                int count = 0;
+
+                foreach (var item in PopularHashTagsList)
+                {
+
+                    string[] splitHastags = item.HashTag.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (var tag in splitHastags)
+                    {
+                        PopularTag _hashtag = new PopularTag();
+                        _hashtag.HashTag = tag;
+                        //_hashtag.QuestionId = item.QuestionId;
+                        //_hashtag.Count = PopularHashTagsList.Where(x => x.HashTag.Contains(tag)).ToList().Count;
+                        TopPopularHashTags.Add(_hashtag);
+                    }
+                }
+
+                foreach (var tag in TopPopularHashTags)
+                {
+                    tag.Count = TopPopularHashTags.Where(x => x.HashTag == tag.HashTag).ToList().Count;
+                }
+
+                TopPopularHashTags = TopPopularHashTags.OrderByDescending(x => x.Count).Distinct().ToList();
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+            }
+            return TopPopularHashTags;
+        }
+        #endregion
+
+        public class PopularTag
+        {
+            public string HashTag { get; set; }
+            //public int QuestionId { get; set; }
+            public int Count { get; set; }
+        }
+
+
         [HttpPost]
         [Route("api/WebApi/PostOpinionWeb")]
         public Token PostOpinionWeb(PostAnswerWeb Model)
