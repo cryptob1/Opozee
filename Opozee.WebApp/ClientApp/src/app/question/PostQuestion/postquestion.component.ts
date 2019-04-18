@@ -20,6 +20,7 @@ export class PostQuestionComponent implements OnInit {
   selectedItems = [];
   dropdownSettings = {};
   Usertags: string = '';
+ 
 
   users: User[] = [];
   constructor(private userService: UserService, private userservice: UserService, private alertService: AlertService, private formBuilder: FormBuilder,
@@ -97,7 +98,7 @@ export class PostQuestionComponent implements OnInit {
         }
         else {
           this.alertService.success('Question Posted', true);
-          this.router.navigate(['/questionlisting']);
+          this.router.navigate(['']);
         }
         this.loading = false;
         debugger;

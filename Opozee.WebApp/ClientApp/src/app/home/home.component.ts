@@ -8,7 +8,11 @@ import { QuestionListing } from '../_models/question';
 //import { Emoji } from 'emoji-mart'
 
 
-@Component({ templateUrl: 'home.component.html' })
+@Component({
+  templateUrl: 'home.component.html',
+  styleUrls: ['home.component.css']
+})
+
 export class HomeComponent implements OnInit {
   currentUser: User;
   users: User[] = [];

@@ -261,7 +261,7 @@
     <Compile Include="Models\WebModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EmailSender.cs" />
-    <Compile Include="Services\SendNotification.cs" />
+  
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
