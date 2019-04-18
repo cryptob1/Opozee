@@ -159,13 +159,14 @@
         <h3 class="pagetitle">Contact Us</h3>
       </div>
       <div class="contact-form">
-        <form>
+        <form name="contactForm" #f="ngForm" (ngSubmit)="f.form.valid && submitForm()">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label>
                   First Name*
-                  <input type="text" name="fname" class="form-control">
+                  <input type="text" class="form-control" placeholder="Enter first name" required
+                            [(ngModel)]="contact.firstName" name="firstName" #firstName="ngModel">
                 </label>
               </div>
             </div>
@@ -173,7 +174,8 @@
               <div class="form-group">
                 <label>
                   Last Name*
-                  <input type="text" name="lname" class="form-control">
+                  <input type="text" class="form-control" placeholder="Enter last name" required
+                            [(ngModel)]="contact.lastName" name="lastName" #lastName="ngModel">
                 </label>
               </div>
             </div>
@@ -181,7 +183,8 @@
               <div class="form-group">
                 <label>
                   Email*
-                  <input type="email" name="email" class="form-control">
+                  <input type="email" class="form-control" placeholder="Enter email aaddress" required
+                            [(ngModel)]="contact.email" name="email" #email="ngModel">
                 </label>
               </div>
             </div>
@@ -190,7 +193,8 @@
               <div class="form-group">
                 <label>
                   Phone*
-                  <input type="tel" name="phone" class="form-control">
+                  <input type="tel" class="form-control" placeholder="Enter phone number" required
+                            [(ngModel)]="contact.phone" name="phone" #phone="ngModel">
                 </label>
               </div>
             </div>
@@ -198,12 +202,16 @@
               <div class="form-group">
                 <label>
                   Message
-                  <textarea class="form-control"></textarea>
+                  <textarea class="form-control" placeholder="Enter message here..." required rows="4"
+                            [(ngModel)]="contact.message" name="message" #message="ngModel"></textarea>
                 </label>
               </div>
             </div>
             <div class="col-md-12">
-              <button type="submit" class="hire_btn">Send</button>
+              <button type="submit" class="buttonload hire_btn">
+                Send &nbsp;<i *ngIf="loading" class="fa fa-circle-o-notch fa-spin"></i>
+              </button>
+              <span *ngIf="f.form.invalid">* Enter valid values.</span>
             </div>
           </div>
         </form>

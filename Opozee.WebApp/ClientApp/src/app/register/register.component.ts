@@ -35,25 +35,43 @@ export class RegisterComponent implements OnInit {
     get f() { return this.registerForm.controls; }
 
   onSubmit() {
-    debugger;
-        this.submitted = true;
+    this.submitted = true;
 
-        // stop here if form is invalid
-        if (this.registerForm.invalid) {
-            return;
-        }
-
-        this.loading = true;
-        this.userService.register(this.registerForm.value)
-            .pipe(first())
-            .subscribe(
-                data => {
-                    this.alertService.success('Registration successful', true);
-                    this.router.navigate(['/login']);
-                },
-                error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                });
+    // stop here if form is invalid
+    if (this.registerForm.invalid) {
+      return;
     }
+
+    this.loading = true;
+    this.userService.register(this.registerForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.alertService.success('Registration successful', true);
+          
+          if (data.Response) {
+            if (data.Response.UserData) {
+              let _user = data.Response.UserData;
+              let contact = {
+                'firstName': _user.FirstName,
+                'lastName': _user.LastName,
+                'email': _user.Email
+              }
+              this.sendWelcomeMail(contact);
+            }
+          }
+
+          this.router.navigate(['/login']);
+        },
+        error => {
+          this.alertService.error(error);
+          this.loading = false;
+        });
+  }
+
+  private sendWelcomeMail(contact) {
+    this.userService.sendWelcomeMail(contact)
+      .pipe(first())
+      .subscribe(data => { });
+  }
 }

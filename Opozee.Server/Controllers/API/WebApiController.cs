@@ -2,6 +2,8 @@
 using Opozee.Models;
 using Opozee.Models.API;
 using Opozee.Models.Models;
+using Opozee.Server.Models.API;
+using Opozee.Server.Services;
 using OpozeeLibrary.API;
 using OpozeeLibrary.PushNotfication;
 using OpozeeLibrary.Utilities;
@@ -11,6 +13,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -570,20 +573,20 @@ namespace opozee.Controllers.API
                 else if (Model.CheckedTab == "myquestions")
                 {
                     TotalRecord = (from q in db.Questions
-                                   join o in db.Opinions on q.Id equals o.QuestId into op
-                                   from o in op.DefaultIfEmpty()
-                                   join n in db.Notifications on o.Id equals n.CommentId into noti
-                                   from n in noti.DefaultIfEmpty()
+                                   //join o in db.Opinions on q.Id equals o.QuestId into op
+                                   //from o in op.DefaultIfEmpty()
+                                   //join n in db.Notifications on o.Id equals n.CommentId into noti
+                                   //from n in noti.DefaultIfEmpty()
                                    join u in db.Users on q.OwnerUserID equals u.UserID
                                    where q.OwnerUserID == Model.UserId && q.IsDeleted == false
                                    select q
                     ).ToList().Count();
 
                     _userProfileData = (from q in db.Questions
-                                        join o in db.Opinions on q.Id equals o.QuestId into op
-                                        from o in op.DefaultIfEmpty()
-                                        join n in db.Notifications on o.Id equals n.CommentId into noti
-                                        from n in noti.DefaultIfEmpty()
+                                        //join o in db.Opinions on q.Id equals o.QuestId into op
+                                        //from o in op.DefaultIfEmpty()
+                                        //join n in db.Notifications on o.Id equals n.CommentId into noti
+                                        //from n in noti.DefaultIfEmpty()
                                         join u in db.Users on q.OwnerUserID equals u.UserID
                                         where q.OwnerUserID == Model.UserId && q.IsDeleted == false
                                         select new UserNotifications
@@ -601,7 +604,7 @@ namespace opozee.Controllers.API
                                             //Dislike = ((n.Dislike ?? false) ? true : false),
                                             //Comment = ((n.Comment ?? false) ? true : false),
                                             IsAgree = false,//o == null ? false : ((o.IsAgree ?? false) ? true : false),
-                                            CreationDate = n.CreationDate,
+                                            //CreationDate = n.CreationDate,
                                             // ModifiedDate = n.ModifiedDate,
                                             TotalRecordcount = TotalRecord,
                                             //NotificationId = n.Id,
@@ -2264,6 +2267,75 @@ namespace opozee.Controllers.API
         }
         #endregion
 
+        #region "Mail APIs" 
+        [HttpPost]
+        [Route("api/WebApi/SendContactMail")]
+        public async Task<dynamic> SendContactMail(ContactMail model)
+        {
+            dynamic _response = new ExpandoObject();
+            try
+            {
 
+                string recepientName = model.Firstname + " " + model.LastName;
+                string recepientEmail = model.Email;
+                string subject = "Message from " + recepientName;
+                
+                bool isHtml = true;
+
+                string pathHTMLFile = HttpContext.Current.Server.MapPath("~/Content/mail-template/ContactMailTemplate.html");
+                string TEMPLATE = File.ReadAllText(pathHTMLFile);
+                TEMPLATE = TEMPLATE.Replace("##MESSAGE##", model.Message);
+                TEMPLATE = TEMPLATE.Replace("##NAME##", recepientName);
+                TEMPLATE = TEMPLATE.Replace("##PHONE##", model.Phone);
+                TEMPLATE = TEMPLATE.Replace("##EMAIL##", model.Email);
+
+                string body = TEMPLATE;
+
+                (bool success, string errorMsg) = await EmailSender.SendEmailAsync(recepientName, recepientEmail, subject, body, isHtml, true);
+
+                _response.success = success;
+
+                if (!success)
+                    return BadRequest(errorMsg);
+            }
+            catch (Exception ex)
+            {
+            }
+            return _response;
+        }
+
+        [HttpPost]
+        [Route("api/WebApi/SendWelcomMail")]
+        public async Task<dynamic> SendWelcomMail(ContactMail model)
+        {
+            dynamic _response = new ExpandoObject();
+            try
+            {
+
+                string recepientName = model.Firstname + " " + model.LastName;
+                string recepientEmail = model.Email;
+                string subject = "Welcome to Opozee";
+
+                bool isHtml = true;
+
+                string pathHTMLFile = HttpContext.Current.Server.MapPath("~/Content/mail-template/WelcomeMailTemplate.html");
+                string TEMPLATE = File.ReadAllText(pathHTMLFile);
+                TEMPLATE = TEMPLATE.Replace("##NAME##", recepientName);
+
+                string body = TEMPLATE;
+
+                (bool success, string errorMsg) = await EmailSender.SendEmailAsync(recepientName, recepientEmail, subject, body, isHtml);
+
+                _response.success = success;
+
+                if (!success)
+                    return BadRequest(errorMsg);
+            }
+            catch (Exception ex)
+            {
+            }
+            return _response;
+        }
+        #endregion
     }
 }

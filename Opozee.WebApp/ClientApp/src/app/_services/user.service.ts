@@ -45,8 +45,8 @@ export class UserService {
     return this.http.get(this.myAppUrl + 'users/ + id');
   }
 
-  register(user: User) {
-    return this.http.post(this.myAppUrl + 'opozee/api/WebApi/RegisterUser', user, {
+  register(user: any) {
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/RegisterUser', user, {
       headers: new HttpHeaders({
         'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
       })
@@ -90,10 +90,6 @@ export class UserService {
   }
 
 
-
-
-
-
   getAllNotification(Model) {
     return this.http.post<NotificationsModel[]>(this.myAppUrl + 'opozee/api/WebApi/GetAllNotificationByUser',Model, {
       headers: new HttpHeaders({
@@ -102,7 +98,6 @@ export class UserService {
     })
   }
 
-
   getTabOneNotification(Model) {
     return this.http.post<NotificationsModel[]>(this.myAppUrl + 'opozee/api/WebApi/GetProfileNotificationByUser', Model, {
       headers: new HttpHeaders({
@@ -110,7 +105,6 @@ export class UserService {
       })
     })
   }
-
 
 
   //getAllQuestionlist(questionGetModel) {
@@ -131,12 +125,6 @@ export class UserService {
     })
 
   }
-
-
-
-
-
-
 
 
 
@@ -274,7 +262,6 @@ export class UserService {
         'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
       })
     })
-
   }
 
   editPostQuestionwebService(question) {
@@ -283,7 +270,6 @@ export class UserService {
         'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
       })
     })
-
   }
 
   deletePostQuestionwebService(question) {
@@ -292,9 +278,22 @@ export class UserService {
         'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
       })
     })
+  }
 
+  sendContactMail(contact) {
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/SendContactMail', contact, {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
+  }
+
+  sendWelcomeMail(contact) {
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/SendWelcomMail', contact, {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
   }
 
 }
-
-
