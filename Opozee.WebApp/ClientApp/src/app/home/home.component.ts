@@ -3,7 +3,7 @@ import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../_models';
 import { UserService } from '../_services';
-import { QuestionListing, PopularHasTags } from '../_models/question';
+import { QuestionListing } from '../_models/question';
 
 //import { Emoji } from 'emoji-mart'
 
@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
   currentUser: User;
   users: User[] = [];
   questionListing: QuestionListing[] = [];
-  popularhastags: PopularHasTags[] = [];
+  popularhastags:any = [];
   
   constructor(private userService: UserService,private route: ActivatedRoute,
     private router: Router) {

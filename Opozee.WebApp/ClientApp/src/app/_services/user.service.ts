@@ -5,7 +5,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { HttpHeaders } from '@angular/common/http';
 import { User, Question, NotificationsModel, PostQuestionDetail, BookMarkQuestion, UserProfileModel } from '../_models';
 import { UserEditProfileModel } from '../_models/user';
-import { QuestionListing, PopularHasTags } from '../_models/question';
+import { QuestionListing } from '../_models/question';
 import { config } from 'process';
 import { AppConfigService } from '../appConfigService';
 import { Notification, Observable } from 'rxjs';
