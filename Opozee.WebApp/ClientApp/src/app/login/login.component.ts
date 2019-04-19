@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit {
           this.dataSharingService.loginsetstate(data);
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(data));
-          this.router.navigate(['/questionlisting']);
+          this.router.navigate(['']);
         }
 
         else {
@@ -116,7 +116,7 @@ export class LoginComponent implements OnInit {
               this.dataSharingService.loginsetstate(data);
               // store user details and jwt token in local storage to keep user logged in between page refreshes
               localStorage.setItem('currentUser', JSON.stringify(data));
-              this.router.navigate(['/questionlisting']);
+              this.router.navigate(['']);
             }
 
             else {
@@ -160,7 +160,7 @@ export class LoginComponent implements OnInit {
               this.dataSharingService.loginsetstate(data);
               // store user details and jwt token in local storage to keep user logged in between page refreshes
               localStorage.setItem('currentUser', JSON.stringify(data));
-              this.router.navigate(['/questionlisting']);
+              this.router.navigate(['']);
             }
 
             else {
@@ -209,7 +209,7 @@ export class LoginComponent implements OnInit {
         this.dataSharingService.loginsetstate(data);
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('currentUser', JSON.stringify(data));
-        this.router.navigate(['/questionlisting']);
+        this.router.navigate(['']);
       }
       else {
         this.loading = false;
