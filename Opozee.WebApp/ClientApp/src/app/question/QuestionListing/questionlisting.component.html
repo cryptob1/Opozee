@@ -9,7 +9,7 @@
         <img src="../../../assets/images/reordloaderImages.gif" />
       </div>
 
-      <div class="container mb-5" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded">No record found</div>
+      <div class="container" style="margin:60px 0px 40px 0px" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded">No record found</div>
 
       <div class="col-sm-12">
         <ul>
@@ -30,7 +30,7 @@
                     <br />
                     <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
                   </div>
-                  
+
                   <br />
                 </div>
 
@@ -40,7 +40,7 @@
                   </a>
                 </strong>
 
-          
+
 
                 <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
                   <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></div>
@@ -116,7 +116,7 @@
             </div>
 
           </li>
-                   
+
         </ul>
 
       </div>

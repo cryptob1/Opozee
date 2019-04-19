@@ -5,22 +5,31 @@
   <div class="creds p-4">
 
     <div class="container">
-
+      
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-12 col-sm-12">
           <div class="login_data bg-white text-center rounded p-md-4  pt-4">
             <div class="logo_main text-center">
-              
-            </div>
-            <div class="login_form">
-              <form class="w-md-75 mx-auto px-sm-3 my-3 mt-4" [formGroup]="questionPostForm" (ngSubmit)="onSubmit()">
-                <div class="main_fields text-left">
 
-                  <div class="form-group">
+            </div>
+            <div class="login_form" >
+              <form class="w-md-75 mx-auto px-sm-3 my-3 mt-4" [formGroup]="questionPostForm" (ngSubmit)="onSubmit()">
+                <div class="text-left">
+
+                  <div class="form-group" style="width:100%" >
                     <label for="postQuestion">Question</label>
                     <div class="QuestionComment">Opozee is designed to answer questions in a yes or no format.</div>
-                    <textarea rows="4" cols="50" style="padding-left: 15px;" formControlName="postQuestion" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.postQuestion.errors }"></textarea>
 
+                    <app-ngx-editor 
+                                    resizer="basic"
+                                    formControlName="postQuestion"
+                                    [config]="editorConfig"
+                                    [(ngModel)]="postQuestion">
+                    </app-ngx-editor>
+
+
+
+                    <!--<textarea rows="4" cols="50" style="padding-left: 15px;" formControlName="postQuestion" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.postQuestion.errors }"></textarea>-->
                     <!--<div *ngIf="postQuestionTemp == ''">question required</div>
                     {{postQuestionTemp}}-->
 
@@ -30,21 +39,19 @@
                   </div>
 
                   <!--<ng-multiselect-dropdown [placeholder]="'TAG USERS'"
-                                           [data]="dropdownList"
-                                           [ngModelOptions]="{standalone: true}"
-                                           [(ngModel)]="selectedItems"
-                                           [settings]="dropdownSettings"
-                                           (onSelect)="onItemSelect($event)"
-                                           (onSelectAll)="onSelectAll($event)"
-                                           (onDeSelect)="onDeSelect($event)">-->
-          
-
+                       [data]="dropdownList"
+                       [ngModelOptions]="{standalone: true}"
+                       [(ngModel)]="selectedItems"
+                       [settings]="dropdownSettings"
+                       (onSelect)="onItemSelect($event)"
+                       (onSelectAll)="onSelectAll($event)"
+                       (onDeSelect)="onDeSelect($event)">-->
                   <!--</ng-multiselect-dropdown>-->
 
-                  <div class="form-group">
+                  <div class="form-group" style="width:100%" >
                     <label for="hashtagss">Hashtags </label>
                     <label style="font-size: 10px">(optional) </label>
-                    <input type="text" style="padding-left: 15px;" formControlName="hashtags" class="form-control form-control pl-5"  />
+                    <input type="text" style="padding-left: 15px;" formControlName="hashtags" class="form-control form-control pl-5" />
 
                   </div>
                 </div>
