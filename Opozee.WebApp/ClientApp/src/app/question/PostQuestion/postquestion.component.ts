@@ -7,7 +7,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
 
-@Component({ templateUrl: 'postquestion.component.html', styleUrls: ['./postquestion.component.css'] })
+@Component({
+  templateUrl: 'postquestion.component.html',
+  styleUrls: ['./postquestion.component.css']
+})
 export class PostQuestionComponent implements OnInit {
   questionPostForm: FormGroup;
   loading = false;
@@ -20,7 +23,27 @@ export class PostQuestionComponent implements OnInit {
   selectedItems = [];
   dropdownSettings = {};
   Usertags: string = '';
- 
+
+  editorConfig = {
+    "editable": true,
+    "spellcheck": true,
+    "height": "100px",
+    "minHeight": "100px",
+    "width": "auto",
+    "minWidth": "0",
+    "translate": "yes",
+    "enableToolbar": true,
+    "showToolbar": true,
+    "placeholder": "Enter question here...",
+    "imageEndPoint": "",
+    "toolbar": [
+      ["bold", "italic", "underline","fontSize", "color"],
+      ["cut", "copy", "delete" , "undo", "redo"],
+      ["link", "unlink"]
+    ]
+
+  }
+
 
   users: User[] = [];
   constructor(private userService: UserService, private userservice: UserService, private alertService: AlertService, private formBuilder: FormBuilder,
@@ -34,7 +57,6 @@ export class PostQuestionComponent implements OnInit {
 
   ngOnInit() {
 
-    debugger;
     //this.loadAllUsers();
     this.questionPostForm = this.formBuilder.group({
       postQuestion: ['', Validators.required],

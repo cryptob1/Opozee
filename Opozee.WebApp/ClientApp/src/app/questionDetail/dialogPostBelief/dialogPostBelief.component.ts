@@ -16,6 +16,27 @@ export class DialogPostBelief implements OnInit {
   postBeliefForm: FormGroup;
   dataModel: any;
 
+  editorConfigModal = {
+    "editable": true,
+    "spellcheck": true,
+    "height": "100px",
+    "minHeight": "100px",
+    "width": "auto",
+    "minWidth": "0",
+    "translate": "yes",
+    "enableToolbar": true,
+    "showToolbar": true,
+    "placeholder": "Share your belief..",
+    "imageEndPoint": "",
+    "toolbar": [
+      ["bold", "italic", "underline", "fontSize", "color"],
+      ["cut", "copy", "delete", "undo", "redo"],
+      ["link", "unlink"]
+    ]
+
+  }
+
+
   @ViewChild('dialogPostBelief') public dialogPostBelief: ModalDirective;
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
 
@@ -26,6 +47,7 @@ export class DialogPostBelief implements OnInit {
   }  
 
   ngOnInit() {
+    this.editorConfigModal;
   }
 
  

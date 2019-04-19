@@ -48,6 +48,10 @@ import { privatePolicyComponent } from './legal/privatePolicy.component';
 import { aboutusComponent } from './aboutus/aboutus.component';
 import { ModalModule, BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { DialogPostBelief } from './questionDetail/dialogPostBelief/dialogPostBelief.component';
+import { NgxEditorModule } from 'ngx-editor';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { ExternalLinkDirective } from './_helpers/external-link.directive';
+
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -79,7 +83,9 @@ export function getAuthServiceConfigs() {
     ToastrModule.forRoot(),
     SocialLoginModule,
     Ng2EmojiModule.forRoot(),
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    NgxEditorModule,
+    AngularFontAwesomeModule    
   ],
   declarations: [
     AppComponent,
@@ -100,7 +106,8 @@ export function getAuthServiceConfigs() {
     , privatePolicyComponent,
     TimeAgoPipe,
     DialogPostBelief,
-    aboutusComponent
+    aboutusComponent,
+    ExternalLinkDirective
   ],
   entryComponents: [
     DialogPostBelief

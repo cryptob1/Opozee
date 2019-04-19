@@ -56,11 +56,11 @@
                      </a>
                    </strong>
                    <div *ngIf="temp.IsAgree===true">
-                     <strong class="text-danger"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Opinion}}</a></strong>
+                     <strong class="text-danger"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion"></a></strong>
                    </div>
 
                    <div *ngIf="temp.IsAgree===false">
-                     <strong class="text-success"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]">{{temp.Opinion}}</a></strong>
+                     <strong class="text-success"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion"></a></strong>
                    </div>
                    
                  </span>

@@ -32,9 +32,9 @@
 
               <!--<span class="time">{{PostQuestionDetailModel.postQuestionDetail?.CreationDate |  timeAgo}}</span>-->
               <!--<p>{{PostQuestionDetailModel.postQuestionDetail.Question}}</p>-->
-
-              <p class="message-container" [innerHTML]="PostQuestionDetailModel?.postQuestionDetail?.Question | emojis"></p>
-
+              <div ExternalLink>
+                <p class="message-container" [innerHTML]="PostQuestionDetailModel?.postQuestionDetail?.Question | emojis"></p>
+              </div>
               <div class="hash_tag">
                 <span>
                   <ng-container *ngFor="let tag of PostQuestionDetailModel?.postQuestionDetail?.HashTags?.split(',')">
@@ -70,7 +70,7 @@
               <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
 
                 <div [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']">
-                  <p>{{temp?.Comment}}</p>
+                  <div ExternalLink><p [innerHTML] ="temp?.Comment"></p></div>
                   <span class="profile_bottom_cover">
 
                     <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
@@ -119,6 +119,8 @@
 
                     <div class="comment_box" *ngIf="Isclicked">
                       <textarea [(ngModel)]="dataModel.Comment"></textarea>
+                    
+
 
                       <a (click)="saveOpinionclick()" style="cursor:pointer">Submit</a>
                       <a (click)="cancelclick()" style="cursor:pointer">Cancel</a>
