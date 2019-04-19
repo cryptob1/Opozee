@@ -8,10 +8,17 @@
   width: 100%;
 }
 
+.t_label {
+  display: inline-block;
+  padding: 5px 15px 0px;
+}
+
 .taglist {
   display: inline-block;
   padding:  5px 15px 0px;
 }
+
+
  
 
 @media screen and (max-width: 480px) {
@@ -24,5 +31,12 @@
     .taglist h4 a{
       font-size: 12px;
     }
-}
+
+
+  .t_label {
+    display: none;
+    
+  }
+
+ }
 

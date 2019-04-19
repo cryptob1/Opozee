@@ -14,15 +14,7 @@
   padding-right: 5px;
   padding-left: 5px;
 }
-
-
-
-.section_second  {
-
-  margin-bottom: 0px;
-  margin-top: 0px;
-}
-
+ 
 
 
 .cover_questions .user_right {
@@ -56,7 +48,7 @@
     padding-left: 1px;
     padding-right: 1px;
   }
-
+   
 
   .section_second ul li {
     width: 100%;
@@ -73,3 +65,9 @@
     box-shadow: unset;
   }
 }
+
+
+
+
+
+
