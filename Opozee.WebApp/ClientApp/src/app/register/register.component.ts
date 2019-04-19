@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
+import { ToastrService } from 'ngx-toastr';
+
 import { AlertService, UserService } from '../_services';
 
 @Component({templateUrl: 'register.component.html'})
@@ -16,7 +18,8 @@ export class RegisterComponent implements OnInit {
         private formBuilder: FormBuilder,
         private router: Router,
         private userService: UserService,
-      private alertService: AlertService) {
+      private alertService: AlertService,
+    private toastr: ToastrService) {
 
 
     }
@@ -60,6 +63,8 @@ export class RegisterComponent implements OnInit {
               this.sendWelcomeMail(contact);
             }
           }
+
+          this.toastr.success('Registration', 'Successful.', { timeOut: 5000 });
 
           this.router.navigate(['/login']);
         },
