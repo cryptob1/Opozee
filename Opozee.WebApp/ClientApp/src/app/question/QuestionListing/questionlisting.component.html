@@ -66,7 +66,12 @@
                 </div>
 
                 <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
-                  <p>{{temp.MostYesLiked?.Comment}}</p>
+ 
+                  <div ExternalLink>
+                    <p class="message-container" [innerHTML]="temp.MostYesLiked.Comment | emojis"></p>
+                  </div>
+
+                 
                   <div class="row">
                     <div class="col-sm-6 text-left">
                       <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
@@ -87,7 +92,11 @@
                 </div>
 
                 <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
-                  <p>{{temp.MostNoLiked?.Comment}}</p>
+                  <div ExternalLink>
+                    <p class="message-container" [innerHTML]="temp.MostNoLiked.Comment | emojis"></p>
+                  </div>
+
+               
                   <div class="row">
 
                     <div class="col-sm-6 text-right">

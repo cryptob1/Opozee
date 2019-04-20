@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../_services/user.service';
 import { first } from 'rxjs/operators';
-import { LocalStorageUser } from '../_models/user';
+import { LocalStorageUser, Comments } from '../_models/user';
 import { PostQuestionDetail, BookMarkQuestion } from '../_models/user';
 import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
@@ -52,6 +52,7 @@ export class Questiondetail implements OnInit {
   localStorageUser: LocalStorageUser;
   // PostQuestionDetailModel: { 'Comments': [], 'PostQuestionDetail':{}};
   PostQuestionDetailModel: BookMarkQuestion = new BookMarkQuestion();
+ 
   // isExpanded = false;
 
   constructor(private route: ActivatedRoute, private userService: UserService, private formBuilder: FormBuilder, private router: Router,
@@ -82,7 +83,7 @@ export class Questiondetail implements OnInit {
     this.userService.getquestionDetails(this.Id, this.localStorageUser.Id).subscribe(data => {
       debugger
       this.PostQuestionDetailModel = data as BookMarkQuestion;
-      this.PostQuestionDetailModel.comments = data['Comments'];
+      this.PostQuestionDetailModel.comments = data['Comments'] as Comments[];
 
       let _countLike = data['Comments'].map(c => c.LikesCount);
       var sumLike = _countLike.reduce(function (a, b) { return a + b; }, 0);
@@ -93,8 +94,8 @@ export class Questiondetail implements OnInit {
       let _count = data['Comments'].length;
 
       this.countReactionScore = sumLike + sumDisLike + _count;
-     
-      this.PostQuestionDetailModel.postQuestionDetail = data['PostQuestionDetail'];
+
+      this.PostQuestionDetailModel.postQuestionDetail = data['PostQuestionDetail'] as PostQuestionDetail[];
      
     });
   }
