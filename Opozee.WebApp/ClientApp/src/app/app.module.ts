@@ -108,8 +108,7 @@ export function getAuthServiceConfigs() {
     TimeAgoPipe,
     DialogPostBelief,
     aboutusComponent,
-    ExternalLinkDirective,
-    InfoPopupComponent
+    ExternalLinkDirective
   ],
   entryComponents: [
     DialogPostBelief
