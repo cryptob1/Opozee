@@ -17,11 +17,21 @@ export class HomeComponent implements OnInit {
   currentUser: User;
   users: User[] = [];
   questionListing: QuestionListing[] = [];
-  popularhastags:any = [];
+  popularhastags: any = [];
+  showPopup: boolean =true;
   
   constructor(private userService: UserService,private route: ActivatedRoute,
     private router: Router) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+ 
+    if (JSON.parse(localStorage.getItem('popupShown')) ) {
+      this.showPopup = false;
+    }
+    else {
+      
+      localStorage.setItem('popupShown', 'true')
+    }
+
   }
 
   ngOnInit() {
@@ -29,6 +39,14 @@ export class HomeComponent implements OnInit {
     //this.getUserALLRecords();
     this.getHastagsRecords();
   }
+
+  hidePopup( ) {
+    
+    this.showPopup = false;
+
+  }
+
+   
 
   deleteUser(id: number) {
     //this.userService.delete(id).pipe(first()).subscribe(() => { 

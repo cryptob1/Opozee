@@ -53,6 +53,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { ExternalLinkDirective } from './_helpers/external-link.directive';
 
 
+
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
     [
@@ -107,7 +108,8 @@ export function getAuthServiceConfigs() {
     TimeAgoPipe,
     DialogPostBelief,
     aboutusComponent,
-    ExternalLinkDirective
+    ExternalLinkDirective,
+    InfoPopupComponent
   ],
   entryComponents: [
     DialogPostBelief

@@ -1,13 +1,16 @@
+<script src="../../assets/js/jquery.min.js"></script>
+<script src="../../assets/js/bootstrap.min.js"></script>
+
 <div class="mains">
 
   <section class="trending" style="padding-top:35px;" *ngIf="popularhastags?.length>0">
     <div class="container">
-   
+
       <div class="row">
         <div class="col-xs-12">
           <div class="d-flex">
             <div class="t_label"> Trending:</div>
-            
+
             <ng-container *ngFor="let tag of popularhastags;let i=index">
               <div class="taglist" *ngIf="i<5">
 
@@ -79,6 +82,53 @@
     </div>
   </section>-->
 
+
+
+  <div  >
+
+
+
+
+  <div *ngIf="showPopup"   class="popup-container"  >
+    <div class="popup-content">
+      <span class="popup-text">
+        <h5> Welcome to Opozee!</h5>
+        <p>
+
+          Our mission is to be the worlds first decentralized social network that offers a platform for free speech and ecourages users to converge to shared beliefs.
+        </p>
+        <h5>How Opozee works:</h5>
+        <div class="popup-step">
+          <div class="step-items">
+            <strong>Step 1:</strong> Start by posting a “yes or no” question.
+          </div>
+          <div class="step-items">
+            <strong>Step 2:</strong> Or simply post your beliefs in response to existing questions.
+          </div>
+          <div class="step-items">
+            <strong>Step 3:</strong> Earn crypto-tokens when people like your beliefs.
+          </div>
+        </div>
+        <h5>What’s in there for me?</h5>
+        <p>
+          You get 100 tokens just for signing up. You can earn additional tokens by actively participating in the network by posting beliefs.
+          Opozee plans to operate as a decentralized autonomous organization (DOA). Every Opozee tokenholder is shareholder in the network with a claim on the networks growth and profitability. As the value of the networks increases, so will the value of its tokens.
+        </p>
+      </span>
+      <span class="popup-close" (click)="hidePopup()">X</span>
+    </div>
+  </div>
+  <script>
+
+
+      //jQuery(document).ready(function ($) {
+      //  jQuery('.popup-close, .popup-container').click(function () {
+      //    jQuery('.popup-container').hide();
+      //    jQuery('.popup-container iframe').attr('src', '');
+      //  });
+      //});
+
+  </script>
 
 
   <footer>

@@ -68,7 +68,8 @@
                 <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
  
                   <div ExternalLink>
-                    <p class="message-container" [innerHTML]="temp.MostYesLiked.Comment | emojis"></p>
+                    <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment | emojis"></p>
+                    
                   </div>
 
                  
@@ -93,7 +94,7 @@
 
                 <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
                   <div ExternalLink>
-                    <p class="message-container" [innerHTML]="temp.MostNoLiked.Comment | emojis"></p>
+                    <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment | emojis"></p>
                   </div>
 
                

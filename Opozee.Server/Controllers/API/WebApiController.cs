@@ -2312,7 +2312,7 @@ namespace opozee.Controllers.API
             try
             {
 
-                string recepientName = model.Firstname + " " + model.LastName;
+                string recepientName = model.Firstname ;
                 string recepientEmail = model.Email;
                 string subject = "Welcome to Opozee";
 
