@@ -45,4 +45,6 @@ const appRoutes: Routes = [
   { path: '**', redirectTo: '' }
 ];
 
-export const routing = RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' });
+export const routing = RouterModule.forRoot(appRoutes, { scrollPositionRestoration: 'enabled' })
+
+// RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' });
