@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DataSharingService } from '../dataSharingService';
 import { User, LocalStorageUser, PostQuestionDetail } from '../_models/user';
 import { UserService } from '../_services';
-import { QuestionListing } from '../_models/question';
+ 
 
 @Component({
   selector: 'header-component',

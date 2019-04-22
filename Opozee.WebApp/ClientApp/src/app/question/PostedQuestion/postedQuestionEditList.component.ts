@@ -3,7 +3,7 @@ import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User, LocalStorageUser, PostQuestionDetail } from '../../_models';
 import { UserService } from '../../_services';
-import { } from '../../_models/question';
+
 import { ToastrService } from 'ngx-toastr';
 
 @Component({ templateUrl: 'postedQuestionEditList.component.html', styleUrls: ['./postedQuestionEditList.component.css']  })
