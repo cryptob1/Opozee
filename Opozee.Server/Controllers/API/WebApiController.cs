@@ -2285,7 +2285,7 @@ namespace opozee.Controllers.API
                 string pathHTMLFile = HttpContext.Current.Server.MapPath("~/Content/mail-template/ContactMailTemplate.html");
                 string TEMPLATE = File.ReadAllText(pathHTMLFile);
                 TEMPLATE = TEMPLATE.Replace("##MESSAGE##", model.Message);
-                TEMPLATE = TEMPLATE.Replace("##NAME##", recepientName);
+                TEMPLATE = TEMPLATE.Replace("##NAME##", UppercaseFirst(recepientName));
                 TEMPLATE = TEMPLATE.Replace("##PHONE##", model.Phone);
                 TEMPLATE = TEMPLATE.Replace("##EMAIL##", model.Email);
 
@@ -2320,7 +2320,7 @@ namespace opozee.Controllers.API
 
                 string pathHTMLFile = HttpContext.Current.Server.MapPath("~/Content/mail-template/WelcomeMailTemplate.html");
                 string TEMPLATE = File.ReadAllText(pathHTMLFile);
-                TEMPLATE = TEMPLATE.Replace("##NAME##", recepientName);
+                TEMPLATE = TEMPLATE.Replace("##NAME##", UppercaseFirst(recepientName));
 
                 string body = TEMPLATE;
 
@@ -2337,5 +2337,17 @@ namespace opozee.Controllers.API
             return _response;
         }
         #endregion
+
+
+        static string UppercaseFirst(string s)
+        {
+            // Check for empty string.
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            // Return char and concat substring.
+            return char.ToUpper(s[0]) + s.Substring(1);
+        }
     }
 }
