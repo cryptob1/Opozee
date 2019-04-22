@@ -93,6 +93,7 @@ nav.navbar.navbar-default.navbar-fixed-top {
 
 .nav.navbar-nav.navbar-right {
   margin-top: 4px;
+  float:left;
 }
 
 header .container-fluid {

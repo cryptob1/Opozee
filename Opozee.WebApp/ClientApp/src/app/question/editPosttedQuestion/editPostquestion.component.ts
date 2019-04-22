@@ -21,6 +21,7 @@ export class EditPostquestion implements OnInit {
   users: User[] = [];
   //editquestion
   QuestionId: number = 0;
+  postQuestionTemp: any;
   
 
   constructor(private userService: UserService, private userservice: UserService, private alertService: AlertService, private formBuilder: FormBuilder,
@@ -62,10 +63,11 @@ export class EditPostquestion implements OnInit {
       return;
     }
     this.questionPostForm.value.postQuestion = this.questionPostForm.value.postQuestion.trim();
-    let postQuestionTemp = this.questionPostForm.value.postQuestion.trim();
+    //let postQuestionTemp = this.questionPostForm.value.postQuestion.trim();
+    this.postQuestionTemp = this.questionPostForm.value.postQuestion.trim();
        
-    if (postQuestionTemp == '') {
-      postQuestionTemp = 0;
+    if (this.postQuestionTemp == '') {
+      this.postQuestionTemp = 0;
       this.toastr.error('', 'please Fill all Field', { timeOut: 2000 });
       return
     }

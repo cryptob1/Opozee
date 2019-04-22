@@ -265,6 +265,9 @@ section.section_second {
   .cover_questions .user_right .date i {
     font-size: 9px;
     color: grey;
+    width:100%;
+    text-align:right;
+    float:left;
 
   }
 
@@ -733,7 +736,7 @@ span.bell-icon i {
   @media screen and (max-width: 991px) {
     .anlysis_slider {
       width: 100% !important;
-      margin-top: 26px !important;
+      margin-top: 6px !important;
     }
 
     .cover_profile p {
@@ -812,7 +815,7 @@ span.bell-icon i {
     }
 
     .user_left {
-      width: 100% !important;
+      /*width: 100% !important;*/
       margin-bottom: 5px;
     }
 

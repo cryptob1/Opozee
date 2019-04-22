@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../_services/user.service';
 import { first } from 'rxjs/operators';
 import { LocalStorageUser, Comments } from '../_models/user';
-import { PostQuestionDetail, BookMarkQuestion } from '../_models/user';
+import { PostQuestionDetail, BookMarkQuestionVM } from '../_models/user';
 import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
 import { DialogPostBelief } from '../questionDetail/dialogPostBelief/dialogPostBelief.component';
@@ -30,11 +30,10 @@ export class Questiondetail implements OnInit {
   imageShowLike: number = -1;;
   imageShowDislike: number = -1;
   isWanttoSentComment: boolean = false;
-
   animal: string;
   name: string;
-
   countReactionScore: number;
+  PostQuestionDetail: any;
 
   public _emitter: EventEmitter<any> = new EventEmitter();
 
@@ -48,10 +47,10 @@ export class Questiondetail implements OnInit {
     'CreationDate': new Date(),
     'LikeOrDislke': false,
   }
-
+  
   localStorageUser: LocalStorageUser;
   // PostQuestionDetailModel: { 'Comments': [], 'PostQuestionDetail':{}};
-  PostQuestionDetailModel: BookMarkQuestion = new BookMarkQuestion();
+  PostQuestionDetailModel: BookMarkQuestionVM = new BookMarkQuestionVM();
  
   // isExpanded = false;
 
@@ -63,6 +62,7 @@ export class Questiondetail implements OnInit {
     if (this.route.snapshot.params["Id"]) {
       this.Id = this.route.snapshot.params["Id"];
     }
+   // this.PostQuestionDetailModel.PostQuestionDetailModel = new PostQuestionDetail();
   }
   
   //logout() { } 
@@ -71,6 +71,16 @@ export class Questiondetail implements OnInit {
   //}
 
   ngOnInit() {
+    //  {
+    //  HashTags: "",
+    //  IsBookmark: false,
+    //  OwnerUserID: 0,
+    //  OwnerUserName: "",
+    //  Question: "",
+    //  UserImage: "",
+    //  YesCount: 0,
+    //  NoCount: 0
+    //}
     this.postOpinionForm = this.formBuilder.group({
       firstName: ['', Validators.required],
     });
@@ -82,7 +92,7 @@ export class Questiondetail implements OnInit {
     debugger;
     this.userService.getquestionDetails(this.Id, this.localStorageUser.Id).subscribe(data => {
       debugger
-      this.PostQuestionDetailModel = data as BookMarkQuestion;
+      this.PostQuestionDetailModel = data as BookMarkQuestionVM;
       this.PostQuestionDetailModel.comments = data['Comments'] as Comments[];
 
       let _countLike = data['Comments'].map(c => c.LikesCount);
@@ -95,7 +105,7 @@ export class Questiondetail implements OnInit {
 
       this.countReactionScore = sumLike + sumDisLike + _count;
 
-      this.PostQuestionDetailModel.postQuestionDetail = data['PostQuestionDetail'] as PostQuestionDetail[];
+      this.PostQuestionDetailModel.postQuestionDetail = data['PostQuestionDetail'] as PostQuestionDetail;
      
     });
   }

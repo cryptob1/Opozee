@@ -16,7 +16,7 @@ export class PostQuestionComponent implements OnInit {
   loading = false;
   submitted = false;
   returnUrl: string;
-
+  postQuestion: string;
   localStorageUser: LocalStorageUser;
 
   dropdownList = [];

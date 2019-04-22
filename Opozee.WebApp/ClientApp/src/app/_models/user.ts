@@ -61,6 +61,13 @@ export class BookMarkQuestion {
 
 }
 
+export class BookMarkQuestionVM {
+  public comments: Comments[] = [];
+  public postQuestionDetail: PostQuestionDetail; //[] = [new PostQuestionDetail()];
+  public IsBookmark: boolean;
+  OwnerUserName: string
+}
+
 export class Comments {
 
   Comment: string;
@@ -91,7 +98,6 @@ export class PostQuestionDetail {
   TotalDisLikes: number;
   TotalLikes: number;
   UserImage: string;
-
   YesCount: number;
   NoCount: number;
 

@@ -14,6 +14,7 @@ export class PostedQuestionEditList implements OnInit {
   //questionListing: QuestionListing[] = [];
   PostQuestionDetailList: PostQuestionDetail[] = [];
   isRecordLoaded: boolean = false;
+  isNotRecordLoaded: boolean = false;
   questionGetModel = { 'UserId': 0, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0,'PageSize': 0 }
 
   private allItems: any[];
