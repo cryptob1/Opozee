@@ -61,8 +61,7 @@ export class PostQuestionComponent implements OnInit {
     this.questionPostForm = this.formBuilder.group({
       postQuestion: ['', Validators.required],
       hashtags: [''],
-      ownerUserId: this.localStorageUser.Id,
-      taggedUser: ['']
+      ownerUserId: this.localStorageUser.Id 
     });
 
 

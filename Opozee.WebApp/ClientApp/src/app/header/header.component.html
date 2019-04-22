@@ -1,12 +1,23 @@
-
+<!-- Begin Inspectlet Asynchronous Code -->
+<script type="text/javascript">
+  (function () {
+    window.__insp = window.__insp || [];
+    __insp.push(['wid', 1268188243]);
+    var ldinsp = function () {
+      if (typeof window.__inspld != "undefined") return; window.__inspld = 1; var insp = document.createElement('script'); insp.type = 'text/javascript'; insp.async = true; insp.id = "inspsync"; insp.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://cdn.inspectlet.com/inspectlet.js?wid=1268188243&r=' + Math.floor(new Date().getTime() / 3600000); var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(insp, x);
+    };
+    setTimeout(ldinsp, 0);
+  })();
+</script>
+<!-- End Inspectlet Asynchronous Code -->
 
 <div class="inner_pages">
   <header>
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
 
-        <div class="navbar-header"  >
-          <button type="button" class="navbar-toggle collapsed"   data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -36,8 +47,6 @@
             <li *ngIf="loginData.isAuthenticateUserId == 0 || loginData  == 0"><a (click)="navbar();" [routerLink]="['/login']">Login</a></li>
             <li class="notification" *ngIf="loginData.Id > 0"><a (click)="navbar();" [routerLink]="['/notifications']">Notifications</a></li>
             <!--<span class="bell-icon"><i class="fa fa-bell" aria-hidden="true"></i>  <span></span></span>-->
-
-
             <!--<li *ngIf="isAuthenticateUserId"><a (click)="navbar();" [routerLink]="['/bookmark',0]">Bookmarks</a></li>-->
             <li>
               <div class="dropdown" *ngIf="loginData.Id > 0" style="cursor:pointer">
