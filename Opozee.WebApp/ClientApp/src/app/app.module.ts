@@ -46,11 +46,13 @@ import { termandConditionComponent } from './legal/termandCondition.component';
 
 import { privatePolicyComponent } from './legal/privatePolicy.component';
 import { aboutusComponent } from './aboutus/aboutus.component';
+
 import { ModalModule, BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { DialogPostBelief } from './questionDetail/dialogPostBelief/dialogPostBelief.component';
 import { NgxEditorModule } from 'ngx-editor';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { ExternalLinkDirective } from './_helpers/external-link.directive';
+import { FaqComponent } from './faq/faq.component';
 
 
 
@@ -108,7 +110,8 @@ export function getAuthServiceConfigs() {
     TimeAgoPipe,
     DialogPostBelief,
     aboutusComponent,
-    ExternalLinkDirective
+    ExternalLinkDirective,
+    FaqComponent
   ],
   entryComponents: [
     DialogPostBelief

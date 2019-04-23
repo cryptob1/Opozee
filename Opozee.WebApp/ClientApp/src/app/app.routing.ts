@@ -18,6 +18,7 @@ import { EditPostquestion } from './question/editPosttedQuestion/editPostquestio
 import { termandConditionComponent } from './legal/termandCondition.component';
 import { privatePolicyComponent } from './legal/privatePolicy.component';
 import { aboutusComponent } from './aboutus/aboutus.component';
+import { FaqComponent } from './faq/faq.component';
 
 const appRoutes: Routes = [
   { path: 'questionlisting', component: QuestionListingComponent },
@@ -42,6 +43,7 @@ const appRoutes: Routes = [
   { path: 'termcondition', component: termandConditionComponent, canActivate: [AuthGuard] },
   { path: 'privatepolicy', component: privatePolicyComponent },
   { path: 'aboutus', component: aboutusComponent },
+  { path: 'faq', component: FaqComponent },
   { path: '**', redirectTo: '' }
 ];
 
