@@ -33,7 +33,7 @@ export class PostQuestionComponent implements OnInit {
     "minWidth": "0",
     "translate": "yes",
     "enableToolbar": true,
-    "showToolbar": true,
+    "showToolbar": false,
     "placeholder": "Enter question here...",
     "imageEndPoint": "",
     "toolbar": [

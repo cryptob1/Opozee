@@ -142,8 +142,8 @@ namespace opozee.Controllers.API
                     db.SaveChanges();
 
                     int userID = entity.UserID;
-                    token.TotalToken = 100;
-                    token.BalanceToken = 100;
+                    token.TotalToken = 500;
+                    token.BalanceToken = 500;
                     token.UserId = userID;
                     db.Tokens.Add(token);
                     db.SaveChanges();
@@ -357,11 +357,11 @@ namespace opozee.Controllers.API
                 quest.TaggedUser = postQuestion.TaggedUser;
                 db.Questions.Add(quest);
                 db.SaveChanges();
-                token = db.Tokens.Where(p => p.UserId == postQuestion.OwnerUserID).FirstOrDefault();
-                token.BalanceToken = token.BalanceToken - 1;
+                //token = db.Tokens.Where(p => p.UserId == postQuestion.OwnerUserID).FirstOrDefault();
+                //token.BalanceToken = token.BalanceToken - 1;
 
-                db.Entry(token).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                // db.Entry(token).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
                 int questID = quest.Id;
                 quest = db.Questions.Find(questID);
                 return ObjToken;
@@ -1220,11 +1220,11 @@ namespace opozee.Controllers.API
                 db.Opinions.Add(ObjOpinion);
                 db.SaveChanges();
                 int CommentId = ObjOpinion.Id;
-                token = db.Tokens.Where(p => p.UserId == Model.CommentedUserId).FirstOrDefault();
-                token.BalanceToken = token.BalanceToken - 1;
+                //token = db.Tokens.Where(p => p.UserId == Model.CommentedUserId).FirstOrDefault();
+                //token.BalanceToken = token.BalanceToken - 1;
 
-                db.Entry(token).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(token).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
                 notification = new Notification();
                 notification.CommentedUserId = Model.CommentedUserId;
                 notification.CommentId = CommentId;

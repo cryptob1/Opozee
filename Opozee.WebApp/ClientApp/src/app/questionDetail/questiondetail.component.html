@@ -47,7 +47,7 @@
               <div class="opiniuns">
                 <div class="left">
                   <span> </span>
-                  <div class="anlysis_slider">
+                  <div class="anlysis_slider"  *ngIf="((PostQuestionDetailModel.postQuestionDetail?.YesCount)>0 || (PostQuestionDetailModel.postQuestionDetail?.NoCount)>0) ">
 
                     <span [style.width.%]="(PostQuestionDetailModel.postQuestionDetail?.YesCount /  (PostQuestionDetailModel.postQuestionDetail?.YesCount + PostQuestionDetailModel.postQuestionDetail?.NoCount) * 100) | number:'1.0-0'" class="color yes_div"></span>
                     <!--<span class="percentage" *ngIf="PostQuestionDetailModel.postQuestionDetail?.NoCount > 0"> No : {{(PostQuestionDetailModel.postQuestionDetail.NoCount /  (PostQuestionDetailModel.postQuestionDetail.YesCount + PostQuestionDetailModel.postQuestionDetail.NoCount) * 100) | number:'1.0-0'}} %</span>-->

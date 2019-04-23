@@ -189,8 +189,8 @@ namespace opozee.Controllers.API
                     db.SaveChanges();
 
                     int userID = entity.UserID;
-                    token.TotalToken = 100;
-                    token.BalanceToken = 100;
+                    token.TotalToken = 500;
+                    token.BalanceToken = 500;
                     token.UserId = userID;
                     db.Tokens.Add(token);
                     db.SaveChanges();
@@ -250,11 +250,11 @@ namespace opozee.Controllers.API
                     quest.CreationDate = DateTime.Now;
                     db.Questions.Add(quest);
                     db.SaveChanges();
-                    token = db.Tokens.Where(p => p.UserId == postQuestion.OwnerUserID).FirstOrDefault();
-                    token.BalanceToken = token.BalanceToken - 1;
+                    //token = db.Tokens.Where(p => p.UserId == postQuestion.OwnerUserID).FirstOrDefault();
+                    //token.BalanceToken = token.BalanceToken - 1;
 
-                    db.Entry(token).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    //db.Entry(token).State = System.Data.Entity.EntityState.Modified;
+                    //db.SaveChanges();
                     User questionOwner = db.Users.Find(quest.OwnerUserID);
                     int questID = quest.Id;
                     quest = db.Questions.Find(questID);
@@ -346,11 +346,11 @@ namespace opozee.Controllers.API
                     opinion.CreationDate = DateTime.Now;
                     db.Opinions.Add(opinion);
                     db.SaveChanges();
-                    token = db.Tokens.Where(p => p.UserId == postAnswer.CommentedUserId).FirstOrDefault();
-                    token.BalanceToken = token.BalanceToken - 1;
+                    //token = db.Tokens.Where(p => p.UserId == postAnswer.CommentedUserId).FirstOrDefault();
+                    //token.BalanceToken = token.BalanceToken - 1;
 
-                    db.Entry(token).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    //db.Entry(token).State = System.Data.Entity.EntityState.Modified;
+                    //db.SaveChanges();
                     int opinionID = opinion.Id;
                     opinion = db.Opinions.Find(opinionID);
                     notification = db.Notifications.Where(p => p.CommentedUserId == postAnswer.CommentedUserId && p.CommentId == opinionID).FirstOrDefault();
@@ -735,6 +735,7 @@ namespace opozee.Controllers.API
         {
             try
             {
+                int token_score = 0;
                 db.Configuration.LazyLoadingEnabled = false;
                 string action = "";
                 if (!ModelState.IsValid)
@@ -751,22 +752,26 @@ namespace opozee.Controllers.API
                         notification.Dislike = true;
                         notification.Like = false;
                         action = "dislike";
+                        token_score = -1;
                     }
                     else if (likeDislike.CommentStatus == CommentStatus.Like)
                     {
                         notification.Like = true;
                         notification.Dislike = false;
                         action = "like";
+                        token_score = 1;
                     }
                     if (likeDislike.CommentStatus == CommentStatus.RemoveLike)
                     {
                         notification.Like = false;
                         action = "remove like";
+                        token_score = -1;
                     }
                     else if (likeDislike.CommentStatus == CommentStatus.RemoveDisLike)
                     {
                         notification.Dislike = false;
                         action = "remove dislike";
+                        token_score = 1;
                     }
                     notification.CommentedUserId = likeDislike.CommentedUserId;
                     notification.CommentId = likeDislike.CommentId;
@@ -847,6 +852,11 @@ namespace opozee.Controllers.API
                         orderID.Dislikes = db.Notifications.Where(p => p.CommentId == orderID.Id && p.Dislike == true).Count();
                         db.Entry(orderID).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
+
+                        //give or take tokens 
+                        Token userToken = db.Tokens.Where(x => x.UserId == orderID.CommentedUserId).FirstOrDefault();
+                        userToken.BalanceToken = userToken.BalanceToken + token_score;
+                        db.Entry(userToken).State = System.Data.Entity.EntityState.Modified;
                     }
 
 
@@ -865,22 +875,26 @@ namespace opozee.Controllers.API
                         notification.Dislike = true;
                         notification.Like = false;
                         action = "dislike";
+                        token_score = -1;
                     }
                     else if (likeDislike.CommentStatus == CommentStatus.Like)
                     {
                         notification.Like = true;
                         notification.Dislike = false;
                         action = "like";
+                        token_score = 1;
                     }
                     if (likeDislike.CommentStatus == CommentStatus.RemoveLike)
                     {
                         notification.Like = false;
                         action = "remove like";
+                        token_score = -1;
                     }
                     else if (likeDislike.CommentStatus == CommentStatus.RemoveDisLike)
                     {
                         notification.Dislike = false;
                         action = "remove disLike";
+                        token_score = +1;
                     }
                     notification.CommentedUserId = likeDislike.CommentedUserId;
                     notification.CommentId = likeDislike.CommentId;
@@ -969,8 +983,18 @@ namespace opozee.Controllers.API
                         orderID.Likes = db.Notifications.Where(p => p.CommentId == orderID.Id && p.Like == true).Count();
                         orderID.Dislikes = db.Notifications.Where(p => p.CommentId == orderID.Id && p.Dislike == true).Count();
                         db.Entry(orderID).State = System.Data.Entity.EntityState.Modified;
+
+
+                        //give or take tokens 
+                        Token userToken = db.Tokens.Where(x => x.UserId == orderID.CommentedUserId).FirstOrDefault();
+                        userToken.BalanceToken = userToken.BalanceToken + token_score;
+                        db.Entry(userToken).State = System.Data.Entity.EntityState.Modified;
+
                         db.SaveChanges();
                     }
+
+
+                     
 
 
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, notification, "LikeDislikeOpinion"));
