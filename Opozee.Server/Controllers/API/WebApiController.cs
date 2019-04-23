@@ -10,6 +10,7 @@ using OpozeeLibrary.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -18,6 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
@@ -309,7 +311,34 @@ namespace opozee.Controllers.API
             }
         }
 
+        public static bool CheckDuplicateQuestion(string input)
+        {
+            bool Result = false;
+            int Status = 0;
+            var question = Regex.Replace(input, "<.*?>", String.Empty);
+            SqlConnection connection = new SqlConnection(con);
+            var command1 = new SqlCommand("spCheckDuplicateQuestion", connection);
+            command1.CommandType = CommandType.StoredProcedure;
+            command1.Parameters.Add("@Question", SqlDbType.VarChar, 500).Value = question;
+            SqlDataAdapter adp = new SqlDataAdapter(command1);
+            DataTable dt = new DataTable();
+            connection.Open();
+            adp.Fill(dt);
+            if (dt.Rows.Count > 0)
+            {
+                Status = Convert.ToInt32(dt.Rows[0][0]);
+            }
 
+            if (Status == 1)
+            {
+                Result = true;
+            }
+            else
+            {
+                Result = false;
+            }
+            return Result;
+        }
         #region "Post Question" 
         [HttpPost]
         [Route("api/WebApi/PostQuestionWeb")]
@@ -327,6 +356,12 @@ namespace opozee.Controllers.API
                 if (ObjToken.BalanceToken <= 0)
                 {
                     return ObjToken;
+                }
+       
+                if (!string.IsNullOrEmpty(postQuestion.PostQuestion))
+                {
+                    if (CheckDuplicateQuestion(postQuestion.PostQuestion))
+                        return null;
                 }
 
                 Question quest = null;
@@ -573,20 +608,20 @@ namespace opozee.Controllers.API
                 else if (Model.CheckedTab == "myquestions")
                 {
                     TotalRecord = (from q in db.Questions
-                                   //join o in db.Opinions on q.Id equals o.QuestId into op
-                                   //from o in op.DefaultIfEmpty()
-                                   //join n in db.Notifications on o.Id equals n.CommentId into noti
-                                   //from n in noti.DefaultIfEmpty()
+                                       //join o in db.Opinions on q.Id equals o.QuestId into op
+                                       //from o in op.DefaultIfEmpty()
+                                       //join n in db.Notifications on o.Id equals n.CommentId into noti
+                                       //from n in noti.DefaultIfEmpty()
                                    join u in db.Users on q.OwnerUserID equals u.UserID
                                    where q.OwnerUserID == Model.UserId && q.IsDeleted == false
                                    select q
                     ).ToList().Count();
 
                     _userProfileData = (from q in db.Questions
-                                        //join o in db.Opinions on q.Id equals o.QuestId into op
-                                        //from o in op.DefaultIfEmpty()
-                                        //join n in db.Notifications on o.Id equals n.CommentId into noti
-                                        //from n in noti.DefaultIfEmpty()
+                                            //join o in db.Opinions on q.Id equals o.QuestId into op
+                                            //from o in op.DefaultIfEmpty()
+                                            //join n in db.Notifications on o.Id equals n.CommentId into noti
+                                            //from n in noti.DefaultIfEmpty()
                                         join u in db.Users on q.OwnerUserID equals u.UserID
                                         where q.OwnerUserID == Model.UserId && q.IsDeleted == false
                                         select new UserNotifications
@@ -622,7 +657,7 @@ namespace opozee.Controllers.API
             }
             catch (Exception ex)
             {
-                
+
             }
             return _userProfileData;
         }
@@ -793,7 +828,7 @@ namespace opozee.Controllers.API
         [HttpGet]
         [Route("api/WebApi/GetAllOpinionWeb")]
         public BookMarkQuestion GetAllOpinionWeb(string questId, int UserId)
-       {
+        {
             BookMarkQuestion questionDetail = new BookMarkQuestion();
             try
             {
@@ -1253,10 +1288,10 @@ namespace opozee.Controllers.API
         public void PostLikeDislikeWeb(PostLikeDislikeModel Model)
         {
 
-            
+
             Notification notification = null;
             Opinion opinion;
-            
+
             string action = "";
             PushNotifications pNoty = new PushNotifications();
             try
@@ -1394,14 +1429,14 @@ namespace opozee.Controllers.API
                     //        pNoty.SendNotification_Android(commentOwner.DeviceToken, finalMessage, "QD", questId.ToString());
                     //    } }
 
- 
+
                     opinion.Likes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Like == true).Count();
                     opinion.Dislikes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Dislike == true).Count();
                     db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
-                       
 
-                    
+
+
                 }
                 else
                 {
@@ -1439,7 +1474,7 @@ namespace opozee.Controllers.API
 
 
 
-                    
+
                     //int questId = opinion[0].QuestId;
                     //Question ques = db.Questions.Where(p => p.Id == questId).FirstOrDefault();
                     //User questOwner = db.Users.Where(u => u.UserID == ques.OwnerUserID).FirstOrDefault();
@@ -1505,12 +1540,12 @@ namespace opozee.Controllers.API
                     //    }
                     //}
 
- 
+
                     opinion.Likes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Like == true).Count();
                     opinion.Dislikes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Dislike == true).Count();
                     db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
-                    
+
 
 
                 }
@@ -2279,7 +2314,7 @@ namespace opozee.Controllers.API
                 string recepientName = model.Firstname + " " + model.LastName;
                 string recepientEmail = model.Email;
                 string subject = "Message from " + recepientName;
-                
+
                 bool isHtml = true;
 
                 string pathHTMLFile = HttpContext.Current.Server.MapPath("~/Content/mail-template/ContactMailTemplate.html");
@@ -2312,7 +2347,7 @@ namespace opozee.Controllers.API
             try
             {
 
-                string recepientName = model.Firstname ;
+                string recepientName = model.Firstname;
                 string recepientEmail = model.Email;
                 string subject = "Welcome to Opozee";
 

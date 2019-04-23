@@ -22,9 +22,8 @@
                 <img src="{{PostQuestionDetailModel?.postQuestionDetail?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user">
 
               </span>
-              <!--<span class="img"><img src="{{PostQuestionDetailModel.postQuestionDetail.UserImage}}"></span>-->
 
-              <span class="text_profile" style="cursor:pointer" [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
+              <span *ngIf="PostQuestionDetailModel?.postQuestionDetail?.OwnerUserName" class="text_profile" style="cursor:pointer" [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
                 <span class="user_123">@{{PostQuestionDetailModel?.postQuestionDetail?.OwnerUserName}}</span>
               </span>
 
@@ -32,7 +31,8 @@
 
               <!--<span class="time">{{PostQuestionDetailModel.postQuestionDetail?.CreationDate |  timeAgo}}</span>-->
               <!--<p>{{PostQuestionDetailModel.postQuestionDetail.Question}}</p>-->
-              <div ExternalLink>
+
+              <div ExternalLink *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question">
                 <p class="message-container" [innerHTML]="PostQuestionDetailModel?.postQuestionDetail?.Question | emojis"></p>
               </div>
               <div class="hash_tag">

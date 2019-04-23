@@ -11,12 +11,19 @@ namespace Opozee.Models.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Linq;
+    using System.Text;
+
     public partial class Token
     {
         public int Id { get; set; }
         public Nullable<int> TotalToken { get; set; }
         public Nullable<int> BalanceToken { get; set; }
         public int UserId { get; set; }
+        public string MessageStatus { get; set; }
     }
+
+
+  
+
 }

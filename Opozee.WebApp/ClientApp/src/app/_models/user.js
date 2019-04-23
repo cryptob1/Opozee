@@ -35,6 +35,13 @@ var BookMarkQuestion = /** @class */ (function () {
     return BookMarkQuestion;
 }());
 exports.BookMarkQuestion = BookMarkQuestion;
+var BookMarkQuestionVM = /** @class */ (function () {
+    function BookMarkQuestionVM() {
+        this.comments = [];
+    }
+    return BookMarkQuestionVM;
+}());
+exports.BookMarkQuestionVM = BookMarkQuestionVM;
 var Comments = /** @class */ (function () {
     function Comments() {
     }

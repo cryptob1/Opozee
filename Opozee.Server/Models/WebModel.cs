@@ -69,13 +69,10 @@ namespace Opozee.Models.API
         public DateTime? CreationDate { get; set; }
         public Comments MostYesLiked { get; set; }
         public Comments MostNoLiked { get; set; }
-
         public int YesCount { get; set; }
         public int NoCount { get; set; }
-
         public int TotalRecordcount { get; set; }
-
-
+        public int CountTopHastag { get; set; }
     }
 
 
