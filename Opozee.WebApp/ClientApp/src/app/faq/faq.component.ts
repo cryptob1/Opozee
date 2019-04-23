@@ -11,8 +11,12 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./faq.component.css']
 })
 export class FaqComponent implements OnInit {
+   
 
-  constructor() { }
+  constructor( 
+    private router: Router ) {
+ 
+  }
 
  
   ngOnInit() {
