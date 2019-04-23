@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Location } from "@angular/common";
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User, LocalStorageUser, PostQuestionDetail } from '../../_models';
 import { UserService } from '../../_services';
 
 import { Subscription } from 'rxjs';
+import { ISubscription } from 'rxjs/Subscription';
 
 
 
@@ -32,28 +34,39 @@ import { Subscription } from 'rxjs';
     // paged items
     pagedItems: any[];
 
-    constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) {
-    this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.hashTag = false;
-    if (this.route.snapshot.params["search"]) {
-      this.search = this.route.snapshot.params["search"];
-    }
-    else if (this.route.snapshot.params["tag"]) {
-      this.hashTag = true;
-      this.search = this.route.snapshot.params["tag"];
-    }
+    constructor(private userService: UserService, private route: ActivatedRoute, private router: Router,
+      private location: Location) {
 
-    this.paramsSub = route.params.subscribe(params => {
-      this.initialize();
-    });
-  }
+      this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
+      this.hashTag = false;
+      if (this.route.snapshot.params["search"]) {
+        this.search = this.route.snapshot.params["search"];
+      }
+      else if (this.route.snapshot.params["tag"]) {
+        this.hashTag = true;
+        this.search = this.route.snapshot.params["tag"];
+      }
+
+      this.paramsSub = route.params.subscribe(params => {
+        this.initialize();
+      });
+      this.questionGetModel.PageNumber = +localStorage.getItem('PageNumber');
+
+    }
 
     ngOnInit() {
-
+      localStorage.removeItem('hasRedirectBack');
+      this.location.subscribe(x =>
+      {
+        localStorage.setItem('hasRedirectBack',"Yes");
+      });
+      if (!localStorage.getItem('hasRedirectBack'))
+        localStorage.removeItem('PageNumber');
     }
 
     ngOnDestroy() {
       this.paramsSub.unsubscribe();
+      this.location.subscribe(x => x).unsubscribe();
     }
 
     initialize() {
@@ -66,7 +79,10 @@ import { Subscription } from 'rxjs';
       else {
         this.questionGetModel.UserId = 0;
       }
-      this.questionGetModel.PageNumber = 1;
+      //this.questionGetModel.PageNumber = 1;
+      
+      this.questionGetModel.PageNumber = localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
+
       this.questionGetModel.TotalRecords = 5
       this.getAllQuestionlist(this.questionGetModel);
 
@@ -81,11 +97,12 @@ import { Subscription } from 'rxjs';
           this.PostQuestionDetailList = data;
           this.questionGetModel.TotalRecords = data[0].TotalRecordcount
         }
-        this.setPageonpageLoad(1, this.questionGetModel.TotalRecords)
+        this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
+        this.isRecordLoaded = true
+      } else {
+        this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
         this.isRecordLoaded = true
       }
-      this.setPageonpageLoad(1, this.questionGetModel.TotalRecords)
-      this.isRecordLoaded = true
 
     }, error => {
       this.isRecordLoaded = false;
@@ -124,16 +141,15 @@ import { Subscription } from 'rxjs';
     this.questionGetModel.PageNumber = PageNumber;
     this.questionGetModel.PageSize = PageSize
     this.getAllQuestionlistPaging(this.questionGetModel);
-
+    localStorage.setItem('PageNumber', PageNumber);
   }
 
     setPageonpageLoad(page, TotalRecords) {
-    
-    this.pager = this.getPager(TotalRecords, page);
-  }
+      this.pager = this.getPager(TotalRecords, page);
+    }
 
     setPage(page, TotalRecords) {
-      
+      localStorage.setItem('PageNumber', page);
       this.pager = this.getPager(this.questionGetModel.TotalRecords, page);
 
       if (this.pager.totalPages >= page) {
