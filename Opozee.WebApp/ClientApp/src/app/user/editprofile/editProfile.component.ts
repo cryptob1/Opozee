@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserEditProfileModel } from '../../_models/user';
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http'
 import { LocalStorageUser } from '../../_models';
-
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({ templateUrl: 'editProfile.component.html' })
@@ -20,9 +20,9 @@ export class EditProfileComponent implements OnInit {
   public message: string;
   imageUrl: string = "";
   fileToUpload: File = null;
-  localStorageUser: LocalStorageUser
+  localStorageUser: LocalStorageUser;
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder, private route: ActivatedRoute) {
+  constructor(private userService: UserService, private formBuilder: FormBuilder, private route: ActivatedRoute, private toastr: ToastrService) {
     if (this.route.snapshot.params["Id"]) {
       this.userId = this.route.snapshot.params["Id"];
 
@@ -108,11 +108,14 @@ export class EditProfileComponent implements OnInit {
         //Caption.value = null;
         //Image.value = null;
         this.getUserProfile();
-        this.imageUrl = "../../../assets/images/user.png";
+        //this.imageUrl = "../../../assets/images/user.png";
+        this.toastr.success('Image', 'Change successful!', { timeOut: 1000 });
+      },
+        error => {
+       
+       
+        this.toastr.error('Failed to upload image -', error.message + '', { timeOut: 2000 });
       }
     );
-  }
-
-
- 
+  } 
 }

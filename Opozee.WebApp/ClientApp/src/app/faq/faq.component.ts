@@ -9,7 +9,14 @@ export class FaqComponent implements OnInit {
 
   constructor() { }
 
+ 
   ngOnInit() {
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      window.scrollTo(0, 0)
+    });
+    window.scrollTo(0, 0)
   }
-
 }
