@@ -31,6 +31,8 @@ namespace Opozee.Models
         public string Password { get; set; }
         public string Token { get; set; }
         public string ImageURL { get; set; }
+
+        public int BalanceToken { get; set; }
         //[Display(Name = "Remember Me")]
         //public bool RememberMe { get; set; }
     }

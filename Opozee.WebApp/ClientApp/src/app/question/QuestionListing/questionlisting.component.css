@@ -26,6 +26,9 @@
     font-size: 11px;
     float: right;
   }
+.mb-0{
+  margin-bottom:0px !important
+}
 
 .cover_questions .user_right .date i {
   font-size: 11px;

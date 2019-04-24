@@ -138,7 +138,20 @@ header .container-fluid {
   z-index: 99;
   width: 100%;
 }*/
+.bg-red {
+  background: #50881c !important;
+  color: white;
+  font-weight: 300;
+}
 
+.btn .badge {
+  position: absolute;
+  top: -1px;
+  left: 80%;
+}
+.bg-green {
+  background: #D2F3C8 !important
+}
 @media(max-width:992px) and (min-width:768px) {
   .banner_search-form {
     margin-left: 20px;

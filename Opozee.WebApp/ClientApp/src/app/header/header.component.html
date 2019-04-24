@@ -51,7 +51,8 @@
             <li>
               <div class="dropdown" *ngIf="loginData.Id > 0" style="cursor:pointer">
                 <a class="profile_head btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                  <img src="{{loginData.ImageURL}}" onerror="this.onerror=null;this.src='../../assets/images/profile.png';">
+                  <img src="{{loginData?.ImageURL}}" onerror="this.onerror=null;this.src='../../assets/images/profile.png';">
+                  <span class="badge bg-red" >{{loginData?.BalanceToken}}</span>
                 </a>
                 <div class="dropdown-menu">
                   <a class="dropdown-item" (click)="navbar();" [routerLink]="['/profile/', loginData.Id]">Profile</a>

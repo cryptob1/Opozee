@@ -194,6 +194,8 @@ namespace opozee.Controllers.API
                         ObjLogin.Email = v.Email;
                         ObjLogin.ImageURL = v.ImageURL;
 
+                        ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault() == null
+                        ? 0 : db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault().BalanceToken ?? 0;
 
                         return ObjLogin;
 
@@ -2048,6 +2050,8 @@ namespace opozee.Controllers.API
                     ObjLogin.Id = entity.UserID;
                     ObjLogin.Email = entity.Email;
                     ObjLogin.ImageURL = entity.ImageURL;
+                    ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == entity.UserID).FirstOrDefault() == null
+                        ? 0 : db.Tokens.Where(x => x.UserId == entity.UserID).FirstOrDefault().BalanceToken ?? 0;
                     return ObjLogin;
                     //  return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "UserData"));
                 }
@@ -2119,6 +2123,7 @@ namespace opozee.Controllers.API
                     ObjLogin.Id = entity.UserID;
                     ObjLogin.Email = entity.Email;
                     ObjLogin.ImageURL = entity.ImageURL;
+                    ObjLogin.BalanceToken = token.BalanceToken ?? 0;
                     return ObjLogin;
 
                     // return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "UserData"));

@@ -1,9 +1,11 @@
-import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, HostListener, ViewChild, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataSharingService } from '../dataSharingService';
-import { User, LocalStorageUser, PostQuestionDetail } from '../_models/user';
+import { User, LocalStorageUser, PostQuestionDetail, UserProfileModel } from '../_models/user';
 import { UserService } from '../_services';
 import { ResetPassword } from '../user/resetPassword/resetPassword.component';
+import { first } from 'rxjs/operators';
+
 
 @Component({
   selector: 'header-component',
@@ -13,6 +15,8 @@ import { ResetPassword } from '../user/resetPassword/resetPassword.component';
 
 export class HeaderComponent implements OnInit {
   @ViewChild('resetPassword') resetPassword: ResetPassword;
+  @Output() save: EventEmitter<any> = new EventEmitter<any>();
+
   model: any = {};
   loading = false;
   returnUrl: string;
@@ -23,6 +27,7 @@ export class HeaderComponent implements OnInit {
   loginData: any;
   searchTextModel: string = '';
   userId: number;
+  userProfiledata: UserProfileModel;
   // isExpanded = false;
 
 
@@ -66,6 +71,7 @@ export class HeaderComponent implements OnInit {
       this.isAuthenticateUserId = this.localStorageUser.Id;
       this.loginData = this.localStorageUser
     }
+   
   }
 
   searchText(e) {    
@@ -89,10 +95,11 @@ export class HeaderComponent implements OnInit {
   //}
 
   openResetModal() {
-    debugger
+    //debugger
     //this.isWanttoSentComment = true
     //this.dataModel.UserLoggedId = this.userId;
     //console.log('data22', this.dataModel);
     this.resetPassword.show();
   }
+ 
 }

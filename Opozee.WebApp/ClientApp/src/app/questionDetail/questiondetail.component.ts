@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
+import { Location } from "@angular/common";
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../_services/user.service';
@@ -34,7 +35,8 @@ export class Questiondetail implements OnInit {
   name: string;
   countReactionScore: number;
   PostQuestionDetail: any;
-
+  sharetext: string = 'Hey I’d like get your take on this question –';
+  shareUrl: string;
   public _emitter: EventEmitter<any> = new EventEmitter();
 
   dataModel = {
@@ -54,7 +56,11 @@ export class Questiondetail implements OnInit {
  
   // isExpanded = false;
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private formBuilder: FormBuilder, private router: Router,
+  constructor(
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private formBuilder: FormBuilder,
+    private router: Router, private location: Location,
     private toastr: ToastrService
   ) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -62,6 +68,7 @@ export class Questiondetail implements OnInit {
     if (this.route.snapshot.params["Id"]) {
       this.Id = this.route.snapshot.params["Id"];
     }
+    this.shareUrl = window.location.origin + this.location.path();
    // this.PostQuestionDetailModel.PostQuestionDetailModel = new PostQuestionDetail();
   }
   

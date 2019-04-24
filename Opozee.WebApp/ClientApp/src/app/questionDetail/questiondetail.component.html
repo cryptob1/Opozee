@@ -20,9 +20,8 @@
 
               <span class="img" [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
                 <img src="{{PostQuestionDetailModel?.postQuestionDetail?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user">
-
               </span>
-
+              
               <span *ngIf="PostQuestionDetailModel?.postQuestionDetail?.OwnerUserName" class="text_profile" style="cursor:pointer" [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
                 <span class="user_123">@{{PostQuestionDetailModel?.postQuestionDetail?.OwnerUserName}}</span>
               </span>
@@ -33,7 +32,10 @@
               <!--<p>{{PostQuestionDetailModel.postQuestionDetail.Question}}</p>-->
 
               <div ExternalLink *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question">
-                <p class="message-container" [innerHTML]="PostQuestionDetailModel?.postQuestionDetail?.Question | emojis"></p>
+                <p class="message-container mb-0" [innerHTML]="PostQuestionDetailModel?.postQuestionDetail?.Question | emojis"></p>
+                <p class="mb-30">
+                  <tweet url={{shareUrl}} text={{sharetext}}></tweet>
+                </p>
               </div>
               <div class="hash_tag">
                 <span>

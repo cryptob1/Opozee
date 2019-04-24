@@ -32,6 +32,7 @@ import { EditPostquestion } from './question/editPosttedQuestion/editPostquestio
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { Ng2EmojiModule } from 'ng2-emoji';
 
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import {
@@ -55,8 +56,10 @@ import { ExternalLinkDirective } from './_helpers/external-link.directive';
 import { FaqComponent } from './faq/faq.component';
 import { ResetPassword } from './user/resetPassword/resetPassword.component';
 import { ForgotPassword } from './user/forgotPassword/forgotPassword.component';
+import { EqualValidatorDirective } from './_directives/equal-validator.directive';
 
-
+// import social buttons module
+import { JwSocialButtonsModule } from 'jw-angular-social-buttons';
 
 
 export function getAuthServiceConfigs() {
@@ -91,7 +94,8 @@ export function getAuthServiceConfigs() {
     Ng2EmojiModule.forRoot(),
     ModalModule.forRoot(),
     NgxEditorModule,
-    AngularFontAwesomeModule    
+    AngularFontAwesomeModule,
+    JwSocialButtonsModule
   ],
   declarations: [
     AppComponent,
@@ -116,7 +120,8 @@ export function getAuthServiceConfigs() {
     ExternalLinkDirective,
     FaqComponent,
     ResetPassword,
-    ForgotPassword
+    ForgotPassword,
+    EqualValidatorDirective
   
   ],
   entryComponents: [
