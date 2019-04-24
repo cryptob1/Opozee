@@ -9,6 +9,8 @@ import { PostQuestionDetail, BookMarkQuestionVM } from '../_models/user';
 import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
 import { DialogPostBelief } from '../questionDetail/dialogPostBelief/dialogPostBelief.component';
+import { HttpUrlEncodingCodec } from '@angular/common/http';
+
 @Component({
   selector: 'questiondetail-component',
   templateUrl: './questiondetail.component.html',
@@ -35,9 +37,10 @@ export class Questiondetail implements OnInit {
   name: string;
   countReactionScore: number;
   PostQuestionDetail: any;
-  sharetext: string = 'Hey I’d like get your take on this question –';
+  sharetext: string = '';//'Hey I’d like get your take on this question –';
   shareUrl: string;
   public _emitter: EventEmitter<any> = new EventEmitter();
+  encoder: HttpUrlEncodingCodec = new HttpUrlEncodingCodec();
 
   dataModel = {
     'QuestId': 0, 'Comment': '',
@@ -102,6 +105,7 @@ export class Questiondetail implements OnInit {
       this.PostQuestionDetailModel = data as BookMarkQuestionVM;
       this.PostQuestionDetailModel.comments = data['Comments'] as Comments[];
 
+
       let _countLike = data['Comments'].map(c => c.LikesCount);
       var sumLike = _countLike.reduce(function (a, b) { return a + b; }, 0);
 
@@ -113,7 +117,11 @@ export class Questiondetail implements OnInit {
       this.countReactionScore = sumLike + sumDisLike + _count;
 
       this.PostQuestionDetailModel.postQuestionDetail = data['PostQuestionDetail'] as PostQuestionDetail;
-     
+
+
+      this.shareUrl = "https://opozee.com/questionlisting/" + this.encoder.encodeValue(this.PostQuestionDetailModel.postQuestionDetail.Question);
+      this.sharetext = this.PostQuestionDetailModel.postQuestionDetail.Question + " - find opposing views on Opozee.com!";
+
     });
   }
 
