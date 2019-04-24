@@ -1152,6 +1152,7 @@ namespace opozee.Controllers.API
             try
             {
                 UserProfile = db.Users.Where(p => p.UserID == Model.UserId).FirstOrDefault();
+                UserProfile.UserName = Model.UserName;
                 UserProfile.FirstName = Model.FirstName;
                 UserProfile.LastName = Model.LastName;
                 UserProfile.Email = Model.Email;

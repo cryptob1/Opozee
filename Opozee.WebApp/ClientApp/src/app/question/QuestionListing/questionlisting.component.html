@@ -21,7 +21,7 @@
                 <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
                   <span class="icon"><img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
                   <span class="username">
-                    {{temp.Name}}
+                    @{{temp.OwnerUserName}}
                   </span>
                 </div>
                 <div class="user_right">

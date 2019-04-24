@@ -12,17 +12,17 @@
             <!--<div class="edit"><i class="fa fa-pencil" aria-hidden="true" [routerLink]="['/editprofile/',userProfiledata?.UserID]" style="cursor:pointer;"></i></div>-->
 
           </div>
-          <h2>{{userProfiledata?.FirstName }} {{userProfiledata?.LastName}}</h2>
+          <!--<h2>{{userProfiledata?.FirstName }} {{userProfiledata?.LastName}}</h2>-->
           <h4>@{{userProfiledata?.UserName}} </h4>
         </div>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-8">
-        <!--<div class="tocken">
+        <div class="tocken">
 
           <img src="../../../assets/images/coin.png" alt="coin" />
           <label>Tokens:</label>
           <strong>{{userProfiledata?.BalanceToken}}</strong>
-        </div>-->
+        </div>
         <div class="tocken">
           <img src="../../../assets/images/iq.png" alt="coin" />
           <label>Questions Posted :</label>
@@ -66,7 +66,7 @@
               <a data-title="Q">
                 <div class="message-container" [innerHTML]="temp?.Question | emojis"></div>
               </a>
-              <small style="color:grey;font-size:10px;font-weight:500">@{{temp.UserName}}</small>
+              <!--<small style="color:grey;font-size:10px;font-weight:500">@{{temp.UserName}}</small>-->
             </strong>
             <!--<strong class="text-success"><a data-title="B">{{temp.Opinion}}</a></strong>-->
             <strong class="text-success" *ngFor="let opinion of temp.OpinionList; let ii=index">

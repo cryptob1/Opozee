@@ -1,6 +1,6 @@
 <section class="section_second">
   <div class="container">
-    <div class="cover_heading">
+    <div class="cover_heading" style="padding-top: 10px">
       <h2>Profile</h2>
     </div>
     <div class="cover_profile">
@@ -24,6 +24,19 @@
 
         <div class="inputs_fields">
           <form [formGroup]="edtiProfileForm" (ngSubmit)="onSubmit()">
+
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="username">User Name</label>
+                <input type="text" formControlName="userName" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.userName.errors }" placeholder="Enter User name" />
+                <div *ngIf="submitted && f.userName.errors" class="invalid-feedback">
+                  <div *ngIf="f.email.errors.required">User name required</div>
+                </div>
+
+              </div>
+
+            </div>
+
             <div class="col-sm-6">
               <div class="form-group">
                 <label for="username">First Name</label>
@@ -31,9 +44,9 @@
                 <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
                   <div *ngIf="f.email.errors.required">First name required</div>
                 </div>
-                
+
               </div>
-              
+
             </div>
 
             <div class="col-sm-6">

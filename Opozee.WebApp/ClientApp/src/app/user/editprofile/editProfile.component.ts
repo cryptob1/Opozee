@@ -33,6 +33,7 @@ export class EditProfileComponent implements OnInit {
 
   ngOnInit() {
     this.edtiProfileForm = this.formBuilder.group({
+      userName: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', Validators.required],
@@ -54,6 +55,7 @@ export class EditProfileComponent implements OnInit {
       debugger;
       //this.userEditProfileModel = data
       //this.edtiProfileForm.setValue(data);
+      this.edtiProfileForm.controls['userName'].setValue(data.UserName);
       this.edtiProfileForm.controls['firstName'].setValue(data.FirstName);
       this.edtiProfileForm.controls['lastName'].setValue(data.LastName);
       this.edtiProfileForm.controls['email'].setValue(data.Email);
