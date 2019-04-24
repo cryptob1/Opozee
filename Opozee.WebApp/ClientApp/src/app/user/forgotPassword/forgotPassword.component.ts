@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../_services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { first } from 'rxjs/operators';
+import { AuthenticationService, AlertService } from '../../_services';
 
 @Component({
   selector: 'forgot-password',
@@ -13,8 +14,11 @@ import { first } from 'rxjs/operators';
 })
 
 export class ForgotPassword implements OnInit {
-  postBeliefForm: FormGroup;
-  dataModel: any;
+  
+
+  forgotForm: FormGroup;
+  loading = false;
+  submitted = false;
 
   editorConfigModal = {
     "editable": true,
@@ -38,27 +42,36 @@ export class ForgotPassword implements OnInit {
 
 
   @ViewChild('forgotPassword') public forgotPassword: ModalDirective;
+
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
 
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private formBuilder: FormBuilder,
-    private router: Router, private toastr: ToastrService) {
-    this.dataModel = this.getModelSetting();
+  constructor(
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private toastr: ToastrService,
+    private authenticationService: AuthenticationService,
+    private alertService: AlertService,
+  ) {
+   
   }  
 
   ngOnInit() {
-    this.editorConfigModal;
+    this.forgotForm = this.formBuilder.group({
+      email: ['', Validators.required]
+    });
   }
 
  
+  // convenience getter for easy access to form fields
+  get f() { return this.forgotForm.controls; }
 
-  show(question?: any): void {
 
-    this.dataModel.QuestId = question.QuestId;
-    this.dataModel.CommentedUserId = question.CommentedUserId;
-    this.dataModel.OpinionAgreeStatus = 0;
 
-    console.log('data', this.dataModel);
+  show(): void {
+
     this.forgotPassword.show();
   }
 
@@ -66,57 +79,24 @@ export class ForgotPassword implements OnInit {
     this.forgotPassword.hide();
   }
 
-  submitForm() {
-    console.log('data', this.dataModel);
-
-    if (this.dataModel.Comment == '' || this.dataModel.Comment == undefined) {
-      this.toastr.error('ERROR', 'Please enter belief.');
+  onSubmit() {
+    console.log('on submit');
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.forgotForm.invalid) {
       return;
     }
-    else if (this.dataModel.Comment.trim() == '') {
-      this.toastr.error('ERROR', 'Please enter belief.');
-      return;
-    }
-    else {
-      this.userService.saveOpinionPost(this.dataModel)
-        .pipe(first())
-        .subscribe(data => {
-          debugger;
-          if (data.BalanceToken <= 0) {
-            this.toastr.error('Token Blance 0', 'You have 0 tokens in your account. Please email us to refill the account to post opinion.', { timeOut: 5000 });
-          }
-          else {
-            this.save.emit();
-            this.toastr.success('Data save successfully', '');
-            this.close();
-          }
-
-        },
-          error => {
-            this.toastr.error('Error', 'Something went wrong, please try again.');
-            //this.alertService.error(error);
-            //this.loading = false;
-          });
-    }
-  }
-
-
-  setOpinionAgreeStatus(status: number) {
-    this.dataModel.OpinionAgreeStatus = status;
-  }
-
-  getModelSetting() {
-    return {
-      'QuestId': 0,
-      'Comment': '',
-      'CommentedUserId': 0,
-      'Likes': 0,
-      'OpinionAgreeStatus': 0,
-      'Dislikes': 0,
-      'CommentId': 0,
-      'CreationDate': new Date(),
-      'LikeOrDislke': false,
-    }
+    this.loading = true;
+    this.authenticationService.forgotPassword(this.forgotForm.value)
+      .pipe(first())
+      .subscribe(data => {
+        console.log(data);
+      },
+        error => {
+          this.alertService.error(error);
+          this.loading = false;
+          this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000 });
+        });
   }
 
 }

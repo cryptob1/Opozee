@@ -54,6 +54,8 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { ExternalLinkDirective } from './_helpers/external-link.directive';
 import { FaqComponent } from './faq/faq.component';
 import { ResetPassword } from './user/resetPassword/resetPassword.component';
+import { ForgotPassword } from './user/forgotPassword/forgotPassword.component';
+
 
 
 
@@ -113,11 +115,15 @@ export function getAuthServiceConfigs() {
     aboutusComponent,
     ExternalLinkDirective,
     FaqComponent,
-    ResetPassword
+    ResetPassword,
+    ForgotPassword
+  
   ],
   entryComponents: [
     DialogPostBelief,
-    ResetPassword
+    ResetPassword,
+    ForgotPassword
+   
   ],
   providers: [
     AuthGuard,

@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -12,10 +12,14 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angular5-social-login';
 //import { AuthService } from './auth/auth.service'; 
 import * as AuthService1 from "auth0-js";
+import { ForgotPassword } from '../user/forgotPassword/forgotPassword.component';
+
 
 @Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit {
 
+  
+  @ViewChild('forgotPassword') forgotPassword: ForgotPassword;
 
   Counter: number = 0;
 
@@ -65,6 +69,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.loading = true;
+ 
     this.authenticationService.login(this.loginForm.value)
       .pipe(first())
       .subscribe(data => {
@@ -223,6 +228,10 @@ export class LoginComponent implements OnInit {
       })
 
 
+  }
+  openforgotpasswordModel() {
+    console.log('here');
+    this.forgotPassword.show();
   }
 }
 

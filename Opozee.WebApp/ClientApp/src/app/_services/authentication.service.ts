@@ -58,5 +58,21 @@ export class AuthenticationService {
 
   }
 
+  resetPassword(model) {
+    var reqHeader = new HttpHeaders({ 'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ==' });
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/SigninThirdPartyWeb', model, { headers: reqHeader })
+      .pipe(map(data => {
+        debugger;
+        return data;
+      }));
+  }
+  forgotPassword(model) {
+    var reqHeader = new HttpHeaders({ 'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ==' });
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/SigninThirdPartyWeb', model, { headers: reqHeader })
+      .pipe(map(data => {
+        debugger;
+        return data;
+      }));
+  }
 
 }
