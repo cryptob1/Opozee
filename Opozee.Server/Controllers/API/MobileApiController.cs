@@ -163,27 +163,29 @@ namespace opozee.Controllers.API
                         entity.SocialType = ThirdPartyType.Twitter.ToString();
                     }
 
-                    if (input.ImageURL != null && input.ImageURL != "")
-                    {
-                        try
-                        {
-                            string strTempImageSave = OpozeeLibrary.Utilities.ResizeImage.Download_Image(input.ImageURL);
-                            string profileFilePath = _SiteURL + "/ProfileImage/" + strTempImageSave;
-                            strIamgeURLfordb = profileFilePath;
-                            entity.ImageURL = profileFilePath;
-                        }
-                        catch (Exception ex)
-                        {
-                            strThumbnailURLfordb = strThumbnailImage;
-                            strIamgeURLfordb = strThumbnailImage;
-                        }
-                    }
-                    else
-                    {
+                    //if (input.ImageURL != null && input.ImageURL != "")
+                    //{
+                    //    try
+                    //    {
+                    //        string strTempImageSave = OpozeeLibrary.Utilities.ResizeImage.Download_Image(input.ImageURL);
+                    //        string profileFilePath = _SiteURL + "/ProfileImage/" + strTempImageSave;
+                    //        strIamgeURLfordb = profileFilePath;
+                    //        entity.ImageURL = profileFilePath;
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        strThumbnailURLfordb = strThumbnailImage;
+                    //        strIamgeURLfordb = strThumbnailImage;
+                    //    }
+                    //}
+                    //else
+                    //{
 
-                        entity.ImageURL = _SiteURL + "/ProfileImage/opozee-profile.png";
-                        strIamgeURLfordb = entity.ImageURL;
-                    }
+                    //    entity.ImageURL = _SiteURL + "/ProfileImage/opozee-profile.png";
+                    //    strIamgeURLfordb = entity.ImageURL;
+                    //}
+
+                    entity.ImageURL= "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
                     entity.ImageURL = strIamgeURLfordb;
                     db.Users.Add(entity);
                     db.SaveChanges();
