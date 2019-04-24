@@ -42,12 +42,15 @@
 
                <div class="cover_right" *ngFor="let temp of NotificationData">
 
-                 <span *ngIf="temp.IsAgree===true" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
+                 <span *ngIf="temp?.IsAgree" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
                    <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Belief
+                   <span>{{ temp.CreationDate | date:'medium' | timeAgo }}</span>
                  </span>
-                 <span *ngIf="temp.IsAgree===false" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
+                 <span *ngIf="!temp?.IsAgree" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
                    <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);">{{temp.UserName}}</a> Posted a Question
+                   <span>{{ temp.CreationDate | date:'medium' | timeAgo }}</span>
                  </span>
+
 
                  <span class="cover_ntfctn_border questions-field">
                    <strong>
@@ -62,10 +65,10 @@
                    <div *ngIf="temp.IsAgree===false">
                      <strong class="text-success"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion"></a></strong>
                    </div>
-                   
+
                  </span>
 
-              <!--<span>{{ temp.CreationDate | date:'medium' }}</span>-->
+                 <!--<span>{{ temp.CreationDate | date:'medium' | timeAgo }}</span>-->
                </div>
              </div>
 
