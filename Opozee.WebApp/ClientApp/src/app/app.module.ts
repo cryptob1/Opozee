@@ -53,6 +53,7 @@ import { NgxEditorModule } from 'ngx-editor';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { ExternalLinkDirective } from './_helpers/external-link.directive';
 import { FaqComponent } from './faq/faq.component';
+import { ResetPassword } from './user/resetPassword/resetPassword.component';
 
 
 
@@ -111,10 +112,12 @@ export function getAuthServiceConfigs() {
     DialogPostBelief,
     aboutusComponent,
     ExternalLinkDirective,
-    FaqComponent
+    FaqComponent,
+    ResetPassword
   ],
   entryComponents: [
-    DialogPostBelief
+    DialogPostBelief,
+    ResetPassword
   ],
   providers: [
     AuthGuard,

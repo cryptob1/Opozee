@@ -1,9 +1,9 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataSharingService } from '../dataSharingService';
 import { User, LocalStorageUser, PostQuestionDetail } from '../_models/user';
 import { UserService } from '../_services';
- 
+import { ResetPassword } from '../user/resetPassword/resetPassword.component';
 
 @Component({
   selector: 'header-component',
@@ -12,6 +12,7 @@ import { UserService } from '../_services';
 })
 
 export class HeaderComponent implements OnInit {
+  @ViewChild('resetPassword') resetPassword: ResetPassword;
   model: any = {};
   loading = false;
   returnUrl: string;
@@ -21,7 +22,17 @@ export class HeaderComponent implements OnInit {
   localStorageUser: LocalStorageUser;
   loginData: any;
   searchTextModel: string = '';
+  userId: number;
   // isExpanded = false;
+
+
+  dataModel = {
+
+    'UserLoggedId': 0,
+    'EmailId': '',
+  }
+
+
   constructor(private dataSharingService: DataSharingService, private route: ActivatedRoute, private router: Router, ) {
 
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -71,5 +82,17 @@ export class HeaderComponent implements OnInit {
 
   navbar() {
     document.getElementById('bs-example-navbar-collapse-1').classList.remove('show');
+  }
+
+  //resetPassword() {
+  //  alert(1)
+  //}
+
+  openResetModal() {
+    debugger
+    //this.isWanttoSentComment = true
+    //this.dataModel.UserLoggedId = this.userId;
+    //console.log('data22', this.dataModel);
+    this.resetPassword.show();
   }
 }
