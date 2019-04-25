@@ -119,8 +119,8 @@ export class Questiondetail implements OnInit {
       this.PostQuestionDetailModel.postQuestionDetail = data['PostQuestionDetail'] as PostQuestionDetail;
 
 
-      this.shareUrl = "https://opozee.com/questionlisting/" + this.encoder.encodeValue(this.PostQuestionDetailModel.postQuestionDetail.Question);
-      this.sharetext = this.PostQuestionDetailModel.postQuestionDetail.Question + " - find opposing views on Opozee.com!";
+      this.shareUrl = "https://opozee.com/qid/" + (this.PostQuestionDetailModel.postQuestionDetail.Id);
+      this.sharetext = this.PostQuestionDetailModel.postQuestionDetail.Question + " - See opposing views on Opozee.com!";
 
     });
   }

@@ -25,6 +25,7 @@ const appRoutes: Routes = [
   { path: 'questionlisting/:search', component: QuestionListingComponent },
   { path: 'questionlistings/:search', component: QuestionListingComponent },
   { path: 'questions/:tag', component: QuestionListingComponent },
+  { path: 'qid/:qid', component: QuestionListingComponent },
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },

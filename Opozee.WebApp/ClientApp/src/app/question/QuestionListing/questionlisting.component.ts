@@ -22,10 +22,11 @@ import { ISubscription } from 'rxjs/Subscription';
     localStorageUser: LocalStorageUser;
     search: string;
     hashTag: boolean = false;
+    qid =-1;
     //questionListing: QuestionListing[] = [];
     PostQuestionDetailList: PostQuestionDetail[] = [];
     isRecordLoaded: boolean = false;
-    questionGetModel = { 'UserId': 0, 'isHashTag':false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0,'PageSize': 0 }
+    questionGetModel = { 'UserId': 0, 'isHashTag':false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0,'PageSize': 0, 'qid':0 }
 
     private allItems: any[];
 
@@ -45,6 +46,10 @@ import { ISubscription } from 'rxjs/Subscription';
       else if (this.route.snapshot.params["tag"]) {
         this.hashTag = true;
         this.search = this.route.snapshot.params["tag"];
+      }
+
+      else if (this.route.snapshot.params["qid"]) {
+        this.qid = this.route.snapshot.params["qid"];
       }
 
       this.paramsSub = route.params.subscribe(params => {
@@ -71,6 +76,8 @@ import { ISubscription } from 'rxjs/Subscription';
 
     initialize() {
       this.questionGetModel.isHashTag = this.hashTag;
+      this.questionGetModel.qid = this.qid;
+
       
       this.questionGetModel.Search = this.search;
       if (this.localStorageUser) {

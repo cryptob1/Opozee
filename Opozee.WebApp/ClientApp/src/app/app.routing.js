@@ -25,6 +25,7 @@ var appRoutes = [
     { path: 'questionlisting/:search', component: QuestionListing_1.QuestionListingComponent },
     { path: 'questionlistings/:search', component: QuestionListing_1.QuestionListingComponent },
     { path: 'questions/:tag', component: QuestionListing_1.QuestionListingComponent },
+    { path: 'qid/:qid', component: QuestionListing_1.QuestionListingComponent },
     { path: '', component: index_1.HomeComponent },
     { path: 'login', component: index_2.LoginComponent },
     { path: 'register', component: index_3.RegisterComponent },
