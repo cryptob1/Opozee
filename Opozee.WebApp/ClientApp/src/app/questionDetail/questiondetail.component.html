@@ -21,7 +21,7 @@
               <span class="img" [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
                 <img src="{{PostQuestionDetailModel?.postQuestionDetail?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user">
               </span>
-              
+
               <span *ngIf="PostQuestionDetailModel?.postQuestionDetail?.OwnerUserName" class="text_profile" style="cursor:pointer" [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
                 <span class="user_123">@{{PostQuestionDetailModel?.postQuestionDetail?.OwnerUserName}}</span>
               </span>
@@ -34,7 +34,7 @@
               <div ExternalLink *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question">
                 <p class="message-container mb-0" [innerHTML]="PostQuestionDetailModel?.postQuestionDetail?.Question | emojis"></p>
                 <p class="mb-30">
-                  <tweet url={{shareUrl}} text={{sharetext}}></tweet>
+
                 </p>
               </div>
               <div class="hash_tag">
@@ -49,7 +49,7 @@
               <div class="opiniuns">
                 <div class="left">
                   <span> </span>
-                  <div class="anlysis_slider"  *ngIf="((PostQuestionDetailModel.postQuestionDetail?.YesCount)>0 || (PostQuestionDetailModel.postQuestionDetail?.NoCount)>0) ">
+                  <div class="anlysis_slider" *ngIf="((PostQuestionDetailModel.postQuestionDetail?.YesCount)>0 || (PostQuestionDetailModel.postQuestionDetail?.NoCount)>0) ">
 
                     <span [style.width.%]="(PostQuestionDetailModel.postQuestionDetail?.YesCount /  (PostQuestionDetailModel.postQuestionDetail?.YesCount + PostQuestionDetailModel.postQuestionDetail?.NoCount) * 100) | number:'1.0-0'" class="color yes_div"></span>
                     <!--<span class="percentage" *ngIf="PostQuestionDetailModel.postQuestionDetail?.NoCount > 0"> No : {{(PostQuestionDetailModel.postQuestionDetail.NoCount /  (PostQuestionDetailModel.postQuestionDetail.YesCount + PostQuestionDetailModel.postQuestionDetail.NoCount) * 100) | number:'1.0-0'}} %</span>-->
@@ -67,12 +67,12 @@
 
             </span>
 
-
+            <tweet style="float: left" url={{shareUrl}} text={{sharetext}}></tweet>
             <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
               <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
 
                 <div [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']">
-                  <div ExternalLink><p [innerHTML] ="temp?.Comment"></p></div>
+                  <div ExternalLink><p [innerHTML]="temp?.Comment"></p></div>
                   <span class="profile_bottom_cover">
 
                     <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
@@ -90,21 +90,21 @@
                 </div>
 
                 <!--<div class="no_feedback" *ngIf="!temp.IsAgree">
-                  {{temp.IsAgree}}
-                  <p>{{temp.Comment}}</p>
-                  <span class="profile_bottom_cover">
-                    <span class="user_left">
-                      <img src="../../assets/images/user.png" alt="user"><span>@{{temp.CommentedUserName}}</span>
-                    </span>
-                    <div class="like_images">
-                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp.Likes,index)">{{temp.LikesCount}}</span>
-                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp.DisLikes,index)" />{{temp.DislikesCount}}</span>
+        {{temp.IsAgree}}
+        <p>{{temp.Comment}}</p>
+        <span class="profile_bottom_cover">
+          <span class="user_left">
+            <img src="../../assets/images/user.png" alt="user"><span>@{{temp.CommentedUserName}}</span>
+          </span>
+          <div class="like_images">
+            <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp.Likes,index)">{{temp.LikesCount}}</span>
+            <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp.DisLikes,index)" />{{temp.DislikesCount}}</span>
 
-                    </div>
-                    <div class="date_like">
-                    </div>
-                  </span>
-                </div>-->
+          </div>
+          <div class="date_like">
+          </div>
+        </span>
+      </div>-->
 
               </span>
             </span>
@@ -121,7 +121,7 @@
 
                     <div class="comment_box" *ngIf="Isclicked">
                       <textarea [(ngModel)]="dataModel.Comment"></textarea>
-                    
+
 
 
                       <a (click)="saveOpinionclick()" style="cursor:pointer">Submit</a>
