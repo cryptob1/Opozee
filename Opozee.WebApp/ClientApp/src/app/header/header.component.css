@@ -32,6 +32,8 @@ a.navbar-brand.logo {
 header .dropdown a {
   padding: 0px !important;
   margin-top: 0px;
+  width:95%;
+  height :auto;
 }
 
 
@@ -214,11 +216,17 @@ header .container-fluid {
     float: left;
     width: 100%;
   }
+
+  .dropdown a {
+    border-radius: 2% !important;
+  }
 }
 
 @media screen and (max-width: 480px) {
-   
- 
+
+  .dropdown a {
+    border-radius: 2% !important;
+  }
 
   .banner_search-form {
     padding-top: 3px;
@@ -226,5 +234,9 @@ header .container-fluid {
     width: 90%;
     float: left;
   }
-  
+
+ 
+}
+.header-ddl .dropdown-menu {
+  margin: 28px 8px 0 0 !important;
 }

@@ -49,7 +49,7 @@
             <!--<span class="bell-icon"><i class="fa fa-bell" aria-hidden="true"></i>  <span></span></span>-->
             <!--<li *ngIf="isAuthenticateUserId"><a (click)="navbar();" [routerLink]="['/bookmark',0]">Bookmarks</a></li>-->
             <li>
-              <div class="dropdown" *ngIf="loginData.Id > 0" style="cursor:pointer">
+              <div class="dropdown header-ddl" *ngIf="loginData.Id > 0" style="cursor:pointer">
                 <a class="profile_head btn btn-primary dropdown-toggle" data-toggle="dropdown">
                   <img src="{{loginData?.ImageURL}}" onerror="this.onerror=null;this.src='../../assets/images/profile.png';">
                   <span class="badge bg-red" >{{loginData?.BalanceToken}}</span>
@@ -70,3 +70,10 @@
   </header>
 </div>
 <reset-password #resetPassword ></reset-password>
+
+<style>
+
+  .header-ddl .dropdown-menu {
+    margin: 28px 8px 0 0 !important;
+  }
+</style>
