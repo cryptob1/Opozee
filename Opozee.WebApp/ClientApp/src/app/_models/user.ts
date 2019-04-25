@@ -100,7 +100,10 @@ export class PostQuestionDetail {
   UserImage: string;
   YesCount: number;
   NoCount: number;
-
+  //MostNoLiked: Comments;
+  //MostYesLiked: Comments;
+  comments: Comments[] = [];
+  percentage: number;
   constructor() {
     //this.IsBookmark = false;
   }

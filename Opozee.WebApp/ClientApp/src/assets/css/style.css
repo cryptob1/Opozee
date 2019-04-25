@@ -1,6 +1,7 @@
 body {
   font-family: 'Poppins', sans-serif;
 }
+
 * {
   outline: none;
 }
@@ -18,7 +19,6 @@ body {
   position: relative;
   background-position: center center;
   margin-top: -48px;
-  
 }
 
 .banner_text {
@@ -55,7 +55,6 @@ body {
   .cover_heading h3 {
     margin: 0px;
     color: #333;
-    
     text-transform: capitalize;
   }
 
@@ -67,14 +66,13 @@ body {
   margin-top: 0px;
 }
 
-.section_second ul li {
-  width: 100%;
-  float: left;
-  display: block;
-   
-  padding: 20px;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
-}
+  .section_second ul li {
+    width: 100%;
+    float: left;
+    display: block;
+    padding: 20px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.2);
+  }
 
 .cover_questions {
   width: 100%;
@@ -100,9 +98,8 @@ body {
     width: 100%;
   }
 
-  .cover_questions .strong  .a{
+  .cover_questions .strong .a {
     font-size: 38px;
-     
   }
 
 section.section_second {
@@ -138,7 +135,7 @@ section.section_second {
   border: 1px solid #333;
 }
 
- 
+
   .cover_questions .cover_analysis .left .anlysis_slider .color {
     float: left;
     height: 14px;
@@ -243,7 +240,6 @@ section.section_second {
     padding-top: 3px;
     font-size: 14px;
     font-weight: 700;
-    
   }
 
     .cover_questions .user_left .username .userid {
@@ -262,13 +258,13 @@ section.section_second {
     font-size: 11px;
     float: right;
   }
+
   .cover_questions .user_right .date i {
     font-size: 9px;
     color: grey;
-    width:100%;
-    text-align:right;
-    float:left;
-
+    width: 100%;
+    text-align: right;
+    float: left;
   }
 
   .cover_questions .user_right .date {
@@ -281,7 +277,6 @@ section.section_second {
 
 .mains {
   padding-top: 0px !important;
-  
 }
 
 /*--------------pagination-------------*/
@@ -469,9 +464,20 @@ span.cover_ntfctn_border label {
 
 .cover_ntfctn_border p {
   margin: 4px 0px 0px 0px;
-  white-space: nowrap;
+  white-space: normal;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.carousel-inner .message-container * {
+  font-size: 14px !important;
+  font-weight: 300 !important
+}
+
+.carousel-inner tweet {
+  top: 4px;
+  position: relative;
+  left: 5px;
 }
 
 .cover_ntfctn_border .name b {
@@ -520,7 +526,6 @@ span.bell-icon {
   border: none;
   border-radius: 2px;
   min-width: 140px;
-  
   background-size: cover;
   background-position: center center;
 }
@@ -733,91 +738,89 @@ span.bell-icon i {
 
 
 
-  @media screen and (max-width: 991px) {
-    .anlysis_slider {
-      width: 100% !important;
-      margin-top: 6px !important;
-    }
-
-    .cover_profile p {
-      font-size: 14px !important;
-      text-align: justify !important;
-    }
-
-    .profile_bottom_cover .like_images {
-      width: 25% !important;
-    }
-
-    .profile_bottom_cover .date_like {
-      width: 25% !important;
-    }
+@media screen and (max-width: 991px) {
+  .anlysis_slider {
+    width: 100% !important;
+    margin-top: 6px !important;
   }
 
-  @media screen and (max-width: 767px) {
+  .cover_profile p {
+    font-size: 14px !important;
+    text-align: justify !important;
+  }
 
-    .user_left {
-      width: 100%;
-      margin-bottom: 20px;
-    }
+  .profile_bottom_cover .like_images {
+    width: 25% !important;
+  }
 
-    .profile_bottom_cover .like_images {
-      width: 50% !important;
-    }
+  .profile_bottom_cover .date_like {
+    width: 25% !important;
+  }
+}
 
-    .profile_bottom_cover .date_like {
-      width: 50% !important;
-    }
+@media screen and (max-width: 767px) {
 
-    .profile_bottom_cover .date_like {
-      width: 100% !important;
-    }
+  .user_left {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 
-      .profile_bottom_cover .date_like i {
-        text-align: left;
-        width: 100%;
-      }
+  .profile_bottom_cover .like_images {
+    width: 50% !important;
+  }
 
-    .user_left span {
-      font-size: 12px;
-    }
+  .profile_bottom_cover .date_like {
+    width: 50% !important;
+  }
 
-    .cover_heading.d-flex {
-      display: block;
+  .profile_bottom_cover .date_like {
+    width: 100% !important;
+  }
+
+    .profile_bottom_cover .date_like i {
       text-align: left;
-      padding: 20px;
+      width: 100%;
     }
 
-    footer ul li {
-      width: auto;
-      padding: 6px 10px;
-    }
+  .user_left span {
+    font-size: 12px;
   }
 
-  @media screen and (max-width: 480px) {
-
-
-    .profile_bottom_cover .like_images {
-      width: 100% !important;
-    }
-
-    .profile_bottom_cover .date_like {
-      width: 100% !important;
-      margin-top: 15px;
-    }
-
-      .profile_bottom_cover .date_like i {
-        width: 100%;
-        text-align: left;
-      }
-
-    .yes_feedback, .no_feedback {
-      width: 100% !important;
-    }
-
-    .user_left {
-      /*width: 100% !important;*/
-      margin-bottom: 5px;
-    }
-
+  .cover_heading.d-flex {
+    display: block;
+    text-align: left;
+    padding: 20px;
   }
 
+  footer ul li {
+    width: auto;
+    padding: 6px 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+
+
+  .profile_bottom_cover .like_images {
+    width: 100% !important;
+  }
+
+  .profile_bottom_cover .date_like {
+    width: 100% !important;
+    margin-top: 15px;
+  }
+
+    .profile_bottom_cover .date_like i {
+      width: 100%;
+      text-align: left;
+    }
+
+  .yes_feedback, .no_feedback {
+    width: 100% !important;
+  }
+
+  .user_left {
+    /*width: 100% !important;*/
+    margin-bottom: 5px;
+  }
+}

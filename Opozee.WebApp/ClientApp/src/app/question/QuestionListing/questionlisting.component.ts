@@ -25,16 +25,21 @@ import { ISubscription } from 'rxjs/Subscription';
     qid =-1;
     //questionListing: QuestionListing[] = [];
     PostQuestionDetailList: PostQuestionDetail[] = [];
+    
+    
     isRecordLoaded: boolean = false;
+    percentage: number = 0;
     questionGetModel = { 'UserId': 0, 'isHashTag':false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0,'PageSize': 0, 'qid':0 }
 
     private allItems: any[];
 
+    shareUrl: any;
+    sharetext: any;
     // pager object
     pager: any = {};
     // paged items
     pagedItems: any[];
-
+    sliderData: any[] = [];
     constructor(private userService: UserService, private route: ActivatedRoute, private router: Router,
       private location: Location) {
 
@@ -67,6 +72,10 @@ import { ISubscription } from 'rxjs/Subscription';
       });
       if (!localStorage.getItem('hasRedirectBack'))
         localStorage.removeItem('PageNumber');
+
+      this.shareUrl = "https://opozee.com/qid/";
+      this.sharetext = " - See opposing views on Opozee.com!";
+
     }
 
     ngOnDestroy() {
@@ -96,21 +105,49 @@ import { ISubscription } from 'rxjs/Subscription';
     }
 
   private getAllQuestionlist(questionGetModel) {
-
+    
     this.userService.getAllQuestionlist(questionGetModel).subscribe(data => {
-     
+
       if (data) {
         if (data.length > 0) {
           this.PostQuestionDetailList = data;
           this.questionGetModel.TotalRecords = data[0].TotalRecordcount
-        }
-        this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
-        this.isRecordLoaded = true
-      } else {
-        this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
-        this.isRecordLoaded = true
-      }
+          //----Slider
+          this.sliderData = [];
+          this.PostQuestionDetailList.map((x) => {
+            if (x.YesCount > 0 && x.NoCount > 0) {
+              this.sliderData.push(x);
+            }
+            else if (x.YesCount > 0 || x.NoCount > 0) {
+              this.sliderData.push(x);
+            }
+          })
 
+          this.sliderData.sort(function (a, b) {
+            if (a.MostYesLiked === null) return 1;
+            else if (b.MostYesLiked === null) return -1;
+            else {
+              return a.MostYesLiked < b.MostYesLiked ? -1 : a.MostYesLiked > b.MostYesLiked ? 1 : 0;
+            }
+          });
+
+          this.sliderData.sort(function (a, b) {
+            if (a.MostNoLiked === null) return 1;
+            else if (b.MostNoLiked === null) return -1;
+            else {
+              return a.MostNoLiked < b.MostNoLiked ? -1 : a.MostNoLiked > b.MostNoLiked ? 1 : 0;
+            }
+          });
+          //----------------------------------
+          this.PercentageCalc(data);
+          this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
+          this.isRecordLoaded = true
+        } else {
+          this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
+          this.isRecordLoaded = true
+        }
+
+      }
     }, error => {
       this.isRecordLoaded = false;
 
@@ -118,14 +155,43 @@ import { ISubscription } from 'rxjs/Subscription';
     this.isRecordLoaded = false;
   }
 
-  private getAllQuestionlistPaging(questionGetModel) {
+    private PercentageCalc(data) {
+      let scoreYes = 0;
+      let scoreNo = 0;
+      let _score = 0;
+      data.map((x) => {
 
+        if (x.Comments) {
+
+          x.Comments.map(y => {
+
+            _score = y.LikesCount - y.DislikesCount;
+            if (y.IsAgree) {
+              scoreYes = scoreYes + (_score > 0 ? _score : 0);
+            }
+            else {
+              scoreNo = scoreNo + (_score > 0 ? _score : 0);
+            }
+          });
+        }
+
+        x.percentage = +((scoreYes / (scoreYes + scoreNo)) * 100);
+        if (isNaN(x.percentage))
+          x.percentage = 0;
+        scoreYes = 0;
+        scoreNo = 0;
+      })
+    }
+
+  private getAllQuestionlistPaging(questionGetModel) {
+  
     this.userService.getAllQuestionlist(questionGetModel).subscribe(data => {
      
       if (data) {
         if (data.length > 0) {
           this.PostQuestionDetailList = data;
-          this.questionGetModel.TotalRecords = data[0].TotalRecordcount
+          this.questionGetModel.TotalRecords = data[0].TotalRecordcount;
+          this.PercentageCalc(data);
         }
         this.isRecordLoaded = true
       }

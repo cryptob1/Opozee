@@ -61,7 +61,7 @@ import { EqualValidatorDirective } from './_directives/equal-validator.directive
 // import social buttons module
 import { JwSocialButtonsModule } from 'jw-angular-social-buttons';
 
-
+import { ConfirmationDialogComponent } from './Shared/confirmationDialog/confirmationDialog.component' 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
     [
@@ -96,6 +96,7 @@ export function getAuthServiceConfigs() {
     NgxEditorModule,
     AngularFontAwesomeModule,
     JwSocialButtonsModule
+   
   ],
   declarations: [
     AppComponent,
@@ -121,14 +122,15 @@ export function getAuthServiceConfigs() {
     FaqComponent,
     ResetPassword,
     ForgotPassword,
-    EqualValidatorDirective
+    EqualValidatorDirective,
+    ConfirmationDialogComponent
   
   ],
   entryComponents: [
     DialogPostBelief,
     ResetPassword,
-    ForgotPassword
-   
+    ForgotPassword,
+    ConfirmationDialogComponent
   ],
   providers: [
     AuthGuard,

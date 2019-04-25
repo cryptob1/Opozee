@@ -74,6 +74,8 @@ namespace Opozee.Models.API
         public int NoCount { get; set; }
         public int TotalRecordcount { get; set; }
         public int CountTopHastag { get; set; }
+        public List<Comments> Comments { get; set; }
+
     }
 
 

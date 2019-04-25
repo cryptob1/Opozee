@@ -1,6 +1,63 @@
 
 <div class="inner_pages" >
   <section class="section_second">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="carousel-outer" *ngIf="sliderData?.length>0">
+          <div id="question-slider" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+              <li data-target="#question-slider" data-slide-to="0" class="active"></li>
+              <li data-target="#question-slider" data-slide-to="1"></li>
+              <li data-target="#question-slider" data-slide-to="2"></li>
+            </ol>
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+              <ng-container *ngFor="let slider of sliderData;let i = index">
+                <div class="item" [ngClass]="{'active': i == 0 }" *ngIf="i<3">
+                  <div class="cover_questions">
+                    <div class="question_box">
+
+                      <strong>
+                        <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', slider?.Id]">
+                          <span class="message-container" [innerHTML]="'Q. ' + slider?.Question | emojis"></span>
+                        </a>
+                        <tweet url="{{shareUrl}}{{slider?.Id}}" text="{{slider?.Question}}{{sharetext}}"></tweet>
+                        <ng-container *ngFor="let tag of slider?.HashTags?.split(',')">
+                          <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></small>
+                        </ng-container>
+
+                      </strong>
+                      <div class="liked_ones clearfix yes_feedback" *ngIf="slider?.MostYesLiked">
+                        <div ExternalLink>
+                          <b>@{{slider?.MostYesLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostYesLiked.Comment | emojis"></small>
+                        </div>
+                      </div>
+
+                      <div class="liked_ones clearfix no_feedback" *ngIf="slider?.MostNoLiked">
+                        <div ExternalLink>
+                          <b>@{{slider?.MostNoLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostNoLiked.Comment | emojis"></small>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+
+            <!-- Left and right controls -->
+            <a class="left carousel-control" href="#question-slider" data-slide="prev">
+              <i class="fas fa-arrow-left"></i>
+            </a>
+            <a class="right carousel-control" href="#question-slider" data-slide="next">
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container">
       <div class="cover_heading">
       </div>
@@ -46,16 +103,14 @@
                   <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></div>
 
                 </ng-container>
-
                 <div class="cover_analysis">
                   <div class="left">
                     <span> </span>
                     <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
-                      <span [style.width.%]="((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'" class="color yes_div" ></span>
+                      <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
                       <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
-
-                      <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>
-
+                      <!--<span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>-->
+                      <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
                       <div *ngIf="temp.YesCount == 0 && temp.NoCount ==0">
                         <!--<span class="percentage">NO : 0 %</span>-->
                         <!--<span class="percentage_yes"> - </span>-->
@@ -66,13 +121,13 @@
                 </div>
 
                 <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
- 
+
                   <div ExternalLink>
                     <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment | emojis"></p>
-                    
+
                   </div>
 
-                 
+
                   <div class="row">
                     <div class="col-sm-6 text-left">
                       <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
@@ -97,7 +152,7 @@
                     <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment | emojis"></p>
                   </div>
 
-               
+
                   <div class="row">
 
                     <div class="col-sm-6 text-right">

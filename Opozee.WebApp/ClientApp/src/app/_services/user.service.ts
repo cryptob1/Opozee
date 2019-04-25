@@ -80,6 +80,17 @@ export class UserService {
     })
   }
 
+  postQuestionwebNew(question) {
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/CheckDuplicateQuestions', question, {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
+
+  }
+
+
+
   postQuestionweb(question) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/postquestionweb', question, {
       headers: new HttpHeaders({

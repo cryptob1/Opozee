@@ -34,9 +34,12 @@
               <div ExternalLink *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question">
                 <p class="message-container mb-0" [innerHTML]="PostQuestionDetailModel?.postQuestionDetail?.Question | emojis"></p>
                 <p class="mb-30">
-
+                  <small *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question" style="float: left">
+                    <tweet url={{shareUrl}} text={{sharetext}}></tweet>
+                  </small>
                 </p>
               </div>
+
               <div class="hash_tag">
                 <span>
                   <ng-container *ngFor="let tag of PostQuestionDetailModel?.postQuestionDetail?.HashTags?.split(',')">
@@ -44,32 +47,24 @@
                   </ng-container>
                 </span>
               </div>
-
-
               <div class="opiniuns">
                 <div class="left">
                   <span> </span>
                   <div class="anlysis_slider" *ngIf="((PostQuestionDetailModel.postQuestionDetail?.YesCount)>0 || (PostQuestionDetailModel.postQuestionDetail?.NoCount)>0) ">
-
-                    <span [style.width.%]="(PostQuestionDetailModel.postQuestionDetail?.YesCount /  (PostQuestionDetailModel.postQuestionDetail?.YesCount + PostQuestionDetailModel.postQuestionDetail?.NoCount) * 100) | number:'1.0-0'" class="color yes_div"></span>
+                    <span [style.width.%]="percentage | number:'1.0-0'" class="color yes_div"></span>
+                    <!--<span [style.width.%]="(PostQuestionDetailModel.postQuestionDetail?.YesCount /  (PostQuestionDetailModel.postQuestionDetail?.YesCount + PostQuestionDetailModel.postQuestionDetail?.NoCount) * 100) | number:'1.0-0'" class="color yes_div"></span>-->
                     <!--<span class="percentage" *ngIf="PostQuestionDetailModel.postQuestionDetail?.NoCount > 0"> No : {{(PostQuestionDetailModel.postQuestionDetail.NoCount /  (PostQuestionDetailModel.postQuestionDetail.YesCount + PostQuestionDetailModel.postQuestionDetail.NoCount) * 100) | number:'1.0-0'}} %</span>-->
-                    <span class="percentage_yes" *ngIf="PostQuestionDetailModel.postQuestionDetail?.YesCount > 0 || PostQuestionDetailModel.postQuestionDetail?.NoCount>0"> Yes : {{(PostQuestionDetailModel.postQuestionDetail.YesCount /  (PostQuestionDetailModel.postQuestionDetail.YesCount + PostQuestionDetailModel.postQuestionDetail.NoCount) * 100) | number:'1.0-0'}}  %</span>
-
+                    <span class="percentage_yes" *ngIf="PostQuestionDetailModel.postQuestionDetail?.YesCount > 0 || PostQuestionDetailModel.postQuestionDetail?.NoCount>0"> Yes : {{percentage | number:'1.0-0'}}  %</span>
                     <div *ngIf="PostQuestionDetailModel.postQuestionDetail?.YesCount == 0 && PostQuestionDetailModel.postQuestionDetail?.NoCount ==0">
                       <!--<span class="percentage">NO : 0 %</span>-->
-
                       <span class="empty_space"></span>
                     </div>
                   </div>
-
                 </div>
               </div>
-
             </span>
 
-            <div *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question" style="float: left">
-              <tweet url={{shareUrl}} text={{sharetext}}></tweet>
-            </div>
+           
             <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
               <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
 

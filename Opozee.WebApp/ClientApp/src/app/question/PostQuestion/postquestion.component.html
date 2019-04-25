@@ -5,23 +5,22 @@
   <div class="creds p-4">
 
     <div class="container">
-      
+
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-12 col-sm-12">
           <div class="login_data bg-white text-center rounded p-md-4  pt-4">
             <div class="logo_main text-center">
 
             </div>
-            <div class="login_form" >
-              <form class="w-md-75 mx-auto px-sm-3 my-3 mt-4" [formGroup]="questionPostForm" (ngSubmit)="onSubmit()">
+            <div class="login_form">
+              <form class="w-md-75 mx-auto px-sm-3 my-3 mt-4" [formGroup]="questionPostForm" (ngSubmit)="onSubmitNew()">
                 <div class="text-left">
 
-                  <div class="form-group" style="width:100%" >
+                  <div class="form-group" style="width:100%">
                     <label for="postQuestion">Question</label>
                     <div style="color: red" class="QuestionComment">Opozee is designed to answer questions in a yes or no format.</div>
 
-                    <app-ngx-editor 
-                                    resizer="basic"
+                    <app-ngx-editor resizer="basic"
                                     formControlName="postQuestion"
                                     [config]="editorConfig"
                                     [(ngModel)]="postQuestion">
@@ -31,7 +30,7 @@
 
                     <!--<textarea rows="4" cols="50" style="padding-left: 15px;" formControlName="postQuestion" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.postQuestion.errors }"></textarea>-->
                     <!--<div *ngIf="postQuestionTemp == ''">question required</div>
-                    {{postQuestionTemp}}-->
+      {{postQuestionTemp}}-->
 
                     <small style="float:right;font-size:12px;margin-top:2px;">
                       Press <i style="position:static;opacity: 0.6;" class="fa fa-windows" aria-hidden="true"></i> + Period for Emoji.
@@ -39,19 +38,19 @@
                   </div>
 
                   <!--<ng-multiselect-dropdown [placeholder]="'TAG USERS'"
-                       [data]="dropdownList"
-                       [ngModelOptions]="{standalone: true}"
-                       [(ngModel)]="selectedItems"
-                       [settings]="dropdownSettings"
-                       (onSelect)="onItemSelect($event)"
-                       (onSelectAll)="onSelectAll($event)"
-                       (onDeSelect)="onDeSelect($event)">-->
+         [data]="dropdownList"
+         [ngModelOptions]="{standalone: true}"
+         [(ngModel)]="selectedItems"
+         [settings]="dropdownSettings"
+         (onSelect)="onItemSelect($event)"
+         (onSelectAll)="onSelectAll($event)"
+         (onDeSelect)="onDeSelect($event)">-->
                   <!--</ng-multiselect-dropdown>-->
 
                   <div class="form-group" style="width:100%">
                     <label for="hashtagss">Hashtags </label>
                     <label style="font-size: 11px">(Example: #USAPolitics,#Trump2020 ) </label>
-                    
+
                     <input type="text" style="padding-left: 15px;" formControlName="hashtags" class="form-control form-control pl-5" />
 
                   </div>
@@ -61,6 +60,8 @@
                   <button [disabled]="loading" class="btns bg-primary border-0 w-100 rounded color-white mt-3">Submit yes or no question.</button>
                   <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                 </div>
+
+                <!--<button (click)="openConfirmationDialog()" type="button" class="btn btn-primary">Open dialog</button>-->
 
               </form>
             </div>
@@ -74,3 +75,5 @@
 
 
 </div>
+<confirmation-dialog #confirmationDialogComponent (event)="getPostQuestion()"></confirmation-dialog>
+

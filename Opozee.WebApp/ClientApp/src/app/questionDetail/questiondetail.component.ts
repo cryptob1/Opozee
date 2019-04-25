@@ -97,13 +97,32 @@ export class Questiondetail implements OnInit {
 
     this.getQuestionDetail()
   }
-    
+
+  percentage: number = 0;
+
   getQuestionDetail() {
-    debugger;
+    
     this.userService.getquestionDetails(this.Id, this.localStorageUser.Id).subscribe(data => {
-      debugger
+      
       this.PostQuestionDetailModel = data as BookMarkQuestionVM;
       this.PostQuestionDetailModel.comments = data['Comments'] as Comments[];
+      
+      let scoreYes = 0;
+      let scoreNo = 0;
+
+      this.PostQuestionDetailModel.comments.map((x) => {
+        
+        let _score = x.LikesCount - x.DislikesCount;
+        if (x.IsAgree) {
+          scoreYes = scoreYes + (_score > 0 ? _score : 0);      
+        }
+        else {
+          scoreNo = scoreNo + (_score > 0 ? _score : 0); 
+        }
+       
+      })
+
+      this.percentage = (scoreYes / (scoreYes + scoreNo)) * 100;
 
 
       let _countLike = data['Comments'].map(c => c.LikesCount);
@@ -126,7 +145,7 @@ export class Questiondetail implements OnInit {
   }
 
   saveLikeclick(Likes, index) {
-    debugger;
+    ;
     if (!Likes) { //hitting like
       this.imageShowLike = index;
       //this.imageShowDislike = -2;
@@ -164,7 +183,7 @@ export class Questiondetail implements OnInit {
 
 
   saveDislikeclick(DisLikes, index) {
-    debugger;
+    ;
     if (!DisLikes) { //clicking dislike
       this.imageShowDislike = index;
       //this.imageShowLike = -2;
@@ -228,9 +247,9 @@ export class Questiondetail implements OnInit {
 
   saveOpinionclick() {
 
-    debugger;
+    ;
     this.submitted = true;
-    debugger;
+    ;
     if (this.dataModel.Comment == '' || this.dataModel.Comment == undefined) {
       return;
     }
@@ -240,7 +259,7 @@ export class Questiondetail implements OnInit {
     this.userService.saveOpinionPost(this.dataModel)
       .pipe(first())
       .subscribe(data => {
-        debugger;
+        ;
         if (data.BalanceToken <= 0) {
 
           this.toastr.error('Token Blance 0', 'You have 0 tokens in your account. Please email us to refill the account to post opinion.', { timeOut: 5000 });
@@ -268,12 +287,12 @@ export class Questiondetail implements OnInit {
   }
 
   SaveLikeDislike(dataModel) {
-    debugger;
+    ;
     this.loading = true;
     this.userService.SaveLikeDislikeService(this.dataModel)
       .pipe(first())
       .subscribe(data => {
-        debugger;
+        ;
         this.loading = false;
         this.getQuestionDetail();
         //this.toastr.success('Data save successfully', '');
@@ -300,7 +319,7 @@ export class Questiondetail implements OnInit {
 
   saveBookmarkQuestion(IsBookmark) {
 
-    debugger;
+    ;
     var dataBookMarkModel = {
       'QuestionId': this.Id,
       'IsBookmark': true,
@@ -322,7 +341,7 @@ export class Questiondetail implements OnInit {
     this.userService.saveBookmarkQuestionservice(dataBookMarkModel)
       .pipe(first())
       .subscribe(data => {
-        debugger;
+        ;
         if (data.BalanceToken <= 0) {
           this.toastr.error('Token Blance 0', 'You have 0 tokens in your account. Please email us to refill the account to post opinion.', { timeOut: 5000 });
         }
