@@ -67,7 +67,9 @@
 
             </span>
 
-            <tweet style="float: left" url={{shareUrl}} text={{sharetext}}></tweet>
+            <div *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question" style="float: left">
+              <tweet url={{shareUrl}} text={{sharetext}}></tweet>
+            </div>
             <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
               <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
 
