@@ -74,7 +74,7 @@ import { ISubscription } from 'rxjs/Subscription';
         localStorage.removeItem('PageNumber');
 
       this.shareUrl = "https://opozee.com/qid/";
-      this.sharetext = " - See opposing views on Opozee.com!";
+      this.sharetext = " - See opposing views on Opozee.com";
 
     }
 

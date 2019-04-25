@@ -575,7 +575,7 @@ span.bell-icon i {
 
 
 .yes_feedback, .no_feedback {
-  width: 90% !important;
+  width: 100% !important;
   float: left !important;
   /*border: 2px solid #D2F3C8;*/
   border: 3px solid #D2F3C8;
@@ -677,6 +677,7 @@ span.bell-icon i {
   }
 
 .questions-field {
+  background-color: #fff;
   width: calc(100% - 40px);
   box-shadow: none;
   border: 1px solid #dadada;
@@ -714,7 +715,7 @@ span.bell-icon i {
       }
 
     .questions-field strong.text-success {
-      border: 2px solid #529024;
+      border: 2px solid #D2F3C8;
       border-radius: 4px;
     }
 
@@ -724,7 +725,7 @@ span.bell-icon i {
   }*/
 
     .questions-field strong.text-danger {
-      border: 2px solid #902525;
+      border: 2px solid #FAC7C7;
       border-radius: 4px;
     }
 

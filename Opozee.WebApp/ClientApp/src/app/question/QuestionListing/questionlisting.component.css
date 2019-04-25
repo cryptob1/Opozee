@@ -33,11 +33,29 @@
 
 .carousel-outer {
   padding: 0px;
+ 
 }
 
-  .carousel-outer .cover_questions {
-    padding: 30px 80px 60px;
+
+  .carousel-outer .cover_questions strong {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0px 0px 5px 0px;
+    float: left;
+    width: 100%;
   }
+
+
+.question_box {
+padding: 0px;
+
+}
+
+.carousel-outer .cover_questions {
+  padding: 30px 80px 60px;
+  /*background-image: linear-gradient(90deg, rgb(108, 214, 192), rgb(108, 214, 192));*/
+  /*background-color: rgb(108, 214, 192);*/
+}
 
 .carousel-indicators .active {
   background: #333;
@@ -50,6 +68,7 @@
 .carousel-control {
   width: 50px;
   background: transparent !important;
+ 
 }
 
   .carousel-control i {
@@ -69,6 +88,12 @@
 
 
 @media screen and (max-width: 480px) {
+
+
+  .carousel-outer .cover_questions {
+    padding: 30px 10px 60px;
+    /*background-image: linear-gradient(90deg, rgb(108, 214, 192), rgb(108, 214, 192));*/
+  }
 
   .cover_questions .user_right .date i {
     font-size: 9px;
