@@ -15,14 +15,14 @@ namespace Opozee.Models.Models
     public partial class Notification
     {
         public int Id { get; set; }
-        public int CommentedUserId { get; set; }
-        public int CommentId { get; set; }
+        public Nullable<int> CommentedUserId { get; set; }
+        public Nullable<int> CommentId { get; set; }
+        public Nullable<int> questId { get; set; }
         public Nullable<bool> Like { get; set; }
         public Nullable<bool> Dislike { get; set; }
         public Nullable<bool> Comment { get; set; }
         public Nullable<bool> SendNotification { get; set; }
         public Nullable<System.DateTime> CreationDate { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
-        public Nullable<int> questId { get; set; }
     }
 }

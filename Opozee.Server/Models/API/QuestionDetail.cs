@@ -42,7 +42,7 @@ namespace Opozee.Models.API
         public DateTime? CreationDate { get; set; }
         public Comments MostYesLiked { get; set; }
         public Comments MostNoLiked { get; set; }
-
+        public bool? IsSlider { get; set; }
     }
     public class BookMarkQuestionDetail
     {
@@ -63,6 +63,7 @@ namespace Opozee.Models.API
         public int BookmarkId { get; set; }
         public bool IsUserPosted { get; set; }
         public IQueryable TaggedUsers { get; set; }
+        public bool? IsSlider { get; set; }
     }
     
     public class Comments

@@ -138,6 +138,15 @@ export class UserService {
   }
 
 
+  getAllSliderQuestionlist(questionGetModel) {
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllSliderPostsWeb', questionGetModel, {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
+
+  }
+
 
   getquestionDetails(Id: number, UserId: number) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllOpinionWeb?questId=' + Id + '&UserId=' + UserId, {

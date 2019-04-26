@@ -100,6 +100,7 @@ export class PostQuestionDetail {
   UserImage: string;
   YesCount: number;
   NoCount: number;
+  IsSlider: boolean;
   //MostNoLiked: Comments;
   //MostYesLiked: Comments;
   comments: Comments[] = [];

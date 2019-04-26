@@ -75,6 +75,7 @@ namespace Opozee.Models.API
         public int TotalRecordcount { get; set; }
         public int CountTopHastag { get; set; }
         public List<Comments> Comments { get; set; }
+        public bool? IsSlider { get; set; }
 
     }
 

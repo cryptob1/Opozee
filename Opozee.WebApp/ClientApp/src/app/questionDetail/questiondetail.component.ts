@@ -139,7 +139,7 @@ export class Questiondetail implements OnInit {
 
 
       this.shareUrl = "https://opozee.com/qid/" + (this.PostQuestionDetailModel.postQuestionDetail.Id);
-      this.sharetext = this.PostQuestionDetailModel.postQuestionDetail.Question + " - See opposing views on Opozee.com!";
+      this.sharetext = this.PostQuestionDetailModel.postQuestionDetail.Question + " - See opposing views at ";
 
     });
   }

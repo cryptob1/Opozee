@@ -20,6 +20,7 @@ namespace Opozee.Models.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public Nullable<bool> IsAdmin { get; set; }
         public string SocialID { get; set; }
         public string SocialType { get; set; }
         public string ImageURL { get; set; }
@@ -28,6 +29,5 @@ namespace Opozee.Models.Models
         public string RecordStatus { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public System.DateTime CreatedDate { get; set; }
-        public Nullable<bool> IsAdmin { get; set; }
     }
 }

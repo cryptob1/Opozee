@@ -11,12 +11,13 @@
               <li data-target="#question-slider" data-slide-to="0" class="active"></li>
               <li data-target="#question-slider" data-slide-to="1"></li>
               <li data-target="#question-slider" data-slide-to="2"></li>
+              <li data-target="#question-slider" data-slide-to="3"></li>
             </ol>
 
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
               <ng-container *ngFor="let slider of sliderData;let i = index">
-                <div class="item" [ngClass]="{'active': i == 0 }" *ngIf="i<3">
+                <div class="item" [ngClass]="{'active': i == 0 }" *ngIf="i<4">
                   <div class="cover_questions">
                     <div class="question_box">
 

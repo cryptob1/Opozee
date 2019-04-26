@@ -50,6 +50,9 @@ var Comments = /** @class */ (function () {
 exports.Comments = Comments;
 var PostQuestionDetail = /** @class */ (function () {
     function PostQuestionDetail() {
+        //MostNoLiked: Comments;
+        //MostYesLiked: Comments;
+        this.comments = [];
         //this.IsBookmark = false;
     }
     return PostQuestionDetail;

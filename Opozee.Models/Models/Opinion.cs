@@ -18,10 +18,10 @@ namespace Opozee.Models.Models
         public int QuestId { get; set; }
         public string Comment { get; set; }
         public int CommentedUserId { get; set; }
+        public Nullable<bool> IsAgree { get; set; }
         public Nullable<int> Likes { get; set; }
         public Nullable<int> Dislikes { get; set; }
         public Nullable<System.DateTime> CreationDate { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
-        public Nullable<bool> IsAgree { get; set; }
     }
 }

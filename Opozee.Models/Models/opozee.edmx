@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="oposeeDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="oposeeDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="BookMark">
           <Key>
             <PropertyRef Name="Id" />
@@ -21,8 +21,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CommentedUserId" Type="int" Nullable="false" />
-          <Property Name="CommentId" Type="int" Nullable="false" />
+          <Property Name="CommentedUserId" Type="int" />
+          <Property Name="CommentId" Type="int" />
           <Property Name="questId" Type="int" />
           <Property Name="Like" Type="bit" />
           <Property Name="Dislike" Type="bit" />
@@ -57,6 +57,7 @@
           <Property Name="HashTags" Type="varchar" MaxLength="1000" />
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="IsSlider" Type="bit" />
         </EntityType>
         <EntityType Name="Token">
           <Key>
@@ -87,7 +88,6 @@
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
         </EntityType>
-        <Function Name="SP_GetTopLikes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="oposeeDbModelStoreContainer">
           <EntitySet Name="BookMark" EntityType="Self.BookMark" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
@@ -96,11 +96,34 @@
           <EntitySet Name="Token" EntityType="Self.Token" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="oposeeDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="OpozeeDbEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="SP_GetTopLikes" ReturnType="Collection(oposeeDbModel.SP_GetTopLikes_Result)" />
+          <EntitySet Name="BookMarks" EntityType="oposeeDbModel.BookMark" />
+          <EntitySet Name="Notifications" EntityType="oposeeDbModel.Notification" />
+          <EntitySet Name="Opinions" EntityType="oposeeDbModel.Opinion" />
+          <EntitySet Name="Questions" EntityType="oposeeDbModel.Question" />
+          <EntitySet Name="Tokens" EntityType="oposeeDbModel.Token" />
+          <EntitySet Name="Users" EntityType="oposeeDbModel.User" />
+          </EntityContainer>
+        <ComplexType Name="SP_GetTopLikes_Result">
+          <Property Type="Int32" Name="questid" Nullable="false" />
+          <Property Type="Int32" Name="countquest" Nullable="true" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="PostQuestion" Nullable="true" />
+          <Property Type="Int32" Name="OwnerUserID" Nullable="false" />
+          <Property Type="Boolean" Name="IsDeleted" Nullable="true" />
+          <Property Type="String" Name="TaggedUser" Nullable="true" />
+          <Property Type="String" Name="HashTags" Nullable="true" MaxLength="1000" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="ImageURL" Nullable="true" MaxLength="300" />
+        </ComplexType>
         <EntityType Name="BookMark">
           <Key>
             <PropertyRef Name="Id" />
@@ -117,8 +140,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CommentedUserId" Type="Int32" Nullable="false" />
-          <Property Name="CommentId" Type="Int32" Nullable="false" />
+          <Property Name="CommentedUserId" Type="Int32" />
+          <Property Name="CommentId" Type="Int32" />
           <Property Name="questId" Type="Int32" />
           <Property Name="Like" Type="Boolean" />
           <Property Name="Dislike" Type="Boolean" />
@@ -133,7 +156,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="QuestId" Type="Int32" Nullable="false" />
-          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CommentedUserId" Type="Int32" Nullable="false" />
           <Property Name="IsAgree" Type="Boolean" />
           <Property Name="Likes" Type="Int32" />
@@ -153,6 +176,7 @@
           <Property Name="HashTags" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="CreationDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="IsSlider" Type="Boolean" />
         </EntityType>
         <EntityType Name="Token">
           <Key>
@@ -168,7 +192,7 @@
             <PropertyRef Name="UserID" />
           </Key>
           <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="FirstName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
@@ -183,146 +207,103 @@
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <EntityContainer Name="OpozeeDbEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="BookMarks" EntityType="Self.BookMark" />
-          <EntitySet Name="Notifications" EntityType="Self.Notification" />
-          <EntitySet Name="Opinions" EntityType="Self.Opinion" />
-          <EntitySet Name="Questions" EntityType="Self.Question" />
-          <EntitySet Name="Tokens" EntityType="Self.Token" />
-          <EntitySet Name="Users" EntityType="Self.User" />
-          <FunctionImport Name="SP_GetTopLikes" ReturnType="Collection(oposeeDbModel.SP_GetTopLikes_Result)" />
-        </EntityContainer>
-        <ComplexType Name="SP_GetTopLikes_Result">
-          <Property Type="Int32" Name="questid" Nullable="false" />
-          <Property Type="Int32" Name="countquest" Nullable="true" />
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="PostQuestion" Nullable="true" />
-          <Property Type="Int32" Name="OwnerUserID" Nullable="false" />
-          <Property Type="Boolean" Name="IsDeleted" Nullable="true" />
-          <Property Type="String" Name="TaggedUser" Nullable="true" />
-          <Property Type="String" Name="HashTags" Nullable="true" MaxLength="1000" />
-          <Property Type="DateTime" Name="CreationDate" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="ModifiedDate" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="UserID" Nullable="false" />
-          <Property Type="String" Name="UserName" Nullable="false" MaxLength="100" />
-          <Property Type="String" Name="ImageURL" Nullable="true" MaxLength="300" />
-        </ComplexType>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="oposeeDbModelStoreContainer" CdmEntityContainer="OpozeeDbEntities">
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="oposeeDbModelStoreContainer" CdmEntityContainer="OpozeeDbEntities">
           <EntitySetMapping Name="BookMarks">
             <EntityTypeMapping TypeName="oposeeDbModel.BookMark">
               <MappingFragment StoreEntitySet="BookMark">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
-                <ScalarProperty Name="IsBookmark" ColumnName="IsBookmark" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="IsBookmark" ColumnName="IsBookmark" />
+                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Notifications">
             <EntityTypeMapping TypeName="oposeeDbModel.Notification">
               <MappingFragment StoreEntitySet="Notification">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="CommentedUserId" ColumnName="CommentedUserId" />
-                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
-                <ScalarProperty Name="questId" ColumnName="questId" />
-                <ScalarProperty Name="Like" ColumnName="Like" />
-                <ScalarProperty Name="Dislike" ColumnName="Dislike" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="SendNotification" ColumnName="SendNotification" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="SendNotification" ColumnName="SendNotification" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Dislike" ColumnName="Dislike" />
+                <ScalarProperty Name="Like" ColumnName="Like" />
+                <ScalarProperty Name="questId" ColumnName="questId" />
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="CommentedUserId" ColumnName="CommentedUserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Opinions">
             <EntityTypeMapping TypeName="oposeeDbModel.Opinion">
               <MappingFragment StoreEntitySet="Opinion">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="QuestId" ColumnName="QuestId" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="CommentedUserId" ColumnName="CommentedUserId" />
-                <ScalarProperty Name="IsAgree" ColumnName="IsAgree" />
-                <ScalarProperty Name="Likes" ColumnName="Likes" />
-                <ScalarProperty Name="Dislikes" ColumnName="Dislikes" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="Dislikes" ColumnName="Dislikes" />
+                <ScalarProperty Name="Likes" ColumnName="Likes" />
+                <ScalarProperty Name="IsAgree" ColumnName="IsAgree" />
+                <ScalarProperty Name="CommentedUserId" ColumnName="CommentedUserId" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="QuestId" ColumnName="QuestId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Questions">
             <EntityTypeMapping TypeName="oposeeDbModel.Question">
               <MappingFragment StoreEntitySet="Question">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="PostQuestion" ColumnName="PostQuestion" />
-                <ScalarProperty Name="OwnerUserID" ColumnName="OwnerUserID" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="TaggedUser" ColumnName="TaggedUser" />
-                <ScalarProperty Name="HashTags" ColumnName="HashTags" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="IsSlider" ColumnName="IsSlider" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="HashTags" ColumnName="HashTags" />
+                <ScalarProperty Name="TaggedUser" ColumnName="TaggedUser" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="OwnerUserID" ColumnName="OwnerUserID" />
+                <ScalarProperty Name="PostQuestion" ColumnName="PostQuestion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Tokens">
             <EntityTypeMapping TypeName="oposeeDbModel.Token">
               <MappingFragment StoreEntitySet="Token">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="TotalToken" ColumnName="TotalToken" />
-                <ScalarProperty Name="BalanceToken" ColumnName="BalanceToken" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="BalanceToken" ColumnName="BalanceToken" />
+                <ScalarProperty Name="TotalToken" ColumnName="TotalToken" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="oposeeDbModel.User">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
-                <ScalarProperty Name="SocialID" ColumnName="SocialID" />
-                <ScalarProperty Name="SocialType" ColumnName="SocialType" />
-                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
-                <ScalarProperty Name="DeviceType" ColumnName="DeviceType" />
-                <ScalarProperty Name="DeviceToken" ColumnName="DeviceToken" />
-                <ScalarProperty Name="RecordStatus" ColumnName="RecordStatus" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="RecordStatus" ColumnName="RecordStatus" />
+                <ScalarProperty Name="DeviceToken" ColumnName="DeviceToken" />
+                <ScalarProperty Name="DeviceType" ColumnName="DeviceType" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+                <ScalarProperty Name="SocialType" ColumnName="SocialType" />
+                <ScalarProperty Name="SocialID" ColumnName="SocialID" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SP_GetTopLikes" FunctionName="oposeeDbModel.Store.SP_GetTopLikes">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="oposeeDbModel.SP_GetTopLikes_Result">
-                <ScalarProperty Name="questid" ColumnName="questid" />
-                <ScalarProperty Name="countquest" ColumnName="countquest" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="PostQuestion" ColumnName="PostQuestion" />
-                <ScalarProperty Name="OwnerUserID" ColumnName="OwnerUserID" />
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="TaggedUser" ColumnName="TaggedUser" />
-                <ScalarProperty Name="HashTags" ColumnName="HashTags" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -334,9 +315,9 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>
