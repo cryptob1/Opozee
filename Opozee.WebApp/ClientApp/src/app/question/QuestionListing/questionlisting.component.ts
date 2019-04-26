@@ -39,7 +39,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   pager: any = {};
   // paged items
   pagedItems: any[];
-  sliderData: any[] = [];
+  sliderData: PostQuestionDetail[] = [];
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router,
     private location: Location) {
 
@@ -112,7 +112,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       if (data) {
         if (data.length > 0) {
 
-
+          this.PercentageCalc(data);
           //----Slider
           this.sliderData = [];
 
@@ -126,7 +126,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
           })
 
 
-
+         
         } else {
 
         }

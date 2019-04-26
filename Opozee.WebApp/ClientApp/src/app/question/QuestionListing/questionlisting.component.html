@@ -30,6 +30,10 @@
                         </ng-container>
 
                       </strong>
+
+                      <span class="percentage_yes" *ngIf="slider.YesCount >0 || slider.NoCount>0">Yes : {{slider.percentage | number:'1.0-0'}}  %</span>
+
+
                       <div class="liked_ones clearfix yes_feedback" *ngIf="slider?.MostYesLiked">
                         <div ExternalLink>
                           <b>@{{slider?.MostYesLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostYesLiked.Comment | emojis"></small>
@@ -41,8 +45,8 @@
                           <b>@{{slider?.MostNoLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostNoLiked.Comment | emojis"></small>
                         </div>
                       </div>
-                      
-                        <!--<tweet url="{{shareUrl}}{{slider?.Id}}" text="{{slider?.Question}}{{sharetext}}"></tweet>-->
+
+                      <!--<tweet url="{{shareUrl}}{{slider?.Id}}" text="{{slider?.Question}}{{sharetext}}"></tweet>-->
                     </div>
                   </div>
                 </div>
