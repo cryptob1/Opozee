@@ -57,9 +57,8 @@ export class ProfileComponent implements OnInit {
   getUserProfile() {
     //var Id = this.localStorageUser.Id;
     this.userService.getUserProfileWeb(this.localStorageUser.Id).pipe(first()).subscribe(data => {
-      ;
       this.userProfiledata = data
-      console.log(data);
+      //console.log(data);
     });
   }
   
@@ -111,8 +110,7 @@ export class ProfileComponent implements OnInit {
     this.pager = this.getPager(TotalRecords, page);
   }
 
-  setPage(page, TotalRecords) {
-    
+  setPage(page, TotalRecords) {    
 
     this.pager = this.getPager(this.PagingModel.TotalRecords, page);
 

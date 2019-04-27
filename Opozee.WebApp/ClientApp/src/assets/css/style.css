@@ -508,9 +508,9 @@ span.bell-icon {
     right: -10px;
   }
 
-.dropdown a {
-  width: 40px;
-  height: 40px;
+.dropdown > a {
+  width: 33px;
+  height: 33px;
   float: left;
   margin-top: 7px;
   background-color: #fff;

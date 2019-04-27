@@ -117,26 +117,17 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
           this.sliderData = [];
 
           data.map((x) => {
-            console.log(x.Question);
-            console.log(x.IsSlider);
+            //console.log(x.Question);
+            //console.log(x.IsSlider);
             if (x.IsSlider) {
               this.sliderData.push(x);
             }
-
           })
-
-
-         
-        } else {
-
         }
-
       }
-    }, error => {
-
-
-    });
-
+    },
+      error => {
+      });
   }
 
   private getAllQuestionlist(questionGetModel) {
@@ -327,7 +318,4 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       pages: pages
     };
   }
-
-
-
 }
