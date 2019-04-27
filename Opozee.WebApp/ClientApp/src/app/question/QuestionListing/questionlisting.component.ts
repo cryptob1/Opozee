@@ -25,23 +25,22 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   qid = -1;
   //questionListing: QuestionListing[] = [];
   PostQuestionDetailList: PostQuestionDetail[] = [];
-
-
   isRecordLoaded: boolean = false;
   percentage: number = 0;
   questionGetModel = { 'UserId': 0, 'isHashTag': false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, 'qid': 0 }
 
   private allItems: any[];
-
+  showSlider: boolean = false;
   shareUrl: any;
   sharetext: any;
-  // pager object
   pager: any = {};
-  // paged items
   pagedItems: any[];
   sliderData: PostQuestionDetail[] = [];
+
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router,
     private location: Location) {
+    
+    this.showSlider = this.location.path() ? false : true;
 
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
     this.hashTag = false;
