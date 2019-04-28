@@ -2348,8 +2348,8 @@ namespace opozee.Controllers.API
                     db.SaveChanges();
 
                     int userID = entity.UserID;
-                    token.TotalToken = 100;
-                    token.BalanceToken = 100;
+                    token.TotalToken = 500;
+                    token.BalanceToken = 500;
                     token.UserId = userID;
                     db.Tokens.Add(token);
                     db.SaveChanges();
