@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit {
   }
 
 
-  popup(event) {
+  popup() {
  
     this.showPopup = true;
     window.scroll(0, 0);
