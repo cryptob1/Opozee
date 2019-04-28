@@ -129,7 +129,6 @@ export class PostQuestionComponent implements OnInit {
     this.userservice.postQuestionwebNew(this.questionPostForm.value)
       .pipe(first())
       .subscribe(data => {
-        console.log('abc',data);
         if (data) {
           this.openConfirmationDialog();
           this.loading = false;
@@ -226,7 +225,7 @@ export class PostQuestionComponent implements OnInit {
       debugger;
       this.dropdownList = data;
 
-      console.log(data);
+      //console.log(data);
     });
   }
 

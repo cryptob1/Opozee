@@ -19,11 +19,12 @@ a.navbar-brand.logo {
   
 }
 .dropdown a img {
-  width: 32px !important;
-  height: 32px !important;
+  width: 28px !important;
+  height: 28px !important;
   padding-top: 5px;
-  float:  unset;
+  float: unset;
   border-radius: 100% !important;
+  cursor: pointer;
 }
 
 .inner_pages header {
@@ -31,9 +32,11 @@ a.navbar-brand.logo {
 }
 header .dropdown a {
   padding: 0px !important;
-  margin-top: 0px;
+  /*margin-top: 0px;
   width:95%;
-  height :auto;
+  height :auto;*/
+  position: relative;
+  cursor:pointer;
 }
 
 
@@ -217,16 +220,16 @@ header .container-fluid {
     width: 100%;
   }
 
-  .dropdown a {
+  /*.dropdown a {
     border-radius: 2% !important;
-  }
+  }*/
 }
 
 @media screen and (max-width: 480px) {
 
-  .dropdown a {
+  /*.dropdown a {
     border-radius: 2% !important;
-  }
+  }*/
 
   .banner_search-form {
     padding-top: 3px;
@@ -238,5 +241,20 @@ header .container-fluid {
  
 }
 .header-ddl .dropdown-menu {
-  margin: 28px 8px 0 0 !important;
+  margin: 0px 0px 0 10px !important;
+  float: left;
+  width: 100%;
+  background: #fff;
+}
+
+  .header-ddl .dropdown-menu a {
+    width: 100%;
+    float: left;
+    padding: 6px 15px !important;
+  }
+
+@media (min-width:768px) {
+  .header-ddl .dropdown-menu {
+    margin-top: 40px !important;
+  }
 }

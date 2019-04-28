@@ -51,7 +51,7 @@
             <li>
               <div class="dropdown header-ddl" *ngIf="loginData.Id > 0" style="cursor:pointer">
                 <a class="profile_head btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                  <img src="{{loginData?.ImageURL}}" onerror="this.onerror=null;this.src='../../assets/images/profile.png';">
+                  <img class="cls-profile" src="{{loginData?.ImageURL}}" onerror="this.onerror=null;this.src='../../assets/images/profile.png';">
                   <span class="badge bg-red" >{{loginData?.BalanceToken}}</span>
                 </a>
                 <div class="dropdown-menu">
@@ -71,9 +71,3 @@
 </div>
 <reset-password #resetPassword ></reset-password>
 
-<style>
-
-  .header-ddl .dropdown-menu {
-    margin: 28px 8px 0 0 !important;
-  }
-</style>

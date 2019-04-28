@@ -41,7 +41,6 @@ export class HeaderComponent implements OnInit {
   constructor(private dataSharingService: DataSharingService, private route: ActivatedRoute, private router: Router, ) {
 
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
-
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -50,7 +49,9 @@ export class HeaderComponent implements OnInit {
       if (!target.className.endsWith("nav navbar-nav navbar-right")
         && !target.className.endsWith("ng-untouched ng-pristine ng-valid")
         && !target.className.endsWith("ng-valid ng-touched ng-dirty")        
-        && !target.className.endsWith("ng-pristine ng-valid ng-touched")) {
+        && !target.className.endsWith("ng-pristine ng-valid ng-touched")
+        && !target.className.endsWith("badge bg-red")
+        && !target.className.endsWith("cls-profile")) {
         this.navbar();
       }
     } catch (err) {  }
@@ -88,6 +89,7 @@ export class HeaderComponent implements OnInit {
 
   navbar() {
     document.getElementById('bs-example-navbar-collapse-1').classList.remove('show');
+    document.getElementById('bs-example-navbar-collapse-1').classList.remove('in');
   }
 
   //resetPassword() {

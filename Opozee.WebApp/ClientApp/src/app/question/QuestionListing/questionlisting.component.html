@@ -1,18 +1,18 @@
 
-  <div class="inner_pages">
-    <section class="section_second">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="carousel-outer" *ngIf="sliderData?.length>0 && !search && !hashTag && qid==-1">
-            <div id="question-slider" class="carousel slide" data-ride="false" data-interval="50000">
-              <!-- Indicators -->
-              Popular Questions:
-              <ol class="carousel-indicators">
-                <li data-target="#question-slider" data-slide-to="0" class="active"></li>
-                <li data-target="#question-slider" data-slide-to="1"></li>
-                <li data-target="#question-slider" data-slide-to="2"></li>
-                <li data-target="#question-slider" data-slide-to="3"></li>
-              </ol>
+<div class="inner_pages" >
+  <section class="section_second">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="carousel-outer" *ngIf="sliderData?.length>0 && !search && !hashTag && qid==-1">
+          <div id="question-slider" class="carousel slide" data-ride="false" data-interval="50000">
+            <!-- Indicators -->
+            Popular Questions:
+            <ol class="carousel-indicators">
+              <li data-target="#question-slider" data-slide-to="0" class="active"></li>
+              <li data-target="#question-slider" data-slide-to="1"></li>
+              <li data-target="#question-slider" data-slide-to="2"></li>
+              <li data-target="#question-slider" data-slide-to="3"></li>
+            </ol>
 
               <!-- Wrapper for slides -->
               <div class="carousel-inner">

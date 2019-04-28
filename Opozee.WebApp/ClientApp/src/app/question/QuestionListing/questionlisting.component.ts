@@ -32,16 +32,17 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   questionGetModel = { 'UserId': 0, 'isHashTag': false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, 'qid': 0 }
 
   private allItems: any[];
-
+  showSlider: boolean = false;
   shareUrl: any;
   sharetext: any;
-  // pager object
   pager: any = {};
-  // paged items
   pagedItems: any[];
   sliderData: PostQuestionDetail[] = [];
+
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router,
     private location: Location) {
+    
+    this.showSlider = this.location.path() ? false : true;
 
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
     this.hashTag = false;
@@ -118,26 +119,17 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
           this.sliderData = [];
 
           data.map((x) => {
-            console.log(x.Question);
-            console.log(x.IsSlider);
+            //console.log(x.Question);
+            //console.log(x.IsSlider);
             if (x.IsSlider) {
               this.sliderData.push(x);
             }
-
           })
-
-
-         
-        } else {
-
         }
-
       }
-    }, error => {
-
-
-    });
-
+    },
+      error => {
+      });
   }
 
   private getAllQuestionlist(questionGetModel) {
@@ -337,7 +329,4 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       pages: pages
     };
   }
-
-
-
 }
