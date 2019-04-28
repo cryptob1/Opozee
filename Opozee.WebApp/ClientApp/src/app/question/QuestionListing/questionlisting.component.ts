@@ -152,6 +152,11 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
           this.PostQuestionDetailList = data;
           this.questionGetModel.TotalRecords = data[0].TotalRecordcount
 
+          if (this.qid != -1) {
+            this.PostQuestionDetailList[0].comments = data[0]['Comments'];
+          }
+
+         
           ////----Slider
           //this.sliderData = [];
 
