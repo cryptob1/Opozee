@@ -22,7 +22,7 @@
                       <div class="question_box">
 
                         <strong>
-                          <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', slider?.Id]">
+                          <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', slider?.Id] :['/qid/', slider?.Id]">
                             <span class="message-container" [innerHTML]="'Q. ' + slider?.Question | emojis"></span>
                           </a>
                           <ng-container *ngFor="let tag of slider?.HashTags?.split(',')">
@@ -79,7 +79,7 @@
 
             <li *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0" style=" box-shadow:none">
 
-              <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="['/questiondetail/', temp.Id]">
+              <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]" >
                 <div class="question_box">
                   <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
                     <span class="icon"><img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
@@ -98,7 +98,7 @@
                   </div>
 
                   <strong>
-                    <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp.Id]">
+                    <a href="javascript:void(0)" style="font-size: 18px;"  [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
                       <div class="message-container" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
                     </a>
                   </strong>

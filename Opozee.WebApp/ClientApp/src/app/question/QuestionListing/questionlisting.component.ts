@@ -46,6 +46,17 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
     this.hashTag = false;
+
+
+    if (JSON.parse(localStorage.getItem('popupShown')) || this.localStorageUser != null) {
+      this.showPopup = false;
+    }
+    else {
+
+      localStorage.setItem('popupShown', 'true')
+    }
+
+
     if (this.route.snapshot.params["search"]) {
       this.search = this.route.snapshot.params["search"];
     }
@@ -56,7 +67,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
     else if (this.route.snapshot.params["qid"]) {
       this.qid = this.route.snapshot.params["qid"];
-      this.showPopup = true;
+ 
     }
 
     this.paramsSub = route.params.subscribe(params => {
