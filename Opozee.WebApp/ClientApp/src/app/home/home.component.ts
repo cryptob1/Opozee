@@ -45,9 +45,20 @@ export class HomeComponent implements OnInit {
     
     this.showPopup = false;
 
+ 
+
   }
 
-   
+
+  popup(event) {
+ 
+    this.showPopup = true;
+    window.scroll(0, 0);
+
+    //document.getElementById('popup-container').classList.add('show');
+ 
+  }
+
 
   deleteUser(id: number) {
     //this.userService.delete(id).pipe(first()).subscribe(() => { 
