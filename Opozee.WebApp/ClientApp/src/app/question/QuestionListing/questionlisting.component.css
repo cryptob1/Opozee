@@ -183,6 +183,25 @@ padding: 0px;
 }
 
 
+.cover_hello {
+  width: 90%;
+  float: left;
+  position: fixed;
+  left: 5%;
+  bottom: 35px;
+}
+
+  .cover_hello i {
+    float: right;
+    padding: 15px 16px;
+    background-color: #1587dd;
+    color: #fff;
+    border-radius: 100%;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+
 /*media query*/
 @media(max-width: 767px) {
 

@@ -64,22 +64,31 @@
           </div>
         </div>
       </div>
-      <div class="container">
-        <div class="cover_heading">
-        </div>
+    <div class="container">
+      <div class="cover_heading">
+      </div>
 
-        <div *ngIf="!isRecordLoaded" class="scroller_cover" style="margin:40px 0px 40px 0px">
-          <img src="../../../assets/images/reordloaderImages.gif" />
-        </div>
 
-        <div class="container" style="margin:60px 0px 40px 0px" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded">No record found</div>
 
-        <div class="col-sm-12">
+      <div *ngIf="!isRecordLoaded" class="scroller_cover" style="margin:40px 0px 40px 0px">
+        <img src="../../../assets/images/reordloaderImages.gif" />
+      </div>
+
+      <div class="container" style="margin:60px 0px 40px 0px" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded">No record found</div>
+
+      <div class="col-sm-12">
+
+        <div class="cover_hello"  >
+          <a [routerLink]="['/postquestion',0]" href="javascript:void(0)">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+          </a>
+          </div>
+
           <ul>
 
             <li *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0" style=" box-shadow:none">
 
-              <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]" >
+              <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
                 <div class="question_box">
                   <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
                     <span class="icon"><img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
@@ -98,7 +107,7 @@
                   </div>
 
                   <strong>
-                    <a href="javascript:void(0)" style="font-size: 18px;"  [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
+                    <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
                       <div class="message-container" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
                     </a>
                   </strong>
@@ -190,7 +199,9 @@
 
           </ul>
 
+
         </div>
+
 
 
         <div class="navigation_cover" *ngIf="PostQuestionDetailList?.length>0">
