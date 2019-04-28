@@ -559,7 +559,7 @@ namespace opozee.Controllers.API
             {
 
                 int Total = Model.TotalRecords;
-                int pageSize = 10; // set your page size, which is number of records per page
+                int pageSize = 500; // set your page size, which is number of records per page
                 int page = Model.PageNumber;
                 int skip = pageSize * (page - 1);
 
