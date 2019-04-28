@@ -1,224 +1,256 @@
 
-<div class="inner_pages" >
-  <section class="section_second">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="carousel-outer" *ngIf="sliderData?.length>0 && !search && !hashTag && qid==-1">
-          <div id="question-slider" class="carousel slide" data-ride="false" data-interval="50000">
-            <!-- Indicators -->
-            Popular Questions:
-            <ol class="carousel-indicators">
-              <li data-target="#question-slider" data-slide-to="0" class="active"></li>
-              <li data-target="#question-slider" data-slide-to="1"></li>
-              <li data-target="#question-slider" data-slide-to="2"></li>
-              <li data-target="#question-slider" data-slide-to="3"></li>
-            </ol>
+  <div class="inner_pages">
+    <section class="section_second">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="carousel-outer" *ngIf="sliderData?.length>0 && !search && !hashTag && qid==-1">
+            <div id="question-slider" class="carousel slide" data-ride="false" data-interval="50000">
+              <!-- Indicators -->
+              Popular Questions:
+              <ol class="carousel-indicators">
+                <li data-target="#question-slider" data-slide-to="0" class="active"></li>
+                <li data-target="#question-slider" data-slide-to="1"></li>
+                <li data-target="#question-slider" data-slide-to="2"></li>
+                <li data-target="#question-slider" data-slide-to="3"></li>
+              </ol>
 
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner">
-              <ng-container *ngFor="let slider of sliderData;let i = index">
-                <div class="item" [ngClass]="{'active': i == 0 }" *ngIf="i<4">
-                  <div class="cover_questions">
-                    <div class="question_box">
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner">
+                <ng-container *ngFor="let slider of sliderData;let i = index">
+                  <div class="item" [ngClass]="{'active': i == 0 }" *ngIf="i<4">
+                    <div class="cover_questions">
+                      <div class="question_box">
 
-                      <strong>
-                        <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', slider?.Id]">
-                          <span class="message-container" [innerHTML]="'Q. ' + slider?.Question | emojis"></span>
-                        </a>
-                        <ng-container *ngFor="let tag of slider?.HashTags?.split(',')">
-                          <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></small>
-                        </ng-container>
+                        <strong>
+                          <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', slider?.Id]">
+                            <span class="message-container" [innerHTML]="'Q. ' + slider?.Question | emojis"></span>
+                          </a>
+                          <ng-container *ngFor="let tag of slider?.HashTags?.split(',')">
+                            <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></small>
+                          </ng-container>
 
-                      </strong>
+                        </strong>
 
-                      <span class="percentage_yes" *ngIf="slider.YesCount >0 || slider.NoCount>0">Yes : {{slider.percentage | number:'1.0-0'}}  %</span>
+                        <span class="percentage_yes" *ngIf="slider.YesCount >0 || slider.NoCount>0">Yes : {{slider.percentage | number:'1.0-0'}}  %</span>
 
 
-                      <div class="liked_ones clearfix yes_feedback" *ngIf="slider?.MostYesLiked">
-                        <div ExternalLink>
-                          <b>@{{slider?.MostYesLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostYesLiked.Comment | emojis"></small>
+                        <div class="liked_ones clearfix yes_feedback" *ngIf="slider?.MostYesLiked">
+                          <div ExternalLink>
+                            <b>@{{slider?.MostYesLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostYesLiked.Comment | emojis"></small>
+                          </div>
                         </div>
-                      </div>
 
-                      <div class="liked_ones clearfix no_feedback" *ngIf="slider?.MostNoLiked">
-                        <div ExternalLink>
-                          <b>@{{slider?.MostNoLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostNoLiked.Comment | emojis"></small>
+                        <div class="liked_ones clearfix no_feedback" *ngIf="slider?.MostNoLiked">
+                          <div ExternalLink>
+                            <b>@{{slider?.MostNoLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostNoLiked.Comment | emojis"></small>
+                          </div>
                         </div>
-                      </div>
 
-                      <!--<tweet url="{{shareUrl}}{{slider?.Id}}" text="{{slider?.Question}}{{sharetext}}"></tweet>-->
+                        <!--<tweet url="{{shareUrl}}{{slider?.Id}}" text="{{slider?.Question}}{{sharetext}}"></tweet>-->
+                      </div>
                     </div>
                   </div>
-                </div>
-              </ng-container>
-            </div>
+                </ng-container>
+              </div>
 
-            <!-- Left and right controls -->
-            <a class="left carousel-control" href="#question-slider" data-slide="prev">
-              <i class="fas fa-arrow-left"></i>
-            </a>
-            <a class="right carousel-control" href="#question-slider" data-slide="next">
-              <i class="fas fa-arrow-right"></i>
-            </a>
+              <!-- Left and right controls -->
+              <a class="left carousel-control" href="#question-slider" data-slide="prev">
+                <i class="fas fa-arrow-left"></i>
+              </a>
+              <a class="right carousel-control" href="#question-slider" data-slide="next">
+                <i class="fas fa-arrow-right"></i>
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="container">
-      <div class="cover_heading">
-      </div>
+      <div class="container">
+        <div class="cover_heading">
+        </div>
 
-      <div *ngIf="!isRecordLoaded" class="scroller_cover" style="margin:40px 0px 40px 0px">
-        <img src="../../../assets/images/reordloaderImages.gif" />
-      </div>
+        <div *ngIf="!isRecordLoaded" class="scroller_cover" style="margin:40px 0px 40px 0px">
+          <img src="../../../assets/images/reordloaderImages.gif" />
+        </div>
 
-      <div class="container" style="margin:60px 0px 40px 0px" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded">No record found</div>
+        <div class="container" style="margin:60px 0px 40px 0px" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded">No record found</div>
 
-      <div class="col-sm-12">
-        <ul>
+        <div class="col-sm-12">
+          <ul>
 
-          <li *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0" style=" box-shadow:none">
+            <li *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0" style=" box-shadow:none">
 
-            <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="['/questiondetail/', temp.Id]">
-              <div class="question_box">
-                <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
-                  <span class="icon"><img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
-                  <span class="username">
-                    @{{temp.OwnerUserName}}
-                  </span>
-                </div>
-                <div class="user_right">
-                  <div class="date">
-                    <i>{{temp.CreationDate | timeAgo}}</i>
+              <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="['/questiondetail/', temp.Id]">
+                <div class="question_box">
+                  <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
+                    <span class="icon"><img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
+                    <span class="username">
+                      @{{temp.OwnerUserName}}
+                    </span>
+                  </div>
+                  <div class="user_right">
+                    <div class="date">
+                      <i>{{temp.CreationDate | timeAgo}}</i>
+                      <br />
+                      <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
+                    </div>
+
                     <br />
-                    <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
                   </div>
 
-                  <br />
-                </div>
-
-                <strong>
-                  <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp.Id]">
-                    <div class="message-container" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
-                  </a>
-                </strong>
+                  <strong>
+                    <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp.Id]">
+                      <div class="message-container" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
+                    </a>
+                  </strong>
 
 
 
-                <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
-                  <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></div>
+                  <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
+                    <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></div>
 
-                </ng-container>
-                <div class="cover_analysis">
-                  <div class="left">
-                    <span> </span>
-                    <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
-                      <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
-                      <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
-                      <!--<span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>-->
-                      <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
-                      <div *ngIf="temp.YesCount == 0 && temp.NoCount ==0">
-                        <!--<span class="percentage">NO : 0 %</span>-->
-                        <!--<span class="percentage_yes"> - </span>-->
-                        <span class="empty_space"></span>
+                  </ng-container>
+                  <div class="cover_analysis">
+                    <div class="left">
+                      <span> </span>
+                      <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
+                        <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
+                        <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
+                        <!--<span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>-->
+                        <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
+                        <div *ngIf="temp.YesCount == 0 && temp.NoCount ==0">
+                          <!--<span class="percentage">NO : 0 %</span>-->
+                          <!--<span class="percentage_yes"> - </span>-->
+                          <span class="empty_space"></span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
+                  <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
 
-                  <div ExternalLink>
-                    <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment | emojis"></p>
-
-                  </div>
-
-
-                  <div class="row">
-                    <div class="col-sm-6 text-left">
-                      <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
-
-                        <span class="icon"><img src="{{temp.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
-                        <span class="username">
-                          @ {{temp.MostYesLiked?.CommentedUserName}}
-                        </span>
-                      </div>
-                    </div>
-                    <div class="col-sm-6 text-right">
-                      <div class="thumbs">
-                        <span><img src="../../../assets/images/like.png" alt="user">{{temp.MostYesLiked?.LikesCount}}</span>
-                        <span><img src="../../../assets/images/unlike.png" alt="user">{{temp.MostYesLiked?.DislikesCount}}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
-                  <div ExternalLink>
-                    <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment | emojis"></p>
-                  </div>
-
-
-                  <div class="row">
-
-                    <div class="col-sm-6 text-right">
-                      <div class="thumbs">
-                        <span><img src="../../../assets/images/like.png" alt="user"> {{temp.MostNoLiked?.LikesCount}}</span>
-                        <span><img src="../../../assets/images/unlike.png" alt="user"> {{temp.MostNoLiked?.DislikesCount}}</span>
-                      </div>
+                    <div ExternalLink>
+                      <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment | emojis"></p>
 
                     </div>
-                    <div class="col-sm-6 text-left">
-                      <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostNoLiked?.CommentedUserId]">
 
-                        <span class="icon"><img src="{{temp.MostNoLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';"></span>
-                        <!--<span class="icon"><img src="./images/user.png" alt=""></span>-->
-                        <span class="username">
-                          @
-                          {{temp.MostNoLiked?.CommentedUserName}}
-                        </span>
+
+                    <div class="row">
+                      <div class="col-sm-6 text-left">
+                        <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
+
+                          <span class="icon"><img src="{{temp.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
+                          <span class="username">
+                            @ {{temp.MostYesLiked?.CommentedUserName}}
+                          </span>
+                        </div>
                       </div>
+                      <div class="col-sm-6 text-right">
+                        <div class="thumbs">
+                          <span><img src="../../../assets/images/like.png" alt="user">{{temp.MostYesLiked?.LikesCount}}</span>
+                          <span><img src="../../../assets/images/unlike.png" alt="user">{{temp.MostYesLiked?.DislikesCount}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
+                    <div ExternalLink>
+                      <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment | emojis"></p>
+                    </div>
+
+
+                    <div class="row">
+
+                      <div class="col-sm-6 text-right">
+                        <div class="thumbs">
+                          <span><img src="../../../assets/images/like.png" alt="user"> {{temp.MostNoLiked?.LikesCount}}</span>
+                          <span><img src="../../../assets/images/unlike.png" alt="user"> {{temp.MostNoLiked?.DislikesCount}}</span>
+                        </div>
+
+                      </div>
+                      <div class="col-sm-6 text-left">
+                        <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostNoLiked?.CommentedUserId]">
+
+                          <span class="icon"><img src="{{temp.MostNoLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';"></span>
+                          <!--<span class="icon"><img src="./images/user.png" alt=""></span>-->
+                          <span class="username">
+                            @
+                            {{temp.MostNoLiked?.CommentedUserName}}
+                          </span>
+                        </div>
+                      </div>
+
                     </div>
 
                   </div>
-
                 </div>
               </div>
-            </div>
 
-          </li>
+            </li>
 
-        </ul>
+          </ul>
 
-      </div>
-
-
-      <div class="navigation_cover" *ngIf="PostQuestionDetailList?.length>0">
-
-        <div class="container">
-          <div class="text-center" style="cursor:pointer">
-            <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-              <li [ngClass]="{disabled:pager.currentPage === 1}">
-                <a (click)="setPage(pager.currentPage - 1)">Previous</a>
-              </li>
-              <li *ngFor="let page of pager.pages;index as i" [ngClass]="{active:pager.currentPage === page}">
-                <a (click)="setPage( page)">{{page}}</a>
-              </li>
-              <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-                <a (click)="setPage(pager.currentPage + 1)">Next</a>
-              </li>
-
-            </ul>
-          </div>
         </div>
 
+
+        <div class="navigation_cover" *ngIf="PostQuestionDetailList?.length>0">
+
+          <div class="container">
+            <div class="text-center" style="cursor:pointer">
+              <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                <li [ngClass]="{disabled:pager.currentPage === 1}">
+                  <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+                </li>
+                <li *ngFor="let page of pager.pages;index as i" [ngClass]="{active:pager.currentPage === page}">
+                  <a (click)="setPage( page)">{{page}}</a>
+                </li>
+                <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                  <a (click)="setPage(pager.currentPage + 1)">Next</a>
+                </li>
+
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+
+    <div *ngIf="showPopup" class="popup-container">
+      <div class="popup-content">
+        <span class="popup-text">
+          <h5> Welcome to Opozee!</h5>
+          <p>
+            Our mission is to build a decentralized open-source social network that offers a platform for free speech and encourages users to converge to shared beliefs. Think of us as Instagram for sharing and discussing beliefs.
+
+          </p>
+          <h5>How Opozee works:</h5>
+          <div class="popup-step">
+            <div class="step-items">
+              <strong>Step 1:</strong> Sign up and join the community!
+            </div>
+            <div class="step-items">
+              <strong>Step 2:</strong> Post a “yes/no” question or your belief in response to existing questions.
+            </div>
+            <div class="step-items">
+              <strong>Step 3:</strong> Earn Opozee Coins (OPZ) when people like your beliefs.
+            </div>
+          </div>
+          <h5>What’s in it for me?</h5>
+          <p>
+            You get 500 Opozee Coins (OPZ) just for signing up. You can earn additional OPZ coins by actively participating in the network by posting beliefs. Every OPZ coin holder is a shareholder in the network with a claim on the network's growth and profitability. As the value of the networks increases, so will the value of its tokens.
+          </p>
+        </span>
+        <span class="popup-close" (click)="hidePopup()">X</span>
       </div>
     </div>
-  </section>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-  <script src="js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-</div>
+    <script src="js/bootstrap.min.js"></script>
+
+  </div>
 

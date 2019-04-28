@@ -25,7 +25,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   qid = -1;
   //questionListing: QuestionListing[] = [];
   PostQuestionDetailList: PostQuestionDetail[] = [];
-
+  showPopup: boolean = true;
 
   isRecordLoaded: boolean = false;
   percentage: number = 0;
@@ -55,6 +55,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
     else if (this.route.snapshot.params["qid"]) {
       this.qid = this.route.snapshot.params["qid"];
+      this.showPopup = true;
     }
 
     this.paramsSub = route.params.subscribe(params => {
@@ -247,6 +248,15 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       this.isRecordLoaded = false;
     });
   }
+
+
+  hidePopup() {
+
+    this.showPopup = false;
+
+  }
+
+
 
   searchForTag(hashtag) {
     this.router.navigateByUrl('/questionlistings/' + hashtag, { skipLocationChange: true }).then(() =>
