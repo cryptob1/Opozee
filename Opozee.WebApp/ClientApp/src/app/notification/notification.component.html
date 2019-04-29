@@ -43,11 +43,11 @@
                 <div class="cover_right" *ngFor="let temp of NotificationData">
 
                   <span *ngIf="temp?.IsAgree" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                    <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);">@{{temp.UserName}}</a> Posted a Belief
+                    <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);">@{{temp.UserName}}</a> {{temp.Message}}
                     <span>{{ temp.CreationDate | date:'medium' | timeAgo }}</span>
                   </span>
                   <span *ngIf="!temp?.IsAgree" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                    <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);">@{{temp.UserName}}</a> Posted a Question
+                    <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);">@{{temp.UserName}}</a> {{temp.Message}}
                     <span>{{ temp.CreationDate | date:'medium' | timeAgo }}</span>
                   </span>
 
@@ -59,11 +59,11 @@
                       </a>
                     </strong>
                     <div *ngIf="temp.IsAgree===true">
-                      <strong class="text-danger"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion"></a></strong>
+                      <strong class="text-success"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion"></a></strong>
                     </div>
 
                     <div *ngIf="temp.IsAgree===false">
-                      <strong class="text-success"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion"></a></strong>
+                      <strong class="text-danger"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion"></a></strong>
                     </div>
 
                   </span>

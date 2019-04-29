@@ -411,6 +411,16 @@ namespace opozee.Controllers.API
                 quest.TaggedUser = postQuestion.TaggedUser;
                 db.Questions.Add(quest);
                 db.SaveChanges();
+
+                Notification notification = new Notification();
+                notification = new Notification();
+                notification.CommentedUserId = postQuestion.OwnerUserID;
+                notification.questId = quest.Id;
+                notification.Comment = true;
+                notification.CreationDate = DateTime.Now;
+                // notification.Status = 1;
+                db.Notifications.Add(notification);
+                db.SaveChanges();
                 //token = db.Tokens.Where(p => p.UserId == postQuestion.OwnerUserID).FirstOrDefault();
                 //token.BalanceToken = token.BalanceToken - 1;
 
@@ -467,7 +477,7 @@ namespace opozee.Controllers.API
                     var userNotifications1 = (from q in db.Questions
                                               join o in db.Opinions on q.Id equals o.QuestId
                                               join n in db.Notifications on o.Id equals n.CommentId
-                                              join u in db.Users on o.CommentedUserId equals u.UserID
+                                              join u in db.Users on n.CommentedUserId equals u.UserID
                                               where q.OwnerUserID == Model.UserId && q.IsDeleted == false
                                               select new UserNotifications
                                               {
@@ -493,7 +503,7 @@ namespace opozee.Controllers.API
 
                     foreach (var data in userNotifications1)
                     {
-                        data.Message = GenerateTags(data.Like, data.Dislike, data.Comment, data.UserName);
+                        data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName);
                         data.Tag = (data.Like == true) ? "Like" : (data.Dislike == true) ? "Dislike" : (data.Comment == true) ? "Comment" : "";
                     }
                     return userNotifications1.Where(p => p.Message != "").ToList();
@@ -509,8 +519,8 @@ namespace opozee.Controllers.API
                     var userNotifications1 = (from q in db.Questions
                                               join o in db.Opinions on q.Id equals o.QuestId
                                               join n in db.Notifications on o.Id equals n.CommentId
-                                              join u in db.Users on o.CommentedUserId equals u.UserID
-                                              where q.OwnerUserID != Model.UserId && q.IsDeleted == false
+                                              join u in db.Users on n.CommentedUserId equals u.UserID
+                                              where q.IsDeleted == false && q.OwnerUserID != Model.UserId
                                               select new UserNotifications
                                               {
                                                   QuestionId = q.Id,
@@ -534,7 +544,7 @@ namespace opozee.Controllers.API
 
                     foreach (var data in userNotifications1)
                     {
-                        data.Message = GenerateTags(data.Like, data.Dislike, data.Comment, data.UserName);
+                        data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName);
                         data.Tag = (data.Like == true) ? "Like" : (data.Dislike == true) ? "Dislike" : (data.Comment == true) ? "Comment" : "";
                     }
                     return userNotifications1.Where(p => p.Message != "").ToList();
@@ -709,7 +719,32 @@ namespace opozee.Controllers.API
             return Tag;
         }
 
-        
+        public string GenerateNotificationTags(bool? like, bool? dislike, bool? comment, string UserName)
+        {
+            string Tag = "";
+            if (like == true && dislike == false && comment == false)
+            {
+                Tag = " has Liked opinion.";
+            }
+            else if (dislike == true && like == false && comment == false)
+            {
+                Tag = " has Disliked opinion.";
+            }
+            else if (comment == true && like == false && dislike == false)
+            {
+                Tag = " has posted a belief.";
+            }
+            else if (like == true && dislike == false && comment == true)
+            {
+                Tag = " has Liked and posted a belief.";
+            }
+            else if (dislike == true && like == false && comment == true)
+            {
+                Tag = " has Disliked and posted a belief.";
+            }
+
+            return Tag;
+        }
 
         #region "Get All Slider Posts" 
         [HttpPost]
@@ -1501,10 +1536,11 @@ namespace opozee.Controllers.API
                 notification.CommentedUserId = Model.CommentedUserId;
                 notification.CommentId = CommentId;
                 notification.questId = Model.QuestId;
-                notification.Like = Convert.ToBoolean(Model.Likes);
-                notification.Dislike = Convert.ToBoolean(Model.Dislikes);
+                //notification.Like = Convert.ToBoolean(Model.Likes);
+                //notification.Dislike = Convert.ToBoolean(Model.Dislikes);
                 notification.Comment = true;
                 notification.CreationDate = DateTime.Now;
+                // notification.Status = 2;
                 db.Notifications.Add(notification);
                 db.SaveChanges();
 
@@ -1570,6 +1606,7 @@ namespace opozee.Controllers.API
                     notification.Like = Convert.ToBoolean(Model.Likes);
                     notification.Dislike = Convert.ToBoolean(Model.Dislikes);
                     notification.CreationDate = Model.CreationDate;
+                    // notification.Status = 3;
                     db.Notifications.Add(notification);
                     db.SaveChanges();
                     opinion = db.Opinions.Where(p => p.Id == Model.CommentId).FirstOrDefault();
@@ -1691,6 +1728,7 @@ namespace opozee.Controllers.API
                     notification.Like = Convert.ToBoolean(Model.Likes);
                     notification.Dislike = Convert.ToBoolean(Model.Dislikes);
                     notification.CreationDate = Model.CreationDate;
+                    // notification.Status = 3;
                     db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                     opinion = db.Opinions.Where(p => p.Id == Model.CommentId).FirstOrDefault();
