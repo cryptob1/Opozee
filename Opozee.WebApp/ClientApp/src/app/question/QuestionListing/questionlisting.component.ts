@@ -41,13 +41,15 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router,
     private location: Location) {
-    
+
     this.showSlider = this.location.path() ? false : true;
 
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
     this.hashTag = false;
 
 
+   
+     
     if (JSON.parse(localStorage.getItem('popupShown')) || this.localStorageUser != null) {
       this.showPopup = false;
     }
@@ -64,17 +66,17 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       this.hashTag = true;
       this.search = this.route.snapshot.params["tag"];
     }
-
     else if (this.route.snapshot.params["qid"]) {
       this.qid = this.route.snapshot.params["qid"];
- 
+
     }
+
 
     this.paramsSub = route.params.subscribe(params => {
       this.initialize();
     });
     this.questionGetModel.PageNumber = +localStorage.getItem('PageNumber');
-
+    
   }
 
   ngOnInit() {
@@ -87,6 +89,11 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
     this.shareUrl = "https://opozee.com/qid/";
     this.sharetext = " - See opposing views at ";
+
+    if (this.qid>0 && this.localStorageUser != null) {
+      
+      this.goToqDetail();
+    }
 
   }
 
@@ -156,7 +163,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
             this.PostQuestionDetailList[0].comments = data[0]['Comments'];
           }
 
-         
+
           ////----Slider
           //this.sliderData = [];
 
@@ -264,7 +271,9 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
   }
 
-
+  goToqDetail() {
+    this.router.navigate(['/questiondetail/', this.qid]);
+  }
 
   searchForTag(hashtag) {
     this.router.navigateByUrl('/questionlistings/' + hashtag, { skipLocationChange: true }).then(() =>

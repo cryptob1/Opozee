@@ -78,8 +78,8 @@
 
       <div class="col-sm-12">
 
-        <div class="cover_hello" *ngIf="qid == -1">
-          <a [routerLink]="['/postquestion',0]" href="javascript:void(0)">
+        <div class="cover_hello">
+          <a [routerLink]="qid == -1 ?  ['/postquestion',0] : ['/questiondetail/',qid]" href="javascript:void(0)">
             <i class="fa fa-plus" aria-hidden="true"></i>
           </a>
         </div>
