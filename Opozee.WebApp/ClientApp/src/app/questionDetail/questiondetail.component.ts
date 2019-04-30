@@ -80,6 +80,11 @@ export class Questiondetail implements OnInit {
   //  this.isExpanded = !this.isExpanded;
   //}
 
+  html2text(text) {
+    return String(text).replace(/<[^>]+>/gm, '').replace(/&amp;/g, '&');
+  }
+
+
   ngOnInit() {
     //  {
     //  HashTags: "",
@@ -139,10 +144,12 @@ export class Questiondetail implements OnInit {
 
 
       this.shareUrl = "https://opozee.com/qid/" + (this.PostQuestionDetailModel.postQuestionDetail.Id);
-      this.sharetext = this.PostQuestionDetailModel.postQuestionDetail.Question + " - See opposing views at ";
+      this.sharetext = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
 
     });
   }
+
+
 
   saveLikeclick(Likes, index) {
     ;
@@ -371,4 +378,7 @@ export class Questiondetail implements OnInit {
     console.log('data22', this.dataModel);
     this.dialogPostBelief.show(this.dataModel);
   }
+
+
+
 }
