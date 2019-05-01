@@ -108,7 +108,7 @@
 
                 <strong>
                   <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
-                    <div class="message-container" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
+                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
                   </a>
                 </strong>
 
@@ -138,7 +138,7 @@
                 <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
 
                   <div ExternalLink>
-                    <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment | emojis"></p>
+                    <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment "></p>
 
                   </div>
 
@@ -164,7 +164,7 @@
 
                 <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
                   <div ExternalLink>
-                    <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment | emojis"></p>
+                    <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment "></p>
                   </div>
 
 
@@ -221,7 +221,7 @@
 
                 <strong>
                   <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp?.Id]">
-                    <div class="message-container" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
+                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
                   </a>
 
 
@@ -252,7 +252,9 @@
 
                     <div [class]="[temp1?.IsAgree ? 'yes_feedback' : 'no_feedback']">
 
-                      <div ExternalLink><p [innerHTML]="temp1?.Comment"></p></div>
+                      <div ExternalLink><p style=" font-family: 'Poppins', sans-serif;  font-size: 16px;" [innerHTML]="temp1?.Comment">
+                        </p>
+                      </div>
                       <span class="profile_bottom_cover">
 
                         <div class="col-sm-6 text-left">
