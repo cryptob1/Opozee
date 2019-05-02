@@ -60,6 +60,41 @@ export class LoginComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
+
+  loginAnon() {
+    this.submitted = true;
+    this.loading = true;
+
+    console.log(this.loginForm.value);
+    this.loginForm.value.email = 'contactus@opozee.com'
+    this.loginForm.value.password='useropz'
+
+    this.authenticationService.login(this.loginForm.value)
+      .pipe(first())
+      .subscribe(data => {
+        //debugger;
+        if (data.Id != 0) {
+
+          this.loading = false;
+          this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
+          this.dataSharingService.loginsetstate(data);
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem('currentUser', JSON.stringify(data));
+          this.router.navigate(['']);
+        }
+
+        else {
+          this.loading = false;
+          this.toastr.error('Invalid User', 'please check user name or Password !', { timeOut: 2000 });
+        }
+      },
+        error => {
+          this.alertService.error(error);
+          this.loading = false;
+          this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000 });
+        });
+  }
+
   onSubmit() {
     this.submitted = true;
     debugger;
