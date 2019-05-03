@@ -901,7 +901,7 @@ namespace opozee.Controllers.API
                 {
                     questionDetail = (from q in db.Questions
                                       join u in db.Users on q.OwnerUserID equals u.UserID
-                                      where q.IsDeleted == false && q.HashTags.Contains(model.Search)
+                                      where q.IsDeleted == false && q.HashTags.Contains(model.Search) 
                                       select new PostQuestionDetailWebModel
                                       {
                                           Id = q.Id,
@@ -918,6 +918,7 @@ namespace opozee.Controllers.API
                                           TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
                                           TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
                                           TotalRecordcount = db.Questions.Count(x => x.IsDeleted == false && x.PostQuestion.Contains(model.Search)),
+                                          LastActivityTime = (DateTime) (db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
                                           Comments = (from e in db.Opinions
                                                       join t in db.Users on e.CommentedUserId equals t.UserID
                                                       where e.QuestId == q.Id
@@ -937,7 +938,7 @@ namespace opozee.Controllers.API
                                                           CreationDate = e.CreationDate
                                                       }).ToList()
 
-                                      }).OrderByDescending(p => p.Id).Skip(skip).Take(pageSize).ToList();
+                                      }).OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
                 }
 
                 else if (model.QId!=-1)
@@ -962,6 +963,7 @@ namespace opozee.Controllers.API
                                           TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
                                           TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
                                           TotalRecordcount = 1,
+                                          LastActivityTime = (DateTime)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
                                           Comments = (from e in db.Opinions
                                                       join t in db.Users on e.CommentedUserId equals t.UserID
                                                       where e.QuestId == q.Id
@@ -982,7 +984,7 @@ namespace opozee.Controllers.API
                                                       }).ToList()
                                           // db.Questions.Count(x => x.IsDeleted == false && x.PostQuestion.Contains(model.Search))
 
-                                      }).OrderByDescending(p => p.Id).Skip(skip).Take(pageSize).ToList();
+                                      }).OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
                 }
 
                 else
@@ -1006,6 +1008,7 @@ namespace opozee.Controllers.API
                                           TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
                                           TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
                                           TotalRecordcount = db.Questions.Count(x => x.IsDeleted == false && x.PostQuestion.Contains(model.Search)),
+                                          LastActivityTime = (DateTime)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
                                           Comments = (from e in db.Opinions
                                                       join t in db.Users on e.CommentedUserId equals t.UserID
                                                       where e.QuestId == q.Id
@@ -1026,7 +1029,7 @@ namespace opozee.Controllers.API
                                                       }).ToList()
 
 
-                }).OrderByDescending(p => p.Id).Skip(skip).Take(pageSize).ToList();
+                }).OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
 
                 }
 
@@ -1082,7 +1085,8 @@ namespace opozee.Controllers.API
                         }
                     }
                 }
-                return questionDetail;
+
+                return questionDetail; //.OrderByDescending(p=>p.LastActivityTime);
                 //return Request.CreateResponse(JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "AllUserQuestions"));
             }
             catch (Exception ex)

@@ -98,7 +98,7 @@
                 </div>
                 <div class="user_right">
                   <div class="date">
-                    <i>{{temp.CreationDate | timeAgo}}</i>
+                    <i>{{temp.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
                     <br />
                     <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
                   </div>
@@ -211,7 +211,7 @@
                 </div>
                 <div class="user_right">
                   <div class="date">
-                    <i>{{temp.CreationDate | timeAgo}}</i>
+                      <i>{{temp.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
                     <br />
                     <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
                   </div>

@@ -44,11 +44,11 @@
 
                   <span *ngIf="temp?.IsAgree" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
                     <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);">@{{temp.UserName}}</a> {{temp.Message}}
-                    <span>{{ temp.CreationDate | date:'medium' | timeAgo }}</span>
+                    <span>{{ temp.CreationDate+'Z' | date:'medium' | timeAgo }}</span>
                   </span>
                   <span *ngIf="!temp?.IsAgree" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
                     <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);">@{{temp.UserName}}</a> {{temp.Message}}
-                    <span>{{ temp.CreationDate | date:'medium' | timeAgo }}</span>
+                  <span>{{ temp.CreationDate+'Z' | date:'medium' | timeAgo }}</span>
                   </span>
 
 

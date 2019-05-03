@@ -105,6 +105,7 @@ export class PostQuestionDetail {
   //MostYesLiked: Comments;
   comments: Comments[] = [];
   percentage: number;
+  LastActivityTime: Date;
   constructor() {
     //this.IsBookmark = false;
   }
