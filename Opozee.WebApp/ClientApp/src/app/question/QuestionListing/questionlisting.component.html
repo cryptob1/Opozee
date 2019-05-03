@@ -26,7 +26,7 @@
                           <span class="message-container" [innerHTML]="'Q. ' + slider?.Question | emojis"></span>
                         </a>
                         <ng-container *ngFor="let tag of slider?.HashTags?.split(',')">
-                          <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></small>
+                          <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></small>
                         </ng-container>
 
                       </strong>
@@ -115,7 +115,7 @@
 
 
                 <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
-                  <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a></div>
+                  <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></div>
 
                 </ng-container>
                 <div class="cover_analysis">

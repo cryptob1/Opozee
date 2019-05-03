@@ -113,7 +113,7 @@ export class PostQuestionComponent implements OnInit {
     }
     let postQuestionTemp = this.questionPostForm.value.postQuestion.trim();
     let UsertagsTemp = this.Usertags.trim();
-    this.questionPostForm.value.hashtags = this.questionPostForm.value.hashtags.trim();
+    this.questionPostForm.value.hashtags = this.questionPostForm.value.hashtags.trim().replace(' ',',').replace('#','').replace('%23','');
     let taggedUserTemp = this.Usertags
 
     if (postQuestionTemp == '') {
