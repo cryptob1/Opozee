@@ -170,13 +170,7 @@
 
                   <div class="row">
 
-                    <div class="col-sm-6 text-right">
-                      <div class="thumbs">
-                        <span><img src="../../../assets/images/like.png" alt="user"> {{temp.MostNoLiked?.LikesCount}}</span>
-                        <span><img src="../../../assets/images/unlike.png" alt="user"> {{temp.MostNoLiked?.DislikesCount}}</span>
-                      </div>
-
-                    </div>
+ 
                     <div class="col-sm-6 text-left">
                       <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostNoLiked?.CommentedUserId]">
 
@@ -187,6 +181,14 @@
                           {{temp.MostNoLiked?.CommentedUserName}}
                         </span>
                       </div>
+                    </div>
+
+                    <div class="col-sm-6 text-right">
+                      <div class="thumbs">
+                        <span><img src="../../../assets/images/like.png" alt="user"> {{temp.MostNoLiked?.LikesCount}}</span>
+                        <span><img src="../../../assets/images/unlike.png" alt="user"> {{temp.MostNoLiked?.DislikesCount}}</span>
+                      </div>
+
                     </div>
 
                   </div>

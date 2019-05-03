@@ -585,7 +585,7 @@ span.bell-icon i {
 }
 
 .no_feedback {
-  float: right !important;
+  float: left !important;
   /*border: 2px solid #FAC7C7;*/
   border: 3px solid #FAC7C7;
 }
@@ -600,13 +600,13 @@ span.bell-icon i {
   font-weight: 400 !important;
 }
 
-.no_feedback .text-right {
+/*.no_feedback .text-right {
   text-align: left;
 }
 
 .no_feedback .text-left .opinionsList {
   float: right;
-}
+}*/
 
 .scroller_cover {
   width: 100%;
