@@ -76,6 +76,8 @@ export class HomeComponent implements OnInit {
 
   // getting popular Hastags
   private getHastagsRecords() {
+
+   
     this.userService.getPopularHasTags().pipe(first()).subscribe(data => {
 
       this.popularhastags = data.reduce((arr, _item) => {
@@ -83,10 +85,11 @@ export class HomeComponent implements OnInit {
         if (!exists) {
           arr.push(_item);
         }
+        debugger;
         return arr;
       }, []);
 
-    });
+    } );
   }
 
 
