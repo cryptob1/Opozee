@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { Location } from "@angular/common";
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../_services/user.service';
 import { first } from 'rxjs/operators';
@@ -41,6 +41,10 @@ export class Questiondetail implements OnInit {
   shareUrl: string;
   public _emitter: EventEmitter<any> = new EventEmitter();
   encoder: HttpUrlEncodingCodec = new HttpUrlEncodingCodec();
+
+  sliderData: PostQuestionDetail[] = [];
+
+
 
   dataModel = {
     'QuestId': 0, 'Comment': '',
@@ -101,6 +105,7 @@ export class Questiondetail implements OnInit {
     });
 
     this.getQuestionDetail()
+
   }
 
   percentage: number = 0;
@@ -146,10 +151,60 @@ export class Questiondetail implements OnInit {
       this.shareUrl = "https://opozee.com/qid/" + (this.PostQuestionDetailModel.postQuestionDetail.Id);
       this.sharetext = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
 
+
+      console.log(this.PostQuestionDetailModel);
+      this.getAllSliderQuestionlist(this.Id, this.PostQuestionDetailModel.postQuestionDetail.HashTags);
+      
+
     });
   }
 
 
+
+  private getAllSliderQuestionlist(qid: number, hashtags: string) {
+     
+
+
+    this.userService.getSimilarQuestionsList(qid, hashtags).subscribe(data => {
+
+      this.PercentageCalc(data);
+      this.sliderData = data
+       
+ 
+    },
+      error => {
+      });
+  }
+
+  
+
+  private PercentageCalc(data) {
+    let scoreYes = 0;
+    let scoreNo = 0;
+    let _score = 0;
+    data.map((x) => {
+
+      if (x.Comments) {
+
+        x.Comments.map(y => {
+
+          _score = y.LikesCount - y.DislikesCount;
+          if (y.IsAgree) {
+            scoreYes = scoreYes + (_score > 0 ? _score : 0);
+          }
+          else {
+            scoreNo = scoreNo + (_score > 0 ? _score : 0);
+          }
+        });
+      }
+
+      x.percentage = +((scoreYes / (scoreYes + scoreNo)) * 100);
+      if (isNaN(x.percentage))
+        x.percentage = 0;
+      scoreYes = 0;
+      scoreNo = 0;
+    })
+  }
 
   saveLikeclick(Likes, index) {
     ;

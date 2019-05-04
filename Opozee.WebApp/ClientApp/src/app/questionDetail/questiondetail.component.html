@@ -32,7 +32,7 @@
               <!--<p>{{PostQuestionDetailModel.postQuestionDetail.Question}}</p>-->
 
               <div ExternalLink *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question">
-                <p class="message-container mb-0" [innerHTML]="PostQuestionDetailModel?.postQuestionDetail?.Question | emojis"></p>
+                <p class="message-container mb-0" [innerHTML]="'Q: '+PostQuestionDetailModel?.postQuestionDetail?.Question | emojis"></p>
                 <p class="mb-30">
                   <small *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question" style="float: left">
                     <tweet url={{shareUrl}} text={{sharetext}}></tweet>
@@ -64,12 +64,15 @@
               </div>
             </span>
 
-           
+
             <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
               <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
 
                 <div [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']">
-                  <div ExternalLink><p [innerHTML]="temp?.Comment"></p></div>
+                  
+                  <div ExternalLink> 
+                    <h1>{{temp?.IsAgree ? 'Yes' : 'No'}}</h1>
+                   <p [innerHTML]="temp?.Comment"></p> </div>
                   <span class="profile_bottom_cover">
 
                     <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
@@ -87,21 +90,21 @@
                 </div>
 
                 <!--<div class="no_feedback" *ngIf="!temp.IsAgree">
-        {{temp.IsAgree}}
-        <p>{{temp.Comment}}</p>
-        <span class="profile_bottom_cover">
-          <span class="user_left">
-            <img src="../../assets/images/user.png" alt="user"><span>@{{temp.CommentedUserName}}</span>
-          </span>
-          <div class="like_images">
-            <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp.Likes,index)">{{temp.LikesCount}}</span>
-            <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp.DisLikes,index)" />{{temp.DislikesCount}}</span>
+                  {{temp.IsAgree}}
+                  <p>{{temp.Comment}}</p>
+                  <span class="profile_bottom_cover">
+                    <span class="user_left">
+                      <img src="../../assets/images/user.png" alt="user"><span>@{{temp.CommentedUserName}}</span>
+                    </span>
+                    <div class="like_images">
+                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp.Likes,index)">{{temp.LikesCount}}</span>
+                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp.DisLikes,index)" />{{temp.DislikesCount}}</span>
 
-          </div>
-          <div class="date_like">
-          </div>
-        </span>
-      </div>-->
+                    </div>
+                    <div class="date_like">
+                    </div>
+                  </span>
+                </div>-->
 
               </span>
             </span>
@@ -139,11 +142,131 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="cover_heading">
+      <div class="container-fluid">
+        <h4 *ngIf="sliderData?.length>0" >Similar Questions:</h4>
+        <div class="row">
+
+          <div class="carousel-outer" *ngIf="sliderData?.length>0  ">
+            <div id="question-slider" class="carousel slide" data-ride="false" data-interval="50000">
+              <!-- Indicators -->
+
+              <ol class="carousel-indicators">
+                <li data-target="#question-slider" data-slide-to="0" class="active"></li>
+                <li data-target="#question-slider" data-slide-to="1"></li>
+                <li data-target="#question-slider" data-slide-to="2"></li>
+                <li data-target="#question-slider" data-slide-to="3"></li>
+              </ol>
+
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner">
+                <ng-container *ngFor="let slider of sliderData;let i = index">
+                  <div class="item" [ngClass]="{'active': i == 0 }" *ngIf="i<4">
+                    <div class="cover_questions">
+                      <div class="question_box">
+
+                        <strong>
+                          <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', slider?.Id] :['/qid/', slider?.Id]">
+                            <span class="message-container" [innerHTML]="'Q: ' + slider?.Question | emojis"></span>
+                          </a>
+                          <ng-container *ngFor="let tag of slider?.HashTags?.split(',')">
+                            <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></small>
+                          </ng-container>
+
+                        </strong>
+
+                        <span class="percentage_yes" *ngIf="slider.YesCount >0 || slider.NoCount>0">Yes : {{slider.percentage | number:'1.0-0'}}  %</span>
+
+
+                        <div class="liked_ones clearfix yes_feedback" *ngIf="slider?.MostYesLiked">
+                          <div ExternalLink>
+                            <b>@{{slider?.MostYesLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostYesLiked.Comment | emojis"></small>
+                          </div>
+                        </div>
+
+                        <div class="liked_ones clearfix no_feedback" *ngIf="slider?.MostNoLiked">
+                          <div ExternalLink>
+                            <b>@{{slider?.MostNoLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostNoLiked.Comment | emojis"></small>
+                          </div>
+                        </div>
+
+
+
+
+
+
+
+                        <!--<tweet url="{{shareUrl}}{{slider?.Id}}" text="{{slider?.Question}}{{sharetext}}"></tweet>-->
+
+
+                      </div>
+
+
+
+                    </div>
+
+                  </div>
+                </ng-container>
+              </div>
+
+
+
+              <!-- Left and right controls -->
+              <a class="left carousel-control" href="#question-slider" data-slide="prev">
+                <i class="fas fa-arrow-left"></i>
+              </a>
+              <a class="right carousel-control" href="#question-slider" data-slide="next">
+                <i class="fas fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
-
   </div>
+
 
 </section>
 
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <ul>
+          <li>    <a href="javascript:void(0)" (click)="popup()">Help</a></li>
+          <li>   <a [routerLink]="['/faq/']">FAQ</a></li>
+          <li>   <a [routerLink]="['/aboutus/']">About Us</a></li>
+
+
+          <li><a href="mailto:contactus@opozee.com">Contact Us</a></li>
+          <!--<li >   <a [routerLink]="['/aboutus/']">About Us</a></li>-->
+        </ul>
+        <!--<li> <a [routerLink]="['/aboutus/']">About Us</a></li>
+
+          <li><a href="#">Register</a></li>
+        -->
+      </div>
+    </div>
+  </div>
+
+  <div class="copywrite"><p>Copyright Opozee Inc 2019</p></div>
+  <div class="privatePolicy">
+    <!--<a [routerLink]="['/privatepolicy/']">Privacy Policy</a>-->
+
+  </div>
+
+  <div class="aboutus">
+  </div>
+
+  <span id="siteseal">
+    <script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=tO7ndZkEUXZNnbHsOziOEYXzlu2s0mKH9rgu1WUzFXZbUYexoQKcFMLqv54v"></script>
+  </span>
+
+</footer>
 <dialog-post-belief #dialogPostBelief (save)="getQuestionDetail()"></dialog-post-belief>

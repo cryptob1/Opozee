@@ -202,6 +202,36 @@ padding: 0px;
   }
 
 
+
+
+
+.yes_feedback h1 {
+  width: 30px;
+  font-size: 12px;
+  margin-top: -25px;
+  margin-left: 5px;
+  background: white;
+  margin-inline-start: 5px;
+  margin-left: 5px;
+  text-align: center;
+  color: #D2F3C8;
+  
+}
+
+
+
+.no_feedback h1 {
+  width: 30px;
+  font-size: 12px;
+  margin-top: -25px;
+  margin-left: 5px;
+  background: white;
+  margin-inline-start: 5px;
+  margin-left: 5px;
+  text-align: center;
+    color: #FAC7C7;
+}
+
 /*media query*/
 @media(max-width: 767px) {
 

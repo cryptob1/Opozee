@@ -137,6 +137,14 @@ export class UserService {
 
   }
 
+  getSimilarQuestionsList(qid: number, tags: string) {
+    return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetSimilarQuestionsWeb?qid='+qid+'&tags='+tags , {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
+
+  }
 
   getAllSliderQuestionlist(questionGetModel) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllSliderPostsWeb', questionGetModel, {

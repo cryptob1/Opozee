@@ -23,7 +23,7 @@
 
                       <strong>
                         <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', slider?.Id] :['/qid/', slider?.Id]">
-                          <span class="message-container" [innerHTML]="'Q. ' + slider?.Question | emojis"></span>
+                          <span class="message-container" [innerHTML]="'Q: ' + slider?.Question | emojis"></span>
                         </a>
                         <ng-container *ngFor="let tag of slider?.HashTags?.split(',')">
                           <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></small>
@@ -36,12 +36,14 @@
 
                       <div class="liked_ones clearfix yes_feedback" *ngIf="slider?.MostYesLiked">
                         <div ExternalLink>
+                          <h1>  Yes</h1>
                           <b>@{{slider?.MostYesLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostYesLiked.Comment | emojis"></small>
                         </div>
                       </div>
 
                       <div class="liked_ones clearfix no_feedback" *ngIf="slider?.MostNoLiked">
                         <div ExternalLink>
+                          <h1>  No</h1>
                           <b>@{{slider?.MostNoLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostNoLiked.Comment | emojis"></small>
                         </div>
                       </div>
@@ -138,6 +140,7 @@
                 <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
 
                   <div ExternalLink>
+                    <h1>  Yes</h1>
                     <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment "></p>
 
                   </div>
@@ -164,6 +167,7 @@
 
                 <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
                   <div ExternalLink>
+                    <h1>  No</h1>
                     <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment "></p>
                   </div>
 
@@ -327,7 +331,7 @@
       <span class="popup-text">
        <h5> Welcome to Opozee!</h5>
         <p>
-          Our mission is to build a decentralized open-source social network that helps users converge to <b>shared beliefs</b> and promotes <b>conversation health</b>. <br /><br />  Think of us as Instagram for sharing and discussing beliefs.
+          Our mission is to build a decentralized open-source social network that helps users converge to <b>shared beliefs</b> and promotes <b>conversation health</b>. <br />
 
         </p>
         <h5>How Opozee works:</h5>
