@@ -258,7 +258,9 @@
 
                     <div [class]="[temp1?.IsAgree ? 'yes_feedback' : 'no_feedback']">
 
-                      <div ExternalLink><p style=" font-family: 'Poppins', sans-serif;  font-size: 16px;" [innerHTML]="temp1?.Comment">
+                      <div ExternalLink>
+                        <h1>{{temp1?.IsAgree ? 'Yes' : 'No'}}</h1>
+                        <p style=" font-family: 'Poppins', sans-serif;  font-size: 16px;" [innerHTML]="temp1?.Comment">
                         </p>
                       </div>
                       <span class="profile_bottom_cover">
