@@ -90,9 +90,9 @@ namespace opozee.Controllers.API
                 {
                     entity = new User();
                     Token token = new Token();
-                    entity.UserName = users.FirstName + " " + users.LastName;
-                    entity.FirstName = users.FirstName;
-                    entity.LastName = users.LastName;
+                    entity.UserName = users.UserName;
+                    entity.FirstName = "FirstName";
+                    entity.LastName = "Lastname";
                     entity.Email = users.Email;
                     entity.IsAdmin = false;
                     bool Email = false;

@@ -27,8 +27,8 @@ export class RegisterComponent implements OnInit {
 
     ngOnInit() {
         this.registerForm = this.formBuilder.group({
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
+            userName: ['', Validators.required],
+            //lastName: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(6)]]
         });
@@ -56,8 +56,9 @@ export class RegisterComponent implements OnInit {
             if (data.Response.UserData) {
               let _user = data.Response.UserData;
               let contact = {
-                'firstName': _user.FirstName,
-                'lastName': _user.LastName,
+                'userName': _user.userName,
+                'firstName': '',
+                'lastName': '',
                 'email': _user.Email
               }
               this.sendWelcomeMail(contact);

@@ -85,7 +85,7 @@ export class HomeComponent implements OnInit {
         if (!exists) {
           arr.push(_item);
         }
-        debugger;
+        
         return arr;
       }, []);
 
