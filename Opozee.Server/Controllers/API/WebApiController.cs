@@ -757,9 +757,21 @@ namespace opozee.Controllers.API
 
             string[] taglist = tags.Split(',');
 
-            Random rnd = new Random();
-            int r = rnd.Next(taglist.Count());
-            string tag = taglist[r];
+            var r = new Random();
+            string tag = "";
+
+            foreach (var t in taglist) {
+                var qList = db.Questions.Where(p => p.HashTags.Contains(tag)).ToList();
+                if (qList.Count > 0) {
+                    tag = t;
+                    break;
+                }
+                
+
+            }
+
+            
+            
 
             int Total = 5;
             int pageSize = 5; // set your page size, which is number of records per page
@@ -794,6 +806,7 @@ namespace opozee.Controllers.API
                                       TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
                                       TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
                                       TotalRecordcount = db.Questions.Count(x => x.IsDeleted == false && x.HashTags.Contains(tag)),
+                                      LastActivityTime= (DateTime)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
                                       Comments = (from e in db.Opinions
                                                   join t in db.Users on e.CommentedUserId equals t.UserID
                                                   where e.QuestId == q.Id
@@ -814,7 +827,7 @@ namespace opozee.Controllers.API
                                                   }).ToList()
 
 
-                                  }).OrderByDescending(p => p.Id).Skip(skip).Take(pageSize).ToList();
+                                  }).OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
 
 
 

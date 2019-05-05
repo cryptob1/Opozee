@@ -76,6 +76,9 @@ export class Questiondetail implements OnInit {
       this.Id = this.route.snapshot.params["Id"];
     }
     this.shareUrl = window.location.origin + this.location.path();
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    };
    // this.PostQuestionDetailModel.PostQuestionDetailModel = new PostQuestionDetail();
   }
   
@@ -100,6 +103,15 @@ export class Questiondetail implements OnInit {
     //  YesCount: 0,
     //  NoCount: 0
     //}
+
+    this.route.params.subscribe(
+      params => {
+        
+        this.getQuestionDetail();
+      }
+    );
+
+
     this.postOpinionForm = this.formBuilder.group({
       firstName: ['', Validators.required],
     });

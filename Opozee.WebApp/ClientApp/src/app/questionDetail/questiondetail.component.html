@@ -147,88 +147,135 @@
 
 
   <div class="container">
-    <div class="cover_heading">
-      <div class="container-fluid">
+ 
         <h4 *ngIf="sliderData?.length>0" >Similar Questions:</h4>
-        <div class="row">
+  
+          <div class="col-sm-12">
+            <ul >
 
-          <div class="carousel-outer" *ngIf="sliderData?.length>0  ">
-            <div id="question-slider" class="carousel slide" data-ride="false" data-interval="50000">
-              <!-- Indicators -->
+              <li *ngIf="sliderData?.length>0  " style=" box-shadow:none">
 
-              <ol class="carousel-indicators">
-                <li data-target="#question-slider" data-slide-to="0" class="active"></li>
-                <li data-target="#question-slider" data-slide-to="1"></li>
-                <li data-target="#question-slider" data-slide-to="2"></li>
-                <li data-target="#question-slider" data-slide-to="3"></li>
-              </ol>
-
-              <!-- Wrapper for slides -->
-              <div class="carousel-inner">
-                <ng-container *ngFor="let slider of sliderData;let i = index">
-                  <div class="item" [ngClass]="{'active': i == 0 }" *ngIf="i<4">
-                    <div class="cover_questions">
-                      <div class="question_box">
-
-                        <strong>
-                          <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', slider?.Id] :['/qid/', slider?.Id]">
-                            <span class="message-container" [innerHTML]="'Q: ' + slider?.Question | emojis"></span>
-                          </a>
-                          <ng-container *ngFor="let tag of slider?.HashTags?.split(',')">
-                            <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></small>
-                          </ng-container>
-
-                        </strong>
-
-                        <span class="percentage_yes" *ngIf="slider.YesCount >0 || slider.NoCount>0">Yes : {{slider.percentage | number:'1.0-0'}}  %</span>
+                <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of sliderData" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
+                  <div class="question_box">
 
 
-                        <div class="liked_ones clearfix yes_feedback" *ngIf="slider?.MostYesLiked">
-                          <div ExternalLink>
-                            <b>@{{slider?.MostYesLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostYesLiked.Comment | emojis"></small>
+     
+
+                    <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
+                      <img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" />
+                      <span class="username">
+                        @{{temp.OwnerUserName}}
+                      </span>
+                    </div>
+                    <div class="user_right">
+                      <div class="date">
+                        <i>{{temp.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
+                        <br />
+                        <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
+                      </div>
+
+                      <br />
+                    </div>
+
+                    <strong>
+                      <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
+                        <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
+                      </a>
+                    </strong>
+
+
+
+                    <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
+                      <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></div>
+
+                    </ng-container>
+                    <div class="cover_analysis">
+                      <div class="left">
+                        <span> </span>
+                        <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
+                          <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
+                          <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
+                          <!--<span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>-->
+                          <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
+                          <div *ngIf="temp.YesCount == 0 && temp.NoCount ==0">
+                            <!--<span class="percentage">NO : 0 %</span>-->
+                            <!--<span class="percentage_yes"> - </span>-->
+                            <span class="empty_space"></span>
                           </div>
                         </div>
+                      </div>
+                    </div>
 
-                        <div class="liked_ones clearfix no_feedback" *ngIf="slider?.MostNoLiked">
-                          <div ExternalLink>
-                            <b>@{{slider?.MostNoLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostNoLiked.Comment | emojis"></small>
-                          </div>
-                        </div>
+                    <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
 
-
-
-
-
-
-
-                        <!--<tweet url="{{shareUrl}}{{slider?.Id}}" text="{{slider?.Question}}{{sharetext}}"></tweet>-->
-
+                      <div ExternalLink>
+                        <h1>  Yes</h1>
+                        <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment "></p>
 
                       </div>
 
 
+                      <div class="row">
+                        <div class="col-sm-6 text-left">
+                          <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
 
+                            <span class="icon"><img src="{{temp.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
+                            <span class="username">
+                              @ {{temp.MostYesLiked?.CommentedUserName}}
+                            </span>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                          <div class="thumbs">
+                            <span><img src="../../../assets/images/like.png" alt="user">{{temp.MostYesLiked?.LikesCount}}</span>
+                            <span><img src="../../../assets/images/unlike.png" alt="user">{{temp.MostYesLiked?.DislikesCount}}</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
+                    <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
+                      <div ExternalLink>
+                        <h1>  No</h1>
+                        <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment "></p>
+                      </div>
+
+
+                      <div class="row">
+
+
+                        <div class="col-sm-6 text-left">
+                          <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostNoLiked?.CommentedUserId]">
+
+                            <span class="icon"><img src="{{temp.MostNoLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';"></span>
+                            <!--<span class="icon"><img src="./images/user.png" alt=""></span>-->
+                            <span class="username">
+                              @
+                              {{temp.MostNoLiked?.CommentedUserName}}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-6 text-right">
+                          <div class="thumbs">
+                            <span><img src="../../../assets/images/like.png" alt="user"> {{temp.MostNoLiked?.LikesCount}}</span>
+                            <span><img src="../../../assets/images/unlike.png" alt="user"> {{temp.MostNoLiked?.DislikesCount}}</span>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
                   </div>
-                </ng-container>
-              </div>
+                </div>
 
-
-
-              <!-- Left and right controls -->
-              <a class="left carousel-control" href="#question-slider" data-slide="prev">
-                <i class="fas fa-arrow-left"></i>
-              </a>
-              <a class="right carousel-control" href="#question-slider" data-slide="next">
-                <i class="fas fa-arrow-right"></i>
-              </a>
-            </div>
+              </li>
+            </ul>
           </div>
-        </div>
-      </div>
+ 
 
-    </div>
+ 
   </div>
 
 

@@ -358,67 +358,20 @@ span.profile_left p {
   }
 
 
-.carousel-iner {
-  padding-bottom: 10px;
-  margin-bottom: 15px;
+
+.col-sm-12 ul {
+  border: thick;
+  border-color: aqua;
 }
 
-.carousel-outer {
-  padding: 0px;
+.cover_questions {
   padding: 15px;
   padding-bottom: 10px;
   margin-bottom: 15px;
-  background: #fff;
+  background: #FFF;
   border-radius: 4px;
   border: 0.5px solid rgba(0,0,0,0.2);
 }
-
-
-.carousel-outer .cover_questions strong {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0px 0px 5px 0px;
-  float: left;
-  width: 100%;
-}
-
-
-.question_box {
-  padding: 0px;
-}
-
-.carousel-outer .cover_questions {
-  padding: 30px 60px 60px;
-  /*background-image: linear-gradient(90deg, rgb(108, 214, 192), rgb(108, 214, 192));*/
-  /*background-color: rgb(108, 214, 192);*/
-  /*background-color: #007bff;*/
-  background: #FFF;
-  border-color: #6d7993;
-  border-width: 1px;
-  float: left;
-}
-
-.carousel-indicators .active {
-  background: #333;
-}
-
-.carousel-indicators li {
-  border-color: #333
-}
-
-.carousel-control {
-  width: 50px;
-  background: transparent !important;
-}
-
-  .carousel-control i {
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translate(0,-50%);
-    transform: translate(-50%,-50%);
-    left: 50%;
-    color: #333333;
-  } 
 
 @media screen and (max-width: 767px) {
 
@@ -436,6 +389,8 @@ span.profile_left p {
     margin-right: 7px;
   }
 
+
+ 
 }
 
 .user_left, .img, .text_profile {
