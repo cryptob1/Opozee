@@ -302,6 +302,8 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     if (this.pager.totalPages >= page) {
       this.PagingPagesload(this.pager.currentPage, this.pager.pageSize);
     }
+
+    window.scrollTo(0, 0)
   }
 
   getPager(totalItems: number, currentPage: number = 1, pageSize: number = 10) {
