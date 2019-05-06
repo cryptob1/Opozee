@@ -187,6 +187,7 @@ padding: 0px;
   width: 90%;
   float: left;
   position: fixed;
+  z-index: 1000;
   left: 5%;
   bottom: 35px;
 }
