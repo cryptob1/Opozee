@@ -88,7 +88,12 @@ export class Questiondetail implements OnInit {
   //}
 
   html2text(text) {
-    return String(text).replace(/<[^>]+>/gm, '').replace(/&amp;/g, '&');
+
+    return String(text).replace(/<[^>]+>/gm, '').replace(/&amp;/g, "&").replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+
+
+  
+  
   }
 
 
@@ -170,8 +175,7 @@ export class Questiondetail implements OnInit {
 
     });
   }
-
-
+   
 
   private getAllSliderQuestionlist(qid: number, hashtags: string) {
      
