@@ -159,7 +159,7 @@
                   <div class="question_box">
 
 
-     
+
 
                     <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
                       <img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" />
@@ -206,67 +206,67 @@
                       </div>
                     </div>
 
-                    <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
+                    <!--<div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
 
-                      <div ExternalLink>
-                        <h1>  Yes</h1>
-                        <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment "></p>
+    <div ExternalLink>
+      <h1>  Yes</h1>
+      <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment "></p>
 
-                      </div>
-
-
-                      <div class="row">
-                        <div class="col-sm-6 text-left">
-                          <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
-
-                            <span class="icon"><img src="{{temp.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
-                            <span class="username">
-                              @ {{temp.MostYesLiked?.CommentedUserName}}
-                            </span>
-                          </div>
-                        </div>
-                        <div class="col-sm-6 text-right">
-                          <div class="thumbs">
-                            <span><img src="../../../assets/images/like.png" alt="user">{{temp.MostYesLiked?.LikesCount}}</span>
-                            <span><img src="../../../assets/images/unlike.png" alt="user">{{temp.MostYesLiked?.DislikesCount}}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
-                      <div ExternalLink>
-                        <h1>  No</h1>
-                        <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment "></p>
-                      </div>
+    </div>
 
 
-                      <div class="row">
+    <div class="row">
+      <div class="col-sm-6 text-left">
+        <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
+
+          <span class="icon"><img src="{{temp.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
+          <span class="username">
+            @ {{temp.MostYesLiked?.CommentedUserName}}
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-6 text-right">
+        <div class="thumbs">
+          <span><img src="../../../assets/images/like.png" alt="user">{{temp.MostYesLiked?.LikesCount}}</span>
+          <span><img src="../../../assets/images/unlike.png" alt="user">{{temp.MostYesLiked?.DislikesCount}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
+    <div ExternalLink>
+      <h1>  No</h1>
+      <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment "></p>
+    </div>
 
 
-                        <div class="col-sm-6 text-left">
-                          <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostNoLiked?.CommentedUserId]">
+    <div class="row">
 
-                            <span class="icon"><img src="{{temp.MostNoLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';"></span>
-                            <!--<span class="icon"><img src="./images/user.png" alt=""></span>-->
-                            <span class="username">
-                              @
-                              {{temp.MostNoLiked?.CommentedUserName}}
-                            </span>
-                          </div>
-                        </div>
 
-                        <div class="col-sm-6 text-right">
-                          <div class="thumbs">
-                            <span><img src="../../../assets/images/like.png" alt="user"> {{temp.MostNoLiked?.LikesCount}}</span>
-                            <span><img src="../../../assets/images/unlike.png" alt="user"> {{temp.MostNoLiked?.DislikesCount}}</span>
-                          </div>
+      <div class="col-sm-6 text-left">
+        <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostNoLiked?.CommentedUserId]">
 
-                        </div>
+          <span class="icon"><img src="{{temp.MostNoLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';"></span>
 
-                      </div>
+          <span class="username">
+            @
+            {{temp.MostNoLiked?.CommentedUserName}}
+          </span>
+        </div>
+      </div>
 
-                    </div>
+      <div class="col-sm-6 text-right">
+        <div class="thumbs">
+          <span><img src="../../../assets/images/like.png" alt="user"> {{temp.MostNoLiked?.LikesCount}}</span>
+          <span><img src="../../../assets/images/unlike.png" alt="user"> {{temp.MostNoLiked?.DislikesCount}}</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>-->
                   </div>
                 </div>
 
