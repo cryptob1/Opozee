@@ -109,7 +109,7 @@
               </span>
             </span>
             <div class="cover_hello" *ngIf="Id">
-              <i class="fa fa-plus" aria-hidden="true" (click)="openBeliefModal()"></i>
+              <i class="fa fa-plus" aria-hidden="true" (click)="openBeliefModal()">&nbsp;New Belief</i> 
             </div>
 
             <div class="cover_buttons" *ngIf="isWanttoSentComment">
@@ -148,7 +148,7 @@
 
   <div class="container">
  
-        <h4 *ngIf="sliderData?.length>0" >Similar Questions:</h4>
+        <h4 *ngIf="sliderData?.length>0" >Related Questions:</h4>
   
           <div class="col-sm-12">
             <ul >

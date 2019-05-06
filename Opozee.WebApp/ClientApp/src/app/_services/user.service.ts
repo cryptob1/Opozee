@@ -128,6 +128,18 @@ export class UserService {
   //  })
   //}
 
+  
+
+  getTopEarners(days: number) {
+    return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetTopEarners?days=' + days ,  {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
+
+  }
+
+
   getAllQuestionlist(questionGetModel) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllPostsWeb', questionGetModel, {
       headers: new HttpHeaders({

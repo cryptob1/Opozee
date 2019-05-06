@@ -10,6 +10,14 @@ namespace Opozee.Models.API
     {
     }
 
+    public class UsersEarnings
+    {
+        public int Id { get; set; }
+        public string OwnerUserName { get; set; }
+
+
+        public int Earnings { get; set; }
+    }
 
     public class PostQuestionDetailWEB
     {

@@ -31,126 +31,125 @@
 
 
 
-
-  <!--<section class="section_second">
-    <div class="container">
-      <div class="cover_heading">
-        <h2>Popular Hastags</h2>
-      </div>
-      <div class="row">
-        <div class="col-sm-6" *ngFor="let temp of questionListing">
-          <ul>
-            <li>
-              <div class="cover_questions">
-                <strong><a [routerLink]="['/questiondetail/', temp.Id]">{{temp.Question}}</a></strong>
-                <div class="cover_analysis">
-                  <div class="left">
-                    <span>Analysis</span>   <span>{{temp.HashTags}}</span>
-                    <div class="anlysis_slider">
-                      <span class="color"></span>
-                      <span class="percentage">50%</span>
+    <!--<section class="section_second">
+      <div class="container">
+        <div class="cover_heading">
+          <h2>Popular Hastags</h2>
+        </div>
+        <div class="row">
+          <div class="col-sm-6" *ngFor="let temp of questionListing">
+            <ul>
+              <li>
+                <div class="cover_questions">
+                  <strong><a [routerLink]="['/questiondetail/', temp.Id]">{{temp.Question}}</a></strong>
+                  <div class="cover_analysis">
+                    <div class="left">
+                      <span>Analysis</span>   <span>{{temp.HashTags}}</span>
+                      <div class="anlysis_slider">
+                        <span class="color"></span>
+                        <span class="percentage">50%</span>
+                      </div>
                     </div>
+                  </div>-
+
+                  <div class="user_left"  [routerLink]="['/viewprofile/', temp?.UserID]">
+                    <span class="icon"><img src="../../assets/images/user.png" alt="user" /></span>
+                    <span class="icon"><img src="{{temp.ImageURL}}" alt="user" /></span>
+                    <span class="username">
+                      {{temp.OwnerUserName}}
+                    </span>
+
                   </div>
-                </div>-
-
-                <div class="user_left"  [routerLink]="['/viewprofile/', temp?.UserID]">
-                  <span class="icon"><img src="../../assets/images/user.png" alt="user" /></span>
-                  <span class="icon"><img src="{{temp.ImageURL}}" alt="user" /></span>
-                  <span class="username">
-                    {{temp.OwnerUserName}}
+                  <span class="cover_span">
+                    <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
+                      <a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a>
+                    </ng-container>
                   </span>
-
+                  <div class="user_right"><div class="date"><i>{{ temp.CreationDate | date:'medium' }}</i></div></div>
                 </div>
-                <span class="cover_span">
-                  <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
-                    <a href="javascript:void(0)" (click)="searchForTag(tag)">{{tag}}&nbsp;</a>
-                  </ng-container>
-                </span>
-                <div class="user_right"><div class="date"><i>{{ temp.CreationDate | date:'medium' }}</i></div></div>
+              </li>
+
+
+            </ul>
+          </div>
+
+
+
+        </div>
+
+      </div>
+    </section>-->
+
+
+
+    <div>
+
+
+      <div *ngIf="showPopup" class="popup-container">
+        <div class="popup-content">
+          <span class="popup-text">
+            <h5> Welcome to Opozee!</h5>
+            <p>
+              Our mission is to build a decentralized open-source social network that helps users converge to <b>shared beliefs</b> and promotes <b>conversation health</b>. <br />
+
+            </p>
+            <h5>How Opozee works:</h5>
+            <div class="popup-step">
+              <div class="step-items">
+                <strong>Step 1:</strong> Sign up and join the community!
               </div>
-            </li>
-
-
-          </ul>
-        </div>
-
-
-
-      </div>
-
-    </div>
-  </section>-->
-
-
-
-  <div  >
-
-       
-  <div *ngIf="showPopup"   class="popup-container"  >
-    <div class="popup-content">
-      <span class="popup-text">
-        <h5> Welcome to Opozee!</h5>
-        <p>
-          Our mission is to build a decentralized open-source social network that helps users converge to <b>shared beliefs</b> and promotes <b>conversation health</b>. <br />
-
-        </p>
-        <h5>How Opozee works:</h5>
-        <div class="popup-step">
-          <div class="step-items">
-            <strong>Step 1:</strong> Sign up and join the community!
-          </div>
-          <div class="step-items">
-            <strong>Step 2:</strong> Post a “yes/no” question or your beliefs in response to existing questions.
-          </div>
-          <div class="step-items">
-            <strong>Step 3:</strong> Earn Opozee Coins (OPZ) when people up-vote your beliefs.
-          </div>
-        </div>
-        <h5>What’s in it for me:</h5>
-        <p>
-          500 Opozee Coins (OPZ) for signing up and earn more as you participate in the network. <br /><br /> Every OPZ coin holder is a <b>shareholder</b> in the network with a claim on the network's growth and profitability. As the value of the network increases, so will the value of OPZ coins.
-        </p>
-      </span>
-      <span class="popup-close" (click)="hidePopup()">X</span>
-    </div>
-  </div>
-
-
-
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <ul>
-            <li>    <a href="javascript:void(0)" (click)="popup()" >Help</a></li>
-            <li>   <a [routerLink]="['/faq/']">FAQ</a></li>
-            <li>   <a [routerLink]="['/aboutus/']">About Us</a></li>
-
-
-            <li><a href="mailto:contactus@opozee.com">Contact Us</a></li>
-            <!--<li >   <a [routerLink]="['/aboutus/']">About Us</a></li>-->
-          </ul>
-          <!--<li> <a [routerLink]="['/aboutus/']">About Us</a></li>
-
-            <li><a href="#">Register</a></li>
-          -->
+              <div class="step-items">
+                <strong>Step 2:</strong> Post a “yes/no” question or your beliefs in response to existing questions.
+              </div>
+              <div class="step-items">
+                <strong>Step 3:</strong> Earn Opozee Coins (OPZ) when people up-vote your beliefs.
+              </div>
+            </div>
+            <h5>What’s in it for me:</h5>
+            <p>
+              500 Opozee Coins (OPZ) for signing up and earn more as you participate in the network. <br /><br /> Every OPZ coin holder is a <b>shareholder</b> in the network with a claim on the network's growth and profitability. As the value of the network increases, so will the value of OPZ coins.
+            </p>
+          </span>
+          <span class="popup-close" (click)="hidePopup()">X</span>
         </div>
       </div>
+
+
+
+      <footer>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <ul>
+                <li>    <a href="javascript:void(0)" (click)="popup()">Help</a></li>
+                <li>   <a [routerLink]="['/faq/']">FAQ</a></li>
+                <li>   <a [routerLink]="['/aboutus/']">About Us</a></li>
+
+
+                <li><a href="mailto:contactus@opozee.com">Contact Us</a></li>
+                <!--<li >   <a [routerLink]="['/aboutus/']">About Us</a></li>-->
+              </ul>
+              <!--<li> <a [routerLink]="['/aboutus/']">About Us</a></li>
+
+                <li><a href="#">Register</a></li>
+              -->
+            </div>
+          </div>
+        </div>
+
+        <div class="copywrite"><p>Copyright Opozee Inc 2019</p></div>
+        <div class="privatePolicy">
+          <!--<a [routerLink]="['/privatepolicy/']">Privacy Policy</a>-->
+
+        </div>
+
+        <div class="aboutus">
+        </div>
+
+        <span id="siteseal">
+          <script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=tO7ndZkEUXZNnbHsOziOEYXzlu2s0mKH9rgu1WUzFXZbUYexoQKcFMLqv54v"></script>
+        </span>
+
+      </footer>
     </div>
-
-    <div class="copywrite"><p>Copyright Opozee Inc 2019</p></div>
-    <div class="privatePolicy">
-      <!--<a [routerLink]="['/privatepolicy/']">Privacy Policy</a>-->
-
-    </div>
-
-    <div class="aboutus">
-    </div>
-
-    <span id="siteseal">
-      <script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=tO7ndZkEUXZNnbHsOziOEYXzlu2s0mKH9rgu1WUzFXZbUYexoQKcFMLqv54v"></script>
-    </span>
-
-  </footer>
-</div>
 

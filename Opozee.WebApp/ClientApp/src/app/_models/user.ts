@@ -114,6 +114,17 @@ export class PostQuestionDetail {
 
 }
 
+
+export class UserEarnModel {
+  Id: number;
+  OwnerUserName: string;
+
+  Earnings: number;
+  
+
+}
+
+
 export class UserProfileModel {
 
   BalanceToken: number;

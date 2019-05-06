@@ -1,0 +1,66 @@
+
+
+
+<section class="leader-table" style=" padding-top: 30px; text-align: center">
+
+  <div class="container-fluid" style="width: 50%; ">
+    <div class="row  ">
+
+      <h3>Top Earners - last 30 days</h3>
+
+      <ul class="list-group">
+
+        <ng-container *ngFor="let record of earnings;let i=index">
+          <div class="taglist" *ngIf="i<15">
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{record.OwnerUserName}}
+              <span class="badge badge-primary badge-pill">{{record.Earnings}} OPZ</span>
+            </li>
+
+          </div>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <ul>
+          <li>    <a href="javascript:void(0)" (click)="popup()">Help</a></li>
+          <li>   <a [routerLink]="['/faq/']">FAQ</a></li>
+          <li>   <a [routerLink]="['/aboutus/']">About Us</a></li>
+
+
+          <li><a href="mailto:contactus@opozee.com">Contact Us</a></li>
+          <!--<li >   <a [routerLink]="['/aboutus/']">About Us</a></li>-->
+        </ul>
+        <!--<li> <a [routerLink]="['/aboutus/']">About Us</a></li>
+
+          <li><a href="#">Register</a></li>
+        -->
+      </div>
+    </div>
+  </div>
+
+  <div class="copywrite"><p>Copyright Opozee Inc 2019</p></div>
+  <div class="privatePolicy">
+    <!--<a [routerLink]="['/privatepolicy/']">Privacy Policy</a>-->
+
+  </div>
+
+  <div class="aboutus">
+  </div>
+
+  <span id="siteseal">
+    <script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=tO7ndZkEUXZNnbHsOziOEYXzlu2s0mKH9rgu1WUzFXZbUYexoQKcFMLqv54v"></script>
+  </span>
+
+</footer>
+    

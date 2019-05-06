@@ -1026,6 +1026,51 @@ namespace opozee.Controllers.API
         }
         #endregion
 
+        #region "Get Top Earners" 
+        [HttpGet]
+        [Route("api/WebApi/GetTopEarners")]
+        public List<UsersEarnings> GetTopEarners(int days)
+        {
+            //    AllUserQuestions questionDetail = new AllUserQuestions();
+             
+            List<UsersEarnings> earnList = new List<UsersEarnings>();
+            try
+            { 
+
+                SqlConnection connection = new SqlConnection(con);
+                var command1 = new SqlCommand("SP_GetEarnings", connection);
+                command1.CommandType = System.Data.CommandType.StoredProcedure;
+
+                command1.Parameters.Add("@days", SqlDbType.Int).Value = days;
+
+                connection.Open();
+                SqlDataReader reader = command1.ExecuteReader();
+
+
+
+                UsersEarnings objitem = null;
+                while (reader.Read())
+                {
+                    objitem = new UsersEarnings();
+                    objitem.OwnerUserName = reader["username"].ToString();
+                    objitem.Id = Convert.ToInt32(reader["UserId"]);
+                    objitem.Earnings = Convert.ToInt32(reader["earnings"]);
+                     
+                    earnList.Add(objitem);
+                }
+
+
+                return earnList;
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+                return null;
+            }
+        }
+        #endregion
+
+
         #region "Get All Posts" 
         [HttpPost]
         [Route("api/WebApi/GetAllPostsWeb")]

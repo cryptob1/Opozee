@@ -20,6 +20,7 @@ var termandCondition_component_1 = require("./legal/termandCondition.component")
 var privatePolicy_component_1 = require("./legal/privatePolicy.component");
 var aboutus_component_1 = require("./aboutus/aboutus.component");
 var faq_component_1 = require("./faq/faq.component");
+var earn_stats_component_1 = require("./earn-stats/earn-stats.component");
 var appRoutes = [
     { path: 'questionlisting', component: QuestionListing_1.QuestionListingComponent },
     { path: 'questionlisting/:search', component: QuestionListing_1.QuestionListingComponent },
@@ -35,6 +36,7 @@ var appRoutes = [
     { path: 'questiondetail/:Id', component: questiondetail_component_1.Questiondetail, canActivate: [index_4.AuthGuard] },
     { path: 'profile/:Id', component: profile_component_1.ProfileComponent, canActivate: [index_4.AuthGuard] },
     { path: 'viewprofile/:Id', component: viewprofile_component_1.ViewProfileComponent },
+    { path: 'score', component: earn_stats_component_1.EarnStatsComponent },
     { path: 'editprofile/:Id', component: editProfile_component_1.EditProfileComponent, canActivate: [index_4.AuthGuard] },
     { path: 'mypostquestions', component: userpostQuestion_component_1.UserpostQuestion, canActivate: [index_4.AuthGuard] },
     { path: 'bookmark/:questionId', component: bookmark_component_1.BookmarkQuestion, canActivate: [index_4.AuthGuard] },

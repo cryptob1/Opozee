@@ -58,6 +58,12 @@ var PostQuestionDetail = /** @class */ (function () {
     return PostQuestionDetail;
 }());
 exports.PostQuestionDetail = PostQuestionDetail;
+var UserEarnModel = /** @class */ (function () {
+    function UserEarnModel() {
+    }
+    return UserEarnModel;
+}());
+exports.UserEarnModel = UserEarnModel;
 var UserProfileModel = /** @class */ (function () {
     function UserProfileModel() {
     }

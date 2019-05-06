@@ -81,6 +81,7 @@ export class EditProfileComponent implements OnInit {
       .subscribe(data => {
         debugger;
         this.loading = false;
+        this.toastr.success('', 'Change successful!', { timeOut: 1000 });
       },
         error => {
           //this.alertService.error(error);
