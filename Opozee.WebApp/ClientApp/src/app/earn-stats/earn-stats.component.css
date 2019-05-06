@@ -1,0 +1,16 @@
+.leader-table {
+  padding-top: 30px;
+  text-align: center;
+}
+
+
+
+.container-fluid {
+  width: 50%;
+}
+@media screen and (max-width: 767px) {
+
+  .container-fluid {
+    width: 80%;
+  }
+}
