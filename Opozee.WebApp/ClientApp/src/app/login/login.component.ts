@@ -65,7 +65,6 @@ export class LoginComponent implements OnInit {
     this.submitted = true;
     this.loading = true;
 
-    console.log(this.loginForm.value);
     this.loginForm.value.email = 'contactus@opozee.com'
     this.loginForm.value.password='useropz'
 

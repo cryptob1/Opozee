@@ -223,7 +223,10 @@ export class Questiondetail implements OnInit {
   }
 
   saveLikeclick(Likes, index) {
-    ;
+
+    if (this.PostQuestionDetailModel.comments[index].CommentedUserId = this.localStorageUser.Id)
+      return;
+
     if (!Likes) { //hitting like
       this.imageShowLike = index;
       //this.imageShowDislike = -2;
@@ -261,7 +264,9 @@ export class Questiondetail implements OnInit {
 
 
   saveDislikeclick(DisLikes, index) {
-    ;
+
+    if (this.PostQuestionDetailModel.comments[index].CommentedUserId = this.localStorageUser.Id)
+      return;
     if (!DisLikes) { //clicking dislike
       this.imageShowDislike = index;
       //this.imageShowLike = -2;

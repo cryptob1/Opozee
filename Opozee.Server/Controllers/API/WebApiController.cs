@@ -478,8 +478,8 @@ namespace opozee.Controllers.API
                                               join o in db.Opinions on q.Id equals o.QuestId
                                               join n in db.Notifications on o.Id equals n.CommentId
                                               join u in db.Users on n.CommentedUserId equals u.UserID
-                                              where q.OwnerUserID == Model.UserId && q.IsDeleted == false
-                                              select new UserNotifications
+                                              where q.OwnerUserID == Model.UserId && q.IsDeleted == false && n.CommentedUserId != Model.UserId 
+                                             select new UserNotifications
                                               {
                                                   UserId = q.OwnerUserID,
                                                   QuestionId = q.Id,
@@ -503,8 +503,9 @@ namespace opozee.Controllers.API
 
                     foreach (var data in userNotifications1)
                     {
-                        data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName);
-                        data.Tag = (data.Like == true) ? "Like" : (data.Dislike == true) ? "Dislike" : (data.Comment == true) ? "Comment" : "";
+                        
+                        data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName, false, IsActive);
+                        data.Tag = (data.Like == true) ? "Up-vote" : (data.Dislike == true) ? "Down-Vote" : (data.Comment == true) ? "Belief" : "";
                     }
                     return userNotifications1.Where(p => p.Message != "").ToList();
                 }
@@ -520,7 +521,7 @@ namespace opozee.Controllers.API
                                               join o in db.Opinions on q.Id equals o.QuestId
                                               join n in db.Notifications on o.Id equals n.CommentId
                                               join u in db.Users on n.CommentedUserId equals u.UserID
-                                              where q.IsDeleted == false && q.OwnerUserID != Model.UserId
+                                              where q.IsDeleted == false  
                                               select new UserNotifications
                                               {
                                                   QuestionId = q.Id,
@@ -544,8 +545,8 @@ namespace opozee.Controllers.API
 
                     foreach (var data in userNotifications1)
                     {
-                        data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName);
-                        data.Tag = (data.Like == true) ? "Like" : (data.Dislike == true) ? "Dislike" : (data.Comment == true) ? "Comment" : "";
+                        data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName, false, IsActive);
+                        data.Tag = (data.Like == true) ? "Up-Vote" : (data.Dislike == true) ? "Down-Vote" : (data.Comment == true) ? "Belief" : "";
                     }
                     return userNotifications1.Where(p => p.Message != "").ToList();
                 }
@@ -697,7 +698,7 @@ namespace opozee.Controllers.API
             string Tag = "";
             if (like == true && dislike == false && comment == false)
             {
-                Tag = UserName + " Has Liked your opinion.";
+                Tag = UserName + " Has Liked your belief.";
             }
             else if (dislike == true && like == false && comment == false)
             {
@@ -719,31 +720,36 @@ namespace opozee.Controllers.API
             return Tag;
         }
 
-        public string GenerateNotificationTags(bool? like, bool? dislike, bool? comment, string UserName)
+        public string GenerateNotificationTags(bool? like, bool? dislike, bool? comment, string UserName , bool you, bool yours)
         {
             string Tag = "";
+            string addStr = "";
+            if (yours) { addStr = "your"; }
             if (like == true && dislike == false && comment == false)
             {
-                Tag = " has Liked opinion.";
+                Tag = " up-voted "+ addStr+" belief:";
             }
             else if (dislike == true && like == false && comment == false)
             {
-                Tag = " has Disliked opinion.";
+                Tag = " down-voted " + addStr + " belief:";
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = " has posted a belief.";
+                Tag = " posted a belief to answer " + addStr + " question:";
             }
             else if (like == true && dislike == false && comment == true)
             {
-                Tag = " has Liked and posted a belief.";
+                Tag = " posted a belief and up-voted.";
             }
             else if (dislike == true && like == false && comment == true)
             {
-                Tag = " has Disliked and posted a belief.";
+                Tag = " posted a belief and down-voted.";
             }
 
-            return Tag;
+
+            if (you) { return "You " + Tag; }
+
+            return "@" +UserName+" " + Tag;
         }
 
         

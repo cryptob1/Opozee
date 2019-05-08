@@ -63,6 +63,7 @@ export class NotificationComponent implements OnInit {
         if (Notifications.length > 0) {
           this.NotificationData = Notifications;
           this.PagingModel.TotalRecords = Notifications[0].TotalRecordcount
+          
         }
         else {
           this.PagingModel.TotalRecords = 0;
@@ -76,6 +77,7 @@ export class NotificationComponent implements OnInit {
       this.isRecordLoaded = false;
     });
   }
+   
 
   PagingPagesload(PageNumber, PageSize) {
     this.PagingModel.PageNumber = PageNumber;
