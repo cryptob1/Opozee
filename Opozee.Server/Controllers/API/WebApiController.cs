@@ -1548,11 +1548,11 @@ namespace opozee.Controllers.API
                                    TotalPostedQuestion = db.Questions.Where(p => p.OwnerUserID == userid && p.IsDeleted == false).Count(),
                                    TotalLikes = (from q in db.Questions
                                                  join o in db.Opinions on q.Id equals o.QuestId
-                                                 where q.OwnerUserID == userid && q.IsDeleted == false
+                                                 where o.CommentedUserId== userid && q.IsDeleted == false
                                                  select o.Likes).Sum(),
                                    TotalDislikes = (from q in db.Questions
                                                     join o in db.Opinions on q.Id equals o.QuestId
-                                                    where q.OwnerUserID == userid && q.IsDeleted == false
+                                                    where o.CommentedUserId == userid && q.IsDeleted == false
                                                     select o.Dislikes).Sum(),
                                }).FirstOrDefault();
 

@@ -224,7 +224,7 @@ export class Questiondetail implements OnInit {
 
   saveLikeclick(Likes, index) {
 
-    if (this.PostQuestionDetailModel.comments[index].CommentedUserId = this.localStorageUser.Id)
+    if (this.PostQuestionDetailModel.comments[index].CommentedUserId == this.localStorageUser.Id)
       return;
 
     if (!Likes) { //hitting like
@@ -265,7 +265,7 @@ export class Questiondetail implements OnInit {
 
   saveDislikeclick(DisLikes, index) {
 
-    if (this.PostQuestionDetailModel.comments[index].CommentedUserId = this.localStorageUser.Id)
+    if (this.PostQuestionDetailModel.comments[index].CommentedUserId == this.localStorageUser.Id)
       return;
     if (!DisLikes) { //clicking dislike
       this.imageShowDislike = index;
