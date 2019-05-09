@@ -224,8 +224,15 @@ export class Questiondetail implements OnInit {
 
   saveLikeclick(Likes, index) {
 
-    if (this.PostQuestionDetailModel.comments[index].CommentedUserId == this.localStorageUser.Id)
-      return;
+    if (this.PostQuestionDetailModel.comments[index].CommentedUserId == this.localStorageUser.Id) { 
+
+      this.toastr.error('', 'You cant vote on your own beliefs.', { timeOut: 5000 });
+     return;
+  }
+    if (this.localStorageUser.Id== 133) {
+      this.toastr.error('', 'You cant vote as an anonyomous user.', { timeOut: 5000 });
+  return
+  }
 
     if (!Likes) { //hitting like
       this.imageShowLike = index;
@@ -265,8 +272,15 @@ export class Questiondetail implements OnInit {
 
   saveDislikeclick(DisLikes, index) {
 
-    if (this.PostQuestionDetailModel.comments[index].CommentedUserId == this.localStorageUser.Id)
+    if (this.PostQuestionDetailModel.comments[index].CommentedUserId == this.localStorageUser.Id) {
+
+      this.toastr.error('', 'You can\'t vote on your own beliefs.', { timeOut: 5000 });
       return;
+    }
+    if (this.localStorageUser.Id == 133) {
+      this.toastr.error('', 'You cant vote as an anonyomous user.', { timeOut: 5000 });
+      return
+    }
     if (!DisLikes) { //clicking dislike
       this.imageShowDislike = index;
       //this.imageShowLike = -2;

@@ -1265,6 +1265,29 @@ namespace opozee.Controllers.API
                                                  }).OrderByDescending(s => s.LikesCount).ThenByDescending(s => s.CreationDate).First();
 
                         }
+                        else if (maxYesLike != null)
+                        {
+                            // get the latest opinion with no votes
+                            data.MostYesLiked = (from e in db.Opinions
+                                                 join t in db.Users on e.CommentedUserId equals t.UserID
+                                                 join n in db.Notifications on e.QuestId equals n.questId
+                                                 where e.IsAgree == true && e.QuestId == data.Id  
+                                                 select new Comments
+                                                 {
+                                                     Id = e.Id,
+                                                     Comment = e.Comment,
+                                                     CommentedUserId = t.UserID,
+                                                     Name = t.FirstName + " " + t.LastName,
+                                                     UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                     IsAgree = e.IsAgree,
+                                                     LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                     DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                     CommentedUserName = t.UserName,
+                                                     CreationDate = e.CreationDate
+                                                 }).OrderByDescending(s => s.CreationDate).First();
+
+                        }
+
                         if (maxNoLike != null && maxNoLike > 0)
                         {
                             data.MostNoLiked = (from e in db.Opinions
@@ -1284,6 +1307,26 @@ namespace opozee.Controllers.API
                                                     CommentedUserName = t.UserName,
                                                     CreationDate = e.CreationDate
                                                 }).OrderByDescending(s => s.LikesCount).ThenByDescending(s => s.CreationDate).First();
+                        }
+                        else if(maxNoLike != null)
+                        {
+                            data.MostNoLiked = (from e in db.Opinions
+                                                join t in db.Users on e.CommentedUserId equals t.UserID
+                                                join n in db.Notifications on e.QuestId equals n.questId
+                                                where e.IsAgree == false && e.QuestId == data.Id  
+                                                select new Comments
+                                                {
+                                                    Id = e.Id,
+                                                    Comment = e.Comment,
+                                                    CommentedUserId = t.UserID,
+                                                    Name = t.FirstName + " " + t.LastName,
+                                                    UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                    IsAgree = e.IsAgree,
+                                                    LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                    DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                    CommentedUserName = t.UserName,
+                                                    CreationDate = e.CreationDate
+                                                }).OrderByDescending (s => s.CreationDate).First();
                         }
                     }
                 }

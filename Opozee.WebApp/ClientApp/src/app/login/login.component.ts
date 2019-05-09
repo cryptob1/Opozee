@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   submitted = false;
-  returnUrl: string;
+  returnUrl: string ="";
   thirdPartyModel = { 'UserName': '', 'FirstName': '', 'LastName': '', 'DeviceType': 'Web', 'ThirdPartyId': '', 'Email': '', 'ThirdPartyType': 0 };
 
   constructor(
@@ -79,7 +79,8 @@ export class LoginComponent implements OnInit {
           this.dataSharingService.loginsetstate(data);
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(data));
-          this.router.navigate(['']);
+          //this.router.navigate(['']);
+          this.router.navigateByUrl(this.returnUrl);
         }
 
         else {
@@ -115,7 +116,8 @@ export class LoginComponent implements OnInit {
           this.dataSharingService.loginsetstate(data);
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(data));
-          this.router.navigate(['']);
+          //this.router.navigate(['']);
+          this.router.navigateByUrl(this.returnUrl);
         }
 
         else {
@@ -155,7 +157,8 @@ export class LoginComponent implements OnInit {
               this.dataSharingService.loginsetstate(data);
               // store user details and jwt token in local storage to keep user logged in between page refreshes
               localStorage.setItem('currentUser', JSON.stringify(data));
-              this.router.navigate(['']);
+              //this.router.navigate(['']);
+              this.router.navigateByUrl(this.returnUrl);
             }
 
             else {
@@ -199,7 +202,8 @@ export class LoginComponent implements OnInit {
               this.dataSharingService.loginsetstate(data);
               // store user details and jwt token in local storage to keep user logged in between page refreshes
               localStorage.setItem('currentUser', JSON.stringify(data));
-              this.router.navigate(['']);
+              //this.router.navigate(['']);
+              this.router.navigateByUrl(this.returnUrl);
             }
 
             else {
@@ -248,7 +252,8 @@ export class LoginComponent implements OnInit {
         this.dataSharingService.loginsetstate(data);
         // store user details and jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('currentUser', JSON.stringify(data));
-        this.router.navigate(['']);
+        //this.router.navigate(['']);
+        this.router.navigateByUrl(this.returnUrl);
       }
       else {
         this.loading = false;
