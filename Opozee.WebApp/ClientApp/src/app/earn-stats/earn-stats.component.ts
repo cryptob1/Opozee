@@ -16,7 +16,12 @@ import { debounce } from 'rxjs/operator/debounce';
 })
 export class EarnStatsComponent implements OnInit {
 
-  earnings: UserEarnModel[] = [];
+  //earnings30: UserEarnModel[] = [];
+  //earnings7: UserEarnModel[] = [];
+  //earnings1: UserEarnModel[] = [];
+  earnings: {
+    [id: number]: UserEarnModel[];
+  } = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -27,6 +32,8 @@ export class EarnStatsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getTopEarners(1)
+    this.getTopEarners(7)
     this.getTopEarners(30)
   }
 
@@ -39,9 +46,11 @@ export class EarnStatsComponent implements OnInit {
 
 
     this.userService.getTopEarners(days).subscribe(data => {
-       
-      this.earnings = data as UserEarnModel[];
-      console.log(this.earnings);
+
+      
+      this.earnings[days] = (data as UserEarnModel[]);
+      //this.earnings.push({key: days, value: (data as UserEarnModel[]) });
+      
 
     },
       error => {

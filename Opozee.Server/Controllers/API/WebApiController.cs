@@ -478,7 +478,7 @@ namespace opozee.Controllers.API
                                               join o in db.Opinions on q.Id equals o.QuestId
                                               join n in db.Notifications on o.Id equals n.CommentId
                                               join u in db.Users on n.CommentedUserId equals u.UserID
-                                              where q.OwnerUserID == Model.UserId && q.IsDeleted == false && n.CommentedUserId != Model.UserId 
+                                              where (q.OwnerUserID == Model.UserId || o.CommentedUserId==Model.UserId) && q.IsDeleted == false && n.CommentedUserId != Model.UserId 
                                              select new UserNotifications
                                               {
                                                   UserId = q.OwnerUserID,

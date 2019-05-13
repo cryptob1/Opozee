@@ -3,26 +3,71 @@
 
 <section class="leader-table">
 
-  <div class="container-fluid" >
-    <div class="row  ">
+  <h2>Top Earners </h2>
 
-      <h3>Top Earners - last 30 days</h3>
+  <div class="container-fluid">
+    <div class="row justify-content-start  ">
 
-      <ul class="list-group">
+      <div class="col-lg-4">
 
-        <ng-container *ngFor="let record of earnings;let i=index">
-          <div class="taglist" *ngIf="i<15">
+        <h3>24 hours </h3>
 
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              {{record.OwnerUserName}}
-              <span class="badge badge-primary badge-pill">{{record.Earnings}} OPZ</span>
-            </li>
+        <ul class="list-group">
 
-          </div>
-        </ng-container>
-      </ul>
+          <ng-container *ngFor="let record of earnings[1];let i=index">
+            <div class="taglist" *ngIf="i<15">
+
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a [routerLink]="['/viewprofile/', record?.Id]"> {{record.OwnerUserName}}</a>
+                <span class="badge badge-primary badge-pill">{{record.Earnings}} OPZ</span>
+              </li>
+
+            </div>
+          </ng-container>
+        </ul>
+      </div>
+
+      <div class="col-lg-4">
+
+        <h3>7 days</h3>
+
+        <ul class="list-group">
+
+          <ng-container *ngFor="let record of earnings[7];let i=index">
+            <div class="taglist" *ngIf="i<15">
+
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a [routerLink]="['/viewprofile/', record?.Id]"> {{record.OwnerUserName}}</a>
+                <span class="badge badge-primary badge-pill">{{record.Earnings}} OPZ</span>
+              </li>
+
+            </div>
+          </ng-container>
+        </ul>
+      </div>
+
+      <div class="col-lg-4">
+
+        <h3>30 days</h3>
+
+        <ul class="list-group">
+
+          <ng-container *ngFor="let record of earnings[30];let i=index">
+            <div class="taglist" *ngIf="i<15">
+
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a [routerLink]="['/viewprofile/', record?.Id]"> {{record.OwnerUserName}}</a>
+                <span class="badge badge-primary badge-pill">{{record.Earnings}} OPZ</span>
+              </li>
+
+            </div>
+          </ng-container>
+        </ul>
+      </div>
+
     </div>
   </div>
+   
 </section>
 
 
@@ -33,7 +78,7 @@
     <div class="row">
       <div class="col-sm-12">
         <ul>
-          <li>    <a href="javascript:void(0)" >Help</a></li>
+          <li>    <a href="javascript:void(0)">Help</a></li>
           <li>   <a [routerLink]="['/faq/']">FAQ</a></li>
           <li>   <a [routerLink]="['/aboutus/']">About Us</a></li>
 
@@ -63,4 +108,4 @@
   </span>
 
 </footer>
-    
+
