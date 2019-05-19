@@ -1061,14 +1061,24 @@ namespace opozee.Controllers.API
              
             List<UsersEarnings> earnList = new List<UsersEarnings>();
             try
-            { 
+            {
+                SqlConnection connection;
+                var command1 = new SqlCommand();
 
-                SqlConnection connection = new SqlConnection(con);
-                var command1 = new SqlCommand("SP_GetEarnings", connection);
-                command1.CommandType = System.Data.CommandType.StoredProcedure;
-
-                command1.Parameters.Add("@days", SqlDbType.Int).Value = days;
-
+                if (days == 0)
+                {
+                    connection = new SqlConnection(con);
+                    command1 = new SqlCommand("SP_GetEarnings_since_sunday", connection);
+                    command1.CommandType = System.Data.CommandType.StoredProcedure;
+                      
+                }   
+                else
+                {
+                    connection = new SqlConnection(con);
+                    command1 = new SqlCommand("SP_GetEarnings", connection);
+                    command1.CommandType = System.Data.CommandType.StoredProcedure;
+                    command1.Parameters.Add("@days", SqlDbType.Int).Value = days;
+                }
                 connection.Open();
                 SqlDataReader reader = command1.ExecuteReader();
 

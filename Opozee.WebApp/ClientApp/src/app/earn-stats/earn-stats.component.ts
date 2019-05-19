@@ -33,8 +33,8 @@ export class EarnStatsComponent implements OnInit {
 
   ngOnInit() {
     this.getTopEarners(1)
+    this.getTopEarners(0)
     this.getTopEarners(7)
-    this.getTopEarners(30)
   }
 
 
