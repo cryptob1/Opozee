@@ -21,23 +21,27 @@
 
 .popup-container {
   background: rgba(0,0,0,.5);
+ 
   position: absolute;
   top: 0;
   right: 0;
   left: 0;
-  bottom: 0;
+  bottom: -6000px;
   z-index: 999;
   animation: popup_anime linear 1000ms forwards;
   opacity: 0;
-}
+ }
 
-@keyframes popup_anime {
-  to {
-    opacity: 1;
+
+  
+
+  @keyframes popup_anime {
+    to {
+      opacity: 1;
+    }
   }
-}
- 
-.popup-content {
+
+  .popup-content {
   width: 650px;
   padding: 40px;
   border-radius: 5px;
@@ -64,6 +68,7 @@
   cursor: pointer;
   font-weight: 900;
   color: #808080;
+ 
 }
 
 .popup-text {

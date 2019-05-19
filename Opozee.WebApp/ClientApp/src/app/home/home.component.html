@@ -85,7 +85,7 @@
     <div>
 
 
-      <div *ngIf="showPopup" class="popup-container">
+      <div *ngIf="showPopup" class="popup-container" ng-disable-scroll="showPopup">
         <div class="popup-content">
           <span class="popup-text">
             <h5> Welcome to Opozee!</h5>
@@ -96,14 +96,15 @@
             <h5>How Opozee works:</h5>
             <div class="popup-step">
               <div class="step-items">
-                <strong>Step 1:</strong> Sign up and join the community!
+                <strong>Step 1:</strong> Sign up and join the community! <br /><br />
+                <strong>Step 2:</strong> Post a “yes/no” question or your beliefs in response to existing questions. <br /><br />
+                <strong>Step 3:</strong> Earn Opozee Coins (OPZ) when people up-vote your beliefs.<br /><br />
               </div>
+         
               <div class="step-items">
-                <strong>Step 2:</strong> Post a “yes/no” question or your beliefs in response to existing questions.
+                <img src="https://opozee.com:81/Content/Upload/ProfileImage/opozee_howto.gif" />
               </div>
-              <div class="step-items">
-                <strong>Step 3:</strong> Earn Opozee Coins (OPZ) when people up-vote your beliefs.
-              </div>
+              
             </div>
             <h5>What’s in it for me:</h5>
             <p>
