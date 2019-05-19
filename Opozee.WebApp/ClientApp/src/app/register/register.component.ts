@@ -53,6 +53,7 @@ export class RegisterComponent implements OnInit {
           this.alertService.success('Registration successful', true);
           
           if (data.Response) {
+            //console.log(data.Response);
             if (data.Response.UserData) {
               let _user = data.Response.UserData;
               let contact = {
@@ -62,12 +63,18 @@ export class RegisterComponent implements OnInit {
                 'email': _user.Email
               }
               this.sendWelcomeMail(contact);
+
+              this.toastr.success('Registration', 'Successful.', { timeOut: 5000 });
+
+              this.router.navigate(['/login']);
             }
+            else if (data.Response.Code=1) {
+              this.toastr.error('Registration Failed', data.Response.Status, { timeOut: 8000 });
+              this.router.navigate(['/login']);
+            }
+            
           }
 
-          this.toastr.success('Registration', 'Successful.', { timeOut: 5000 });
-
-          this.router.navigate(['/login']);
         },
         error => {
           this.alertService.error(error);
