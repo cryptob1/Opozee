@@ -175,21 +175,36 @@ export class PostQuestionComponent implements OnInit {
       .pipe(first())
       .subscribe(data => {
 
-        //if (data) {
-          if (data.BalanceToken <= 0) {
-            this.toastr.error('Token Blance 0', 'You have 0 tokens in your account. Please email us to refill the account to post opinion.', { timeOut: 5000 });
-          }
-          else {
+        console.log(data);
+        debugger;
+        if (data) {
+          if (data.Response.Question) {
+            console.log(data.Response.Question);
             this.alertService.success('Question Posted', true);
-            this.router.navigate(['']);
+            this.router.navigate(['questiondetail/' + data.Response.Question]);
+
+            //if (data.BalanceToken <= 0) {
+            //  this.toastr.error('Token Blance 0', 'You have 0 tokens in your account. Please email us to refill the account to post opinion.', { timeOut: 5000 });
+            //}
+            //else {
+            //  this.alertService.success('Question Posted', true);
+            //  this.router.navigate(['']);
+            //}
+            this.loading = false;
           }
-          this.loading = false;
+
+        }
+        else {
+          this.toastr.error('This question is already posted. Please enter a diffrent question.');
+          this.router.navigate(['']);
+        }
         //}
         //else {
         //  this.toastr.error('This question is already posted. Please enter a diffrent question.');
         //  this.loading = false;
         //  return false;
         //}
+
       },
         error => {
           this.alertService.error(error);

@@ -102,9 +102,11 @@ namespace opozee.Controllers.API
                         entity.Password = AesCryptography.Encrypt(users.Password);
                     }
 
+
+
                     entity.DeviceType = "Web";
                     entity.DeviceToken = users.DeviceToken;
-                    entity.CreatedDate = DateTime.Now;
+                    entity.CreatedDate = DateTime.Now.ToUniversalTime(); 
                     entity.RecordStatus = RecordStatus.Active.ToString();
                     // entity.SocialID = users.ThirdPartyId;
                     //if (input.ThirdPartyType == ThirdPartyType.Facebook)
@@ -119,6 +121,23 @@ namespace opozee.Controllers.API
                     //{
                     //    entity.SocialType = ThirdPartyType.Twitter.ToString();
                     //}
+
+
+                    var v = db.Users.Where(a => a.Email == users.Email).FirstOrDefault();
+
+                    if (v!=null)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Email already registered.", "Message"));
+                    }
+
+
+                    v = db.Users.Where(a => a.UserName == users.UserName).FirstOrDefault();
+
+                    if (v != null)
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Username already exists.", "Message"));
+                    }
+
 
                     if (users.ImageURL != null && users.ImageURL != "")
                     {
@@ -361,7 +380,7 @@ namespace opozee.Controllers.API
         #region "Post Question" 
         [HttpPost]
         [Route("api/WebApi/PostQuestionWeb")]
-        public Token PostQuestionWeb([FromBody] Question postQuestion)
+        public HttpResponseMessage PostQuestionWeb([FromBody] Question postQuestion)
         {
             Token ObjToken = null;
             try
@@ -369,12 +388,12 @@ namespace opozee.Controllers.API
 
                 if (!ModelState.IsValid)
                 {
-                    return ObjToken; ;
+                    return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Invalid State", "Question"));
                 }
                 ObjToken = db.Tokens.Where(x => x.UserId == postQuestion.OwnerUserID).FirstOrDefault();
                 if (ObjToken.BalanceToken <= 0)
                 {
-                    return ObjToken;
+                    return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Insufficient Tokens", "Question"));
                 }
        
                 //if (!string.IsNullOrEmpty(postQuestion.PostQuestion))
@@ -407,7 +426,7 @@ namespace opozee.Controllers.API
                 quest.OwnerUserID = postQuestion.OwnerUserID;
                 quest.HashTags = postQuestion.HashTags;
                 quest.IsDeleted = false;
-                quest.CreationDate = DateTime.Now;
+                quest.CreationDate = DateTime.Now.ToUniversalTime();
                 quest.TaggedUser = postQuestion.TaggedUser;
                 db.Questions.Add(quest);
                 db.SaveChanges();
@@ -417,7 +436,7 @@ namespace opozee.Controllers.API
                 notification.CommentedUserId = postQuestion.OwnerUserID;
                 notification.questId = quest.Id;
                 notification.Comment = true;
-                notification.CreationDate = DateTime.Now;
+                notification.CreationDate = DateTime.Now.ToUniversalTime(); ;
                 // notification.Status = 1;
                 db.Notifications.Add(notification);
                 db.SaveChanges();
@@ -428,15 +447,16 @@ namespace opozee.Controllers.API
                 //db.SaveChanges();
                 int questID = quest.Id;
                 quest = db.Questions.Find(questID);
-                return ObjToken;
-                //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, quest, "Question"));
+                
+                //return ObjToken;
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, quest.Id, "Question"));
                 //}
             }
             catch (Exception ex)
             {
-                return ObjToken;
+                //return ObjToken;
                 OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
-                //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "Question"));
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "Question"));
             }
         }
         #endregion
@@ -1780,7 +1800,7 @@ namespace opozee.Controllers.API
                 ObjOpinion.QuestId = Model.QuestId;
                 ObjOpinion.Comment = Model.Comment;
                 ObjOpinion.CommentedUserId = Model.CommentedUserId;
-                ObjOpinion.CreationDate = DateTime.Now;
+                ObjOpinion.CreationDate = DateTime.Now.ToUniversalTime(); ;
                 ObjOpinion.Likes = Model.Likes;
                 ObjOpinion.IsAgree = Model.OpinionAgreeStatus;
                 ObjOpinion.Dislikes = Model.Dislikes;
@@ -1799,7 +1819,7 @@ namespace opozee.Controllers.API
                 //notification.Like = Convert.ToBoolean(Model.Likes);
                 //notification.Dislike = Convert.ToBoolean(Model.Dislikes);
                 notification.Comment = true;
-                notification.CreationDate = DateTime.Now;
+                notification.CreationDate = DateTime.Now.ToUniversalTime(); ;
                 // notification.Status = 2;
                 db.Notifications.Add(notification);
                 db.SaveChanges();
@@ -2606,7 +2626,7 @@ namespace opozee.Controllers.API
 
                     entity.DeviceType = input.DeviceType;
                     entity.DeviceToken = input.DeviceToken;
-                    entity.CreatedDate = DateTime.Now;
+                    entity.CreatedDate = DateTime.Now.ToUniversalTime(); 
                     entity.RecordStatus = RecordStatus.Active.ToString();
                     entity.SocialID = input.ThirdPartyId;
                     if (input.ThirdPartyType == ThirdPartyType.Facebook)
@@ -2792,7 +2812,7 @@ namespace opozee.Controllers.API
                 //quest = new Question();
                 quest.PostQuestion = postQuestion.PostQuestion;
                 quest.HashTags = postQuestion.HashTags;
-                quest.ModifiedDate = DateTime.Now;
+                quest.ModifiedDate = DateTime.Now.ToUniversalTime(); 
                 db.Entry(quest).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
@@ -2826,7 +2846,7 @@ namespace opozee.Controllers.API
                 }
                 //quest = new Question();
                 quest.IsDeleted = true;
-                quest.ModifiedDate = DateTime.Now;
+                quest.ModifiedDate = DateTime.Now.ToUniversalTime(); 
                 db.Entry(quest).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
