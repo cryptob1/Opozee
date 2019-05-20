@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -44,6 +44,9 @@ export class DialogPostBelief implements OnInit {
   constructor(private route: ActivatedRoute, private userService: UserService, private formBuilder: FormBuilder,
     private router: Router, private toastr: ToastrService) {
     this.dataModel = this.getModelSetting();
+
+    
+
   }  
 
   ngOnInit() {
@@ -51,23 +54,30 @@ export class DialogPostBelief implements OnInit {
   }
 
  
-
   show(question?: any): void {
+ 
+     
 
     this.dataModel.QuestId = question.QuestId;
     this.dataModel.CommentedUserId = question.CommentedUserId;
     this.dataModel.OpinionAgreeStatus = 0;
-
-    console.log('data', this.dataModel);
+ 
     this.dialogPostBelief.show();
   }
 
   close() {
+ 
+ 
+    this.dataModel.Comment = '';
+ 
+ 
+
     this.dialogPostBelief.hide();
+
   }
 
   submitForm() {
-    console.log('data', this.dataModel);
+ 
 
     if (this.dataModel.Comment == '' || this.dataModel.Comment == undefined) {
       this.toastr.error('ERROR', 'Please enter belief.');
@@ -89,11 +99,13 @@ export class DialogPostBelief implements OnInit {
             this.save.emit();
             this.toastr.success('Data save successfully', '');
             this.close();
+            this.dataModel.Commment = '';
           }
 
         },
           error => {
             this.toastr.error('Error', 'Something went wrong, please try again.');
+ 
             //this.alertService.error(error);
             //this.loading = false;
           });
