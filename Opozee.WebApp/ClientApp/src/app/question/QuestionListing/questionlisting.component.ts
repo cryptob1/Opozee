@@ -7,6 +7,7 @@ import { UserService } from '../../_services';
 
 import { Subscription } from 'rxjs';
 import { ISubscription } from 'rxjs/Subscription';
+import { MixpanelService } from '../../_services/mixpanel.service';
 
 
 
@@ -40,14 +41,16 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   sliderData: PostQuestionDetail[] = [];
 
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router,
-    private location: Location) {
+    private location: Location, private mixpanelService: MixpanelService ) {
 
     this.showSlider = this.location.path() ? false : true;
 
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
     this.hashTag = false;
 
-
+    if (this.localStorageUser != null) {
+      mixpanelService.init(this.localStorageUser.UserName)
+    }
    
      
     if (JSON.parse(localStorage.getItem('popupShown')) || this.localStorageUser != null) {

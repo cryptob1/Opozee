@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationDialogComponent } from '../../Shared/confirmationDialog/confirmationDialog.component';
+import { MixpanelService } from '../../_services/mixpanel.service';
 
 //import { ConfirmationDialogService } from '../../Shared/confirmationDialog/confirmationDialog.service';
 
@@ -56,7 +57,7 @@ export class PostQuestionComponent implements OnInit {
   constructor(private userService: UserService, private userservice: UserService, private alertService: AlertService, private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private toastr: ToastrService,
+    private toastr: ToastrService, private mixpanelService: MixpanelService
     //private confirmationDialogService: ConfirmationDialogService
   ) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -126,7 +127,7 @@ export class PostQuestionComponent implements OnInit {
     this.Usertags = this.Usertags.substring(0, this.Usertags.length - 1)
     this.questionPostForm.value.taggedUser = this.Usertags;
     this.loading = true;
-    this.userservice.postQuestionwebNew(this.questionPostForm.value)
+    this.userservice.checkDuplicateQuestions(this.questionPostForm.value)
       .pipe(first())
       .subscribe(data => {
         if (data) {
@@ -181,6 +182,7 @@ export class PostQuestionComponent implements OnInit {
           if (data.Response.Question) {
             console.log(data.Response.Question);
             this.alertService.success('Question Posted', true);
+            this.mixpanelService.track('Posted Belief');
             this.router.navigate(['questiondetail/' + data.Response.Question]);
 
             //if (data.BalanceToken <= 0) {
@@ -191,11 +193,13 @@ export class PostQuestionComponent implements OnInit {
             //  this.router.navigate(['']);
             //}
             this.loading = false;
+
+
           }
 
         }
         else {
-          this.toastr.error('This question is already posted. Please enter a diffrent question.');
+          this.toastr.error('This question is already posted. Please enter a different question.');
           this.router.navigate(['']);
         }
         //}

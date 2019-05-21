@@ -63,6 +63,7 @@ import { JwSocialButtonsModule } from 'jw-angular-social-buttons';
 
 import { ConfirmationDialogComponent } from './Shared/confirmationDialog/confirmationDialog.component';
 import { EarnStatsComponent } from './earn-stats/earn-stats.component' 
+import { MixpanelService } from './_services/mixpanel.service';
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
     [
@@ -142,6 +143,8 @@ export function getAuthServiceConfigs() {
     UserService,
     //BsModalService,
     //BsModalRef,
+    MixpanelService,
+ 
     DataSharingService,
     {
       provide: HTTP_INTERCEPTORS,

@@ -716,7 +716,7 @@ namespace opozee.Controllers.API
                                             //NotificationId = n.Id,
                                             //IsValidToDelete = this.CheckIsValidToDeleteQuestion(q)
                                             QOCreationDate = q.CreationDate
-                                        }).ToList().OrderByDescending(x => x.NotificationId).ToList().Skip(skip).Take(pageSize).ToList();
+                                        }).ToList().OrderByDescending(x => x.QuestionId).ToList().Skip(skip).Take(pageSize).ToList();
 
                     return _userProfileData;
                 }

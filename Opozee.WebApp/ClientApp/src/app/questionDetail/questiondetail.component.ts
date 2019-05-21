@@ -10,6 +10,7 @@ import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
 import { DialogPostBelief } from '../questionDetail/dialogPostBelief/dialogPostBelief.component';
 import { HttpUrlEncodingCodec } from '@angular/common/http';
+import { MixpanelService } from '../_services/mixpanel.service';
 
 @Component({
   selector: 'questiondetail-component',
@@ -68,7 +69,8 @@ export class Questiondetail implements OnInit {
     private userService: UserService,
     private formBuilder: FormBuilder,
     private router: Router, private location: Location,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private mixpanelService: MixpanelService
   ) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -235,6 +237,7 @@ export class Questiondetail implements OnInit {
   }
 
     if (!Likes) { //hitting like
+      
       this.imageShowLike = index;
       //this.imageShowDislike = -2;
       /////+
@@ -248,7 +251,7 @@ export class Questiondetail implements OnInit {
       this.dataModel.CommentId = this.PostQuestionDetailModel.comments[index].Id;
       this.dataModel.CreationDate = new Date();
       this.SaveLikeDislike(this.dataModel);
-
+      this.mixpanelService.track('Liked');
     }
     else {
       this.imageShowLike = -1;
@@ -263,7 +266,7 @@ export class Questiondetail implements OnInit {
       this.dataModel.CommentId = this.PostQuestionDetailModel.comments[index].Id;
       this.dataModel.CreationDate = new Date();
       this.SaveLikeDislike(this.dataModel);
-
+      this.mixpanelService.track('Unlike');
 
     }
   }
@@ -297,6 +300,7 @@ export class Questiondetail implements OnInit {
       this.dataModel.CommentId = this.PostQuestionDetailModel.comments[index].Id;
       this.dataModel.CreationDate = new Date();
       this.SaveLikeDislike(this.dataModel);
+      this.mixpanelService.track('Dislike');
     }
     else {
       this.imageShowDislike = -1;
@@ -312,7 +316,7 @@ export class Questiondetail implements OnInit {
       this.dataModel.CommentId = this.PostQuestionDetailModel.comments[index].Id;
       this.dataModel.CreationDate = new Date();
       this.SaveLikeDislike(this.dataModel);
-
+      this.mixpanelService.track('UnDislike');
 
     }
 
@@ -467,6 +471,7 @@ export class Questiondetail implements OnInit {
 
     console.log('data22', this.dataModel);
     this.dialogPostBelief.show(this.dataModel);
+
   }
 
 

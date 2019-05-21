@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../_services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { first } from 'rxjs/operators';
+import { MixpanelService } from '../../_services/mixpanel.service';
 
 @Component({
   selector: 'dialog-post-belief',
@@ -42,7 +43,7 @@ export class DialogPostBelief implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private userService: UserService, private formBuilder: FormBuilder,
-    private router: Router, private toastr: ToastrService) {
+    private router: Router, private toastr: ToastrService, private mixpanelService: MixpanelService)  {
     this.dataModel = this.getModelSetting();
 
     
@@ -100,6 +101,8 @@ export class DialogPostBelief implements OnInit {
             this.toastr.success('Data save successfully', '');
             this.close();
             this.dataModel.Commment = '';
+
+            this.mixpanelService.track('Posted Belief');
           }
 
         },

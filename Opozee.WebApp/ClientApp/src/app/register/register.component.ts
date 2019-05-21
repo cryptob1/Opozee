@@ -6,6 +6,7 @@ import { first } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
 import { AlertService, UserService } from '../_services';
+import { MixpanelService } from '../_services/mixpanel.service';
 
 @Component({templateUrl: 'register.component.html'})
 export class RegisterComponent implements OnInit {
@@ -19,7 +20,8 @@ export class RegisterComponent implements OnInit {
         private router: Router,
         private userService: UserService,
       private alertService: AlertService,
-    private toastr: ToastrService) {
+      private toastr: ToastrService,
+        private mixpanelService: MixpanelService) {
 
 
     }
@@ -65,12 +67,15 @@ export class RegisterComponent implements OnInit {
               this.sendWelcomeMail(contact);
 
               this.toastr.success('Registration', 'Successful.', { timeOut: 5000 });
-
+              this.mixpanelService.init(_user.userName);
+              this.mixpanelService.track('Signedup');
               this.router.navigate(['/login']);
+
             }
             else if (data.Response.Code=1) {
               this.toastr.error('Registration Failed', data.Response.Status, { timeOut: 8000 });
-              this.router.navigate(['/login']);
+              //this.router.navigate(['/login']);
+              this.loading = false;
             }
             
           }

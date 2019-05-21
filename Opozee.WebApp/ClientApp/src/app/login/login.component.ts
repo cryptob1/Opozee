@@ -13,7 +13,8 @@ import { AuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angular
 //import { AuthService } from './auth/auth.service'; 
 import * as AuthService1 from "auth0-js";
 import { ForgotPassword } from '../user/forgotPassword/forgotPassword.component';
-
+import { MixpanelService } from '../_services/mixpanel.service';
+ 
 
 @Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit {
@@ -38,7 +39,8 @@ export class LoginComponent implements OnInit {
     private dataSharingService: DataSharingService,
     private toastr: ToastrService,
     private socialAuthService: AuthService,
-    public auth: AuthService
+    public auth: AuthService,
+     private mixpanelService: MixpanelService
   ) {
 
 
@@ -80,6 +82,8 @@ export class LoginComponent implements OnInit {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(data));
           //this.router.navigate(['']);
+          this.mixpanelService.init('Anon');
+          this.mixpanelService.track('Login');
           this.router.navigateByUrl(this.returnUrl);
         }
 
@@ -117,6 +121,9 @@ export class LoginComponent implements OnInit {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(data));
           //this.router.navigate(['']);
+          this.mixpanelService.init(this.loginForm.value.Email);
+          this.mixpanelService.track('Login with email');
+
           this.router.navigateByUrl(this.returnUrl);
         }
 
@@ -158,6 +165,8 @@ export class LoginComponent implements OnInit {
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
                   localStorage.setItem('currentUser', JSON.stringify(data));
                   //this.router.navigate(['']);
+                  this.mixpanelService.init(this.thirdPartyModel.Email);
+                  this.mixpanelService.track('Login with facebook');
                   this.router.navigateByUrl(this.returnUrl);
                 }
                 else {
@@ -206,6 +215,9 @@ export class LoginComponent implements OnInit {
                   this.dataSharingService.loginsetstate(data);
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
                   localStorage.setItem('currentUser', JSON.stringify(data));
+
+                  this.mixpanelService.init(this.thirdPartyModel.Email);
+                  this.mixpanelService.track('Login with Google');
                   //this.router.navigate(['']);
                   this.router.navigateByUrl(this.returnUrl);
                 }
@@ -282,6 +294,11 @@ export class LoginComponent implements OnInit {
   openforgotpasswordModel() {
     console.log('here');
     this.forgotPassword.show();
+
+
+    this.mixpanelService.init('Anon');
+    this.mixpanelService.track('Frogot password');
+
   }
 }
 

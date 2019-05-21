@@ -86,7 +86,7 @@ export class ProfileComponent implements OnInit {
                             this.profileData = this.profileData.map((x) => {
                                 if (x.QOCreationDate) {
                                     let Valid10MinDate = new Date(x.QOCreationDate);
-                                    Valid10MinDate.setMinutes(Valid10MinDate.getMinutes() + 10);
+                                    Valid10MinDate.setMinutes(Valid10MinDate.getMinutes() + 30);
 
                                     let currentDate = new Date().toISOString().substring(0, new Date().toISOString().length - 1);
                                     //console.log(Valid10MinDate, new Date(currentDate));

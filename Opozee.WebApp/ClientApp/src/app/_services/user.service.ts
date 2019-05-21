@@ -80,7 +80,7 @@ export class UserService {
     })
   }
 
-  postQuestionwebNew(question) {
+  checkDuplicateQuestions(question) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/CheckDuplicateQuestions', question, {
       headers: new HttpHeaders({
         'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
