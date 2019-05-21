@@ -53,7 +53,7 @@
     </div>
     <div class="questions-section">
       <ul class="nav nav-tabs">
-        <li><a class="active" data-toggle="tab" (click)="onchangeTab('mybeliefs')" href="#mybeliefs">My Beliefs</a></li>
+        <li class="active"><a data-toggle="tab" (click)="onchangeTab('mybeliefs')" href="#mybeliefs">My Beliefs</a></li>
         <li><a data-toggle="tab" (click)="onchangeTab('myquestions')" href="#myquestions">My Questions</a></li>
       </ul>
 
@@ -63,9 +63,12 @@
 
             <strong style="border-color: #D2F3C8">
               <!--<a data-title="Q">-->
-              <a data-title="Q" href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp.QuestionId]">
+              <a data-title="Q" href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp?.QuestionId]">
                 <div class="message-container" [innerHTML]="temp?.Question | emojis"></div>
               </a>
+              <span *ngIf="temp?.IsValidToDelete" (click)="deleteQuestionBelief('mybeliefs',temp)" title="Delete">
+                <i style="cursor:pointer" class="fa fa-trash" aria-hidden="true"></i>
+              </span>
               <!--<small style="color:grey;font-size:10px;font-weight:100">@{{temp.UserName}}</small>-->
             </strong>
             
@@ -86,6 +89,9 @@
                 <a data-title="Q" href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp1.QuestionId]">
                   <div ExternalLink class="message-container" [innerHTML]="temp1?.Question | emojis"></div>
                 </a>
+                <span *ngIf="temp1?.IsValidToDelete" (click)="deleteQuestionBelief('myquestions',temp1)" title="Delete this question">
+                  <i style="cursor:pointer" class="fa fa-trash" aria-hidden="true"></i>
+                </span>
               </strong>
             </span>
           </div>

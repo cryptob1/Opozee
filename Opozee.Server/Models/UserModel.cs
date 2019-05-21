@@ -33,6 +33,7 @@ namespace Opozee.Models
 
         public int UserId { get; set; }
 
+        public bool IsSocialLogin { get; set; }
 
     }
 

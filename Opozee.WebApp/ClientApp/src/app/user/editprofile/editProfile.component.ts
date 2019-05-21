@@ -21,6 +21,7 @@ export class EditProfileComponent implements OnInit {
   imageUrl: string = "";
   fileToUpload: File = null;
   localStorageUser: LocalStorageUser;
+  isSocialLogin: boolean = false;
 
   constructor(private userService: UserService, private formBuilder: FormBuilder, private route: ActivatedRoute, private toastr: ToastrService) {
     if (this.route.snapshot.params["Id"]) {
@@ -28,7 +29,6 @@ export class EditProfileComponent implements OnInit {
 
       this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
     }
-
   }
 
   ngOnInit() {
@@ -37,55 +37,76 @@ export class EditProfileComponent implements OnInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', Validators.required],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       userId: ['']
     });
-
+        
     this.getUserProfile();
+    this.formControlOnSocialLogin(this.isSocialLogin);
+  }
 
+  formControlOnSocialLogin(isSocial) {
+    if (isSocial) {
+      const emailControl = this.edtiProfileForm.get('email');
+      emailControl.clearValidators();
+      emailControl.updateValueAndValidity();
+      const passwordControl = this.edtiProfileForm.get('password');
+      passwordControl.clearValidators();
+      passwordControl.updateValueAndValidity();
+    }    
   }
 
   // convenience getter for easy access to form fields
   get f() { return this.edtiProfileForm.controls; }
 
   getUserProfile() {
-    debugger;
     //var Id = this.localStorageUser.Id;
-    this.userService.getEditUserProfileWeb(this.localStorageUser.Id).pipe(first()).subscribe(data => {
-      debugger;
-      //this.userEditProfileModel = data
-      //this.edtiProfileForm.setValue(data);
-      this.edtiProfileForm.controls['userName'].setValue(data.UserName);
-      this.edtiProfileForm.controls['firstName'].setValue(data.FirstName);
-      this.edtiProfileForm.controls['lastName'].setValue(data.LastName);
-      this.edtiProfileForm.controls['email'].setValue(data.Email);
-      this.edtiProfileForm.controls['password'].setValue(data.Password);
-      this.edtiProfileForm.controls['userId'].setValue(data.UserId);
-      this.imageUrl = data.ImageURL;
-      
-    });
+    this.userService.getEditUserProfileWeb(this.localStorageUser.Id)
+      .pipe(first())
+      .subscribe(data => {
+        console.log('getUserProfile: ', data);
+        //this.userEditProfileModel = data
+        //this.edtiProfileForm.setValue(data);
+        this.edtiProfileForm.controls['userName'].setValue(data.UserName);
+        this.edtiProfileForm.controls['firstName'].setValue(data.FirstName);
+        this.edtiProfileForm.controls['lastName'].setValue(data.LastName);
+        this.edtiProfileForm.controls['email'].setValue(data.Email);
+        this.edtiProfileForm.controls['password'].setValue(data.Password);
+        this.edtiProfileForm.controls['userId'].setValue(data.UserId);
+        this.imageUrl = data.ImageURL;
+        this.isSocialLogin = data.IsSocialLogin;
+        this.formControlOnSocialLogin(data.IsSocialLogin);
+      }, error => {
+        console.log('error: ', error);
+        this.loading = false;
+      });
   }
 
+
   onSubmit() {
-    debugger;
+    
     this.submitted = true;
-    debugger;
     if (this.edtiProfileForm.invalid) {
       return;
     }
-
 
     this.loading = true;
     this.userService.editUserprofile(this.edtiProfileForm.value)
       .pipe(first())
       .subscribe(data => {
-        debugger;
         this.loading = false;
-        this.toastr.success('', 'Change successful!', { timeOut: 1000 });
+        if (data) {
+          console.log('editUserprofile: ', data);
+          if (data.success) {
+            this.toastr.success('', 'Change successful!', { timeOut: 1000 });
+          } else {
+            this.toastr.error('', data.message + '', { timeOut: 2000 });
+          }
+        }
       },
         error => {
           //this.alertService.error(error);
-          //this.loading = false;
+          this.loading = false;
         });
   }
 
@@ -114,9 +135,7 @@ export class EditProfileComponent implements OnInit {
         //this.imageUrl = "../../../assets/images/user.png";
         this.toastr.success('Image', 'Change successful!', { timeOut: 1000 });
       },
-        error => {
-       
-       
+      error => {
         this.toastr.error('Failed to upload image -', error.message + '', { timeOut: 2000 });
       }
     );

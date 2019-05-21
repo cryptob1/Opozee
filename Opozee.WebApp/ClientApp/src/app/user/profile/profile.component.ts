@@ -4,6 +4,7 @@ import { UserService } from '../../_services/user.service';
 import { first } from 'rxjs/operators';
 import { LocalStorageUser, NotificationsModel } from '../../_models';
 import { UserProfileModel } from '../../_models/user';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({ templateUrl: 'profile.component.html' })
@@ -15,7 +16,7 @@ export class ProfileComponent implements OnInit {
   localStorageUser: LocalStorageUser
 
   notification: NotificationsModel[] = [];
-  profileData: NotificationsModel[] = [];
+  profileData: any[] = [];
 
   pager: any = {};
   // paged items
@@ -25,7 +26,8 @@ export class ProfileComponent implements OnInit {
   PagingModel = { 'UserId': 0, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, IsChecked: true, CheckedTab: "mybeliefs" }
 
 
-  constructor(private route: ActivatedRoute, private userService: UserService ) {
+    constructor(private route: ActivatedRoute, private userService: UserService
+        , private toastr: ToastrService) {
     if (this.route.snapshot.params["Id"]) {
       this.Id = this.route.snapshot.params["Id"];
       
@@ -67,34 +69,53 @@ export class ProfileComponent implements OnInit {
     this.PagingModel.UserId = this.localStorageUser.Id;
   }
 
-  private getTabOneNotification(PagingModel) {
-    this.profileData = [];
-    var Id = this.localStorageUser.Id;
-    this.userService.getTabOneNotification(PagingModel).pipe(first()).subscribe(data => {
-    
-      this.profileData = [];
-      
-      if (data) {
-        if (data.length > 0) {
-          this.profileData = data;
-          //console.log("dt",this.profileData);
-          this.PagingModel.TotalRecords = data[0].TotalRecordcount
-        }
-        else {
-          this.PagingModel.TotalRecords = 0;
-        }
-        this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
-        this.isRecordLoaded = true
-      }
-      this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
-      this.isRecordLoaded = true
+    private getTabOneNotification(PagingModel) {
+        this.profileData = [];
+        var Id = this.localStorageUser.Id;
+        this.userService.getTabOneNotification(PagingModel)
+            .pipe(first()).toPromise()
+            .then(data => {
 
-    }, error => {
-      this.isRecordLoaded = false;
+                this.profileData = [];
 
-    });
-  
-  }
+                if (data) {
+                    if (data.length > 0) {
+                        this.profileData = data;
+
+                        try {
+                            this.profileData = this.profileData.map((x) => {
+                                if (x.QOCreationDate) {
+                                    let Valid10MinDate = new Date(x.QOCreationDate);
+                                    Valid10MinDate.setMinutes(Valid10MinDate.getMinutes() + 10);
+
+                                    let currentDate = new Date().toISOString().substring(0, new Date().toISOString().length - 1);
+                                    //console.log(Valid10MinDate, new Date(currentDate));
+                                    if (Valid10MinDate.getTime() > new Date(currentDate).getTime()) {
+                                        x.IsValidToDelete = true;
+                                    }
+                                }
+                                return x;
+                            });
+                        } catch (err) { }
+
+                        console.log("profileData",this.profileData);
+                        this.PagingModel.TotalRecords = data[0].TotalRecordcount
+                    }
+                    else {
+                        this.PagingModel.TotalRecords = 0;
+                    }
+                    this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
+                    this.isRecordLoaded = true
+                }
+                this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
+                this.isRecordLoaded = true
+
+            }, error => {
+                this.isRecordLoaded = false;
+
+            });
+
+    }
 
   ///
   PagingPagesload(PageNumber, PageSize) {
@@ -172,7 +193,48 @@ export class ProfileComponent implements OnInit {
     };
   }
 
-
+    deleteQuestionBelief(tab, qData) {
+        if (tab === 'myquestions') {
+            var questionModel = { 'Id': qData.QuestionId, 'OwnerUserID': this.localStorageUser.Id }
+            this.userService.deleteMyQuestion(questionModel)
+                .pipe(first())
+                .subscribe(data => {
+                    if (data) {
+                        this.profileData = this.profileData.filter(x => x.QuestionId != qData.QuestionId);
+                        this.PagingModel.TotalRecords = this.profileData.length;
+                        this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
+                        this.isRecordLoaded = true;
+                        this.toastr.success('', 'Question deleted successfully.', { timeOut: 5000 });
+                    }
+                    else {
+                        this.toastr.error('Wrong Record', 'Some error occured.', { timeOut: 5000 });
+                    }
+                },
+                    error => {
+                        console.log('error: ', error)
+                    });
+        }
+        else if (tab === 'mybeliefs') {
+            var beliefModel = { 'Id': qData.OpinionId, 'OwnerUserID': this.localStorageUser.Id }
+            this.userService.deleteMyBelief(beliefModel)
+                .pipe(first())
+                .subscribe(data => {
+                    if (data) {
+                        this.profileData = this.profileData.filter(x => x.OpinionId != qData.OpinionId);
+                        this.PagingModel.TotalRecords = this.profileData.length;
+                        this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
+                        this.isRecordLoaded = true;
+                        this.toastr.success('', 'Belief deleted successfully.', { timeOut: 5000 });
+                    }
+                    else {
+                        this.toastr.error('Wrong Record', 'Some error occured.', { timeOut: 5000 });
+                    }
+                },
+                    error => {
+                        console.log('error: ', error)
+                    });
+        }
+    }
 
 
 }

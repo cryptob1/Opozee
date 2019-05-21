@@ -35,5 +35,6 @@ namespace Opozee.Models
         public int BalanceToken { get; set; }
         //[Display(Name = "Remember Me")]
         //public bool RememberMe { get; set; }
+        public DateTime? LastLoginDate { get; set; }
     }
 }

@@ -88,8 +88,7 @@ export class UserService {
     })
 
   }
-
-
+    
 
   postQuestionweb(question) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/postquestionweb', question, {
@@ -115,7 +114,23 @@ export class UserService {
         'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
       })
     })
-  }
+    }
+
+    deleteMyQuestion(model) {
+        return this.http.post<NotificationsModel[]>(this.myAppUrl + 'opozee/api/WebApi/DeleteMyQuestion', model, {
+            headers: new HttpHeaders({
+                'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+            })
+        })
+    }
+
+    deleteMyBelief(model) {
+        return this.http.post<NotificationsModel[]>(this.myAppUrl + 'opozee/api/WebApi/DeleteMyBelief', model, {
+            headers: new HttpHeaders({
+                'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+            })
+        })
+    }
 
 
   //getAllQuestionlist(questionGetModel) {
@@ -188,7 +203,7 @@ export class UserService {
     ))
   }
 
-  editUserprofile(Model) {
+  editUserprofile(Model): Observable<any> {
     return this.http.post(this.myAppUrl + 'opozee/api/WebApi/EditUserProfileWeb', Model, {
       headers: new HttpHeaders({
         'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
@@ -222,7 +237,13 @@ export class UserService {
     ))
   }
 
-
+    checkNotification(userId) {
+        return this.http.get<any[]>(this.myAppUrl + 'opozee/api/WebApi/CheckNotification?userId=' + userId, {
+            headers: new HttpHeaders({
+                'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+            })
+        })
+    }
 
 
   saveOpinionPost(Model) {

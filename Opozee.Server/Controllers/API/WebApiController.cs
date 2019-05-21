@@ -216,6 +216,16 @@ namespace opozee.Controllers.API
                         ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault() == null
                         ? 0 : db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault().BalanceToken ?? 0;
 
+                        //update once logged-in
+                        v.ModifiedDate = DateTime.Now.ToUniversalTime();
+                        try
+                        {
+                            db.Entry(v).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        catch { }
+                        ObjLogin.LastLoginDate = v.ModifiedDate;
+
                         return ObjLogin;
 
                     }
@@ -469,7 +479,16 @@ namespace opozee.Controllers.API
             try
             {
 
-
+                try
+                {
+                    var user = db.Database
+                            .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserID] = @UserID", new SqlParameter("@UserID", Model.UserId))
+                            .FirstOrDefault();
+                    user.ModifiedDate = DateTime.Now.ToUniversalTime();
+                    db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+                catch { }
                 int Total = Model.TotalRecords;
                 int pageSize = 10; // set your page size, which is number of records per page
                 int page = Model.PageNumber;
@@ -602,14 +621,13 @@ namespace opozee.Controllers.API
                     return _userProfileData;
                 }
 
-                var TotalRecord = (from q1 in db.Questions
-                                   join o1 in db.Opinions on q1.Id equals o1.QuestId
-                                   where q1.OwnerUserID == Model.UserId
-                                   select new UserNotifications { TotalRecordcount = q1.Id }).ToList().Count();
-
-
                 if (Model.CheckedTab == "mybeliefs")
                 {
+
+                    var TotalRecord = (from q1 in db.Questions
+                                       join o1 in db.Opinions on q1.Id equals o1.QuestId
+                                       where q1.OwnerUserID == Model.UserId
+                                       select new UserNotifications { TotalRecordcount = q1.Id }).ToList().Count();
 
                     _userProfileData = (from q in db.Questions
                                         join o in db.Opinions on q.Id equals o.QuestId
@@ -636,6 +654,8 @@ namespace opozee.Controllers.API
                                             ModifiedDate = n.ModifiedDate,
                                             TotalRecordcount = TotalRecord,
                                             NotificationId = n.Id,
+                                            //IsValidToDelete = this.CheckIsValidToDeleteOpinion(o)
+                                            QOCreationDate = o.CreationDate
                                         }).ToList().OrderByDescending(x => x.NotificationId).ToList().Skip(skip).Take(pageSize).ToList();
 
                     List<UserNotifications> NewLoggeduserBelief = new List<UserNotifications>();
@@ -658,7 +678,7 @@ namespace opozee.Controllers.API
                 }
                 else if (Model.CheckedTab == "myquestions")
                 {
-                    TotalRecord = (from q in db.Questions
+                   var TotalRecord = (from q in db.Questions
                                        //join o in db.Opinions on q.Id equals o.QuestId into op
                                        //from o in op.DefaultIfEmpty()
                                        //join n in db.Notifications on o.Id equals n.CommentId into noti
@@ -694,6 +714,8 @@ namespace opozee.Controllers.API
                                             // ModifiedDate = n.ModifiedDate,
                                             TotalRecordcount = TotalRecord,
                                             //NotificationId = n.Id,
+                                            //IsValidToDelete = this.CheckIsValidToDeleteQuestion(q)
+                                            QOCreationDate = q.CreationDate
                                         }).ToList().OrderByDescending(x => x.NotificationId).ToList().Skip(skip).Take(pageSize).ToList();
 
                     return _userProfileData;
@@ -711,6 +733,32 @@ namespace opozee.Controllers.API
 
             }
             return _userProfileData;
+        }
+
+        private bool CheckIsValidToDeleteOpinion(Opinion o)
+        {
+            try
+            {
+                var CreationDate = o.CreationDate.Value;
+                return CreationDate == null ? false : (CreationDate.AddMinutes(10) > DateTime.Now ? true : false);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        private bool CheckIsValidToDeleteQuestion(Question q)
+        {
+            try
+            {
+                var CreationDate = q.CreationDate.Value;
+                return CreationDate == null ? false : (CreationDate.AddMinutes(10) > DateTime.Now ? true : false);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
 
@@ -782,22 +830,23 @@ namespace opozee.Controllers.API
         {
             //    AllUserQuestions questionDetail = new AllUserQuestions();
 
-            string[] taglist = tags.Split(',');
+            string[] taglist = tags == null ? null : tags.Split(',');
 
             var r = new Random();
             string tag = "";
 
-            foreach (var t in taglist) {
-                var qList = db.Questions.Where(p => p.HashTags.Contains(tag)).ToList();
-                if (qList.Count > 0) {
-                    tag = t;
-                    break;
+            if (taglist != null)
+            {
+                foreach (var t in taglist)
+                {
+                    var qList = db.Questions.Where(p => p.HashTags.Contains(tag)).ToList();
+                    if (qList.Count > 0)
+                    {
+                        tag = t;
+                        break;
+                    }
                 }
-                
-
-            }
-
-            
+            }           
             
 
             int Total = 5;
@@ -1583,12 +1632,7 @@ namespace opozee.Controllers.API
                 //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "GetBookmarkQuestion"));
             }
         }
-
-
-
-
-
-
+                      
 
         #endregion
         #region "Get User Profile" 
@@ -1618,6 +1662,8 @@ namespace opozee.Controllers.API
                                    LastName = u.LastName,
                                    Email = u.Email,
                                    ImageURL = u.ImageURL,
+                                   IsSocialLogin = u.SocialID == null ? false : true,
+                                   LastLoginDate = u.ModifiedDate,
                                    BalanceToken = t.BalanceToken,
                                    TotalPostedQuestion = db.Questions.Where(p => p.OwnerUserID == userid && p.IsDeleted == false).Count(),
                                    TotalLikes = (from q in db.Questions
@@ -1641,11 +1687,108 @@ namespace opozee.Controllers.API
                 //  return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "UserProfile"));
             }
         }
+
+        [HttpPost]
+        [Route("api/WebApi/DeleteMyQuestion")]
+        public Question DeleteMyQuestion(PostQuestionModel postQuestion)
+        {
+
+            Question quest = null;
+            try
+            {
+                quest = db.Questions.Where(p => p.Id == postQuestion.Id && p.OwnerUserID == postQuestion.OwnerUserID).FirstOrDefault();
+                if (quest == null)
+                {
+                    return quest;
+                }
+
+                //var opinionList = db.Opinions.Where(p => p.QuestId == quest.Id).ToList();
+                //foreach(var opinion in opinionList)
+                //{
+                //    opinion.IsDeleted = true;
+                //}
+
+                quest.IsDeleted = true;
+                quest.ModifiedDate = DateTime.Now.ToUniversalTime();
+                db.Entry(quest).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                return quest;
+
+            }
+            catch (Exception ex)
+            {
+                return quest;
+            }
+        }
+
+        [HttpPost]
+        [Route("api/WebApi/DeleteMyBelief")]
+        public Opinion DeleteMyBelief(PostQuestionModel model)
+        {
+
+            Opinion _opinion = null;
+            try
+            {
+                _opinion = db.Opinions.Where(o => o.Id == model.Id && o.CommentedUserId == model.OwnerUserID).FirstOrDefault();
+                if (_opinion == null)
+                {
+                    return _opinion;
+                }
+                //must have IsDeleted dolumn if we are not going to actually delete it
+
+                db.Opinions.Remove(_opinion);
+                db.SaveChanges();
+
+                return new Opinion();
+            }
+            catch (Exception ex)
+            {
+                return _opinion;
+            }
+        }
+
+        [HttpGet]
+        [Route("api/WebApi/CheckNotification")]
+        public List<Notification> CheckNotification(int userId)
+        {
+            try
+            {
+                var user = db.Database
+                    .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserID] = @UserID", new SqlParameter("@UserID", userId))
+                    .FirstOrDefault();
+                
+                var _notification = db.Notifications.Where(x => x.CommentedUserId == user.UserID && x.CreationDate >= user.ModifiedDate).ToList();
+                if (_notification.Count == 0)
+                {
+                    _notification = (from q in db.Questions
+                                     join n in db.Notifications on q.Id equals n.questId
+                                     where q.OwnerUserID == user.UserID && q.IsDeleted == false
+                                     && n.CreationDate >= user.ModifiedDate
+                                     select n).ToList();
+                }
+
+                if (_notification.Count == 0)
+                {
+                    _notification = (from q in db.Questions
+                                     join o in db.Opinions on q.Id equals o.QuestId
+                                     join n in db.Notifications on o.Id equals n.CommentId
+                                     where o.CommentedUserId == user.UserID && q.IsDeleted == false
+                                     && n.CreationDate >= user.ModifiedDate
+                                     select n).ToList();
+                }
+
+                return _notification;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         #endregion
 
 
-
-        #region "Get User Profile" 
+        #region "Get Edit User Profile" 
         [HttpGet]
         [Route("api/WebApi/GetEditUserProfileWeb")]
         public UserModelProfileEditWeb GetEditUserProfileWeb(int userid)
@@ -1671,7 +1814,8 @@ namespace opozee.Controllers.API
                                    LastName = u.LastName,
                                    Email = u.Email,
                                    Password = u.Password,
-                                   ImageURL = u.ImageURL
+                                   ImageURL = u.ImageURL,
+                                   IsSocialLogin = u.SocialID == null ? false : true
                                }).FirstOrDefault();
 
                 UserProfile.Password = AesCryptography.Decrypt(UserProfile.Password);
@@ -1689,18 +1833,38 @@ namespace opozee.Controllers.API
             }
         }
         #endregion
+        
 
-
-
-        #region "Get User Profile" 
+        #region "Edit User Profile" 
         [HttpPost]
         [Route("api/WebApi/EditUserProfileWeb")]
-        public void EditUserProfileWeb(UserModelProfileEditWeb Model)
+        public dynamic EditUserProfileWeb(UserModelProfileEditWeb Model)
         {
             User UserProfile;
+            dynamic _response = new ExpandoObject();
             try
             {
+
                 UserProfile = db.Users.Where(p => p.UserID == Model.UserId).FirstOrDefault();
+                if(UserProfile.UserName.Trim() != Model.UserName.Trim())
+                {
+                    if (CheckUserNameExist(Model.UserName.Trim()))
+                    {
+                        _response.success = false;
+                        _response.message = "Username already exists. Please enter unique Username.";
+                        return _response;
+                    }
+                }
+                if (UserProfile.Email.Trim() != Model.Email.Trim())
+                {
+                    if (CheckEmailExist(Model.Email.Trim()))
+                    {
+                        _response.success = false;
+                        _response.message = "Email already exists. Please enter valid Email.";
+                        return _response;
+                    }
+                }
+
                 UserProfile.UserName = Model.UserName;
                 UserProfile.FirstName = Model.FirstName;
                 UserProfile.LastName = Model.LastName;
@@ -1709,14 +1873,44 @@ namespace opozee.Controllers.API
                 db.Entry(UserProfile).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
+                _response.success = true;
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+            }
+            return _response;
+            #endregion
+        }
+
+        private bool CheckUserNameExist(string UserName)
+        {
+            try
+            {
+                return db.Database
+                    .SqlQuery<int>("SELECT COUNT(*) FROM [Users] WHERE [UserName] = @username", new SqlParameter("@username", UserName))
+                    .FirstOrDefault() > 0 ? true : false;
             }
             catch (Exception ex)
             {
             }
-            #endregion
+            return false;
         }
 
-
+        private bool CheckEmailExist(string Email)
+        {
+            try
+            {
+                return db.Database
+                    .SqlQuery<int>("SELECT COUNT(*) FROM [Users] WHERE [Email] = @email", new SqlParameter("@email", Email))
+                    .FirstOrDefault() > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+            }
+            return false;
+        }
 
         #region Get Popular Hashtags
         [HttpGet]
@@ -2562,9 +2756,10 @@ namespace opozee.Controllers.API
         #region "Socail Login" 
         [HttpPost]
         [Route("api/WebApi/SigninThirdPartyWeb")]
-        public UserLoginWeb SigninThirdPartyWeb(InputSignInWithThirdPartyWebModel input)
+        public dynamic SigninThirdPartyWeb(InputSignInWithThirdPartyWebModel input)
         {
             UserLoginWeb ObjLogin = new UserLoginWeb();
+            dynamic _response = new ExpandoObject();
             try
             {
                 if (!ModelState.IsValid)
@@ -2603,6 +2798,11 @@ namespace opozee.Controllers.API
                     }
 
                     entity.UserName = input.UserName != null && input.UserName != "" ? input.UserName : entity.UserName;
+                    if (CheckUserNameExist(entity.UserName))
+                    {
+                        entity.UserName += this.Random4DigitGenerator();
+                    }
+
                     if (!string.IsNullOrEmpty(input.Password))
                     {
                         entity.Password = AesCryptography.Encrypt(input.Password);
@@ -2610,24 +2810,32 @@ namespace opozee.Controllers.API
                     entity.DeviceType = input.DeviceType != null && input.DeviceType != "" ? input.DeviceType : entity.DeviceType;
                     entity.DeviceToken = input.DeviceToken != null && input.DeviceToken != "" ? input.DeviceToken : entity.DeviceToken;
                     entity.ImageURL = entity.ImageURL;
+                    entity.ModifiedDate = DateTime.Now.ToUniversalTime(); 
                     db.Entry(entity).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                     int userID = entity.UserID;
                     entity = db.Users.Find(userID);
+                    
+                    ObjLogin.LastLoginDate = entity.ModifiedDate;
 
                     ObjLogin.Id = entity.UserID;
                     ObjLogin.Email = entity.Email;
                     ObjLogin.ImageURL = entity.ImageURL;
                     ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == entity.UserID).FirstOrDefault() == null
                         ? 0 : db.Tokens.Where(x => x.UserId == entity.UserID).FirstOrDefault().BalanceToken ?? 0;
-                    return ObjLogin;
+
+                    _response.success = true;
+                    _response.data = ObjLogin;
+                    return _response;
+
+                   // return ObjLogin;
                     //  return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "UserData"));
                 }
                 else
                 {
                     entity = new User();
                     Token token = new Token();
-                    entity.UserName = input.FirstName + input.LastName;
+                    entity.UserName = input.FirstName + input.LastName + this.Random4DigitGenerator();
                     entity.FirstName = input.FirstName;
                     entity.LastName = input.LastName;
                     entity.Email = input.Email;
@@ -2637,6 +2845,13 @@ namespace opozee.Controllers.API
                     if (!string.IsNullOrEmpty(input.Password))
                     {
                         entity.Password = AesCryptography.Encrypt(input.Password);
+                    }
+
+                    if (CheckEmailExist(input.Email))
+                    {
+                        _response.success = false;
+                        _response.message = "Email already exists.";
+                        return _response;
                     }
 
                     entity.DeviceType = input.DeviceType;
@@ -2687,23 +2902,41 @@ namespace opozee.Controllers.API
                     db.Tokens.Add(token);
                     db.SaveChanges();
                     entity = db.Users.Find(userID);
+                                        
+                    ObjLogin.LastLoginDate = DateTime.Now.ToUniversalTime();
 
                     ObjLogin.Id = entity.UserID;
                     ObjLogin.Email = entity.Email;
                     ObjLogin.ImageURL = entity.ImageURL;
                     ObjLogin.BalanceToken = token.BalanceToken ?? 0;
-                    return ObjLogin;
+
+                    _response.success = true;
+                    _response.data = ObjLogin;
+                    return _response;
+                    //return ObjLogin;
 
                     // return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "UserData"));
                 }
             }
             catch (Exception ex)
             {
-                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
-                return ObjLogin;
+                LogHelper.CreateLog3(ex, Request);
+                _response.success = true;
+                _response.data = ObjLogin;
+                return _response;
+                //return ObjLogin;
                 //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "UserData"));
             }
         }
+
+        public int Random4DigitGenerator()
+        {
+            int _min = 1000;
+            int _max = 9999;
+            Random _rdm = new Random();
+            return _rdm.Next(_min, _max);
+        }
+
         #endregion
 
 
@@ -2845,7 +3078,7 @@ namespace opozee.Controllers.API
         #endregion
 
 
-        #region "Post Question" 
+        #region "Delete Question" 
         [HttpPost]
         [Route("api/WebApi/DeletePostQuestionWeb")]
         public Question DeletePostQuestionWeb(PostQuestionModel postQuestion)

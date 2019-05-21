@@ -686,9 +686,20 @@ span.bell-icon i {
   .questions-field strong {
     display: block;
     margin-bottom: 9px;
+    position: relative;
+    padding-right: 30px;
   }
-
-    .questions-field strong:last-child {
+    .questions-field strong span {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translate(-0,-50%);
+      color: #dc0304;
+      padding: 5px;
+      font-size: 20px;
+      cursor:pointer
+    }
+  .questions-field strong:last-child {
       margin-bottom: 0px;
     }
 

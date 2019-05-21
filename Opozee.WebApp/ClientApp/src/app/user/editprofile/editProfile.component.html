@@ -30,7 +30,7 @@
                 <label for="username">User Name</label>
                 <input type="text" formControlName="userName" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.userName.errors }" placeholder="Enter User name" />
                 <div *ngIf="submitted && f.userName.errors" class="invalid-feedback">
-                  <div *ngIf="f.email.errors.required">User name required</div>
+                  <small *ngIf="f.email.errors.required">*Username required</small>
                 </div>
 
               </div>
@@ -60,24 +60,26 @@
             </div>-->
 
 
-            <div class="col-sm-6">
+            <div class="col-sm-6" *ngIf="!isSocialLogin">
               <div class="form-group">
                 <label for="username">Email</label>
                 <input type="text" formControlName="email" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" placeholder="Enter email " />
                 <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                  <div *ngIf="f.email.errors.required">Email required</div>
+                  <small *ngIf="f.email.errors.required">*Email required</small>
                 </div>
               </div>
 
             </div>
 
-            <div class="col-sm-6">
+            <div class="col-sm-6" *ngIf="!isSocialLogin">
               <div class="form-group">
                 <label for="username">Password</label>
                 <input type="password" formControlName="password" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Enter password " />
                 <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                  <div *ngIf="f.password.errors.required">Email required</div>
+                  <small *ngIf="f.password.errors.required">*Password required</small>
+                  <small *ngIf="!f.password.errors.required && f.password.errors">*Password must be at least 6 characters</small>
                 </div>
+               
 
               </div>
 
@@ -96,7 +98,12 @@
     </div>
 
   </div>
-
+  <style>
+    .invalid-feedback, .invalid-feedback small {
+      text-align: left !important;
+      color: red;
+    }
+  </style>
 
 
 

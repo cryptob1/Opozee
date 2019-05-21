@@ -30,6 +30,10 @@ namespace Opozee.Models.API
         public int NotificationId { get; set; }
         public bool IsAgree { get; set; }
         public List<string> OpinionList { get; set; }
+
+        public DateTime? QOCreationDate { get; set; }
+
+        public bool IsValidToDelete { get; set; }
     }
     public class UserProfile
     {
@@ -44,6 +48,8 @@ namespace Opozee.Models.API
         public int TotalPostedQuestion { get; set; }
         public int? TotalLikes { get; set; }
         public int? TotalDislikes { get; set; }
+        public bool IsSocialLogin { get; set; }
+        public DateTime? LastLoginDate { get; set; }
     }
     public class OtherUsers
     {

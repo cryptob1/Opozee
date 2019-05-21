@@ -131,8 +131,7 @@ export class LoginComponent implements OnInit {
           this.toastr.error('Error Logging in', error.message+'', { timeOut: 2000 });
         });
   }
-
-
+  
   socialSignIn(socialPlatform: string) {
     debugger;
     let socialPlatformProvider;
@@ -141,37 +140,41 @@ export class LoginComponent implements OnInit {
 
       this.socialAuthService.signIn(socialPlatformProvider).then(
         (userData) => {
-          debugger;
+
           this.thirdPartyModel.ThirdPartyId = userData.id;
           this.thirdPartyModel.FirstName = userData.name.split(' ')[0];
           this.thirdPartyModel.LastName = userData.name.split(' ')[1];
           this.thirdPartyModel.Email = userData.email;
           this.thirdPartyModel.ThirdPartyType = 0;
 
-          this.authenticationService.loginWithFacebook(this.thirdPartyModel).pipe(first()).subscribe(data => {
-            debugger;
-            if (data) {
-
-              this.loading = false;
-              this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
-              this.dataSharingService.loginsetstate(data);
-              // store user details and jwt token in local storage to keep user logged in between page refreshes
-              localStorage.setItem('currentUser', JSON.stringify(data));
-              //this.router.navigate(['']);
-              this.router.navigateByUrl(this.returnUrl);
-            }
-
-            else {
-              this.loading = false;
-              this.toastr.error('Invalid User', 'please check user name or Password !', { timeOut: 2000 });
-            }
-          },
-            error => {
-              this.alertService.error(error);
-              this.loading = false;
-              this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000 });
-            })
-
+          this.authenticationService.loginWithFacebook(this.thirdPartyModel)
+            .pipe(first())
+            .subscribe(data => {
+              if (data) {
+                if (data.success) {
+                  this.loading = false;
+                  this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
+                  this.dataSharingService.loginsetstate(data);
+                  // store user details and jwt token in local storage to keep user logged in between page refreshes
+                  localStorage.setItem('currentUser', JSON.stringify(data));
+                  //this.router.navigate(['']);
+                  this.router.navigateByUrl(this.returnUrl);
+                }
+                else {
+                  this.loading = false;
+                  this.toastr.error('Invalid User', data.message, { timeOut: 2000 });
+                }
+              }
+              else {
+                this.loading = false;
+                this.toastr.error('Invalid User', 'please check user name or Password !', { timeOut: 2000 });
+              }
+            },
+              error => {
+                this.alertService.error(error);
+                this.loading = false;
+                this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000 });
+              })
 
           // Now sign-in with userData
 
@@ -179,7 +182,6 @@ export class LoginComponent implements OnInit {
       );
 
     } else if (socialPlatform == "google") {
-
 
       socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
 
@@ -191,39 +193,41 @@ export class LoginComponent implements OnInit {
           this.thirdPartyModel.LastName = userData.name.split(' ')[1];
           this.thirdPartyModel.Email = userData.email;
           this.thirdPartyModel.ThirdPartyType = 2;
-          debugger;
-          this.authenticationService.loginWithGoogle(this.thirdPartyModel).pipe(first()).subscribe(data => {
-            debugger;
-            if (data) {
-              console.log(data)
-
-              this.loading = false;
-              this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
-              this.dataSharingService.loginsetstate(data);
-              // store user details and jwt token in local storage to keep user logged in between page refreshes
-              localStorage.setItem('currentUser', JSON.stringify(data));
-              //this.router.navigate(['']);
-              this.router.navigateByUrl(this.returnUrl);
-            }
-
-            else {
-              this.loading = false;
-              this.toastr.error('Invalid User', 'please check user name or Password !', { timeOut: 2000 });
-            }
-          },
-            error => {
-              debugger;
-              alert()
-              this.alertService.error(error);
-              this.loading = false;
-              this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000 });
-            })
+         
+          this.authenticationService.loginWithGoogle(this.thirdPartyModel)
+            .pipe(first())
+            .subscribe(data => {
+              
+              if (data) {
+                if (data.success) {
+                  console.log(data)
+                  this.loading = false;
+                  this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
+                  this.dataSharingService.loginsetstate(data);
+                  // store user details and jwt token in local storage to keep user logged in between page refreshes
+                  localStorage.setItem('currentUser', JSON.stringify(data));
+                  //this.router.navigate(['']);
+                  this.router.navigateByUrl(this.returnUrl);
+                }
+                else {
+                  this.loading = false;
+                  this.toastr.error('Invalid User', data.message, { timeOut: 2000 });
+                }
+              }
+              else {
+                this.loading = false;
+                this.toastr.error('Invalid User', 'please check user name or Password !', { timeOut: 2000 });
+              }
+            },
+              error => {
+                this.alertService.error(error);
+                this.loading = false;
+                this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000 });
+              })
 
           // Now sign-in with userData
 
         }, error => {
-          debugger;
-          alert()
           this.alertService.error(error);
           this.loading = false;
           this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000 });
@@ -237,23 +241,29 @@ export class LoginComponent implements OnInit {
     debugger
     var data = event.currentTarget.value.split('_')
 
-
-
     this.thirdPartyModel.ThirdPartyId = data[0];
     this.thirdPartyModel.Email = data[1];
     this.thirdPartyModel.FirstName = data[2].split(' ')[0];
     this.thirdPartyModel.LastName = data[2].split(' ')[1];
     this.thirdPartyModel.ThirdPartyType = 1;
-    this.authenticationService.loginWithGoogle(this.thirdPartyModel).pipe(first()).subscribe(data => {
+    this.authenticationService.loginWithGoogle(this.thirdPartyModel)
+      .pipe(first())
+      .subscribe(data => {
       debugger;
-      if (data) {
-        this.loading = false;
-        this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
-        this.dataSharingService.loginsetstate(data);
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('currentUser', JSON.stringify(data));
-        //this.router.navigate(['']);
-        this.router.navigateByUrl(this.returnUrl);
+        if (data) {
+          if (data.success) {
+            this.loading = false;
+            this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
+            this.dataSharingService.loginsetstate(data);
+            // store user details and jwt token in local storage to keep user logged in between page refreshes
+            localStorage.setItem('currentUser', JSON.stringify(data));
+            //this.router.navigate(['']);
+            this.router.navigateByUrl(this.returnUrl);
+          }
+          else {
+            this.loading = false;
+            this.toastr.error('Invalid User', data.message, { timeOut: 2000 });
+          }
       }
       else {
         this.loading = false;
@@ -268,6 +278,7 @@ export class LoginComponent implements OnInit {
 
 
   }
+
   openforgotpasswordModel() {
     console.log('here');
     this.forgotPassword.show();

@@ -5,7 +5,8 @@ import { User, LocalStorageUser, PostQuestionDetail, UserProfileModel } from '..
 import { UserService } from '../_services';
 import { ResetPassword } from '../user/resetPassword/resetPassword.component';
 import { first } from 'rxjs/operators';
-
+import 'rxjs/add/observable/interval';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'header-component',
@@ -28,8 +29,8 @@ export class HeaderComponent implements OnInit {
   searchTextModel: string = '';
   userId: number;
   userProfiledata: UserProfileModel;
-  // isExpanded = false;
-
+    // isExpanded = false;
+    showNotificationIcon: boolean = false;
 
   dataModel = {
 
@@ -38,7 +39,8 @@ export class HeaderComponent implements OnInit {
   }
 
 
-  constructor(private dataSharingService: DataSharingService, private route: ActivatedRoute, private router: Router, ) {
+    constructor(private dataSharingService: DataSharingService, private route: ActivatedRoute, private router: Router,
+      private userService: UserService) {
 
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
   }
@@ -62,18 +64,39 @@ export class HeaderComponent implements OnInit {
     window.location.reload();
   }
 
-  ngOnInit() {
+    ngOnInit() {
 
-    this.dataSharingService.loginget.subscribe(data => {
-      this.loginData = data
-    })
+        this.dataSharingService.loginget.subscribe(data => {
+            this.loginData = data
+        })
 
-    if (this.localStorageUser && this.localStorageUser.Id > 0) {
-      this.isAuthenticateUserId = this.localStorageUser.Id;
-      this.loginData = this.localStorageUser
+        if (this.localStorageUser && this.localStorageUser.Id > 0) {
+            this.isAuthenticateUserId = this.localStorageUser.Id;
+            this.loginData = this.localStorageUser;
+
+             Observable.interval(100000)
+                 .subscribe((val) => {  this.checkNotification() });
+
+            this.checkNotification()
+        }
+
     }
-   
-  }
+
+    checkNotification() {
+        this.userService.checkNotification(this.localStorageUser.Id)
+            .pipe(first())
+            .subscribe(data => {
+                if (data) {
+                    this.showNotificationIcon = data.length > 0 ? true : false;
+                }
+                else 
+                    this.showNotificationIcon = false;
+            },
+                error => {
+                    console.log('error: ', error)
+                    this.showNotificationIcon = false;
+                });
+    }
 
   searchText(e) {    
     if (e.keyCode == 13) {
