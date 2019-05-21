@@ -498,7 +498,8 @@ namespace opozee.Controllers.API
                                               join o in db.Opinions on q.Id equals o.QuestId
                                               join n in db.Notifications on o.Id equals n.CommentId
                                               join u in db.Users on n.CommentedUserId equals u.UserID
-                                              where (q.OwnerUserID == Model.UserId || o.CommentedUserId==Model.UserId) && q.IsDeleted == false && n.CommentedUserId != Model.UserId 
+                                              where ((q.OwnerUserID == Model.UserId && o.CommentedUserId!=Model.UserId && n.Comment==true) || //someone left a comment
+                                              (o.CommentedUserId == Model.UserId && n.Comment == false)) && q.IsDeleted == false  //someone left a vote
                                              select new UserNotifications
                                               {
                                                   UserId = q.OwnerUserID,
@@ -1829,6 +1830,8 @@ namespace opozee.Controllers.API
                 //notification.Like = Convert.ToBoolean(Model.Likes);
                 //notification.Dislike = Convert.ToBoolean(Model.Dislikes);
                 notification.Comment = true;
+                notification.Dislike = false;
+                notification.Like = false;
                 notification.CreationDate = DateTime.Now.ToUniversalTime(); ;
                 // notification.Status = 2;
                 db.Notifications.Add(notification);
@@ -1895,6 +1898,7 @@ namespace opozee.Controllers.API
                     notification.questId = Model.QuestId;
                     notification.Like = Convert.ToBoolean(Model.Likes);
                     notification.Dislike = Convert.ToBoolean(Model.Dislikes);
+                    notification.Comment = false;
                     notification.CreationDate = Model.CreationDate;
                     // notification.Status = 3;
                     db.Notifications.Add(notification);
@@ -2018,6 +2022,7 @@ namespace opozee.Controllers.API
                     notification.Like = Convert.ToBoolean(Model.Likes);
                     notification.Dislike = Convert.ToBoolean(Model.Dislikes);
                     notification.CreationDate = Model.CreationDate;
+                    notification.Comment = false;
                     // notification.Status = 3;
                     db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
