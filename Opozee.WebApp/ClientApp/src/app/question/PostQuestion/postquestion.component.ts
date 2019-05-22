@@ -61,6 +61,13 @@ export class PostQuestionComponent implements OnInit {
     //private confirmationDialogService: ConfirmationDialogService
   ) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
+
+
+
+    if (this.localStorageUser != null) {
+      mixpanelService.init(this.localStorageUser['Email'])
+    }
+
   }
 
   ngOnInit() {

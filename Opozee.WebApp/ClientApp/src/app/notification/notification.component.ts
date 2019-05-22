@@ -153,5 +153,12 @@ export class NotificationComponent implements OnInit {
   }
 
 
+  html2text(text) {
+
+    return String(text).replace(/<[^>]+>/gm, '').replace(/&amp;/g, "&").replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+
+       
+  }
+
 
 }

@@ -81,6 +81,13 @@ export class Questiondetail implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
+
+
+ 
+    if (this.localStorageUser != null) {
+ 
+      mixpanelService.init(this.localStorageUser['Email'])
+    }
    // this.PostQuestionDetailModel.PostQuestionDetailModel = new PostQuestionDetail();
   }
   
@@ -124,7 +131,7 @@ export class Questiondetail implements OnInit {
     });
 
     this.getQuestionDetail()
-
+    this.mixpanelService.track('questiondetail:' + this.Id);
   }
 
   percentage: number = 0;

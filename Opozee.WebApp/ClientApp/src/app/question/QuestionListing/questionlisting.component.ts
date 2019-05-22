@@ -49,7 +49,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     this.hashTag = false;
 
     if (this.localStorageUser != null) {
-      mixpanelService.init(this.localStorageUser.UserName)
+      mixpanelService.init(this.localStorageUser['Email'])
     }
    
      

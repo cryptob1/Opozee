@@ -67,26 +67,33 @@
 
             <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
               <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
-
+                
                 <div [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']">
-                  
-                  <div ExternalLink> 
+
+                  <div ExternalLink>
                     <h1>{{temp?.IsAgree ? 'Yes' : 'No'}}</h1>
-                   <p [innerHTML]="temp?.Comment"></p> </div>
-                  <span class="profile_bottom_cover">
 
-                    <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                      <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
-                      <span>@{{temp?.CommentedUserName}}</span>
-                    </span>
+                    <p [innerHTML]="temp?.Comment"></p>
 
-                    <div class="like_images">
-                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp?.Likes,index)">{{temp?.LikesCount}}</span>
-                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp?.DisLikes,index)" />{{temp?.DislikesCount}}</span>
+                  </div>
+                  <div class="row">
+                    <span class="profile_bottom_cover">
+
+                      <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
+                        <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
+                        <span>@{{temp?.CommentedUserName}}</span>
+                      </span>
+
+                      <div class="like_images">
+                        <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp?.Likes,index)">{{temp?.LikesCount}}</span>
+                        <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp?.DisLikes,index)" />{{temp?.DislikesCount}}</span>
+                      </div>
+                      <div class="date_like">
+                      </div>
+                  
+
+</span>
                     </div>
-                    <div class="date_like">
-                    </div>
-                  </span>
                 </div>
 
                 <!--<div class="no_feedback" *ngIf="!temp.IsAgree">

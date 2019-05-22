@@ -15,14 +15,7 @@
             <div class="cover_notification" style="display:none">
               <h3>Trends For You <a href="#"></a></h3>
               <span><a href="#">#blast</a></span>
-
-              <span><a href="#">c#</a></span>
-              <span><a href="#">#c sharp</a><p></p></span>
-              <span><a href="#"># pakistan</a><p></p></span>
-              <span><a href="#"># dotnet</a><p></p></span>
-              <span><a href="#"># pulwama</a><p></p></span>
-              <span><a href="#"># kashmir</a><p></p></span>
-
+ 
             </div>
           </div>
 
@@ -55,20 +48,25 @@
                   <span class="cover_ntfctn_border questions-field">
                     <strong>
                       <a data-title="Q" [routerLink]="['/questiondetail/', temp.QuestionId]">
-                        <div class="message-container" [innerHTML]="temp?.Question | emojis"></div>
+                        <div class="message-container" [innerHTML]="temp?.Question "></div>
                       </a>
                     </strong>
                     <div *ngIf="temp.IsAgree===true">
-                      <strong class="text-success"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion"></a></strong>
+                      <strong class="text-success">
+                      <a data-title="B" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion "></a>
+
+                      </strong>
                     </div>
 
                     <div *ngIf="temp.IsAgree===false">
-                      <strong class="text-danger"><a data-title="B" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion"></a></strong>
+                      <strong class="text-danger">
+                      <a data-title="B"style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion ">
+                        </a></strong>
                     </div>
 
                   </span>
 
-                  <!--<span>{{ temp.CreationDate | date:'medium' | timeAgo }}</span>-->
+                   <!--{{ temp.CreationDate | date:'medium' | timeAgo }}--> 
                 </div>
               </div>
 

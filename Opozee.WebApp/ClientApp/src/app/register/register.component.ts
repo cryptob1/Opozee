@@ -67,7 +67,7 @@ export class RegisterComponent implements OnInit {
               this.sendWelcomeMail(contact);
 
               this.toastr.success('Registration', 'Successful.', { timeOut: 5000 });
-              this.mixpanelService.init(_user.userName);
+              this.mixpanelService.init(_user.Email);
               this.mixpanelService.track('Signedup');
               this.router.navigate(['/login']);
 
