@@ -161,9 +161,9 @@ export class LoginComponent implements OnInit {
                 if (data.success) {
                   this.loading = false;
                   this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
-                  this.dataSharingService.loginsetstate(data);
+                    this.dataSharingService.loginsetstate(data.data);
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
-                  localStorage.setItem('currentUser', JSON.stringify(data));
+                    localStorage.setItem('currentUser', JSON.stringify(data.data));
                   //this.router.navigate(['']);
                   this.mixpanelService.init(this.thirdPartyModel.Email);
                   this.mixpanelService.track('Login with facebook');
@@ -212,9 +212,9 @@ export class LoginComponent implements OnInit {
                   console.log(data)
                   this.loading = false;
                   this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
-                  this.dataSharingService.loginsetstate(data);
+                    this.dataSharingService.loginsetstate(data.data);
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
-                  localStorage.setItem('currentUser', JSON.stringify(data));
+                    localStorage.setItem('currentUser', JSON.stringify(data.data));
 
                   this.mixpanelService.init(this.thirdPartyModel.Email);
                   this.mixpanelService.track('Login with Google');
@@ -266,9 +266,9 @@ export class LoginComponent implements OnInit {
           if (data.success) {
             this.loading = false;
             this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
-            this.dataSharingService.loginsetstate(data);
+              this.dataSharingService.loginsetstate(data.data);
             // store user details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('currentUser', JSON.stringify(data));
+            localStorage.setItem('currentUser', JSON.stringify(data.data));
             //this.router.navigate(['']);
             this.router.navigateByUrl(this.returnUrl);
           }
