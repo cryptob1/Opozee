@@ -13,14 +13,23 @@
         <p>Every time a new user signs up with your invite code, both will get free coins</p>
 
         <div class="form-group">
+          <span>Earned coins: <b>{{coinPerReferral}}</b> <small> Coins </small> x <b>{{totalReferred}}</b> <small> Total Referrals</small> = <b>{{totalReferred*coinPerReferral}}</b> <small> Coins</small></span>
+          <!--<small style="display:block">
+            eg: Coin Per Referral X Total Referrals
+          </small>-->
+        </div>
+
+        <div class="form-group">
           <label for="referral">Your Referral Code</label>
           <input type="text" readonly="readonly" [(ngModel)]="referralCode" name="referral" id="referral" class="form-control" #referral="ngModel" />
         </div>
         <div class="form-group">
-          <button [disabled]="loading" (click)="copyLink(referralCode)" value="click to copy" class="btn btn-primary">
+          <button (click)="copyLink(referralCode)" value="click to copy" class="btn btn-primary">
             Copy code from here
           </button>
         </div>
+
+        <p style="text-align:center">OR</p>
 
         <div class="form-group">
           <label for="referralLink">Your Referral Link</label>
@@ -28,7 +37,7 @@
         </div>
 
         <div class="form-group">
-          <button [disabled]="loading" (click)="copyLink(referralURL)" value="click to copy" class="btn btn-primary">
+          <button (click)="copyLink(referralURL)" value="click to copy" class="btn btn-primary">
             Copy link from here
           </button>
         </div>

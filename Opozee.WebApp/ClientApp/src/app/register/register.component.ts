@@ -24,7 +24,7 @@ export class RegisterComponent implements OnInit {
     private alertService: AlertService,
     private toastr: ToastrService,
     private mixpanelService: MixpanelService) {
-    
+
     route.params.subscribe(params => {
       this.referral = params['code'];
     })
@@ -33,13 +33,13 @@ export class RegisterComponent implements OnInit {
 
 
   ngOnInit() {
-    
+
     this.registerForm = this.formBuilder.group({
       userName: ['', Validators.required],
       //lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      referral: [this.referral]
+      referralCode: [this.referral]
     });
     //this.registerForm.referral=this.referral;
   }
@@ -48,16 +48,42 @@ export class RegisterComponent implements OnInit {
   get f() { return this.registerForm.controls; }
 
   onSubmit() {
-    
+    debugger
     this.submitted = true;
-
+    let _referralCode = this.registerForm.get('referralCode').value;
     // stop here if form is invalid
     if (this.registerForm.invalid) {
       return;
     }
+    else {
+      _referralCode = _referralCode ? _referralCode.trim() : _referralCode;
+      if (_referralCode) {
+        this.userService.checkReferralCode(_referralCode)
+          .pipe(first())
+          .toPromise()
+          .then(
+            data => {
+              if (data) {
+                this.registerUser(this.registerForm.value);
+              }
+              else {
+                this.toastr.error('', 'Please enter a valid referral code.', { timeOut: 4000 });
+              }
+            },
+            error => {
+              this.registerUser(this.registerForm.value);
+            });
 
+      }
+      else {
+        this.registerUser(this.registerForm.value);
+      }
+    }
+  }
+
+  private registerUser(registerForm) {
     this.loading = true;
-    this.userService.register(this.registerForm.value)
+    this.userService.register(registerForm)
       .pipe(first())
       .subscribe(
         data => {
@@ -86,7 +112,6 @@ export class RegisterComponent implements OnInit {
               //this.router.navigate(['/login']);
               this.loading = false;
             }
-
           }
 
         },
@@ -102,12 +127,36 @@ export class RegisterComponent implements OnInit {
       .subscribe(data => { });
   }
 
-  checkCodeValidation(event) {
-    let code = event.target.value;
-    code = code ? code.trim() : code;
+  checkCodeValidation(referralCode) {
+    let code = referralCode ? referralCode.trim() : referralCode;
     if (code) {
-      if (code = 'RMU5SZUV')
-        this.isValidCode = true;
+      this.checkIfValidCode(code);
     }
   }
+
+  checkIfValidCode(referralCode): number {
+    let code = referralCode ? referralCode.trim() : referralCode;
+    if (code) {
+      this.userService.checkReferralCode(code)
+        .pipe(first())
+        .toPromise()
+        .then(
+          data => {
+            if (data) {
+              this.isValidCode = true;
+              return 1;
+            }
+            else {
+              this.isValidCode = false;
+              return 0;
+            }
+          },
+          error => {
+            console.log('checkCodeValidation', error);
+            return -1;
+          });
+    }
+    return -1;
+  }
+
 }

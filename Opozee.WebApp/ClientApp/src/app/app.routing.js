@@ -21,6 +21,7 @@ var privatePolicy_component_1 = require("./legal/privatePolicy.component");
 var aboutus_component_1 = require("./aboutus/aboutus.component");
 var faq_component_1 = require("./faq/faq.component");
 var earn_stats_component_1 = require("./earn-stats/earn-stats.component");
+var invite_component_1 = require("./user/invite/invite.component");
 var appRoutes = [
     { path: 'questionlisting', component: QuestionListing_1.QuestionListingComponent },
     { path: 'questionlisting/:search', component: QuestionListing_1.QuestionListingComponent },
@@ -30,6 +31,7 @@ var appRoutes = [
     { path: '', component: index_1.HomeComponent },
     { path: 'login', component: index_2.LoginComponent },
     { path: 'register', component: index_3.RegisterComponent },
+    { path: 'register/:code', component: index_3.RegisterComponent },
     { path: 'postquestion/:questionId', component: PostQuestion_1.PostQuestionComponent, canActivate: [index_4.AuthGuard] },
     { path: 'notifications', component: notification_component_1.NotificationComponent, canActivate: [index_4.AuthGuard] },
     // otherwise redirect to home
@@ -39,6 +41,8 @@ var appRoutes = [
     { path: 'score', component: earn_stats_component_1.EarnStatsComponent },
     { path: 'editprofile/:Id', component: editProfile_component_1.EditProfileComponent, canActivate: [index_4.AuthGuard] },
     { path: 'mypostquestions', component: userpostQuestion_component_1.UserpostQuestion, canActivate: [index_4.AuthGuard] },
+    { path: 'invites', component: invite_component_1.InviteComponent, canActivate: [index_4.AuthGuard] },
+    { path: 'invite/:code', component: invite_component_1.InviteComponent },
     { path: 'bookmark/:questionId', component: bookmark_component_1.BookmarkQuestion, canActivate: [index_4.AuthGuard] },
     { path: 'postedQuestionEditList/:questionId', component: postedQuestionEditList_component_1.PostedQuestionEditList, canActivate: [index_4.AuthGuard] },
     { path: 'editpostedquestion/:qId', component: editPostquestion_component_1.EditPostquestion, canActivate: [index_4.AuthGuard] },
@@ -46,7 +50,7 @@ var appRoutes = [
     { path: 'privatepolicy', component: privatePolicy_component_1.privatePolicyComponent },
     { path: 'aboutus', component: aboutus_component_1.aboutusComponent },
     { path: 'faq', component: faq_component_1.FaqComponent },
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: '' },
 ];
 exports.routing = router_1.RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' });
 //# sourceMappingURL=app.routing.js.map

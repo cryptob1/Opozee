@@ -19,9 +19,9 @@ namespace Opozee.Models
         [Display(Name = "Remember Me")]
         public bool RememberMe { get; set; }
     }
+
     public class UserLoginWeb
-    {
-       
+    {       
         public int Id { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "Email required")]
         public string Email { get; set; }
@@ -36,5 +36,7 @@ namespace Opozee.Models
         //[Display(Name = "Remember Me")]
         //public bool RememberMe { get; set; }
         public DateTime? LastLoginDate { get; set; }
+        public string ReferralCode { get; set; }
+        public int TotalReferred { get; set; }
     }
 }

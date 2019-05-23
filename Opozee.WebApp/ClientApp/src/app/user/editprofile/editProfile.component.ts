@@ -64,7 +64,7 @@ export class EditProfileComponent implements OnInit {
     this.userService.getEditUserProfileWeb(this.localStorageUser.Id)
       .pipe(first())
       .subscribe(data => {
-        console.log('getUserProfile: ', data);
+        //console.log('getUserProfile: ', data);
         //this.userEditProfileModel = data
         //this.edtiProfileForm.setValue(data);
         this.edtiProfileForm.controls['userName'].setValue(data.UserName);

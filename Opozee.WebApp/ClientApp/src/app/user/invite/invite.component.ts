@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageUser } from '../../_models';
+import { AppConfigService } from '../../appConfigService';
 
 @Component({
   selector: 'app-invite',
@@ -14,10 +15,14 @@ export class InviteComponent implements OnInit {
   referralCode: string;
   referralURL: string;
   localStorageUser: any;
+  coinPerReferral: number;
+  totalReferred: number;
 
-  constructor(private route: ActivatedRoute, private router: Router,
+  constructor(private route: ActivatedRoute, private router: Router, private config: AppConfigService,
     @Inject('BASE_URL') baseUrl: string) {
+
     this.BASE_URL = baseUrl;
+    this.coinPerReferral = this.config.coinPerReferral;
     //this.referralURL = this.BASE_URL
     route.params.subscribe(params => {
       let _referralCode = params['code'];
@@ -32,6 +37,7 @@ export class InviteComponent implements OnInit {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
     this.referralCode = this.localStorageUser.ReferralCode;
     this.referralURL = this.BASE_URL + 'invite' + '/' + this.referralCode;
+    this.totalReferred = this.localStorageUser.TotalReferred ? this.localStorageUser.TotalReferred : 0;
   }
 
   copyInputMessage(inputElement) {

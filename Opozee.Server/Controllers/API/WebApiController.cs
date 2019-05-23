@@ -102,11 +102,9 @@ namespace opozee.Controllers.API
                         entity.Password = AesCryptography.Encrypt(users.Password);
                     }
 
-
-
                     entity.DeviceType = "Web";
                     entity.DeviceToken = users.DeviceToken;
-                    entity.CreatedDate = DateTime.Now.ToUniversalTime(); 
+                    entity.CreatedDate = DateTime.Now.ToUniversalTime();
                     entity.RecordStatus = RecordStatus.Active.ToString();
                     // entity.SocialID = users.ThirdPartyId;
                     //if (input.ThirdPartyType == ThirdPartyType.Facebook)
@@ -125,7 +123,7 @@ namespace opozee.Controllers.API
 
                     var v = db.Users.Where(a => a.Email == users.Email).FirstOrDefault();
 
-                    if (v!=null)
+                    if (v != null)
                     {
                         return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Email already registered.", "Message"));
                     }
@@ -159,6 +157,7 @@ namespace opozee.Controllers.API
                     {
                         entity.ImageURL = _SiteURL + "/ProfileImage/opozee-profile.png";
                     }
+                    entity.ReferralCode = Helper.GenerateReferralCode();
                     db.Users.Add(entity);
                     db.SaveChanges();
 
@@ -168,6 +167,25 @@ namespace opozee.Controllers.API
                     token.UserId = userID;
                     db.Tokens.Add(token);
                     db.SaveChanges();
+
+                    if (users.ReferralCode != null)
+                    {
+                        try
+                        {
+                            (bool IsValidCode, int? ReferralUserId) = CheckIfValidReferralCode(users.ReferralCode);
+                            if (IsValidCode)
+                            {
+                                Referral referral = new Referral();
+                                referral.ReferredId = ReferralUserId ?? 0;
+                                referral.UserId = entity.UserID;
+                                referral.CreationDate = DateTime.Now;
+                                referral.IsDeleted = false;
+                                db.Referrals.Add(referral);
+                                db.SaveChanges();
+                            }
+                        }
+                        catch (Exception ex) { }
+                    }
                     entity = db.Users.Find(userID);
 
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "UserData"));
@@ -216,6 +234,8 @@ namespace opozee.Controllers.API
                         ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault() == null
                         ? 0 : db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault().BalanceToken ?? 0;
 
+                        var totalRef = db.Referrals.Where(x => x.ReferredId == v.UserID).ToList();
+                        ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
                         //update once logged-in
                         v.ModifiedDate = DateTime.Now.ToUniversalTime();
                         try
@@ -225,6 +245,7 @@ namespace opozee.Controllers.API
                         }
                         catch { }
                         ObjLogin.LastLoginDate = v.ModifiedDate;
+                        ObjLogin.ReferralCode = v.ReferralCode;
 
                         return ObjLogin;
 
@@ -242,6 +263,44 @@ namespace opozee.Controllers.API
 
         }
 
+        [HttpGet]
+        [Route("api/WebApi/CheckReferralCode")]
+        public bool CheckReferralCode(string referralCode)
+        {
+            using (OpozeeDbEntities db = new OpozeeDbEntities())
+            {
+                try
+                {
+                    return db.Database
+                           .SqlQuery<int>("SELECT COUNT(*) FROM [Users] WHERE [ReferralCode] = @referralCode",
+                                new SqlParameter("@referralCode", referralCode))
+                           .FirstOrDefault() > 0 ? true : false;
+                }
+                catch { }
+            }
+            return false;
+        }
+
+        private (bool IsValidCode, int? ReferralUserId) CheckIfValidReferralCode(string referralCode)
+        {
+            using (OpozeeDbEntities db = new OpozeeDbEntities())
+            {
+                try
+                {
+                    var ReferralUser = db.Database
+                           .SqlQuery<User>("SELECT * FROM [Users] WHERE [ReferralCode] = @referralCode",
+                                new SqlParameter("@referralCode", referralCode))
+                           .FirstOrDefault();
+
+                    if (ReferralUser == null)
+                        return (false, null);
+
+                    return (true, ReferralUser.UserID);
+                }
+                catch { }
+            }
+            return (false, null);
+        }
 
         [HttpGet]
         [Route("api/WebApi/GetQuestion")]
@@ -1848,7 +1907,7 @@ namespace opozee.Controllers.API
                 UserProfile = db.Users.Where(p => p.UserID == Model.UserId).FirstOrDefault();
                 if(UserProfile.UserName.Trim() != Model.UserName.Trim())
                 {
-                    if (CheckUserNameExist(Model.UserName.Trim()))
+                    if (CheckUserNameExist(Model.UserName.Trim()).isExist)
                     {
                         _response.success = false;
                         _response.message = "Username already exists. Please enter unique Username.";
@@ -1884,18 +1943,31 @@ namespace opozee.Controllers.API
             #endregion
         }
 
-        private bool CheckUserNameExist(string UserName)
+        private (bool isExist, User user) CheckUserNameExist(string UserName)
         {
             try
             {
-                return db.Database
-                    .SqlQuery<int>("SELECT COUNT(*) FROM [Users] WHERE [UserName] = @username", new SqlParameter("@username", UserName))
-                    .FirstOrDefault() > 0 ? true : false;
+                var user = this.GetByUserName(UserName);
+                return user == null ? (false, user) : (true, user);
             }
             catch (Exception ex)
             {
             }
-            return false;
+            return (false, null);
+        }
+
+        private User GetByUserName(string UserName)
+        {
+            try
+            {
+                return db.Database
+                    .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserName] = @username", new SqlParameter("@username", UserName))
+                    .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+            }
+            return null;
         }
 
         private bool CheckEmailExist(string Email)
@@ -2798,9 +2870,12 @@ namespace opozee.Controllers.API
                     }
 
                     entity.UserName = input.UserName != null && input.UserName != "" ? input.UserName : entity.UserName;
-                    if (CheckUserNameExist(entity.UserName))
+
+                    (bool IsExist, User _user) = this.CheckUserNameExist(entity.UserName);
+                    if (IsExist)
                     {
-                        entity.UserName += this.Random4DigitGenerator();
+                        if (_user.SocialID != entity.SocialID)
+                            entity.UserName += Helper.Random4DigitGenerator();
                     }
 
                     if (!string.IsNullOrEmpty(input.Password))
@@ -2810,19 +2885,28 @@ namespace opozee.Controllers.API
                     entity.DeviceType = input.DeviceType != null && input.DeviceType != "" ? input.DeviceType : entity.DeviceType;
                     entity.DeviceToken = input.DeviceToken != null && input.DeviceToken != "" ? input.DeviceToken : entity.DeviceToken;
                     entity.ImageURL = entity.ImageURL;
-                    entity.ModifiedDate = DateTime.Now.ToUniversalTime(); 
+                    entity.ModifiedDate = DateTime.Now.ToUniversalTime();
+
+                    if (entity.ReferralCode == null)
+                        entity.ReferralCode = Helper.GenerateReferralCode();
+
                     db.Entry(entity).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
+
                     int userID = entity.UserID;
                     entity = db.Users.Find(userID);
                     
                     ObjLogin.LastLoginDate = entity.ModifiedDate;
+                    ObjLogin.ReferralCode = entity.ReferralCode;
 
                     ObjLogin.Id = entity.UserID;
                     ObjLogin.Email = entity.Email;
                     ObjLogin.ImageURL = entity.ImageURL;
                     ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == entity.UserID).FirstOrDefault() == null
                         ? 0 : db.Tokens.Where(x => x.UserId == entity.UserID).FirstOrDefault().BalanceToken ?? 0;
+
+                    var totalRef = db.Referrals.Where(x => x.ReferredId == entity.UserID).ToList();
+                    ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
 
                     _response.success = true;
                     _response.data = ObjLogin;
@@ -2835,7 +2919,7 @@ namespace opozee.Controllers.API
                 {
                     entity = new User();
                     Token token = new Token();
-                    entity.UserName = input.FirstName + input.LastName + this.Random4DigitGenerator();
+                    entity.UserName = input.FirstName + input.LastName + Helper.Random4DigitGenerator();
                     entity.FirstName = input.FirstName;
                     entity.LastName = input.LastName;
                     entity.Email = input.Email;
@@ -2892,6 +2976,7 @@ namespace opozee.Controllers.API
                         entity.ImageURL = _SiteURL + "/ProfileImage/opozee-profile.png";
                     }
                     // entity.ImageURL = strIamgeURLfordb;
+                    entity.ReferralCode = Helper.GenerateReferralCode();
                     db.Users.Add(entity);
                     db.SaveChanges();
 
@@ -2904,6 +2989,7 @@ namespace opozee.Controllers.API
                     entity = db.Users.Find(userID);
                                         
                     ObjLogin.LastLoginDate = DateTime.Now.ToUniversalTime();
+                    ObjLogin.ReferralCode = entity.ReferralCode;
 
                     ObjLogin.Id = entity.UserID;
                     ObjLogin.Email = entity.Email;
@@ -2929,13 +3015,7 @@ namespace opozee.Controllers.API
             }
         }
 
-        public int Random4DigitGenerator()
-        {
-            int _min = 1000;
-            int _max = 9999;
-            Random _rdm = new Random();
-            return _rdm.Next(_min, _max);
-        }
+       
 
         #endregion
 

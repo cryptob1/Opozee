@@ -64,13 +64,13 @@
 
 
                   <!--<div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
-                    <i class="fa fa-user"></i>
-                    <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                      <div *ngIf="f.lastName.errors.required">Last Name is required</div>
-                    </div>
-                  </div>-->
+    <label for="lastName">Last Name</label>
+    <input type="text" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+    <i class="fa fa-user"></i>
+    <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+      <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+    </div>
+  </div>-->
 
 
 
@@ -95,12 +95,12 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="referral">Referral Code <small> (Optional)</small></label>
-                    <input type="text" formControlName="referral" class="form-control" (blur)="checkCodeValidation($event)" />
+                    <label for="referralCode">Referral Code <small> (Optional)</small></label>
+                    <input type="text" formControlName="referralCode" class="form-control" />
                     <i class="fa fa-share-alt-square" aria-hidden="true"></i>
-                    <div *ngIf="isValidCode" class="invalid-feedback">
+                    <!--<div *ngIf="isValidCode" class="invalid-feedback">
                       <small>*Invalid Referral Code</small>
-                    </div>
+                    </div>-->
                   </div>
 
                 </div>

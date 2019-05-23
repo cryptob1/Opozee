@@ -86,6 +86,14 @@ export class UserService {
         'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
       })
     })
+  }
+
+  checkReferralCode(code: string) {
+    return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/CheckReferralCode?referralCode=' + code, {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
 
   }
     

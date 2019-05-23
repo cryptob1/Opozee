@@ -78,6 +78,25 @@ namespace OpozeeLibrary.Utilities
             bool isStrictMatch = reStrict.IsMatch(vToValidate);
             return isStrictMatch;
         }
-        
+
+
+        public static string GenerateReferralCode()
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            return new string(
+                Enumerable.Repeat(chars, 8)
+                          .Select(s => s[random.Next(s.Length)])
+                          .ToArray());
+        }
+
+        public static int Random4DigitGenerator()
+        {
+            int _min = 1000;
+            int _max = 9999;
+            Random _rdm = new Random();
+            return _rdm.Next(_min, _max);
+        }
+
     }
 }
