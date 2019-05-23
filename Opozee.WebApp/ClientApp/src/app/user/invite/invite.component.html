@@ -1,11 +1,36 @@
-<div class="container">
-  <div class="row">
+<div id="login" class="inners">
 
-    <h2>Send your promo code and earn free rides</h2>
-    <p>Every time a new rider signs up with your invite code, they get a free ride (amount varies by location). Know
-      more</p>
-    <textarea #link>{{referralURL}}</textarea>
-    <button (click)="copyInputMessage(link)" value="click to copy">Copy from Textbox</button>
+  <div class="creds p-4">
+<div class="container">
+
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-12 col-sm-12">
+      <div class="login_data bg-white text-center rounded p-md-4  pt-4">
+        <div class="logo_main text-center">
+          <!--<img src="../../assets/images/logo-brain.png" alt="main-logo">-->
+        </div>
+        <h2>Send your promo code and earn free rides</h2>
+        <p>Every time a new rider signs up with your invite code, they get a free ride (amount varies by location). Know
+          more</p>
+          <div class="form-group" >
+            <label for="referralURL">Your Referral Code</label>
+            <input type="text" formControlName="referralURL" class="form-control" #link/>
+          </div>
+          <!-- <div class="form-group">
+            <label for="referral">Your Referral Code</label>
+            <textarea id="referral" #link>{{referralURL}}</textarea>
+          </div> -->
+          <div class="form-group">
+            <button [disabled]="loading" (click)="copyInputMessage(link)" value="click to copy" class="btn btn-primary">
+              Copy from Textbox
+            </button>
+          </div>
+        
+      </div>
+    </div>
+
 
   </div>
+</div>
+</div>
 </div>
