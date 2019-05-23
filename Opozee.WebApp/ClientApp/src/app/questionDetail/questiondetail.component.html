@@ -81,7 +81,7 @@
 
                       <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
                         <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
-                        <span>@{{temp?.CommentedUserName}}</span>
+                        <span class="username1">@{{temp?.CommentedUserName}}</span>
                       </span>
 
                       <div class="like_images">
@@ -166,15 +166,14 @@
                   <div class="question_box">
 
 
-
-
-                    <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
+                    <div class="user_left" style="width:55%" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
                       <img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" />
                       <span class="username">
                         @{{temp.OwnerUserName}}
                       </span>
                     </div>
-                    <div class="user_right">
+
+                    <div class="user_right" style="width:45%">
                       <div class="date">
                         <i>{{temp.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
                         <br />

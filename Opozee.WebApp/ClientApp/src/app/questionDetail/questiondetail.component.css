@@ -450,3 +450,33 @@ span.profile_left p {
     background: #50881c;
     color: #fff;
   }
+
+@media(max-width:480px) {
+  .user_left .username1 {
+    width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .user_left .username {
+    width: 85px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+
+  .profile_bottom_cover .like_images {
+    width: 30%;
+    float: none;
+    border: 0px;
+  }
+
+    .profile_bottom_cover .like_images span {
+      width: 20%;
+      float: left;
+      text-align: left;
+      border: 0px;
+    }
+}
