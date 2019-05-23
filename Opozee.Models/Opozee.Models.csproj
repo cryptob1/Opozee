@@ -119,6 +119,9 @@
     <Compile Include="Models\Question.cs">
       <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Referral.cs">
+      <DependentUpon>Opozee.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SP_GetTopLikes_Result.cs">
       <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
