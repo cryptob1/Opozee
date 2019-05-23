@@ -58,7 +58,7 @@
                     <input type="text" formControlName="userName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.userName.errors }" />
                     <i class="fa fa-user"></i>
                     <div *ngIf="submitted && f.userName.errors" class="invalid-feedback">
-                      <div *ngIf="f.userName.errors.required">User Name is required</div>
+                      <small *ngIf="f.userName.errors.required">*User Name is required</small>
                     </div>
                   </div>
 
@@ -79,8 +79,8 @@
                     <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
                     <i class="fa fa-lock"></i>
                     <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                      <div *ngIf="f.email.errors.required">Email is required</div>
-                      <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+                      <small *ngIf="f.email.errors.required">*Email is required</small>
+                      <small *ngIf="f.email.errors.email">*Email must be a valid email address</small>
                     </div>
                   </div>
 
@@ -89,14 +89,18 @@
                     <input type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
                     <i class="fa fa-lock"></i>
                     <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                      <div *ngIf="f.password.errors.required">Password is required</div>
-                      <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+                      <small *ngIf="f.password.errors.required">*Password is required</small>
+                      <small *ngIf="f.password.errors.minlength">*Password must be at least 6 characters</small>
                     </div>
                   </div>
 
-                  <div class="form-group" >
-                    <label for="referral">Referral Code (optional)</label>
-                    <input type="text" formControlName="referral" class="form-control"/>
+                  <div class="form-group">
+                    <label for="referral">Referral Code <small> (Optional)</small></label>
+                    <input type="text" formControlName="referral" class="form-control" (blur)="checkCodeValidation($event)" />
+                    <i class="fa fa-share-alt-square" aria-hidden="true"></i>
+                    <div *ngIf="isValidCode" class="invalid-feedback">
+                      <small>*Invalid Referral Code</small>
+                    </div>
                   </div>
 
                 </div>
@@ -119,3 +123,8 @@
   </div>
 
 </div>
+<style>
+  .invalid-feedback small{
+    color:red;
+  }
+</style>

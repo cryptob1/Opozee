@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageUser } from '../../_models';
 
 @Component({
@@ -14,30 +15,43 @@ export class InviteComponent implements OnInit {
   referralURL: string;
   localStorageUser: any;
 
-  constructor(private route: ActivatedRoute, private router: Router, @Inject('BASE_URL') baseUrl: string) {
-    debugger
+  constructor(private route: ActivatedRoute, private router: Router,
+    @Inject('BASE_URL') baseUrl: string) {
     this.BASE_URL = baseUrl;
-    this.referralURL = this.BASE_URL
+    //this.referralURL = this.BASE_URL
     route.params.subscribe(params => {
-      this.referralCode = params['code'];
-      if (this.referralCode) {
+      let _referralCode = params['code'];
+      if (_referralCode) {
         //redirect to register 
-        this.router.navigate(['/register/' + this.referralCode])
+        this.router.navigate(['/register/' + _referralCode])
       }
     })
-
   }
 
   ngOnInit() {
-
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.referralURL += 'invite' + '/' + this.localStorageUser.ReferralCode
+    this.referralCode = this.localStorageUser.ReferralCode;
+    this.referralURL = this.BASE_URL + 'invite' + '/' + this.referralCode;
   }
 
   copyInputMessage(inputElement) {
     inputElement.select();
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
+  }
+
+  copyLink(referralLink) {
+    let selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = referralLink;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
 
 }

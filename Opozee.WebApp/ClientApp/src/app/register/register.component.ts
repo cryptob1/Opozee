@@ -14,7 +14,7 @@ export class RegisterComponent implements OnInit {
   loading = false;
   submitted = false;
   referral: string;
-
+  isValidCode: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -100,5 +100,14 @@ export class RegisterComponent implements OnInit {
     this.userService.sendWelcomeMail(contact)
       .pipe(first())
       .subscribe(data => { });
+  }
+
+  checkCodeValidation(event) {
+    let code = event.target.value;
+    code = code ? code.trim() : code;
+    if (code) {
+      if (code = 'RMU5SZUV')
+        this.isValidCode = true;
+    }
   }
 }
