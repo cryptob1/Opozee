@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
@@ -8,38 +8,47 @@ import { ToastrService } from 'ngx-toastr';
 import { AlertService, UserService } from '../_services';
 import { MixpanelService } from '../_services/mixpanel.service';
 
-@Component({templateUrl: 'register.component.html'})
+@Component({ templateUrl: 'register.component.html' })
 export class RegisterComponent implements OnInit {
-    registerForm: FormGroup;
-    loading = false;
+  registerForm: FormGroup;
+  loading = false;
   submitted = false;
-  
-
-    constructor(
-        private formBuilder: FormBuilder,
-        private router: Router,
-        private userService: UserService,
-      private alertService: AlertService,
-      private toastr: ToastrService,
-        private mixpanelService: MixpanelService) {
+  referral: string;
 
 
-    }
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private alertService: AlertService,
+    private toastr: ToastrService,
+    private mixpanelService: MixpanelService) {
+    
+    route.params.subscribe(params => {
+      this.referral = params['code'];
+    })
+
+  }
 
 
-    ngOnInit() {
-        this.registerForm = this.formBuilder.group({
-            userName: ['', Validators.required],
-            //lastName: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required, Validators.minLength(6)]]
-        });
-    }
+  ngOnInit() {
+    
+    this.registerForm = this.formBuilder.group({
+      userName: ['', Validators.required],
+      //lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      referral: [this.referral]
+    });
+    //this.registerForm.referral=this.referral;
+  }
 
-    // convenience getter for easy access to form fields
-    get f() { return this.registerForm.controls; }
+  // convenience getter for easy access to form fields
+  get f() { return this.registerForm.controls; }
 
   onSubmit() {
+    
     this.submitted = true;
 
     // stop here if form is invalid
@@ -53,7 +62,7 @@ export class RegisterComponent implements OnInit {
       .subscribe(
         data => {
           this.alertService.success('Registration successful', true);
-          
+
           if (data.Response) {
             //console.log(data.Response);
             if (data.Response.UserData) {
@@ -72,12 +81,12 @@ export class RegisterComponent implements OnInit {
               this.router.navigate(['/login']);
 
             }
-            else if (data.Response.Code=1) {
+            else if (data.Response.Code = 1) {
               this.toastr.error('Registration Failed', data.Response.Status, { timeOut: 8000 });
               //this.router.navigate(['/login']);
               this.loading = false;
             }
-            
+
           }
 
         },

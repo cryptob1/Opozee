@@ -64,6 +64,7 @@ import { JwSocialButtonsModule } from 'jw-angular-social-buttons';
 import { ConfirmationDialogComponent } from './Shared/confirmationDialog/confirmationDialog.component';
 import { EarnStatsComponent } from './earn-stats/earn-stats.component' 
 import { MixpanelService } from './_services/mixpanel.service';
+import { InviteComponent } from './user/invite/invite.component';
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
     [
@@ -126,7 +127,9 @@ export function getAuthServiceConfigs() {
     ForgotPassword,
     EqualValidatorDirective,
     ConfirmationDialogComponent,
-    EarnStatsComponent
+    EarnStatsComponent,
+    InviteComponent
+    
   
   ],
   entryComponents: [

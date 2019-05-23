@@ -20,6 +20,7 @@ import { privatePolicyComponent } from './legal/privatePolicy.component';
 import { aboutusComponent } from './aboutus/aboutus.component';
 import { FaqComponent } from './faq/faq.component';
 import { EarnStatsComponent } from './earn-stats/earn-stats.component';
+import { InviteComponent } from './user/invite/invite.component';
 
 const appRoutes: Routes = [
   { path: 'questionlisting', component: QuestionListingComponent },
@@ -30,6 +31,7 @@ const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'register/:code', component: RegisterComponent },
   { path: 'postquestion/:questionId', component: PostQuestionComponent, canActivate: [AuthGuard] },
   { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuard] },
   // otherwise redirect to home
@@ -40,6 +42,9 @@ const appRoutes: Routes = [
   { path: 'editprofile/:Id', component: EditProfileComponent, canActivate: [AuthGuard] },
   { path: 'mypostquestions', component: UserpostQuestion, canActivate: [AuthGuard] },
 
+  { path: 'invites', component: InviteComponent, canActivate: [AuthGuard] },
+  { path: 'invite/:code', component: InviteComponent },
+
   { path: 'bookmark/:questionId', component: BookmarkQuestion, canActivate: [AuthGuard] },
   { path: 'postedQuestionEditList/:questionId', component: PostedQuestionEditList, canActivate: [AuthGuard] },
   { path: 'editpostedquestion/:qId', component: EditPostquestion, canActivate: [AuthGuard] },
@@ -47,7 +52,7 @@ const appRoutes: Routes = [
   { path: 'privatepolicy', component: privatePolicyComponent },
   { path: 'aboutus', component: aboutusComponent },
   { path: 'faq', component: FaqComponent },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];
 
 export const routing =  RouterModule.forRoot(appRoutes, { onSameUrlNavigation: 'reload' });
