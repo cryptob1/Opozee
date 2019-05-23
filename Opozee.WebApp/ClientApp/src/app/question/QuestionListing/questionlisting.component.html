@@ -97,9 +97,9 @@
             <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
               <div class="question_box">
                 <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
-                  <span class="icon"><img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
-                  <span class="username">
-                    @{{temp.OwnerUserName}}
+                  <span class="icon"><img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
+                  <span class="username" [title]="temp?.OwnerUserName">
+                    @{{temp?.OwnerUserName}}
                   </span>
                 </div>
                 <div class="user_right">
