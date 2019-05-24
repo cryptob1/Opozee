@@ -8,6 +8,7 @@ import { UserService } from '../../_services';
 import { Subscription } from 'rxjs';
 import { ISubscription } from 'rxjs/Subscription';
 import { MixpanelService } from '../../_services/mixpanel.service';
+import { AppConfigService } from '../../appConfigService';
 
 
 
@@ -39,9 +40,15 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   pager: any = {};
   pagedItems: any[];
   sliderData: PostQuestionDetail[] = [];
+  bountyQuestions: any;
+  startDate: any;
+  endDate: any;
 
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router,
-    private location: Location, private mixpanelService: MixpanelService ) {
+    private location: Location, private mixpanelService: MixpanelService, private configService: AppConfigService) {
+
+    this.startDate = this.configService.bountyStartDate;
+    this.endDate = this.configService.bountyEndDate;
 
     this.showSlider = this.location.path() ? false : true;
 
@@ -51,8 +58,8 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     if (this.localStorageUser != null) {
       mixpanelService.init(this.localStorageUser['Email'])
     }
-   
-     
+
+
     if (JSON.parse(localStorage.getItem('popupShown')) || this.localStorageUser != null) {
       this.showPopup = false;
     }
@@ -71,16 +78,16 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     }
     else if (this.route.snapshot.params["qid"]) {
       this.qid = this.route.snapshot.params["qid"];
-
     }
-
 
     this.paramsSub = route.params.subscribe(params => {
       this.initialize();
     });
+
     this.questionGetModel.PageNumber = +localStorage.getItem('PageNumber');
-    
+
   }
+
 
   ngOnInit() {
     localStorage.removeItem('hasRedirectBack');
@@ -123,34 +130,27 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
     this.questionGetModel.TotalRecords = 5
     this.getAllQuestionlist(this.questionGetModel);
-    this.getAllSliderQuestionlist(this.questionGetModel);
+
+    this.getBountyQuestionsByDates();
 
   }
 
 
-  private getAllSliderQuestionlist(questionGetModel) {
-
-    this.userService.getAllSliderQuestionlist(questionGetModel).subscribe(data => {
-
-      if (data) {
-        if (data.length > 0) {
-
-          this.PercentageCalc(data);
-          //----Slider
-          this.sliderData = [];
-
-          data.map((x) => {
-            //console.log(x.Question);
-            //console.log(x.IsSlider);
-            if (x.IsSlider) {
-              this.sliderData.push(x);
-            }
-          })
-        }
-      }
-    },
-      error => {
-      });
+  private getBountyQuestionsByDates() {
+    
+    this.bountyQuestions = [];
+    this.isRecordLoaded = false;
+    this.userService.getBountyQuestions(this.startDate, this.endDate)
+      .subscribe(data => {
+        this.bountyQuestions = data;
+        this.PercentageCalc(this.bountyQuestions);
+        console.log('BountyQuestions', this.bountyQuestions);
+        this.isRecordLoaded = true;
+      },
+        error => {
+          this.isRecordLoaded = true;
+          console.log('err', error);
+        });
   }
 
   private getAllQuestionlist(questionGetModel) {

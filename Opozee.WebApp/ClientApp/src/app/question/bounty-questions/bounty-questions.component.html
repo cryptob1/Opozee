@@ -3,39 +3,62 @@
   <h2>Bounty Question History </h2>
   <div class="container-fluid">
     <div class="row justify-content-start">
-      <div class="col-lg-12">
-        <table class="table table-striped">
-          <thead>
-            <tr>
+      <div class="col-md-12">
 
-              <th>Question</th>
-              <th>User</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th><span class="green">Yes</span>/<span class="red">No</span></th>
-              <th><span class="green">Likes</span>/<span class="red">DisLikes</span></th>
-              <th>Winner</th>
+        <div *ngIf="loading" class="scroller_cover" style="margin:40px 0px 40px 0px">
+          <img src="../../../assets/images/reordloaderImages.gif" />
+        </div>
 
-              <!-- <th>Lastname</th>
-              <th>Email</th> -->
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let bounty of bountyQuestions">
-              <td class="qes">{{bounty.PostQuestion}}</td>
-              <td>{{bounty.UserName}}</td>
-              <td>{{bounty.StartDate | date: 'dd/MM/yyyy' }}</td>
-              <td>{{bounty.EndDate | date: 'dd/MM/yyyy'}}</td>
-              <td><span class="green">{{bounty.YesCount}}</span>/<span class="red">{{bounty.NoCount}}</span></td>
-              <td><span class="green">{{bounty.TotalLikes}}</span>/<span class="red">{{bounty.TotalDisLikes}}</span>
-              </td>
-              <td></td>
-            </tr>
 
-          </tbody>
-        </table>
+        <div class="col-md-12" style="float:right" *ngIf="!loading">
+          <div class="form-group">
+            <input class="form-control" class="date datepicker" type="date" [(ngModel)]="startDate" name="date1" #date1="ngModel" (change)="onStartDateChange($event,'start')" />
+            <input class="form-control" class="date datepicker" type="date" [(ngModel)]="endDate" name="date2" #date2="ngModel" (change)="onStartDateChange($event,'end')" />
+            <button type="button" style="padding:3px 12px;" [disabled]="!(startDate&&endDate)" class="btn btn-success" (click)="filterBQ()">GO</button>
+          </div>
+        </div>
+
+          <table class="table table-striped table-bordered" *ngIf="!loading">
+            <thead>
+              <tr>
+
+                <th>Questions</th>
+                <th>User</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Score</th>
+                <!--<th><span class="green">Yes</span>/<span class="red">No</span></th>
+                  <th><span class="green">Likes</span>/<span class="red">DisLikes</span></th>-->
+                <!--<th>Winner</th>-->
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let bounty of bountyQuestions">
+                <td align="left">
+                  <a href="javascript:void(0)" [routerLink]="localStorageUser ? ['/questiondetail/', bounty?.QuestionId] : ['/qid/', bounty?.QuestionId]">
+                    <span class="message-container" [innerHTML]="bounty?.PostQuestion | emojis"></span>
+                  </a>
+                </td>
+                <td align="left">
+                  <a href="javascript:void(0)" [routerLink]="['/viewprofile/',bounty?.UserId]">{{bounty?.UserName}}</a>
+                </td>
+                <td>{{bounty?.StartDate | date: 'dd/MM/yyyy' }}</td>
+                <td>{{bounty?.EndDate | date: 'dd/MM/yyyy'}}</td>
+                <td>{{bounty?.Score}}</td>
+
+                <!--<td><span class="green">{{bounty?.YesCount}}</span>/<span class="red">{{bounty?.NoCount}}</span></td>
+              <td>
+                <span class="green">{{bounty?.TotalLikes}}</span>/<span class="red">{{bounty?.TotalDisLikes}}</span>
+              </td>-->
+                <!--<td>-</td>-->
+              </tr>
+              <tr *ngIf="bountyQuestions?.length==0"><td colspan="5">No Records Found</td></tr>
+            </tbody>
+          </table>
+        </div>
+       
       </div>
-    </div>
   </div>
 
 </section>

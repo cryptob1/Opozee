@@ -657,8 +657,7 @@ namespace opozee.Controllers.API
                 return userNotifications2;
             }
         }
-
-
+        
 
         [HttpPost]
         [Route("api/WebApi/GetProfileNotificationByUser")]
@@ -1029,7 +1028,125 @@ namespace opozee.Controllers.API
         }
         #endregion
 
+        #region BOUNTY QUESTIONS
+        [HttpGet]
+        [Route("api/WebApi/GetBountyQuestions")]
+        public List<BountyQuestionsVM> GetBountyQuestions(DateTime? StartDate, DateTime? EndDate)
+        {
+            List<BountyQuestionsVM> BountyQuestionList = new List<BountyQuestionsVM>();
+            try
+            {
+                using (var context = new OpozeeDbEntities())
+                {
+                    var _BountyQuestions = context.SP_GetBountyQuestions(StartDate, EndDate).ToList();
+                    foreach (var bq in _BountyQuestions)
+                    {
+                        BountyQuestionsVM _bQuestion = new BountyQuestionsVM();
+                        _bQuestion.BountyId = bq.BountyId;
+                        _bQuestion.QuestionId = bq.QuestionId;
+                        _bQuestion.StartDate = bq.StartDate;
+                        _bQuestion.EndDate = bq.EndDate;
+                        _bQuestion.IsActive = bq.IsActive;
+                        _bQuestion.BountyCreatedOn = bq.BountyCreatedOn;
+                        _bQuestion.PostQuestion = bq.PostQuestion;
+                        _bQuestion.HashTags = bq.HashTags;
+                        _bQuestion.TaggedUser = bq.TaggedUser;
+                        _bQuestion.QuestionCreatedOn = bq.QuestionCreatedOn;
+                        _bQuestion.UserId = bq.UserId;
+                        _bQuestion.UserName = bq.UserName;
+                        _bQuestion.Email = bq.Email;
+                        _bQuestion.SocialID = bq.SocialID;
+                        _bQuestion.YesCount = bq.YesCount;
+                        _bQuestion.NoCount = bq.NoCount;
+                        _bQuestion.TotalLikes = bq.TotalLikes;
+                        _bQuestion.TotalDisLikes = bq.TotalDisLikes;
+                        _bQuestion.Score = bq.Score;
+                        _bQuestion.Comments = (from e in db.Opinions
+                                               join t in db.Users on e.CommentedUserId equals t.UserID
+                                               where e.QuestId == bq.QuestionId
+                                               select new Comments
+                                               {
+                                                   Id = e.Id,
+                                                   Comment = e.Comment,
+                                                   CommentedUserId = t.UserID,
+                                                   Name = t.FirstName + " " + t.LastName,
+                                                   UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                   LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                   DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                   Likes = db.Notifications.Where(p => p.CommentedUserId == bq.UserId && p.CommentId == e.Id).Select(b => b.Like.HasValue ? b.Like.Value : false).FirstOrDefault(),
+                                                   DisLikes = db.Notifications.Where(p => p.CommentedUserId == bq.UserId && p.CommentId == e.Id).Select(b => b.Dislike.HasValue ? b.Dislike.Value : false).FirstOrDefault(),
+                                                   CommentedUserName = t.UserName,
+                                                   IsAgree = e.IsAgree,
+                                                   CreationDate = e.CreationDate
+                                               }).ToList();
 
+                        BountyQuestionList.Add(_bQuestion);
+                    }
+
+                    foreach (var bq in BountyQuestionList)
+                    {
+                        var opinionList = db.Opinions.Where(p => p.QuestId == bq.QuestionId).ToList();
+                        if (opinionList.Count > 0)
+                        {
+
+                            int? maxYesLike = opinionList.Where(p => p.IsAgree == true).Max(i => i.Likes);
+                            int? maxNoLike = opinionList.Where(p => p.IsAgree == false).Max(i => i.Likes);
+                            //int? maxDislike = opinionList.Max(i => i.Dislikes);
+                            if (maxYesLike != null && maxYesLike > 0)
+                            {
+                                bq.MostYesLiked = (from e in db.Opinions
+                                                   join t in db.Users on e.CommentedUserId equals t.UserID
+                                                   join n in db.Notifications on e.QuestId equals n.questId
+                                                   where e.IsAgree == true && e.QuestId == bq.QuestionId && n.Like == true
+                                                   select new Comments
+                                                   {
+                                                       Id = e.Id,
+                                                       Comment = e.Comment,
+                                                       CommentedUserId = t.UserID,
+                                                       Name = t.FirstName + " " + t.LastName,
+                                                       UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                       IsAgree = e.IsAgree,
+                                                       LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                       DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                       CommentedUserName = t.UserName,
+                                                       CreationDate = e.CreationDate
+                                                   }).OrderByDescending(s => s.LikesCount).ThenByDescending(s => s.CreationDate).First();
+
+                            }
+                            if (maxNoLike != null && maxNoLike > 0)
+                            {
+                                bq.MostNoLiked = (from e in db.Opinions
+                                                  join t in db.Users on e.CommentedUserId equals t.UserID
+                                                  join n in db.Notifications on e.QuestId equals n.questId
+                                                  where e.IsAgree == false && e.QuestId == bq.QuestionId && n.Like == true
+                                                  select new Comments
+                                                  {
+                                                      Id = e.Id,
+                                                      Comment = e.Comment,
+                                                      CommentedUserId = t.UserID,
+                                                      Name = t.FirstName + " " + t.LastName,
+                                                      UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                      IsAgree = e.IsAgree,
+                                                      LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                      DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                      CommentedUserName = t.UserName,
+                                                      CreationDate = e.CreationDate
+                                                  }).OrderByDescending(s => s.LikesCount).ThenByDescending(s => s.CreationDate).First();
+                            }
+                        }
+                    }
+
+                    return BountyQuestionList;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+            }
+            return BountyQuestionList;
+        }
+        #endregion
 
 
         #region "Get All Slider Posts" 

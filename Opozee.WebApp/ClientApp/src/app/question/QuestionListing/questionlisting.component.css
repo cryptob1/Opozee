@@ -202,9 +202,16 @@ padding: 0px;
     cursor: pointer;
   }
 
-
-
-
+.bounty-q{
+margin:2px;
+}
+.bounty-q small{
+  font-size:13px;
+}
+  .bounty-q small span {
+    font-size: 12px;
+    color: #2c78b9;
+  }
 
 .yes_feedback h1 {
   width: 30px;
@@ -216,7 +223,6 @@ padding: 0px;
   margin-left: 5px;
   text-align: center;
   color: #D2F3C8;
-  
 }
 
 
@@ -249,6 +255,10 @@ padding: 0px;
 
 @media screen and (max-width: 480px) {
 
+  .bounty-q small {
+    display:block;
+    font-size: 13px;
+  }
 
   .carousel-outer .cover_questions {
     padding: 30px 30px 60px;

@@ -3,10 +3,10 @@
   <section class="section_second">
     <div class="container-fluid">
       <div class="row">
-        <div class="carousel-outer" *ngIf="sliderData?.length>0 && !search && !hashTag && qid==-1">
+        <div class="carousel-outer" *ngIf="bountyQuestions?.length>0 && !search && !hashTag && qid==-1">
           <div id="question-slider" class="carousel slide" data-ride="false" data-interval="50000">
             <!-- Indicators -->
-            Popular Questions:
+            <span class="bounty-q">Bounty Questions <small>From <span>{{startDate | date: 'E, MMMM d, y'}}</span> To <span>{{endDate | date: 'E, MMMM d, y'}}</span></small></span>
             <ol class="carousel-indicators">
               <li data-target="#question-slider" data-slide-to="0" class="active"></li>
               <li data-target="#question-slider" data-slide-to="1"></li>
@@ -16,44 +16,52 @@
 
             <!-- Wrapper for slides -->
             <div class="carousel-inner">
-              <ng-container *ngFor="let slider of sliderData;let i = index">
-                <div class="item" [ngClass]="{'active': i == 0 }" *ngIf="i<4">
+              <ng-container *ngFor="let bounty of bountyQuestions;let i = index">
+                <div class="item" [ngClass]="{'active': i == 0 }">
                   <div class="cover_questions">
                     <div class="question_box">
 
                       <strong>
-                        <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', slider?.Id] :['/qid/', slider?.Id]">
-                          <span class="message-container" [innerHTML]="'Q: ' + slider?.Question | emojis"></span>
+                        <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', bounty?.QuestionId] :['/qid/', bounty?.QuestionId]">
+                          <span class="message-container" [innerHTML]="'Q: ' + bounty?.PostQuestion | emojis"></span>
                         </a>
-                        <ng-container *ngFor="let tag of slider?.HashTags?.split(',')">
+                        <ng-container *ngFor="let tag of bounty?.HashTags?.split(',')">
                           <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></small>
                         </ng-container>
-
+                        
                       </strong>
 
-                      <span class="percentage_yes" *ngIf="slider.YesCount >0 || slider.NoCount>0">Yes : {{slider.percentage | number:'1.0-0'}}  %</span>
+                      <div class="user_left" >
+                       <!-- <span class="icon"><img src="{{bounty?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>-->
+                        <span class="badge" title="Bounty Score" style="background-color: #ff9090;font-weight:200">
+                          <small>Bounty score : {{bounty?.Score}}</small>
+                        </span>
+                      </div>
 
+                      <!--<span class="percentage_yes" *ngIf="bounty?.YesCount >0 || bounty?.NoCount>0">Yes : {{bounty?.percentage | number:'1.0-0'}}  %</span>-->
 
-                      <div class="liked_ones clearfix yes_feedback" *ngIf="slider?.MostYesLiked">
+                      <div class="liked_ones clearfix yes_feedback" *ngIf="bounty?.MostYesLiked">
                         <div ExternalLink>
                           <h1>  Yes</h1>
-                          <b>@{{slider?.MostYesLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostYesLiked.Comment | emojis"></small>
+                          <b>@{{bounty?.MostYesLiked?.CommentedUserName}}:</b>
+                          <small class="message-container" [innerHTML]="bounty?.MostYesLiked.Comment | emojis"></small>
                         </div>
                       </div>
 
-                      <div class="liked_ones clearfix no_feedback" *ngIf="slider?.MostNoLiked">
+                      <div class="liked_ones clearfix no_feedback" *ngIf="bounty?.MostNoLiked">
                         <div ExternalLink>
                           <h1>  No</h1>
-                          <b>@{{slider?.MostNoLiked?.CommentedUserName}}:</b> <small class="message-container" [innerHTML]="slider?.MostNoLiked.Comment | emojis"></small>
+                          <b>@{{bounty?.MostNoLiked?.CommentedUserName}}:</b>
+                          <small class="message-container" [innerHTML]="bounty?.MostNoLiked.Comment | emojis"></small>
                         </div>
                       </div>
 
-                      <!--<tweet url="{{shareUrl}}{{slider?.Id}}" text="{{slider?.Question}}{{sharetext}}"></tweet>-->
                     </div>
                   </div>
                 </div>
               </ng-container>
             </div>
+
 
             <!-- Left and right controls -->
             <a class="left carousel-control" href="#question-slider" data-slide="prev">

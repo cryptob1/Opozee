@@ -50,8 +50,9 @@
                 Notifications <i *ngIf="showNotificationIcon" class="fa fa-circle" aria-hidden="true"></i>
               </a>
             </li>
-            <li class="notification" *ngIf="loginData.Id > 0"><a (click)="navbar();" [routerLink]="['/profile/', loginData.Id]">Profile</a></li>
+            <!--<li class="notification" *ngIf="loginData.Id > 0"><a (click)="navbar();" [routerLink]="['/profile/', loginData.Id]">Profile</a></li>-->
             <li class="notification"> <a (click)="navbar();" [routerLink]="['/score/']">Score</a></li>
+            <li class="notification"> <a (click)="navbar();" [routerLink]="['/bounty-questions/']">Bounty</a></li>
             <!--<span class="bell-icon"><i class="fa fa-bell" aria-hidden="true"></i>  <span></span></span>-->
             <!--<li *ngIf="isAuthenticateUserId"><a (click)="navbar();" [routerLink]="['/bookmark',0]">Bookmarks</a></li>-->
             <li>
@@ -59,10 +60,10 @@
                 <a class="profile_head btn btn-primary dropdown-toggle" data-toggle="dropdown">
                   <img class="cls-profile" src="{{loginData?.ImageURL
                 }}" onerror="this.onerror=null;this.src='../../assets/images/profile.png';">
-                <span class="badge bg-red">{{loginData?.BalanceToken}}</span>
-              </a>
+                  <span class="badge bg-red">{{loginData?.BalanceToken}}</span>
+                </a>
                 <div class="dropdown-menu">
-                  <!--<a class="dropdown-item" (click)="navbar();" [routerLink]="['/profile/', loginData.Id]">Profile</a>-->
+                  <a class="dropdown-item" (click)="navbar();" [routerLink]="['/profile/', loginData.Id]">Profile</a>
                   <!--<a class="dropdown-item" style="cursor:pointer !important" (click)="openResetModal()">Reset Password</a>-->
                   <a class="dropdown-item" style="cursor:pointer !important" (click)="logout()">Log Out</a>
                 </div>
