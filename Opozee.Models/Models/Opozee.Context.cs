@@ -34,10 +34,45 @@ namespace Opozee.Models.Models
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Referral> Referrals { get; set; }
+        public virtual DbSet<Bounty> Bounties { get; set; }
     
         public virtual ObjectResult<SP_GetTopLikes_Result> SP_GetTopLikes()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetTopLikes_Result>("SP_GetTopLikes");
+        }
+    
+        public virtual ObjectResult<SP_GetBountyQuestions_Result> SP_GetBountyQuestions(Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate)
+        {
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("StartDate", startDate) :
+                new ObjectParameter("StartDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetBountyQuestions_Result>("SP_GetBountyQuestions", startDateParameter, endDateParameter);
+        }
+    
+        public virtual int SP_SetBountyQuestions(Nullable<int> questionId, Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, Nullable<bool> isActive)
+        {
+            var questionIdParameter = questionId.HasValue ?
+                new ObjectParameter("QuestionId", questionId) :
+                new ObjectParameter("QuestionId", typeof(int));
+    
+            var startDateParameter = startDate.HasValue ?
+                new ObjectParameter("StartDate", startDate) :
+                new ObjectParameter("StartDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            var isActiveParameter = isActive.HasValue ?
+                new ObjectParameter("IsActive", isActive) :
+                new ObjectParameter("IsActive", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_SetBountyQuestions", questionIdParameter, startDateParameter, endDateParameter, isActiveParameter);
         }
     }
 }

@@ -16,6 +16,18 @@
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="Bounty">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionId" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="EndDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="Score" Type="int" />
+          <Property Name="CreationDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="Notification">
           <Key>
             <PropertyRef Name="Id" />
@@ -100,8 +112,19 @@
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="ReferralCode" Type="nvarchar" MaxLength="10" />
         </EntityType>
+        <Function Name="SP_GetBountyQuestions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="SP_SetBountyQuestions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="QuestionId" Type="int" Mode="In" />
+          <Parameter Name="StartDate" Type="datetime" Mode="In" />
+          <Parameter Name="EndDate" Type="datetime" Mode="In" />
+          <Parameter Name="IsActive" Type="bit" Mode="In" />
+        </Function>
         <EntityContainer Name="oposeeDbModelStoreContainer">
           <EntitySet Name="BookMark" EntityType="Self.BookMark" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bounty" EntityType="Self.Bounty" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Opinion" EntityType="Self.Opinion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
@@ -122,6 +145,17 @@
           <EntitySet Name="Tokens" EntityType="oposeeDbModel.Token" />
           <EntitySet Name="Users" EntityType="oposeeDbModel.User" />
           <EntitySet Name="Referrals" EntityType="oposeeDbModel.Referral" />
+          <FunctionImport Name="SP_GetBountyQuestions" ReturnType="Collection(oposeeDbModel.SP_GetBountyQuestions_Result)">
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SP_SetBountyQuestions">
+            <Parameter Name="QuestionId" Mode="In" Type="Int32" />
+            <Parameter Name="StartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+            <Parameter Name="IsActive" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <EntitySet Name="Bounties" EntityType="oposeeDbModel.Bounty" />
           </EntityContainer>
         <ComplexType Name="SP_GetTopLikes_Result">
           <Property Type="Int32" Name="questid" Nullable="false" />
@@ -233,6 +267,40 @@
           <Property Name="CreationDate" Type="DateTime" Precision="3" />
           <Property Name="IsDeleted" Type="Boolean" />
         </EntityType>
+        <ComplexType Name="SP_GetBountyQuestions_Result">
+          <Property Type="Int32" Name="BountyId" Nullable="false" />
+          <Property Type="Int32" Name="QuestionId" Nullable="false" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" />
+          <Property Type="DateTime" Name="EndDate" Nullable="false" />
+          <Property Type="Int32" Name="QuestionId1" Nullable="false" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="DateTime" Name="BountyCreatedOn" Nullable="true" Precision="23" />
+          <Property Type="String" Name="PostQuestion" Nullable="true" />
+          <Property Type="String" Name="HashTags" Nullable="true" MaxLength="1000" />
+          <Property Type="String" Name="TaggedUser" Nullable="true" />
+          <Property Type="DateTime" Name="QuestionCreatedOn" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="UserId" Nullable="false" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Email" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="SocialID" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="YesCount" Nullable="true" />
+          <Property Type="Int32" Name="NoCount" Nullable="true" />
+          <Property Type="Int32" Name="TotalLikes" Nullable="true" />
+          <Property Type="Int32" Name="TotalDisLikes" Nullable="true" />
+          <Property Type="Int32" Name="Score" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Bounty">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionId" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Score" Type="Int32" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -337,6 +405,46 @@
                 <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="ReferredId" ColumnName="ReferredId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetBountyQuestions" FunctionName="oposeeDbModel.Store.SP_GetBountyQuestions">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="oposeeDbModel.SP_GetBountyQuestions_Result">
+                <ScalarProperty Name="BountyId" ColumnName="BountyId" />
+                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="QuestionId1" ColumnName="QuestionId1" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="BountyCreatedOn" ColumnName="BountyCreatedOn" />
+                <ScalarProperty Name="PostQuestion" ColumnName="PostQuestion" />
+                <ScalarProperty Name="HashTags" ColumnName="HashTags" />
+                <ScalarProperty Name="TaggedUser" ColumnName="TaggedUser" />
+                <ScalarProperty Name="QuestionCreatedOn" ColumnName="QuestionCreatedOn" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="SocialID" ColumnName="SocialID" />
+                <ScalarProperty Name="YesCount" ColumnName="YesCount" />
+                <ScalarProperty Name="NoCount" ColumnName="NoCount" />
+                <ScalarProperty Name="TotalLikes" ColumnName="TotalLikes" />
+                <ScalarProperty Name="TotalDisLikes" ColumnName="TotalDisLikes" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_SetBountyQuestions" FunctionName="oposeeDbModel.Store.SP_SetBountyQuestions" />
+          <EntitySetMapping Name="Bounties">
+            <EntityTypeMapping TypeName="oposeeDbModel.Bounty">
+              <MappingFragment StoreEntitySet="Bounty">
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

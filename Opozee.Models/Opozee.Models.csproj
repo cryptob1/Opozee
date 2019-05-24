@@ -95,6 +95,9 @@
     <Compile Include="Models\BookMark.cs">
       <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Bounty.cs">
+      <DependentUpon>Opozee.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Notification.cs">
       <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
@@ -120,6 +123,9 @@
       <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Referral.cs">
+      <DependentUpon>Opozee.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_GetBountyQuestions_Result.cs">
       <DependentUpon>Opozee.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SP_GetTopLikes_Result.cs">
