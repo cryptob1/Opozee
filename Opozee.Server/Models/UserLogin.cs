@@ -38,5 +38,6 @@ namespace Opozee.Models
         public DateTime? LastLoginDate { get; set; }
         public string ReferralCode { get; set; }
         public int TotalReferred { get; set; }
+        public bool IsSocialLogin { get; set; }
     }
 }

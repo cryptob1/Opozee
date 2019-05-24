@@ -20,7 +20,7 @@ export class EditProfileComponent implements OnInit {
   public message: string;
   imageUrl: string = "";
   fileToUpload: File = null;
-  localStorageUser: LocalStorageUser;
+  localStorageUser: any;
   isSocialLogin: boolean = false;
 
   constructor(private userService: UserService, private formBuilder: FormBuilder, private route: ActivatedRoute, private toastr: ToastrService) {
@@ -28,6 +28,7 @@ export class EditProfileComponent implements OnInit {
       this.userId = this.route.snapshot.params["Id"];
 
       this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
+      this.isSocialLogin = this.localStorageUser.IsSocialLogin;
     }
   }
 
@@ -38,7 +39,8 @@ export class EditProfileComponent implements OnInit {
       lastName: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      userId: ['']
+      userId: [''],
+      IsSocialLogin: [this.isSocialLogin]
     });
         
     this.getUserProfile();

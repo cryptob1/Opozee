@@ -237,18 +237,18 @@ namespace opozee.Controllers.API
                         var totalRef = db.Referrals.Where(x => x.ReferredId == v.UserID).ToList();
                         ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
                         //update once logged-in
-                        v.ModifiedDate = DateTime.Now.ToUniversalTime();
                         try
                         {
+                            v.ModifiedDate = DateTime.Now.ToUniversalTime();
                             db.Entry(v).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
                         }
                         catch { }
                         ObjLogin.LastLoginDate = v.ModifiedDate;
                         ObjLogin.ReferralCode = v.ReferralCode;
+                        ObjLogin.IsSocialLogin = false;
 
                         return ObjLogin;
-
                     }
                     else
                     {
@@ -1903,7 +1903,6 @@ namespace opozee.Controllers.API
             dynamic _response = new ExpandoObject();
             try
             {
-
                 UserProfile = db.Users.Where(p => p.UserID == Model.UserId).FirstOrDefault();
                 if(UserProfile.UserName.Trim() != Model.UserName.Trim())
                 {
@@ -1925,10 +1924,15 @@ namespace opozee.Controllers.API
                 }
 
                 UserProfile.UserName = Model.UserName;
-                UserProfile.FirstName = Model.FirstName;
-                UserProfile.LastName = Model.LastName;
-                UserProfile.Email = Model.Email;
-                UserProfile.Password = AesCryptography.Encrypt(Model.Password);
+                UserProfile.FirstName = Model.FirstName == null ? UserProfile.FirstName : Model.FirstName;
+                UserProfile.LastName = Model.LastName == null ? UserProfile.LastName : Model.LastName;
+
+                if (!Model.IsSocialLogin)
+                {
+                    UserProfile.Email = Model.Email;
+                    UserProfile.Password = AesCryptography.Encrypt(Model.Password);
+                }
+
                 db.Entry(UserProfile).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
@@ -2916,6 +2920,7 @@ namespace opozee.Controllers.API
 
                     var totalRef = db.Referrals.Where(x => x.ReferredId == entity.UserID).ToList();
                     ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
+                    ObjLogin.IsSocialLogin = true;
 
                     _response.success = true;
                     _response.data = ObjLogin;
@@ -2927,7 +2932,6 @@ namespace opozee.Controllers.API
                 else
                 {
                     entity = new User();
-                    Token token = new Token();
                     entity.UserName = input.FirstName + input.LastName + Helper.Random4DigitGenerator();
                     entity.FirstName = input.FirstName;
                     entity.LastName = input.LastName;
@@ -2989,6 +2993,7 @@ namespace opozee.Controllers.API
                     db.Users.Add(entity);
                     db.SaveChanges();
 
+                    Token token = new Token();
                     int userID = entity.UserID;
                     token.TotalToken = 500;
                     token.BalanceToken = 500;
@@ -3004,6 +3009,7 @@ namespace opozee.Controllers.API
                     ObjLogin.Email = entity.Email;
                     ObjLogin.ImageURL = entity.ImageURL;
                     ObjLogin.BalanceToken = token.BalanceToken ?? 0;
+                    ObjLogin.IsSocialLogin = true;
 
                     _response.success = true;
                     _response.data = ObjLogin;
