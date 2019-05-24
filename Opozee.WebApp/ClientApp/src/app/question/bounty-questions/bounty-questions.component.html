@@ -1,45 +1,43 @@
-
-
-
 <section class="leader-table">
 
   <h2>Bounty Question History </h2>
-
   <div class="container-fluid">
-    <div class="row justify-content-start  ">
+    <div class="row justify-content-start">
       <div class="col-lg-12">
         <table class="table table-striped">
           <thead>
             <tr>
-<!--Sr.
-PostQuestion
-UserName
-StartDate
-EndDate
-YesCount
-NoCount
-TotalLikes
-TotalDisLikes
-Winner-->
 
-              <th>Firstname</th>
-              <th>Lastname</th>
-              <th>Email</th>
+              <th>Question</th>
+              <th>User</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th><span class="green">Yes</span>/<span class="red">No</span></th>
+              <th><span class="green">Likes</span>/<span class="red">DisLikes</span></th>
+              <th>Winner</th>
+
+              <!-- <th>Lastname</th>
+              <th>Email</th> -->
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>John</td>
-              <td>Doe</td>
-              <td>john@example.com</td>
+            <tr *ngFor="let bounty of bountyQuestions">
+              <td class="qes">{{bounty.PostQuestion}}</td>
+              <td>{{bounty.UserName}}</td>
+              <td>{{bounty.StartDate | date: 'dd/MM/yyyy' }}</td>
+              <td>{{bounty.EndDate | date: 'dd/MM/yyyy'}}</td>
+              <td><span class="green">{{bounty.YesCount}}</span>/<span class="red">{{bounty.NoCount}}</span></td>
+              <td><span class="green">{{bounty.TotalLikes}}</span>/<span class="red">{{bounty.TotalDisLikes}}</span>
+              </td>
+              <td></td>
             </tr>
-            
+
           </tbody>
         </table>
-      </div> 
+      </div>
     </div>
   </div>
-   
+
 </section>
 
 
@@ -50,9 +48,9 @@ Winner-->
     <div class="row">
       <div class="col-sm-12">
         <ul>
-          <li>    <a href="javascript:void(0)">Help</a></li>
-          <li>   <a [routerLink]="['/faq/']">FAQ</a></li>
-          <li>   <a [routerLink]="['/aboutus/']">About Us</a></li>
+          <li> <a href="javascript:void(0)">Help</a></li>
+          <li> <a [routerLink]="['/faq/']">FAQ</a></li>
+          <li> <a [routerLink]="['/aboutus/']">About Us</a></li>
 
 
           <li><a href="mailto:contactus@opozee.com">Contact Us</a></li>
@@ -66,7 +64,9 @@ Winner-->
     </div>
   </div>
 
-  <div class="copywrite"><p>Copyright Opozee Inc 2019</p></div>
+  <div class="copywrite">
+    <p>Copyright Opozee Inc 2019</p>
+  </div>
   <div class="privatePolicy">
     <!--<a [routerLink]="['/privatepolicy/']">Privacy Policy</a>-->
 
@@ -76,8 +76,8 @@ Winner-->
   </div>
 
   <span id="siteseal">
-    <script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=tO7ndZkEUXZNnbHsOziOEYXzlu2s0mKH9rgu1WUzFXZbUYexoQKcFMLqv54v"></script>
+    <script async type="text/javascript"
+      src="https://seal.godaddy.com/getSeal?sealID=tO7ndZkEUXZNnbHsOziOEYXzlu2s0mKH9rgu1WUzFXZbUYexoQKcFMLqv54v"></script>
   </span>
 
 </footer>
-

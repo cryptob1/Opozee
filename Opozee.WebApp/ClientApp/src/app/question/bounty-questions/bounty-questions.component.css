@@ -8,6 +8,18 @@
 .container-fluid {
   width: 90%;
 }
+
+.green{
+  color: green;
+}
+
+.red{
+  color:red;
+}
+
+.qes{
+  float: left;
+}
 @media screen and (max-width: 767px) {
 
   .container-fluid {
