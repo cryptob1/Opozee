@@ -22,6 +22,7 @@ var aboutus_component_1 = require("./aboutus/aboutus.component");
 var faq_component_1 = require("./faq/faq.component");
 var earn_stats_component_1 = require("./earn-stats/earn-stats.component");
 var invite_component_1 = require("./user/invite/invite.component");
+var bounty_questions_component_1 = require("./question/bounty-questions/bounty-questions.component");
 var appRoutes = [
     { path: 'questionlisting', component: QuestionListing_1.QuestionListingComponent },
     { path: 'questionlisting/:search', component: QuestionListing_1.QuestionListingComponent },
@@ -39,6 +40,7 @@ var appRoutes = [
     { path: 'profile/:Id', component: profile_component_1.ProfileComponent, canActivate: [index_4.AuthGuard] },
     { path: 'viewprofile/:Id', component: viewprofile_component_1.ViewProfileComponent },
     { path: 'score', component: earn_stats_component_1.EarnStatsComponent },
+    { path: 'bounty-questions', component: bounty_questions_component_1.BountyQuestionsComponent },
     { path: 'editprofile/:Id', component: editProfile_component_1.EditProfileComponent, canActivate: [index_4.AuthGuard] },
     { path: 'mypostquestions', component: userpostQuestion_component_1.UserpostQuestion, canActivate: [index_4.AuthGuard] },
     { path: 'invites', component: invite_component_1.InviteComponent, canActivate: [index_4.AuthGuard] },

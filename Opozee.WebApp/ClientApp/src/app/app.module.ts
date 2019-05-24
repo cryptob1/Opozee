@@ -65,6 +65,7 @@ import { ConfirmationDialogComponent } from './Shared/confirmationDialog/confirm
 import { EarnStatsComponent } from './earn-stats/earn-stats.component' 
 import { MixpanelService } from './_services/mixpanel.service';
 import { InviteComponent } from './user/invite/invite.component';
+import { BountyQuestionsComponent } from './question/bounty-questions/bounty-questions.component';
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
     [
@@ -128,8 +129,8 @@ export function getAuthServiceConfigs() {
     EqualValidatorDirective,
     ConfirmationDialogComponent,
     EarnStatsComponent,
-    InviteComponent
-    
+    InviteComponent,
+    BountyQuestionsComponent
   
   ],
   entryComponents: [

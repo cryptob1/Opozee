@@ -21,6 +21,7 @@ import { aboutusComponent } from './aboutus/aboutus.component';
 import { FaqComponent } from './faq/faq.component';
 import { EarnStatsComponent } from './earn-stats/earn-stats.component';
 import { InviteComponent } from './user/invite/invite.component';
+import { BountyQuestionsComponent } from './question/bounty-questions/bounty-questions.component';
 
 const appRoutes: Routes = [
   { path: 'questionlisting', component: QuestionListingComponent },
@@ -39,6 +40,7 @@ const appRoutes: Routes = [
   { path: 'profile/:Id', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'viewprofile/:Id', component: ViewProfileComponent },
   { path: 'score', component: EarnStatsComponent },
+  { path: 'bounty-questions', component: BountyQuestionsComponent },
   { path: 'editprofile/:Id', component: EditProfileComponent, canActivate: [AuthGuard] },
   { path: 'mypostquestions', component: UserpostQuestion, canActivate: [AuthGuard] },
 

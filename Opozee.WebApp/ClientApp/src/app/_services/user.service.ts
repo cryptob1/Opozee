@@ -151,7 +151,14 @@ export class UserService {
   //  })
   //}
 
-  
+  getBountyQuestions(startDate, endDate) {
+    return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetBountyQuestions?StartDate='
+      + startDate + '&EndDate=' + endDate, {
+        headers: new HttpHeaders({
+          'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        })
+      })
+  }
 
   getTopEarners(days: number) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetTopEarners?days=' + days ,  {
@@ -159,7 +166,6 @@ export class UserService {
         'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
       })
     })
-
   }
 
 
