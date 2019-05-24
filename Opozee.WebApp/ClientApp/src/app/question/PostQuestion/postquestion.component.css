@@ -23,3 +23,11 @@ span.tagusers {
   font-size: 12px;
   
 }
+.editor{
+  min-width:100%;
+  max-width:100%;
+  width:100%
+}
+
+@media screen and (max-width: 480px) {
+}

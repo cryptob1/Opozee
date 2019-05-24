@@ -20,11 +20,18 @@
                     <label for="postQuestion">Question</label>
                     <div class="bg-warning QuestionComment">Opozee is designed to answer questions in a yes or no format.</div>
 
-                    <app-ngx-editor resizer="basic"
+                    <!-- <app-ngx-editor resizer="basic"
                                     formControlName="postQuestion"
                                     [config]="editorConfig"
                                     [(ngModel)]="postQuestion">
-                    </app-ngx-editor>
+                    </app-ngx-editor> -->
+                    
+                    <textarea class="editor" 
+                    rows="4" cols="30" resizer="basic"
+                    formControlName="postQuestion"
+                    [(ngModel)]="postQuestion">
+                    </textarea>
+                    
 
 
 
