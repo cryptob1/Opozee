@@ -1,1 +1,1 @@
-ng build --target=production --environment=prod --aot --build-optimizer
+ng build --target=production --environment=prod --aot --build-optimizer --output-hashing=all

@@ -26,7 +26,7 @@ export class DialogPostBelief implements OnInit {
     "minWidth": "0",
     "translate": "yes",
     "enableToolbar": true,
-    "showToolbar": true,
+    "showToolbar": false,
     "placeholder": "Share your belief..",
     "imageEndPoint": "",
     "toolbar": [
