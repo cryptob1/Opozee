@@ -25,14 +25,18 @@
                                     [config]="editorConfig"
                                     [(ngModel)]="postQuestion">
                     </app-ngx-editor> -->
-                    
-                    <textarea class="editor" 
-                    rows="4" cols="30" resizer="basic"
-                    formControlName="postQuestion"
-                    [(ngModel)]="postQuestion">
+                    <textarea class="editor" maxlength="300"
+                       rows="4" cols="30" resizer="basic" 
+                       formControlName="postQuestion" 
+                       [(ngModel)]="postQuestion">
                     </textarea>
+                    <div class="alert-danger" *ngIf="questionPostForm.controls['postQuestion'].touched && questionPostForm.get('postQuestion').hasError('required')">
+                      *Question is required
+                    </div>
+                    <div class="alert-danger" *ngIf="questionPostForm.controls['postQuestion'].touched && questionPostForm.controls['postQuestion'].hasError('maxlength')">
+                      *Maximum of 300 characters
+                    </div>
                     
-
 
 
                     <!--<textarea rows="4" cols="50" style="padding-left: 15px;" formControlName="postQuestion" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.postQuestion.errors }"></textarea>-->

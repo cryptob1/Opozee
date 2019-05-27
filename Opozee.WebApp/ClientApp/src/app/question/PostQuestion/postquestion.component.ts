@@ -62,8 +62,6 @@ export class PostQuestionComponent implements OnInit {
   ) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
 
-
-
     if (this.localStorageUser != null) {
       mixpanelService.init(this.localStorageUser['Email'])
     }
@@ -74,7 +72,7 @@ export class PostQuestionComponent implements OnInit {
 
     //this.loadAllUsers();
     this.questionPostForm = this.formBuilder.group({
-      postQuestion: ['', Validators.required],
+      postQuestion: ['', [Validators.required, Validators.maxLength(299)]],
       hashtags: [''],
       ownerUserId: this.localStorageUser.Id 
     });
