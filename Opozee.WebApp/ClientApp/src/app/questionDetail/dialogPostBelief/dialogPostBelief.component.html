@@ -10,6 +10,7 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
+
           <div class="modal-body">
 
                 <div class="form-group post-yes-no-option">
@@ -41,8 +42,7 @@
                   <app-ngx-editor resizer="basic"
                                   [config]="editorConfigModal"
                                   formControlName="Comment"
-                                  (paste)="onPaste($event)"
-                                  [ngClass]="{ 'is-invalid': submitted && f.Comment.errors }"
+                                  (paste)="onPaste($event)"                                  
                                   name="Comment">
                   </app-ngx-editor>
    
