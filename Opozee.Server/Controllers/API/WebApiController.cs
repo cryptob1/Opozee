@@ -1291,12 +1291,13 @@ namespace opozee.Controllers.API
                 SqlConnection connection;
                 var command1 = new SqlCommand();
 
-                if (days == 0)
+                if (days == 0 || days==-1)
                 {
                     connection = new SqlConnection(con);
-                    command1 = new SqlCommand("SP_GetEarnings_since_sunday", connection);
+                    command1 = new SqlCommand("SP_GetEarnings_daily_competition", connection);
                     command1.CommandType = System.Data.CommandType.StoredProcedure;
-                      
+                    
+                    command1.Parameters.Add("@lag", SqlDbType.Int).Value = days;
                 }   
                 else
                 {
@@ -1496,19 +1497,19 @@ namespace opozee.Controllers.API
 
 
                                       }).OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
-                    //if (model.Sort == 0)
+                    //if (model.Sort == 0) //sort by last reaction time
                     //{
                     //    questionDetail = questionDetail.OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
                     //}
-                    //else if (model.Sort == 1)
+                    //else if (model.Sort == 1) //sort by most reactions
                     //{
 
-                    //    questionDetail = questionDetail.OrderByDescending(p => p.TotalLikes+1000).Skip(skip).Take(pageSize).ToList();
+                    //    questionDetail = questionDetail.OrderByDescending(p => p.TotalLikes+  p.TotalDisLikes + p.YesCount + p.NoCount).Skip(skip).Take(pageSize).ToList();
                     //}
 
-                    //else if (model.Sort == 2)
+                    //else if (model.Sort == 2)// sort by least reactions
                     //{
-                    //    questionDetail= questionDetail.OrderBy(p => ( p.YesCount ) + 1000).Skip(skip).Take(pageSize).ToList();
+                    //    questionDetail= questionDetail.OrderBy(p => (p => p.TotalLikes+  p.TotalDisLikes + p.YesCount + p.NoCount).Skip(skip).Take(pageSize).ToList();
 
                     //}
                 }

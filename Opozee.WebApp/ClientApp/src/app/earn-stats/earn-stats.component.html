@@ -9,7 +9,7 @@
     <div class="row justify-content-start  ">
       <div class="col-lg-4">
 
-        <h3>Todays Competition</h3>
+        <h3>Today</h3> (ends @ 1pm EST/10:30pm IST)
 
         <ul class="list-group">
 
@@ -28,11 +28,11 @@
 
       <div class="col-lg-4">
 
-        <h3>24 hours </h3>
+        <h3>Yesterday </h3>
 
         <ul class="list-group">
 
-          <ng-container *ngFor="let record of earnings[1];let i=index">
+          <ng-container *ngFor="let record of earnings[-1];let i=index">
             <div class="taglist" *ngIf="i<15">
 
               <li class="list-group-item d-flex justify-content-between align-items-center">
