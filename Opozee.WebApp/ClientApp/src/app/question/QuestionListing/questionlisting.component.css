@@ -246,6 +246,9 @@ margin:2px;
   padding: 1px 1px 1px 1px;
 
 }
+.message-container{
+  word-break: break-all;
+}
 
 /*media query*/
 @media(max-width: 767px) {
@@ -300,4 +303,6 @@ margin:2px;
     padding: 1px;
     box-shadow: unset;
   }
+
+  
 }

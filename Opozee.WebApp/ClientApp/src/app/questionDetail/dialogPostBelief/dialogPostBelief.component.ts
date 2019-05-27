@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, Inject } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { UserService } from '../../_services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { first, retry } from 'rxjs/operators';
 import { MixpanelService } from '../../_services/mixpanel.service';
+import { DOCUMENT } from '@angular/platform-browser';
 
 @Component({
   selector: 'dialog-post-belief',
@@ -44,10 +45,9 @@ export class DialogPostBelief implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private userService: UserService, private formBuilder: FormBuilder,
-    private router: Router, private toastr: ToastrService, private mixpanelService: MixpanelService)  {
+    private router: Router, private toastr: ToastrService, private mixpanelService: MixpanelService, @Inject(DOCUMENT) private document: any)  {
     this.dataModel = this.getModelSetting();
     this.dataModel.OpinionAgreeStatus = 0;  
-
   }  
 
   ngOnInit() {
@@ -62,9 +62,19 @@ export class DialogPostBelief implements OnInit {
     });
    
   }
+
   // convenience getter for easy access to form fields
   get f() { return this.postBeliefForm.controls; }
 
+
+  public onPaste(e) {
+    e.preventDefault;
+    e.stopPropagation();
+    let texto = e.clipboardData.getData('text/plain');
+    this.document.execCommand('insertText', false, texto);
+    return false;
+  }
+ 
   show(question?: any): void {
     this.postBeliefForm.reset();
     this.dataModel.QuestId = question.QuestId;
@@ -73,6 +83,7 @@ export class DialogPostBelief implements OnInit {
  
     this.dialogPostBelief.show();
   }
+
   close() {
     this.dataModel.Comment = '';
     this.dialogPostBelief.hide();
@@ -146,10 +157,7 @@ export class DialogPostBelief implements OnInit {
           //this.alertService.error(error);
         });
   }
-
-
-
-
+     
   setOpinionAgreeStatus(status: number) {
     this.dataModel.OpinionAgreeStatus = status;
   }

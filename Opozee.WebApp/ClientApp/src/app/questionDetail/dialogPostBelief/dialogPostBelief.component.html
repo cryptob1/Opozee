@@ -37,10 +37,11 @@
 
                 <div class="form-group">
                   <!--<textarea class="form-control" placeholder="Share your belief.."
-  [(ngModel)]="dataModel.Comment" name="Comment" #Comment="ngModel" rows="4" ></textarea>-->
+                    [(ngModel)]="dataModel.Comment" name="Comment" #Comment="ngModel" rows="4" ></textarea>-->
                   <app-ngx-editor resizer="basic"
                                   [config]="editorConfigModal"
                                   formControlName="Comment"
+                                  (paste)="onPaste($event)"
                                   [ngClass]="{ 'is-invalid': submitted && f.Comment.errors }"
                                   name="Comment">
                   </app-ngx-editor>
