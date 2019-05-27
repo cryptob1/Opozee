@@ -86,7 +86,7 @@
         <img src="../../../assets/images/reordloaderImages.gif" />
       </div>
 
-      <div class="container" style="margin:60px 0px 40px 0px" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded">No record found</div>
+      <div class="container" style="margin:60px 0px 40px 0px" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded"></div>
 
       <div class="col-sm-12">
 
@@ -97,9 +97,30 @@
           </a>
         </div>
 
+
+
+        <!--<div class="btn-group" dropdown>
+          <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
+            Sort By<span class="caret"></span>
+          </button>
+          <ul *dropdownMenu class="dropdown-menu" role="menu">
+            <li role="menuitem"><a class="dropdown-item" (click)="dropdownSort(0)" href="#">Last Reaction</a></li>
+            <li role="menuitem"><a class="dropdown-item" (click)="dropdownSort(1)"  href="#">Most Reactions</a></li>
+            <li role="menuitem"><a class="dropdown-item" (click)="dropdownSort(2)" href="#">Least Reactions</a></li>
+  
+          </ul>
+        </div>-->
+         
+
+
+
         <ul>
+
           <!--Not a QID request-->
           <li *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0 && qid==-1" style=" box-shadow:none">
+
+
+
 
             <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
               <div class="question_box">
@@ -147,6 +168,7 @@
                     </div>
                   </div>
                 </div>
+ 
 
                 <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
 
@@ -154,7 +176,10 @@
                     <h1>  Yes</h1>
                     <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment "></p>
 
+
                   </div>
+
+
 
 
                   <div class="row">
@@ -185,7 +210,7 @@
 
                   <div class="row">
 
- 
+
                     <div class="col-sm-6 text-left">
                       <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostNoLiked?.CommentedUserId]">
 
@@ -228,7 +253,7 @@
                 </div>
                 <div class="user_right">
                   <div class="date">
-                      <i>{{temp.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
+                    <i>{{temp.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
                     <br />
                     <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
                   </div>
@@ -281,7 +306,7 @@
                           <div class="col-sm-6 text-left">
                             <span class="icon" [routerLink]="['/viewprofile/', temp1?.CommentedUserId]">
                               <img src="{{temp1?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
-                              <span  style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" class="username">@{{temp1?.CommentedUserName}}</span>
+                              <span style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" class="username">@{{temp1?.CommentedUserName}}</span>
                             </span>
                           </div>
 
@@ -296,7 +321,7 @@
                       </div>
                     </div>
 
-</span>
+                  </span>
                 </span>
 
               </div>

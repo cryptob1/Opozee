@@ -61,6 +61,8 @@ namespace Opozee.Models.API
         public string CheckedTab { get; set; }
         public Boolean IsHashTag { get; set; }
         public int QId { get; set; }
+
+        public int Sort { get; set; }
     }
 
     public class PostQuestionDetailWebModel

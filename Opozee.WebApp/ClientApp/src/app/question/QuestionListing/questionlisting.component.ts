@@ -9,8 +9,7 @@ import { Subscription } from 'rxjs';
 import { ISubscription } from 'rxjs/Subscription';
 import { MixpanelService } from '../../_services/mixpanel.service';
 import { AppConfigService } from '../../appConfigService';
-
-
+ 
 
 @Component({
   selector: 'question-listing',
@@ -31,7 +30,8 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
   isRecordLoaded: boolean = false;
   percentage: number = 0;
-  questionGetModel = { 'UserId': 0, 'isHashTag': false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, 'qid': 0 }
+  sortModel = {'Last Reaction':0 , 'Most Reactions':1, 'Least Reactions' : 2}
+  questionGetModel = { 'UserId': 0, 'isHashTag': false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, 'qid': 0, 'Sort' :0 }
 
   private allItems: any[];
   showSlider: boolean = false;
@@ -88,6 +88,10 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
   }
 
+  dropdownSort(kind : number) {
+    this.questionGetModel.Sort = kind;
+    this.getAllQuestionlist(this.questionGetModel);
+  }
 
   ngOnInit() {
     localStorage.removeItem('hasRedirectBack');
@@ -128,7 +132,8 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
     this.questionGetModel.PageNumber = localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
 
-    this.questionGetModel.TotalRecords = 5
+    this.questionGetModel.TotalRecords = 5;
+    this.questionGetModel.Sort = 0;
     this.getAllQuestionlist(this.questionGetModel);
 
     this.getBountyQuestionsByDates();
@@ -159,7 +164,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
       if (data) {
         if (data.length > 0) {
- 
+          console.log(data);
           this.PostQuestionDetailList = data;
           this.questionGetModel.TotalRecords = data[0].TotalRecordcount
 

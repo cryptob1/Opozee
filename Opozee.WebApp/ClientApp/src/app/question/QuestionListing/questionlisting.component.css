@@ -1,6 +1,8 @@
 
 
 
+
+
 .popup-container {
   background: rgba(0,0,0,.5);
   position: absolute;
@@ -239,9 +241,14 @@ margin:2px;
     color: #FAC7C7;
 }
 
+.btn-group li{
+
+  padding: 1px 1px 1px 1px;
+
+}
+
 /*media query*/
 @media(max-width: 767px) {
-
   .step-items {
     flex: 0 0 100%;
     margin-bottom: 10px;
