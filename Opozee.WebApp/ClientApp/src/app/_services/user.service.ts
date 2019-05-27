@@ -88,6 +88,16 @@ export class UserService {
     })
   }
 
+  //CheckDuplicateBelief
+  CheckDuplicateBelief(belief) {
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/CheckDuplicateBelief', belief, {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
+  }
+
+
   checkReferralCode(code: string) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/CheckReferralCode?referralCode=' + code, {
       headers: new HttpHeaders({

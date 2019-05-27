@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../_services/user.service';
 import { ToastrService } from 'ngx-toastr';
-import { first } from 'rxjs/operators';
+import { first, retry } from 'rxjs/operators';
 import { MixpanelService } from '../../_services/mixpanel.service';
 
 @Component({
@@ -16,7 +16,8 @@ import { MixpanelService } from '../../_services/mixpanel.service';
 export class DialogPostBelief implements OnInit {
   postBeliefForm: FormGroup;
   dataModel: any;
-
+  loading: boolean = false;
+  //formdata;
   editorConfigModal = {
     "editable": true,
     "spellcheck": true,
@@ -45,75 +46,108 @@ export class DialogPostBelief implements OnInit {
   constructor(private route: ActivatedRoute, private userService: UserService, private formBuilder: FormBuilder,
     private router: Router, private toastr: ToastrService, private mixpanelService: MixpanelService)  {
     this.dataModel = this.getModelSetting();
-
-    
+    this.dataModel.OpinionAgreeStatus = 0;  
 
   }  
 
   ngOnInit() {
+        
     this.editorConfigModal;
+    this.postBeliefForm = this.formBuilder.group({
+      Comment: ['', [Validators.required, Validators.maxLength(300)]],
+      OpinionAgreeStatus: [this.dataModel.OpinionAgreeStatus],
+      QuestId: [this.dataModel.QuestId],
+      CommentedUserId: [this.dataModel.CommentedUserId]
+
+    });
+   
   }
+  // convenience getter for easy access to form fields
+  get f() { return this.postBeliefForm.controls; }
 
- 
   show(question?: any): void {
- 
-     
-
+    this.postBeliefForm.reset();
     this.dataModel.QuestId = question.QuestId;
     this.dataModel.CommentedUserId = question.CommentedUserId;
     this.dataModel.OpinionAgreeStatus = 0;
  
     this.dialogPostBelief.show();
   }
-
   close() {
- 
- 
     this.dataModel.Comment = '';
- 
- 
-
     this.dialogPostBelief.hide();
-
   }
 
   submitForm() {
- 
-
-    if (this.dataModel.Comment == '' || this.dataModel.Comment == undefined) {
+    
+    this.postBeliefForm.patchValue({
+      OpinionAgreeStatus: this.dataModel.OpinionAgreeStatus,
+      QuestId: this.dataModel.QuestId,
+      CommentedUserId: this.dataModel.CommentedUserId
+   });
+    
+    let getComment = this.postBeliefForm.get('Comment').value;
+    if (getComment == '' || getComment == undefined) {
       this.toastr.error('ERROR', 'Please enter belief.');
       return;
     }
-    else if (this.dataModel.Comment.trim() == '') {
+    else if(getComment.trim() == '') {
       this.toastr.error('ERROR', 'Please enter belief.');
       return;
     }
     else {
-      this.userService.saveOpinionPost(this.dataModel)
+      this.loading = true;
+      this.userService.CheckDuplicateBelief(this.postBeliefForm.value)
         .pipe(first())
         .subscribe(data => {
-          debugger;
-          if (data.BalanceToken <= 0) {
-            this.toastr.error('Token Blance 0', 'You have 0 tokens in your account. Please email us to refill the account to post opinion.', { timeOut: 5000 });
+          if (data) {
+            this.toastr.error('', 'You already have posted this belief.', { timeOut: 3000 });
+            this.loading = false;
+            return;
           }
           else {
-            this.save.emit();
-            this.toastr.success('Data save successfully', '');
-            this.close();
-            this.dataModel.Commment = '';
-
+            this.saveOpinionPost(this.postBeliefForm.value);
             this.mixpanelService.track('Posted Belief');
           }
 
         },
           error => {
-            this.toastr.error('Error', 'Something went wrong, please try again.');
- 
-            //this.alertService.error(error);
-            //this.loading = false;
+            this.saveOpinionPost(this.postBeliefForm.value);
+            this.mixpanelService.track('Posted Belief');
           });
     }
   }
+
+
+  saveOpinionPost(model) {
+    
+    this.loading = true;
+    this.userService.saveOpinionPost(model)
+      .pipe(first())
+      .subscribe(data => {
+        
+        this.loading = false;
+        if (data.BalanceToken <= 0) {
+          this.toastr.error('Token Blance 0', 'You have 0 tokens in your account. Please email us to refill the account to post opinion.', { timeOut: 5000 });
+        }
+        else {
+          this.save.emit();
+          this.toastr.success('Data save successfully', '');
+          this.close();
+          this.dataModel.Commment = '';
+
+          this.mixpanelService.track('Posted Belief');
+        }
+
+      },
+        error => {
+          this.toastr.error('Error', 'Something went wrong, please try again.');
+          this.loading = false;
+          //this.alertService.error(error);
+        });
+  }
+
+
 
 
   setOpinionAgreeStatus(status: number) {

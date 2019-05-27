@@ -446,6 +446,30 @@ namespace opozee.Controllers.API
                 return false;
             }
         }
+
+
+        [HttpPost]
+        [Route("api/WebApi/CheckDuplicateBelief")]
+        public bool CheckDuplicateBelief([FromBody] PostAnswerWeb Model)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(Model.Comment))
+                {
+                    var _dbComment = db.Opinions.Any(x => x.Comment == null ? false : x.Comment.Contains(Model.Comment) && x.CommentedUserId == Model.CommentedUserId);
+                    if (_dbComment) return true;
+
+                    var _Comment = Regex.Replace(Model.Comment, @"<[^>]+>| ", "").TrimStart();
+                    return db.Opinions.Any(x => x.Comment == null ? false : x.Comment.Contains(_Comment) && x.CommentedUserId == Model.CommentedUserId);
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         #region "Post Question" 
         [HttpPost]
         [Route("api/WebApi/PostQuestionWeb")]

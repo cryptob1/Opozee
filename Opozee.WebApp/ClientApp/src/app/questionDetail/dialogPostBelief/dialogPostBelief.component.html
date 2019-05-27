@@ -1,7 +1,7 @@
 <div bsModal #dialogPostBelief="bs-modal" class="modal fade" tabindex="-1" role="dialog"
      aria-labelledby="mySmallModalLabel" aria-hidden="true">
   <div class="model fade in show" role="dialog" aria-labelledby="dialog-auto-name">
-    <form name="postBeliefForm" #f="ngForm" (ngSubmit)="f.form.valid && submitForm()">
+    <form name="postBeliefForm" [formGroup] = "postBeliefForm" #f="ngForm" (ngSubmit)="f.form.valid && submitForm()">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -37,15 +37,23 @@
 
                 <div class="form-group">
                   <!--<textarea class="form-control" placeholder="Share your belief.."
-                  [(ngModel)]="dataModel.Comment" name="Comment" #Comment="ngModel" rows="4" ></textarea>-->
+  [(ngModel)]="dataModel.Comment" name="Comment" #Comment="ngModel" rows="4" ></textarea>-->
                   <app-ngx-editor resizer="basic"
-                    [config]="editorConfigModal"
-                   [(ngModel)]="dataModel.Comment" name="Comment" #Comment="ngModel">
-                    </app-ngx-editor>
+                                  [config]="editorConfigModal"
+                                  formControlName="Comment"
+                                  [ngClass]="{ 'is-invalid': submitted && f.Comment.errors }"
+                                  name="Comment">
+                  </app-ngx-editor>
+   
+                  <div *ngIf="postBeliefForm.controls.Comment.errors && postBeliefForm.controls.Comment.touched" class="help-block clearfix mt-2">
+                    <ul role="alert">
+                      <li class="alert-danger p-2">*Maximum 300 characters.</li>
+                    </ul>
+                  </div>
                 </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="submit" [disabled]="loading" class="btn btn-success">Submit</button>
             <button type="button" class="btn btn-danger" (click)="close()">Cancel</button>
           </div>
         </div>
