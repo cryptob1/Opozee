@@ -87,8 +87,8 @@ namespace Opozee.Models.API
         public List<Comments> Comments { get; set; }
         public bool? IsSlider { get; set; }
 
-        public DateTime LastActivityTime { get; set; }
-
+        public DateTime? LastActivityTime { get; set; }
+        public int? ReactionSum { get; set; }
     }
 
 

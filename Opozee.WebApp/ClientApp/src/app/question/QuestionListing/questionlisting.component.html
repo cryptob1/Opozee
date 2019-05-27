@@ -74,13 +74,9 @@
       </div>
     </div>
 
-
-
     <div class="container">
       <div class="cover_heading">
       </div>
-
-
 
       <div *ngIf="!isRecordLoaded" class="scroller_cover" style="margin:40px 0px 40px 0px">
         <img src="../../../assets/images/reordloaderImages.gif" />
@@ -93,15 +89,13 @@
         <div class="cover_hello">
           <a [routerLink]="qid == -1 ?  ['/postquestion',0] : ['/questiondetail/',qid]" href="javascript:void(0)">
             <i class="fa fa-plus" aria-hidden="true">&nbsp;New Question</i>
-
           </a>
         </div>
 
 
-
         <div class="btn-group" dropdown>
-          <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
-            Sort By<span class="caret"></span>
+          <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle" style="width:150px;">
+            Sort By &nbsp;<span class="caret"></span>
           </button>
           <ul *dropdownMenu class="dropdown-menu" role="menu">
             <li role="menuitem"><a class="dropdown-item" (click)="dropdownSort(0)" href="#">Last Reaction</a></li>
@@ -112,16 +106,11 @@
         </div>
          
 
-
-
         <ul>
 
           <!--Not a QID request-->
           <li *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0 && qid==-1" style=" box-shadow:none">
-
-
-
-
+            
             <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
               <div class="question_box">
                 <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">

@@ -88,7 +88,8 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
   }
 
-  dropdownSort(kind : number) {
+  dropdownSort(kind: number) {
+    this.questionGetModel.PageNumber = localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
     this.questionGetModel.Sort = kind;
     this.getAllQuestionlist(this.questionGetModel);
   }
