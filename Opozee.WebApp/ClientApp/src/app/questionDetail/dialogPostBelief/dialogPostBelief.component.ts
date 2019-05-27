@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, OnChanges, SimpleChanges, OnDestroy, Inject } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { UserService } from '../../_services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { first } from 'rxjs/operators';
 import { MixpanelService } from '../../_services/mixpanel.service';
+import { DOCUMENT } from '@angular/platform-browser';
 
 @Component({
   selector: 'dialog-post-belief',
@@ -43,7 +44,7 @@ export class DialogPostBelief implements OnInit {
 
 
   constructor(private route: ActivatedRoute, private userService: UserService, private formBuilder: FormBuilder,
-    private router: Router, private toastr: ToastrService, private mixpanelService: MixpanelService)  {
+    private router: Router, private toastr: ToastrService, private mixpanelService: MixpanelService, @Inject(DOCUMENT) private document: any)  {
     this.dataModel = this.getModelSetting();
 
     
@@ -53,7 +54,13 @@ export class DialogPostBelief implements OnInit {
   ngOnInit() {
     this.editorConfigModal;
   }
-
+  public onPaste(e){
+    e.preventDefault;
+    e.stopPropagation();
+    let texto= e.clipboardData.getData('text/plain');
+    this.document.execCommand('insertText',false,texto);
+    return false;
+    }
  
   show(question?: any): void {
  

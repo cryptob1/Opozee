@@ -40,6 +40,7 @@
                   [(ngModel)]="dataModel.Comment" name="Comment" #Comment="ngModel" rows="4" ></textarea>-->
                   <app-ngx-editor resizer="basic"
                     [config]="editorConfigModal"
+                    (paste)="onPaste($event)"
                    [(ngModel)]="dataModel.Comment" name="Comment" #Comment="ngModel">
                     </app-ngx-editor>
                 </div>
