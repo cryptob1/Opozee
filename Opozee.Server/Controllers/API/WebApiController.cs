@@ -664,14 +664,14 @@ namespace opozee.Controllers.API
 
                 if (IsActive)
                 {
-                    var TotalRecordNotification = (from q1 in db.Questions
-                                                   join n1 in db.Notifications on q1.Id equals n1.questId
-                                                   where q1.OwnerUserID == Model.UserId && q1.IsDeleted == false
-                                                   //     select new UserNotifications { TotalRecordcount = db.Notifications.Count(y1 => y1.Id == n1.Id) }).ToList();
-                                                   select new UserNotifications { TotalRecordcount = n1.Id }).ToList().Count();
+                    //var TotalRecordNotification = (from q1 in db.Questions
+                    //                               join n1 in db.Notifications on q1.Id equals n1.questId
+                    //                               where q1.OwnerUserID == Model.UserId && q1.IsDeleted == false
+                    //                               //     select new UserNotifications { TotalRecordcount = db.Notifications.Count(y1 => y1.Id == n1.Id) }).ToList();
+                    //                               select new UserNotifications { TotalRecordcount = n1.Id }).ToList().Count();
 
 
-                    var userNotifications1 = (from q in db.Questions
+                    var userNotifications = (from q in db.Questions
                                               join o in db.Opinions on q.Id equals o.QuestId
                                               join n in db.Notifications on o.Id equals n.CommentId
                                               join u in db.Users on n.CommentedUserId equals u.UserID
@@ -701,7 +701,7 @@ namespace opozee.Controllers.API
                                               }).ToList(); //.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
 
 
-                    foreach (var data in userNotifications1)
+                    foreach (var data in userNotifications)
                     {
                         //data.TotalRecordcount = userNotifications1.Count;
                         data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName, false, IsActive);
@@ -728,7 +728,7 @@ namespace opozee.Controllers.API
                                                    //IsAgree = ((o.IsAgree ?? false) ? true : false),
                                                    CreationDate = n.CreationDate,
                                                    ModifiedDate = n.ModifiedDate,
-                                                   TotalRecordcount = TotalRecordNotification,
+                                                   //TotalRecordcount = TotalRecordNotification,
                                                    NotificationId = n.Id,
                                                    RefferalStatus = true,
                                                    Message = "registered with your referral code",
@@ -738,23 +738,23 @@ namespace opozee.Controllers.API
                
                     foreach (var obj in getRefferalBaseData)
                     {
-                        userNotifications1.Add(obj);
+                        userNotifications.Add(obj);
                     }
 
-                    foreach (var data in userNotifications1)
+                    foreach (var data in userNotifications)
                     {
-                        data.TotalRecordcount = userNotifications1.Count;
+                        data.TotalRecordcount = userNotifications.Count;
                     }
-                    userNotifications1 = userNotifications1.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
-                    return userNotifications1.Where(p => p.Message != "").ToList();
+                    userNotifications = userNotifications.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
+                    return userNotifications.Where(p => p.Message != "").ToList();
                 }
                 else
                 {
-                    var TotalRecordNotification = (from q1 in db.Questions
-                                                   join n1 in db.Notifications on q1.Id equals n1.questId
-                                                   where q1.OwnerUserID != Model.UserId
-                                                   //     select new UserNotifications { TotalRecordcount = db.Notifications.Count(y1 => y1.Id == n1.Id) }).ToList();
-                                                   select new UserNotifications { TotalRecordcount = n1.Id }).ToList().Count();
+                    //var TotalRecordNotification = (from q1 in db.Questions
+                    //                               join n1 in db.Notifications on q1.Id equals n1.questId
+                    //                               where q1.OwnerUserID != Model.UserId
+                    //                               //     select new UserNotifications { TotalRecordcount = db.Notifications.Count(y1 => y1.Id == n1.Id) }).ToList();
+                    //                               select new UserNotifications { TotalRecordcount = n1.Id }).ToList().Count();
 
                     var userNotifications1 = (from q in db.Questions
                                               join o in db.Opinions on q.Id equals o.QuestId
