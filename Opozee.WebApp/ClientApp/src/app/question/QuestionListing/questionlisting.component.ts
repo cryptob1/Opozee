@@ -29,8 +29,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   showPopup: boolean = true;
 
   isRecordLoaded: boolean = false;
-  percentage: number = 0;
-  sortModel = {'Last Reaction':0 , 'Most Reactions':1, 'Least Reactions' : 2}
+  percentage: number = 0; 
   questionGetModel = { 'UserId': 0, 'isHashTag': false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, 'qid': 0, 'Sort' :0 }
 
   private allItems: any[];
@@ -86,11 +85,14 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
     this.questionGetModel.PageNumber = +localStorage.getItem('PageNumber');
 
+    this.questionGetModel.Sort = +localStorage.getItem('Sort');
   }
 
   dropdownSort(kind: number) {
+    this.isRecordLoaded = false;
     this.questionGetModel.PageNumber = localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
     this.questionGetModel.Sort = kind;
+    localStorage.setItem('Sort', kind.toString());
     this.getAllQuestionlist(this.questionGetModel);
   }
 
@@ -149,8 +151,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     this.userService.getBountyQuestions(this.startDate, this.endDate)
       .subscribe(data => {
         this.bountyQuestions = data;
-        this.PercentageCalc(this.bountyQuestions);
-        console.log('BountyQuestions', this.bountyQuestions);
+        this.PercentageCalc(this.bountyQuestions); 
         this.isRecordLoaded = true;
       },
         error => {
@@ -165,7 +166,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
       if (data) {
         if (data.length > 0) {
-          console.log(data);
+ 
           this.PostQuestionDetailList = data;
           this.questionGetModel.TotalRecords = data[0].TotalRecordcount
 
@@ -305,6 +306,8 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
   setPage(page, TotalRecords) {
+
+    this.isRecordLoaded = false;
     localStorage.setItem('PageNumber', page);
     this.pager = this.getPager(this.questionGetModel.TotalRecords, page);
 
@@ -312,7 +315,8 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       this.PagingPagesload(this.pager.currentPage, this.pager.pageSize);
     }
 
-    window.scrollTo(0, 0)
+    this.isRecordLoaded = true;
+    window.scrollTo(0, 0);
   }
 
   getPager(totalItems: number, currentPage: number = 1, pageSize: number = 10) {

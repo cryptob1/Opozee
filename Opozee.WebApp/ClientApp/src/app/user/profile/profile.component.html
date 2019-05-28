@@ -72,12 +72,19 @@
               <span *ngIf="temp?.IsValidToDelete" (click)="deleteQuestionBelief('mybeliefs',temp)" title="Delete">
                 <i style="cursor:pointer" class="fa fa-trash" aria-hidden="true"></i>
               </span>
-              <!--<small style="color:grey;font-size:10px;font-weight:100">@{{temp.UserName}}</small>-->
+              <p *ngIf="temp?.CreationDate" class="  text-right small text-nowrap" style="color:grey;font-size:10px;font-weight:400">
+                {{ temp?.CreationDate+'Z' | date:'medium' | timeAgo }}
+              </p>
+              <!--<p class="  text-right small text-nowrap" style="color:grey;font-size:10px;font-weight:400">
+
+  </p>-->
+
             </strong>
-            
-              <strong [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']"   *ngFor="let opinion of temp.OpinionList; let ii=index" style="margin:3px">
-                <div data-title="B" ExternalLink [innerHTML]="opinion"></div>
-              </strong>
+
+            <strong [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']" *ngFor="let opinion of temp.OpinionList; let ii=index" style="margin:3px">
+              <div data-title="B" ExternalLink [innerHTML]="opinion"></div>
+
+            </strong>
 
           </span>
         </div>

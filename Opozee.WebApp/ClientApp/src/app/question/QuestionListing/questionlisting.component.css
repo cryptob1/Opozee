@@ -247,7 +247,7 @@ margin:2px;
 
 }
 .message-container{
-  word-break: break-all;
+  /*word-break: break-all;*/
 }
 
 /*media query*/

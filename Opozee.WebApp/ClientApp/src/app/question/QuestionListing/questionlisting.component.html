@@ -92,25 +92,25 @@
           </a>
         </div>
 
-
-        <div class="btn-group" dropdown>
+        <!--sort by button-->
+        <div *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0 && qid==-1 &&  !hashTag " class="btn-group" dropdown>
           <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle" style="width:150px;">
             Sort By &nbsp;<span class="caret"></span>
           </button>
           <ul *dropdownMenu class="dropdown-menu" role="menu">
             <li role="menuitem"><a class="dropdown-item" (click)="dropdownSort(0)" href="#">Last Reaction</a></li>
-            <li role="menuitem"><a class="dropdown-item" (click)="dropdownSort(1)"  href="#">Most Reactions</a></li>
+            <li role="menuitem"><a class="dropdown-item" (click)="dropdownSort(1)" href="#">Most Reactions</a></li>
             <li role="menuitem"><a class="dropdown-item" (click)="dropdownSort(2)" href="#">Least Reactions</a></li>
-  
+
           </ul>
         </div>
-         
+
 
         <ul>
 
           <!--Not a QID request-->
           <li *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0 && qid==-1" style=" box-shadow:none">
-            
+
             <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
               <div class="question_box">
                 <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
@@ -120,8 +120,8 @@
                   </span>
                 </div>
                 <div class="user_right">
-                  <div class="date">
-                    <i>{{temp.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
+                  <div *ngIf="temp?.LastActivityTime" class="date">
+                    <i>{{temp?.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
                     <br />
                     <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
                   </div>
@@ -146,6 +146,7 @@
                     <span> </span>
                     <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
                       <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
+
                       <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
                       <!--<span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>-->
                       <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
@@ -157,7 +158,7 @@
                     </div>
                   </div>
                 </div>
- 
+
 
                 <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
 
@@ -241,8 +242,8 @@
                   </span>
                 </div>
                 <div class="user_right">
-                  <div class="date">
-                    <i>{{temp.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
+                  <div *ngIf="temp.LastActivityTime " class="date">
+                    <i>{{temp?.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
                     <br />
                     <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
                   </div>
@@ -326,9 +327,8 @@
 
       </div>
 
-
-
-      <div class="navigation_cover" *ngIf="PostQuestionDetailList?.length>1">
+       
+      <div class="navigation_cover" *ngIf="isRecordLoaded && PostQuestionDetailList?.length>1">
 
         <div class="container">
           <div class="text-center" style="cursor:pointer">
