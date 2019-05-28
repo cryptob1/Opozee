@@ -43,6 +43,7 @@
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="Status" Type="int" />
+          <Property Name="ReferralId" Type="int" />
         </EntityType>
         <EntityType Name="Opinion">
           <Key>
@@ -78,7 +79,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
-          <Property Name="ReferredId" Type="int" Nullable="false" />
+          <Property Name="ReferralUserId" Type="int" Nullable="false" />
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="IsDeleted" Type="bit" />
         </EntityType>
@@ -139,12 +140,10 @@
         <EntityContainer Name="OpozeeDbEntities" annotation:LazyLoadingEnabled="true">
           <FunctionImport Name="SP_GetTopLikes" ReturnType="Collection(oposeeDbModel.SP_GetTopLikes_Result)" />
           <EntitySet Name="BookMarks" EntityType="oposeeDbModel.BookMark" />
-          <EntitySet Name="Notifications" EntityType="oposeeDbModel.Notification" />
           <EntitySet Name="Opinions" EntityType="oposeeDbModel.Opinion" />
           <EntitySet Name="Questions" EntityType="oposeeDbModel.Question" />
           <EntitySet Name="Tokens" EntityType="oposeeDbModel.Token" />
           <EntitySet Name="Users" EntityType="oposeeDbModel.User" />
-          <EntitySet Name="Referrals" EntityType="oposeeDbModel.Referral" />
           <FunctionImport Name="SP_GetBountyQuestions" ReturnType="Collection(oposeeDbModel.SP_GetBountyQuestions_Result)">
             <Parameter Name="StartDate" Mode="In" Type="DateTime" />
             <Parameter Name="EndDate" Mode="In" Type="DateTime" />
@@ -156,6 +155,8 @@
             <Parameter Name="IsActive" Mode="In" Type="Boolean" />
           </FunctionImport>
           <EntitySet Name="Bounties" EntityType="oposeeDbModel.Bounty" />
+          <EntitySet Name="Notifications" EntityType="oposeeDbModel.Notification" />
+          <EntitySet Name="Referrals" EntityType="oposeeDbModel.Referral" />
           </EntityContainer>
         <ComplexType Name="SP_GetTopLikes_Result">
           <Property Type="Int32" Name="questid" Nullable="false" />
@@ -182,22 +183,6 @@
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="CreationDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="Notification">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CommentedUserId" Type="Int32" />
-          <Property Name="CommentId" Type="Int32" />
-          <Property Name="questId" Type="Int32" />
-          <Property Name="Like" Type="Boolean" />
-          <Property Name="Dislike" Type="Boolean" />
-          <Property Name="Comment" Type="Boolean" />
-          <Property Name="SendNotification" Type="Boolean" />
-          <Property Name="CreationDate" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="Int32" />
         </EntityType>
         <EntityType Name="Opinion">
           <Key>
@@ -257,16 +242,6 @@
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ReferralCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Referral">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="ReferredId" Type="Int32" Nullable="false" />
-          <Property Name="CreationDate" Type="DateTime" Precision="3" />
-          <Property Name="IsDeleted" Type="Boolean" />
-        </EntityType>
         <ComplexType Name="SP_GetBountyQuestions_Result">
           <Property Type="Int32" Name="BountyId" Nullable="false" />
           <Property Type="Int32" Name="QuestionId" Nullable="false" />
@@ -301,6 +276,33 @@
           <Property Name="Score" Type="Int32" />
           <Property Name="CreationDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CommentedUserId" Type="Int32" />
+          <Property Name="CommentId" Type="Int32" />
+          <Property Name="questId" Type="Int32" />
+          <Property Name="Like" Type="Boolean" />
+          <Property Name="Dislike" Type="Boolean" />
+          <Property Name="Comment" Type="Boolean" />
+          <Property Name="SendNotification" Type="Boolean" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="ReferralId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Referral">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="ReferralUserId" Type="Int32" Nullable="false" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="IsDeleted" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -315,23 +317,6 @@
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="IsBookmark" ColumnName="IsBookmark" />
                 <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Notifications">
-            <EntityTypeMapping TypeName="oposeeDbModel.Notification">
-              <MappingFragment StoreEntitySet="Notification">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="SendNotification" ColumnName="SendNotification" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="Dislike" ColumnName="Dislike" />
-                <ScalarProperty Name="Like" ColumnName="Like" />
-                <ScalarProperty Name="questId" ColumnName="questId" />
-                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
-                <ScalarProperty Name="CommentedUserId" ColumnName="CommentedUserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -398,17 +383,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Referrals">
-            <EntityTypeMapping TypeName="oposeeDbModel.Referral">
-              <MappingFragment StoreEntitySet="Referral">
-                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="ReferredId" ColumnName="ReferredId" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="SP_GetBountyQuestions" FunctionName="oposeeDbModel.Store.SP_GetBountyQuestions">
             <ResultMapping>
               <ComplexTypeMapping TypeName="oposeeDbModel.SP_GetBountyQuestions_Result">
@@ -445,6 +419,35 @@
                 <ScalarProperty Name="EndDate" ColumnName="EndDate" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifications">
+            <EntityTypeMapping TypeName="oposeeDbModel.Notification">
+              <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="ReferralId" ColumnName="ReferralId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="SendNotification" ColumnName="SendNotification" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Dislike" ColumnName="Dislike" />
+                <ScalarProperty Name="Like" ColumnName="Like" />
+                <ScalarProperty Name="questId" ColumnName="questId" />
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="CommentedUserId" ColumnName="CommentedUserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Referrals">
+            <EntityTypeMapping TypeName="oposeeDbModel.Referral">
+              <MappingFragment StoreEntitySet="Referral">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="ReferralUserId" ColumnName="ReferralUserId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

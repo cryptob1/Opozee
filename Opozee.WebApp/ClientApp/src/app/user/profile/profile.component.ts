@@ -18,6 +18,8 @@ export class ProfileComponent implements OnInit {
   notification: NotificationsModel[] = [];
   profileData: any[] = [];
 
+  getUserIdbasedData : any;
+
   pager: any = {};
   // paged items
   pagedItems: any[];

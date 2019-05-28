@@ -175,13 +175,40 @@ namespace opozee.Controllers.API
                             (bool IsValidCode, int? ReferralUserId) = CheckIfValidReferralCode(users.ReferralCode);
                             if (IsValidCode)
                             {
+                                
                                 Referral referral = new Referral();
-                                referral.ReferredId = ReferralUserId ?? 0;
+                                referral.ReferralUserId = ReferralUserId ?? 0;
                                 referral.UserId = entity.UserID;
                                 referral.CreationDate = DateTime.Now;
                                 referral.IsDeleted = false;
                                 db.Referrals.Add(referral);
                                 db.SaveChanges();
+
+
+                                var getUserIdBased = db.Tokens.Where(x => x.UserId == userID).FirstOrDefault();
+                                if (getUserIdBased != null)
+                                {
+                                    getUserIdBased.TotalToken = getUserIdBased.TotalToken + 10;
+                                    getUserIdBased.BalanceToken = getUserIdBased.BalanceToken + 10;
+                                    //getUserIdBased.UserId = userID;
+                                    db.SaveChanges();
+                                }
+
+                                var getReferralUserId = db.Tokens.Where(x => x.UserId == ReferralUserId).FirstOrDefault();
+                                if (getReferralUserId != null)
+                                {
+                                    getReferralUserId.TotalToken = getReferralUserId.TotalToken + 10;
+                                    getReferralUserId.BalanceToken = getReferralUserId.BalanceToken + 10;
+                                    //getReferralUserId.UserId = ReferralUserId ?? 0; 
+                                    db.SaveChanges();
+
+                                   var notification = new Notification();
+                                    notification.CommentedUserId = ReferralUserId ?? 0;
+                                    notification.ReferralId = referral.Id;
+                                    notification.CreationDate = DateTime.Now.ToUniversalTime(); ;
+                                    db.Notifications.Add(notification);
+                                    db.SaveChanges();
+                                }
                             }
                         }
                         catch (Exception ex) { }
@@ -234,7 +261,7 @@ namespace opozee.Controllers.API
                         ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault() == null
                         ? 0 : db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault().BalanceToken ?? 0;
 
-                        var totalRef = db.Referrals.Where(x => x.ReferredId == v.UserID).ToList();
+                        var totalRef = db.Referrals.Where(x => x.ReferralUserId == v.UserID).ToList();
                         ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
                         //update once logged-in
                         try
@@ -262,6 +289,53 @@ namespace opozee.Controllers.API
             }
 
         }
+
+
+        [HttpGet]
+        [Route("api/WebApi/GetUserById")]
+        public UserLoginWeb GetUserById(int id)
+        {
+            UserLoginWeb ObjLogin = new UserLoginWeb();
+            try
+            {
+                using (OpozeeDbEntities db = new OpozeeDbEntities())
+                {
+                    var _user = db.Database
+                        .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserID] = @UserID AND [IsAdmin] = 0", new SqlParameter("@UserID", id))
+                        .FirstOrDefault();
+
+                    if (_user != null)
+                    {
+                        ObjLogin.Token = AesCryptography.Encrypt(_user.Password);
+                        ObjLogin.Token = AesCryptography.Decrypt(ObjLogin.Token);
+
+                        ObjLogin.Id = _user.UserID;
+                        ObjLogin.Email = _user.Email;
+                        ObjLogin.ImageURL = _user.ImageURL;
+
+                        ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == _user.UserID).FirstOrDefault() == null
+                        ? 0 : db.Tokens.Where(x => x.UserId == _user.UserID).FirstOrDefault().BalanceToken ?? 0;
+
+                        var totalRef = db.Referrals.Where(x => x.ReferralUserId == _user.UserID).ToList();
+                        ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
+
+                        ObjLogin.LastLoginDate = _user.ModifiedDate;
+                        ObjLogin.ReferralCode = _user.ReferralCode;
+                        ObjLogin.IsSocialLogin = _user.SocialID == null ? false : true;
+                        return ObjLogin;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
 
         [HttpGet]
         [Route("api/WebApi/CheckReferralCode")]
@@ -488,7 +562,7 @@ namespace opozee.Controllers.API
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Insufficient Tokens", "Question"));
                 }
-       
+
                 //if (!string.IsNullOrEmpty(postQuestion.PostQuestion))
                 //{
                 //    if (CheckDuplicateQuestion(postQuestion.PostQuestion))
@@ -540,7 +614,7 @@ namespace opozee.Controllers.API
                 //db.SaveChanges();
                 int questID = quest.Id;
                 quest = db.Questions.Find(questID);
-                
+
                 //return ObjToken;
                 return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, quest.Id, "Question"));
                 //}
@@ -578,6 +652,7 @@ namespace opozee.Controllers.API
                 int skip = pageSize * (page - 1);
 
                 UserNotifications userNotifications = new UserNotifications();
+                List<UserNotifications> userNotificationsList = new List<UserNotifications>();
                 db.Configuration.LazyLoadingEnabled = false;
                 if (!ModelState.IsValid)
                 {
@@ -600,9 +675,9 @@ namespace opozee.Controllers.API
                                               join o in db.Opinions on q.Id equals o.QuestId
                                               join n in db.Notifications on o.Id equals n.CommentId
                                               join u in db.Users on n.CommentedUserId equals u.UserID
-                                              where ((q.OwnerUserID == Model.UserId && o.CommentedUserId!=Model.UserId && n.Comment==true) || //someone left a comment
+                                              where ((q.OwnerUserID == Model.UserId && o.CommentedUserId != Model.UserId && n.Comment == true) || //someone left a comment
                                               (o.CommentedUserId == Model.UserId && n.Comment == false)) && q.IsDeleted == false  //someone left a vote
-                                             select new UserNotifications
+                                              select new UserNotifications
                                               {
                                                   UserId = q.OwnerUserID,
                                                   QuestionId = q.Id,
@@ -612,6 +687,7 @@ namespace opozee.Controllers.API
                                                   Opinion = o.Comment,
                                                   Image = u.ImageURL,
                                                   CommentedUserId = o.CommentedUserId,
+                                                  Name = db.Users.Where(x => x.UserID == o.CommentedUserId).FirstOrDefault().UserName,
                                                   UserName = u.UserName,
                                                   Like = ((n.Like ?? false) ? true : false),
                                                   Dislike = ((n.Dislike ?? false) ? true : false),
@@ -619,17 +695,57 @@ namespace opozee.Controllers.API
                                                   IsAgree = ((o.IsAgree ?? false) ? true : false),
                                                   CreationDate = n.CreationDate,
                                                   ModifiedDate = n.ModifiedDate,
-                                                  TotalRecordcount = TotalRecordNotification,
+                                                 // TotalRecordcount = TotalRecordNotification,
                                                   NotificationId = n.Id,
-                                              }).ToList().OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
+                                                  RefferalStatus = false
+                                              }).ToList(); //.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
 
 
                     foreach (var data in userNotifications1)
                     {
-                        
+                        //data.TotalRecordcount = userNotifications1.Count;
                         data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName, false, IsActive);
                         data.Tag = (data.Like == true) ? "Up-vote" : (data.Dislike == true) ? "Down-Vote" : (data.Comment == true) ? "Belief" : "";
                     }
+                    var getRefferalBaseData = (from n in db.Notifications
+                                               join r in db.Referrals on n.CommentedUserId equals r.ReferralUserId
+                                               join u in db.Users on r.ReferralUserId equals u.UserID
+                                               where n.ReferralId == r.Id && n.CommentedUserId == Model.UserId && n.CommentId == null && n.questId == null
+                                               select new UserNotifications
+                                               {
+                                                   QuestionId = n.questId,
+                                                   //Question = "",
+                                                   // HashTags = "",
+                                                   OpinionId = n.CommentId,
+                                                   //Opinion = o.Comment,
+                                                   Image = u.ImageURL,
+                                                   CommentedUserId = r.ReferralUserId,
+                                                   UserId = r.UserId,
+                                                   UserName = db.Users.Where(x => x.UserID == r.UserId).FirstOrDefault().UserName,
+                                                   //Like = ((n.Like ?? false) ? true : false),
+                                                   //Dislike = ((n.Dislike ?? false) ? true : false),
+                                                   //Comment = ((n.Comment ?? false) ? true : false),
+                                                   //IsAgree = ((o.IsAgree ?? false) ? true : false),
+                                                   CreationDate = n.CreationDate,
+                                                   ModifiedDate = n.ModifiedDate,
+                                                   TotalRecordcount = TotalRecordNotification,
+                                                   NotificationId = n.Id,
+                                                   RefferalStatus = true,
+                                                   Message = "registered with your referral code",
+                                                   HashTags = ""
+                                               }
+                                 ).ToList();
+               
+                    foreach (var obj in getRefferalBaseData)
+                    {
+                        userNotifications1.Add(obj);
+                    }
+
+                    foreach (var data in userNotifications1)
+                    {
+                        data.TotalRecordcount = userNotifications1.Count;
+                    }
+                    userNotifications1 = userNotifications1.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
                     return userNotifications1.Where(p => p.Message != "").ToList();
                 }
                 else
@@ -644,7 +760,7 @@ namespace opozee.Controllers.API
                                               join o in db.Opinions on q.Id equals o.QuestId
                                               join n in db.Notifications on o.Id equals n.CommentId
                                               join u in db.Users on n.CommentedUserId equals u.UserID
-                                              where q.IsDeleted == false  
+                                              where q.IsDeleted == false
                                               select new UserNotifications
                                               {
                                                   QuestionId = q.Id,
@@ -654,6 +770,7 @@ namespace opozee.Controllers.API
                                                   Opinion = o.Comment,
                                                   Image = u.ImageURL,
                                                   CommentedUserId = o.CommentedUserId,
+                                                  Name = db.Users.Where(x => x.UserID == o.CommentedUserId).FirstOrDefault().UserName,
                                                   UserName = u.UserName,
                                                   Like = ((n.Like ?? false) ? true : false),
                                                   Dislike = ((n.Dislike ?? false) ? true : false),
@@ -661,16 +778,19 @@ namespace opozee.Controllers.API
                                                   IsAgree = ((o.IsAgree ?? false) ? true : false),
                                                   CreationDate = n.CreationDate,
                                                   ModifiedDate = n.ModifiedDate,
-                                                  TotalRecordcount = TotalRecordNotification,
+                                                  //TotalRecordcount = TotalRecordNotification,
                                                   NotificationId = n.Id,
+                                                  RefferalStatus = false
                                               }).ToList().OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
 
 
                     foreach (var data in userNotifications1)
                     {
+                        data.TotalRecordcount = userNotifications1.Count;
                         data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName, false, IsActive);
                         data.Tag = (data.Like == true) ? "Up-Vote" : (data.Dislike == true) ? "Down-Vote" : (data.Comment == true) ? "Belief" : "";
                     }
+                                       
                     return userNotifications1.Where(p => p.Message != "").ToList();
                 }
 
@@ -681,7 +801,7 @@ namespace opozee.Controllers.API
                 return userNotifications2;
             }
         }
-        
+
 
         [HttpPost]
         [Route("api/WebApi/GetProfileNotificationByUser")]
@@ -760,15 +880,15 @@ namespace opozee.Controllers.API
                 }
                 else if (Model.CheckedTab == "myquestions")
                 {
-                   var TotalRecord = (from q in db.Questions
-                                       //join o in db.Opinions on q.Id equals o.QuestId into op
-                                       //from o in op.DefaultIfEmpty()
-                                       //join n in db.Notifications on o.Id equals n.CommentId into noti
-                                       //from n in noti.DefaultIfEmpty()
-                                   join u in db.Users on q.OwnerUserID equals u.UserID
-                                   where q.OwnerUserID == Model.UserId && q.IsDeleted == false
-                                   select q
-                    ).ToList().Count();
+                    var TotalRecord = (from q in db.Questions
+                                           //join o in db.Opinions on q.Id equals o.QuestId into op
+                                           //from o in op.DefaultIfEmpty()
+                                           //join n in db.Notifications on o.Id equals n.CommentId into noti
+                                           //from n in noti.DefaultIfEmpty()
+                                       join u in db.Users on q.OwnerUserID equals u.UserID
+                                       where q.OwnerUserID == Model.UserId && q.IsDeleted == false
+                                       select q
+                     ).ToList().Count();
 
                     _userProfileData = (from q in db.Questions
                                             //join o in db.Opinions on q.Id equals o.QuestId into op
@@ -871,14 +991,14 @@ namespace opozee.Controllers.API
             return Tag;
         }
 
-        public string GenerateNotificationTags(bool? like, bool? dislike, bool? comment, string UserName , bool you, bool yours)
+        public string GenerateNotificationTags(bool? like, bool? dislike, bool? comment, string UserName, bool you, bool yours)
         {
             string Tag = "";
             string addStr = "";
             if (yours) { addStr = "your"; }
             if (like == true && dislike == false && comment == false)
             {
-                Tag = " up-voted "+ addStr+" belief:";
+                Tag = " up-voted " + addStr + " belief:";
             }
             else if (dislike == true && like == false && comment == false)
             {
@@ -900,10 +1020,10 @@ namespace opozee.Controllers.API
 
             if (you) { return "You " + Tag; }
 
-            return "@" +UserName+" " + Tag;
+            return  Tag;
         }
 
-        
+
 
         #region "Get Similar Questions" 
         [HttpGet]
@@ -928,8 +1048,8 @@ namespace opozee.Controllers.API
                         break;
                     }
                 }
-            }           
-            
+            }
+
 
             int Total = 5;
             int pageSize = 5; // set your page size, which is number of records per page
@@ -947,7 +1067,7 @@ namespace opozee.Controllers.API
 
                 questionDetail = (from q in db.Questions
                                   join u in db.Users on q.OwnerUserID equals u.UserID
-                                  where q.IsDeleted == false && q.HashTags.Contains(tag) && q.Id!=qid
+                                  where q.IsDeleted == false && q.HashTags.Contains(tag) && q.Id != qid
                                   select new PostQuestionDetailWebModel
                                   {
                                       Id = q.Id,
@@ -964,7 +1084,7 @@ namespace opozee.Controllers.API
                                       TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
                                       TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
                                       TotalRecordcount = db.Questions.Count(x => x.IsDeleted == false && x.HashTags.Contains(tag)),
-                                      LastActivityTime= (DateTime)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
+                                      LastActivityTime = (DateTime)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
                                       Comments = (from e in db.Opinions
                                                   join t in db.Users on e.CommentedUserId equals t.UserID
                                                   where e.QuestId == q.Id
@@ -1194,50 +1314,50 @@ namespace opozee.Controllers.API
             try
             {
                 db.Configuration.LazyLoadingEnabled = false;
-  
-     
-                    questionDetail = (from q in db.Questions
-                                      join u in db.Users on q.OwnerUserID equals u.UserID
-                                      where q.IsDeleted == false && q.IsSlider==true
-                                      select new PostQuestionDetailWebModel
-                                      {
-                                          Id = q.Id,
-                                          Question = q.PostQuestion,
-                                          OwnerUserID = q.OwnerUserID,
-                                          OwnerUserName = u.UserName,
-                                          Name = u.FirstName + " " + u.LastName,
-                                          UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
-                                          HashTags = q.HashTags,
-                                          CreationDate = q.CreationDate,
-                                          IsSlider = q.IsSlider,
-                                          YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
-                                          NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
-                                          TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
-                                          TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
-                                          TotalRecordcount = db.Questions.Count(x => x.IsDeleted == false && x.PostQuestion.Contains(model.Search)),
-                                          Comments = (from e in db.Opinions
-                                                      join t in db.Users on e.CommentedUserId equals t.UserID
-                                                      where e.QuestId == q.Id
-                                                      select new Comments
-                                                      {
-                                                          Id = e.Id,
-                                                          Comment = e.Comment,
-                                                          CommentedUserId = t.UserID,
-                                                          Name = t.FirstName + " " + t.LastName,
-                                                          UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
-                                                          LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
-                                                          DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
-                                                          Likes = db.Notifications.Where(p => p.CommentedUserId == q.OwnerUserID && p.CommentId == e.Id).Select(b => b.Like.HasValue ? b.Like.Value : false).FirstOrDefault(),
-                                                          DisLikes = db.Notifications.Where(p => p.CommentedUserId == q.OwnerUserID && p.CommentId == e.Id).Select(b => b.Dislike.HasValue ? b.Dislike.Value : false).FirstOrDefault(),
-                                                          CommentedUserName = t.UserName,
-                                                          IsAgree = e.IsAgree,
-                                                          CreationDate = e.CreationDate
-                                                      }).ToList()
 
 
-                                      }).OrderByDescending(p => p.Id).Skip(skip).Take(pageSize).ToList();
+                questionDetail = (from q in db.Questions
+                                  join u in db.Users on q.OwnerUserID equals u.UserID
+                                  where q.IsDeleted == false && q.IsSlider == true
+                                  select new PostQuestionDetailWebModel
+                                  {
+                                      Id = q.Id,
+                                      Question = q.PostQuestion,
+                                      OwnerUserID = q.OwnerUserID,
+                                      OwnerUserName = u.UserName,
+                                      Name = u.FirstName + " " + u.LastName,
+                                      UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
+                                      HashTags = q.HashTags,
+                                      CreationDate = q.CreationDate,
+                                      IsSlider = q.IsSlider,
+                                      YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
+                                      NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
+                                      TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
+                                      TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
+                                      TotalRecordcount = db.Questions.Count(x => x.IsDeleted == false && x.PostQuestion.Contains(model.Search)),
+                                      Comments = (from e in db.Opinions
+                                                  join t in db.Users on e.CommentedUserId equals t.UserID
+                                                  where e.QuestId == q.Id
+                                                  select new Comments
+                                                  {
+                                                      Id = e.Id,
+                                                      Comment = e.Comment,
+                                                      CommentedUserId = t.UserID,
+                                                      Name = t.FirstName + " " + t.LastName,
+                                                      UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                      LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                      DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                      Likes = db.Notifications.Where(p => p.CommentedUserId == q.OwnerUserID && p.CommentId == e.Id).Select(b => b.Like.HasValue ? b.Like.Value : false).FirstOrDefault(),
+                                                      DisLikes = db.Notifications.Where(p => p.CommentedUserId == q.OwnerUserID && p.CommentId == e.Id).Select(b => b.Dislike.HasValue ? b.Dislike.Value : false).FirstOrDefault(),
+                                                      CommentedUserName = t.UserName,
+                                                      IsAgree = e.IsAgree,
+                                                      CreationDate = e.CreationDate
+                                                  }).ToList()
 
-           
+
+                                  }).OrderByDescending(p => p.Id).Skip(skip).Take(pageSize).ToList();
+
+
 
                 foreach (var data in questionDetail)
                 {
@@ -1308,21 +1428,21 @@ namespace opozee.Controllers.API
         public List<UsersEarnings> GetTopEarners(int days)
         {
             //    AllUserQuestions questionDetail = new AllUserQuestions();
-             
+
             List<UsersEarnings> earnList = new List<UsersEarnings>();
             try
             {
                 SqlConnection connection;
                 var command1 = new SqlCommand();
 
-                if (days == 0 || days==-1)
+                if (days == 0 || days == -1)
                 {
                     connection = new SqlConnection(con);
                     command1 = new SqlCommand("SP_GetEarnings_daily_competition", connection);
                     command1.CommandType = System.Data.CommandType.StoredProcedure;
-                    
+
                     command1.Parameters.Add("@lag", SqlDbType.Int).Value = days;
-                }   
+                }
                 else
                 {
                     connection = new SqlConnection(con);
@@ -1342,7 +1462,7 @@ namespace opozee.Controllers.API
                     objitem.OwnerUserName = reader["username"].ToString();
                     objitem.Id = Convert.ToInt32(reader["UserId"]);
                     objitem.Earnings = Convert.ToInt32(reader["earnings"]);
-                     
+
                     earnList.Add(objitem);
                 }
 
@@ -1591,7 +1711,7 @@ namespace opozee.Controllers.API
                             data.MostYesLiked = (from e in db.Opinions
                                                  join t in db.Users on e.CommentedUserId equals t.UserID
                                                  join n in db.Notifications on e.QuestId equals n.questId
-                                                 where e.IsAgree == true && e.QuestId == data.Id  
+                                                 where e.IsAgree == true && e.QuestId == data.Id
                                                  select new Comments
                                                  {
                                                      Id = e.Id,
@@ -1628,12 +1748,12 @@ namespace opozee.Controllers.API
                                                     CreationDate = e.CreationDate
                                                 }).OrderByDescending(s => s.LikesCount).ThenByDescending(s => s.CreationDate).First();
                         }
-                        else if(maxNoLike != null)
+                        else if (maxNoLike != null)
                         {
                             data.MostNoLiked = (from e in db.Opinions
                                                 join t in db.Users on e.CommentedUserId equals t.UserID
                                                 join n in db.Notifications on e.QuestId equals n.questId
-                                                where e.IsAgree == false && e.QuestId == data.Id  
+                                                where e.IsAgree == false && e.QuestId == data.Id
                                                 select new Comments
                                                 {
                                                     Id = e.Id,
@@ -1646,11 +1766,11 @@ namespace opozee.Controllers.API
                                                     DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
                                                     CommentedUserName = t.UserName,
                                                     CreationDate = e.CreationDate
-                                                }).OrderByDescending (s => s.CreationDate).First();
+                                                }).OrderByDescending(s => s.CreationDate).First();
                         }
                     }
                 }
-                                
+
 
                 return questionDetail; //.OrderByDescending(p=>p.LastActivityTime);
                 //return Request.CreateResponse(JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "AllUserQuestions"));
@@ -1873,7 +1993,7 @@ namespace opozee.Controllers.API
                 //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "GetBookmarkQuestion"));
             }
         }
-                      
+
 
         #endregion
         #region "Get User Profile" 
@@ -1909,12 +2029,14 @@ namespace opozee.Controllers.API
                                    TotalPostedQuestion = db.Questions.Where(p => p.OwnerUserID == userid && p.IsDeleted == false).Count(),
                                    TotalLikes = (from q in db.Questions
                                                  join o in db.Opinions on q.Id equals o.QuestId
-                                                 where o.CommentedUserId== userid && q.IsDeleted == false
+                                                 where o.CommentedUserId == userid && q.IsDeleted == false
                                                  select o.Likes).Sum(),
                                    TotalDislikes = (from q in db.Questions
                                                     join o in db.Opinions on q.Id equals o.QuestId
                                                     where o.CommentedUserId == userid && q.IsDeleted == false
                                                     select o.Dislikes).Sum(),
+                                   TotalReferred = db.Referrals.Where(x => x.ReferralUserId == u.UserID).ToList().Count(),
+                                   ReferralCode = u.ReferralCode
                                }).FirstOrDefault();
 
                 return UserProfile;
@@ -1998,7 +2120,7 @@ namespace opozee.Controllers.API
                 var user = db.Database
                     .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserID] = @UserID", new SqlParameter("@UserID", userId))
                     .FirstOrDefault();
-                
+
                 var _notification = db.Notifications.Where(x => x.CommentedUserId == user.UserID && x.CreationDate >= user.ModifiedDate).ToList();
                 if (_notification.Count == 0)
                 {
@@ -2074,7 +2196,7 @@ namespace opozee.Controllers.API
             }
         }
         #endregion
-        
+
 
         #region "Edit User Profile" 
         [HttpPost]
@@ -2086,7 +2208,7 @@ namespace opozee.Controllers.API
             try
             {
                 UserProfile = db.Users.Where(p => p.UserID == Model.UserId).FirstOrDefault();
-                if(UserProfile.UserName.Trim() != Model.UserName.Trim())
+                if (UserProfile.UserName.Trim() != Model.UserName.Trim())
                 {
                     if (CheckUserNameExist(Model.UserName.Trim()).isExist)
                     {
@@ -2220,16 +2342,16 @@ namespace opozee.Controllers.API
             //    OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
             //}
 
-            string[] tags= { "crypto", "health", "sports", "uspolitics", "india" };
+            string[] tags = { "crypto", "health", "sports", "uspolitics", "india" };
 
             foreach (var tag in tags)
             {
                 PopularTag _hashtag = new PopularTag();
                 _hashtag.HashTag = tag;
- 
+
                 TopPopularHashTags.Add(_hashtag);
             }
-            
+
             return TopPopularHashTags;
         }
         #endregion
@@ -2317,8 +2439,8 @@ namespace opozee.Controllers.API
                 int prevScore = 0;
                 int newScore = 0;
                 opinion = db.Opinions.Where(p => p.Id == Model.CommentId).FirstOrDefault();
-                prevScore = Math.Max( (int) (opinion.Likes - opinion.Dislikes), 0);
- 
+                prevScore = Math.Max((int)(opinion.Likes - opinion.Dislikes), 0);
+
 
                 notification = db.Notifications.Where(x => x.CommentedUserId == Model.CommentedUserId && x.questId == Model.QuestId && x.CommentId == Model.CommentId).FirstOrDefault();
 
@@ -2463,7 +2585,7 @@ namespace opozee.Controllers.API
                     db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
-                    
+
 
                 }
                 else
@@ -3090,7 +3212,7 @@ namespace opozee.Controllers.API
 
                     int userID = entity.UserID;
                     entity = db.Users.Find(userID);
-                    
+
                     ObjLogin.LastLoginDate = entity.ModifiedDate;
                     ObjLogin.ReferralCode = entity.ReferralCode;
 
@@ -3100,7 +3222,7 @@ namespace opozee.Controllers.API
                     ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == entity.UserID).FirstOrDefault() == null
                         ? 0 : db.Tokens.Where(x => x.UserId == entity.UserID).FirstOrDefault().BalanceToken ?? 0;
 
-                    var totalRef = db.Referrals.Where(x => x.ReferredId == entity.UserID).ToList();
+                    var totalRef = db.Referrals.Where(x => x.ReferralUserId == entity.UserID).ToList();
                     ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
                     ObjLogin.IsSocialLogin = true;
 
@@ -3108,7 +3230,7 @@ namespace opozee.Controllers.API
                     _response.data = ObjLogin;
                     return _response;
 
-                   // return ObjLogin;
+                    // return ObjLogin;
                     //  return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "UserData"));
                 }
                 else
@@ -3135,7 +3257,7 @@ namespace opozee.Controllers.API
 
                     entity.DeviceType = input.DeviceType;
                     entity.DeviceToken = input.DeviceToken;
-                    entity.CreatedDate = DateTime.Now.ToUniversalTime(); 
+                    entity.CreatedDate = DateTime.Now.ToUniversalTime();
                     entity.RecordStatus = RecordStatus.Active.ToString();
                     entity.SocialID = input.ThirdPartyId;
                     if (input.ThirdPartyType == ThirdPartyType.Facebook)
@@ -3183,7 +3305,7 @@ namespace opozee.Controllers.API
                     db.Tokens.Add(token);
                     db.SaveChanges();
                     entity = db.Users.Find(userID);
-                                        
+
                     ObjLogin.LastLoginDate = DateTime.Now.ToUniversalTime();
                     ObjLogin.ReferralCode = entity.ReferralCode;
 
@@ -3212,7 +3334,7 @@ namespace opozee.Controllers.API
             }
         }
 
-       
+
 
         #endregion
 
@@ -3337,7 +3459,7 @@ namespace opozee.Controllers.API
                 //quest = new Question();
                 quest.PostQuestion = postQuestion.PostQuestion;
                 quest.HashTags = postQuestion.HashTags;
-                quest.ModifiedDate = DateTime.Now.ToUniversalTime(); 
+                quest.ModifiedDate = DateTime.Now.ToUniversalTime();
                 db.Entry(quest).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
@@ -3371,7 +3493,7 @@ namespace opozee.Controllers.API
                 }
                 //quest = new Question();
                 quest.IsDeleted = true;
-                quest.ModifiedDate = DateTime.Now.ToUniversalTime(); 
+                quest.ModifiedDate = DateTime.Now.ToUniversalTime();
                 db.Entry(quest).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 

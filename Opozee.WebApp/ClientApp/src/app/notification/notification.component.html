@@ -35,38 +35,47 @@
 
                 <div class="cover_right" *ngFor="let temp of NotificationData">
 
-                  <span *ngIf="temp?.IsAgree" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                    <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);"></a> {{temp.Message}}
+                  <span *ngIf="temp?.IsAgree && !temp?.RefferalStatus" class="profile">
+                    <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user">
+                    <a href="javascript:void(0);" style="font-weight: 400" [routerLink]="['/viewprofile/', temp?.CommentedUserId]"> @{{temp?.UserName}} </a>{{temp?.Message}}
                     <span>{{ temp.CreationDate+'Z' | date:'medium' | timeAgo }}</span>
                   </span>
-                  <span *ngIf="!temp?.IsAgree" class="profile" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                    <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"><a href="javascript:void(0);"></a> {{temp.Message}}
-                  <span>{{ temp.CreationDate+'Z' | date:'medium' | timeAgo }}</span>
+
+                  <span *ngIf="!temp?.IsAgree && !temp?.RefferalStatus" class="profile">
+                    <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user">
+                    <a href="javascript:void(0);" style="font-weight: 400" [routerLink]="['/viewprofile/', temp?.CommentedUserId]"> @{{temp?.UserName}} </a>{{temp?.Message}}
+                    <span>{{ temp.CreationDate+'Z' | date:'medium' | timeAgo }}</span>
                   </span>
 
+                  <span *ngIf="temp?.RefferalStatus" class="profile">
+                    <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user">
+                    <a href="javascript:void(0);" style="font-weight: 400" [routerLink]="['/viewprofile/', temp?.UserId]">@{{temp?.UserName}} </a>{{temp?.Message}}
+                    <!--<div [innerHTML]="temp?.Message"></div>-->
+                    <span>{{ temp.CreationDate+'Z' | date:'medium' | timeAgo }}</span>
+                  </span>
 
-                  <span class="cover_ntfctn_border questions-field">
+                  <span class="cover_ntfctn_border questions-field" *ngIf="!temp?.RefferalStatus">
                     <strong>
                       <a data-title="Q" [routerLink]="['/questiondetail/', temp.QuestionId]">
                         <div class="message-container" [innerHTML]="temp?.Question "></div>
                       </a>
                     </strong>
-                    <div *ngIf="temp.IsAgree===true">
+                    <div *ngIf="temp?.IsAgree">
                       <strong class="text-success">
-                      <a data-title="B" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion "></a>
-
+                        <a data-title="B" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="'@<b>'+temp?.Name+'</b> '+temp?.Opinion "></a>
                       </strong>
                     </div>
 
-                    <div *ngIf="temp.IsAgree===false">
+                    <div *ngIf="!temp?.IsAgree">
                       <strong class="text-danger">
-                      <a data-title="B"style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="temp.Opinion ">
-                        </a></strong>
+                        <a data-title="B" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="'@<b>'+temp?.Name+'</b> '+temp?.Opinion ">
+                        </a>
+                      </strong>
                     </div>
 
                   </span>
 
-                   <!--{{ temp.CreationDate | date:'medium' | timeAgo }}--> 
+                  <!--{{ temp.CreationDate | date:'medium' | timeAgo }}-->
                 </div>
               </div>
 

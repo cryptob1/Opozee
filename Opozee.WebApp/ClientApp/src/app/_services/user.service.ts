@@ -41,6 +41,14 @@ export class UserService {
     })
   }
 
+  getUserById(id: number) {
+    return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetUserById' + id, {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
+  }
+
   getById(id: number) {
     return this.http.get(this.myAppUrl + 'users/ + id');
   }

@@ -8,32 +8,31 @@ namespace Opozee.Models.API
 {
     public class UserNotifications
     {
-        public int UserId { get; set; }
-        public int QuestionId { get; set; }
+        public int? UserId { get; set; }
+        public int? QuestionId { get; set; }
         public string Question { get; set; }
         public string HashTags { get; set; }
-        public int OpinionId { get; set; }
+        public int? OpinionId { get; set; }
         public string Opinion { get; set; }
-        public int CommentedUserId { get; set; }
+        public int? CommentedUserId { get; set; }
         
         public string UserName { get; set; }
         public string Name { get; set; }
-        public bool Like { get; set; }
+        public bool? Like { get; set; }
         public string Image { get; set; }
-        public bool Dislike { get; set; }
-        public bool Comment { get; set; }
+        public bool? Dislike { get; set; }
+        public bool? Comment { get; set; }
         public string Tag { get; set; }
         public string Message { get; set; }
         public DateTime? CreationDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
-        public int TotalRecordcount { get; set; }
-        public int NotificationId { get; set; }
-        public bool IsAgree { get; set; }
+        public int? TotalRecordcount { get; set; }
+        public int? NotificationId { get; set; }
+        public bool? IsAgree { get; set; }
         public List<string> OpinionList { get; set; }
-
         public DateTime? QOCreationDate { get; set; }
-
         public bool IsValidToDelete { get; set; }
+        public bool RefferalStatus { get; set; }
     }
     public class UserProfile
     {
@@ -50,6 +49,9 @@ namespace Opozee.Models.API
         public int? TotalDislikes { get; set; }
         public bool IsSocialLogin { get; set; }
         public DateTime? LastLoginDate { get; set; }
+
+        public string ReferralCode { get; set; }
+        public int TotalReferred { get; set; }
     }
     public class OtherUsers
     {

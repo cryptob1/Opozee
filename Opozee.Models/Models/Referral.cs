@@ -16,7 +16,7 @@ namespace Opozee.Models.Models
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public int ReferredId { get; set; }
+        public int ReferralUserId { get; set; }
         public Nullable<System.DateTime> CreationDate { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
     }

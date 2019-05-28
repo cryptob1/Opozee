@@ -28,13 +28,13 @@ namespace Opozee.Models.Models
         }
     
         public virtual DbSet<BookMark> BookMarks { get; set; }
-        public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Opinion> Opinions { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Referral> Referrals { get; set; }
         public virtual DbSet<Bounty> Bounties { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<Referral> Referrals { get; set; }
     
         public virtual ObjectResult<SP_GetTopLikes_Result> SP_GetTopLikes()
         {
