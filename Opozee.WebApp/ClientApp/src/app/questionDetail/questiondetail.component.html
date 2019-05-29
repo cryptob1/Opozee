@@ -85,8 +85,8 @@
                       </span>
 
                       <div class="like_images">
-                        <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp?.Likes,index)">{{temp?.LikesCount}}</span>
-                        <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp?.DisLikes,index)" />{{temp?.DislikesCount}}</span>
+                        <span class="like" style="cursor:pointer"><img [attr.disabled]="loading" src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp)">{{temp?.LikesCount}}</span>
+                        <span class="like" style="cursor:pointer"><img [attr.disabled]="loading" src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp)" />{{temp?.DislikesCount}}</span>
                       </div>
                       <div class="date_like">
                       </div>

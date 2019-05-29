@@ -175,7 +175,7 @@ namespace opozee.Controllers.API
                             (bool IsValidCode, int? ReferralUserId) = CheckIfValidReferralCode(users.ReferralCode);
                             if (IsValidCode)
                             {
-                                
+
                                 Referral referral = new Referral();
                                 referral.ReferralUserId = ReferralUserId ?? 0;
                                 referral.UserId = entity.UserID;
@@ -202,7 +202,7 @@ namespace opozee.Controllers.API
                                     //getReferralUserId.UserId = ReferralUserId ?? 0; 
                                     db.SaveChanges();
 
-                                   var notification = new Notification();
+                                    var notification = new Notification();
                                     notification.CommentedUserId = ReferralUserId ?? 0;
                                     notification.ReferralId = referral.Id;
                                     notification.CreationDate = DateTime.Now.ToUniversalTime(); ;
@@ -672,33 +672,33 @@ namespace opozee.Controllers.API
 
 
                     var userNotification = (from q in db.Questions
-                                              join o in db.Opinions on q.Id equals o.QuestId
-                                              join n in db.Notifications on o.Id equals n.CommentId
-                                              join u in db.Users on n.CommentedUserId equals u.UserID
-                                              where ((q.OwnerUserID == Model.UserId && o.CommentedUserId != Model.UserId && n.Comment == true) || //someone left a comment
-                                              (o.CommentedUserId == Model.UserId && n.Comment == false)) && q.IsDeleted == false  //someone left a vote
-                                              select new UserNotifications
-                                              {
-                                                  UserId = q.OwnerUserID,
-                                                  QuestionId = q.Id,
-                                                  Question = q.PostQuestion,
-                                                  HashTags = q.HashTags,
-                                                  OpinionId = o.Id,
-                                                  Opinion = o.Comment,
-                                                  Image = u.ImageURL,
-                                                  CommentedUserId = o.CommentedUserId,
-                                                  Name = db.Users.Where(x => x.UserID == o.CommentedUserId).FirstOrDefault().UserName,
-                                                  UserName = u.UserName,
-                                                  Like = ((n.Like ?? false) ? true : false),
-                                                  Dislike = ((n.Dislike ?? false) ? true : false),
-                                                  Comment = ((n.Comment ?? false) ? true : false),
-                                                  IsAgree = ((o.IsAgree ?? false) ? true : false),
-                                                  CreationDate = n.CreationDate,
-                                                  ModifiedDate = n.ModifiedDate,
-                                                 // TotalRecordcount = TotalRecordNotification,
-                                                  NotificationId = n.Id,
-                                                  RefferalStatus = false
-                                              }).ToList(); //.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
+                                            join o in db.Opinions on q.Id equals o.QuestId
+                                            join n in db.Notifications on o.Id equals n.CommentId
+                                            join u in db.Users on n.CommentedUserId equals u.UserID
+                                            where ((q.OwnerUserID == Model.UserId && o.CommentedUserId != Model.UserId && n.Comment == true) || //someone left a comment
+                                            (o.CommentedUserId == Model.UserId && n.Comment == false)) && q.IsDeleted == false  //someone left a vote
+                                            select new UserNotifications
+                                            {
+                                                UserId = q.OwnerUserID,
+                                                QuestionId = q.Id,
+                                                Question = q.PostQuestion,
+                                                HashTags = q.HashTags,
+                                                OpinionId = o.Id,
+                                                Opinion = o.Comment,
+                                                Image = u.ImageURL,
+                                                CommentedUserId = o.CommentedUserId,
+                                                Name = db.Users.Where(x => x.UserID == o.CommentedUserId).FirstOrDefault().UserName,
+                                                UserName = u.UserName,
+                                                Like = ((n.Like ?? false) ? true : false),
+                                                Dislike = ((n.Dislike ?? false) ? true : false),
+                                                Comment = ((n.Comment ?? false) ? true : false),
+                                                IsAgree = ((o.IsAgree ?? false) ? true : false),
+                                                CreationDate = n.CreationDate,
+                                                ModifiedDate = n.ModifiedDate,
+                                                // TotalRecordcount = TotalRecordNotification,
+                                                NotificationId = n.Id,
+                                                RefferalStatus = false
+                                            }).ToList(); //.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
 
 
                     foreach (var data in userNotification)
@@ -735,7 +735,7 @@ namespace opozee.Controllers.API
                                                    HashTags = ""
                                                }
                                  ).ToList();
-               
+
                     foreach (var obj in getRefferalBaseData)
                     {
                         userNotification.Add(obj);
@@ -790,7 +790,7 @@ namespace opozee.Controllers.API
                         data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName, false, IsActive);
                         data.Tag = (data.Like == true) ? "Up-Vote" : (data.Dislike == true) ? "Down-Vote" : (data.Comment == true) ? "Belief" : "";
                     }
-                                       
+
                     return userNotifications1.Where(p => p.Message != "").ToList();
                 }
 
@@ -1020,7 +1020,7 @@ namespace opozee.Controllers.API
 
             if (you) { return "You " + Tag; }
 
-            return  Tag;
+            return Tag;
         }
 
 
@@ -1801,25 +1801,29 @@ namespace opozee.Controllers.API
 
                     int id = Convert.ToInt32(questId);
                     //int userId = Convert.ToInt32(userid);
-                    questionDetail.PostQuestionDetail = (from q in db.Questions
-                                                         join u in db.Users on q.OwnerUserID equals u.UserID
-                                                         where q.Id == id && q.IsDeleted == false
-                                                         select new BookMarkQuestionDetail
-                                                         {
-                                                             Id = q.Id,
-                                                             Question = q.PostQuestion,
-                                                             OwnerUserID = q.OwnerUserID,
-                                                             OwnerUserName = u.UserName,
-                                                             UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
-                                                             HashTags = q.HashTags,
-                                                             YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
-                                                             NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
-                                                             CreationDate = q.CreationDate,
-                                                             IsBookmark = db.BookMarks.Where(b => b.UserId == UserId && b.QuestionId == id).Select(b => b.IsBookmark.HasValue ? b.IsBookmark.Value : false).FirstOrDefault(),
-                                                         }).FirstOrDefault();
 
+                    questionDetail.PostQuestionDetail = db.Database.SqlQuery<BookMarkQuestionDetail>("SP_PostQuestionDetail @id,@UserId",
+                       new SqlParameter("@id", id),
+                       new SqlParameter("@UserId", UserId)).FirstOrDefault();
+                    #region Old Code
+                    //questionDetail.PostQuestionDetail = (from q in db.Questions
+                    //                                     join u in db.Users on q.OwnerUserID equals u.UserID
+                    //                                     where q.Id == id && q.IsDeleted == false
+                    //                                     select new BookMarkQuestionDetail
+                    //                                     {
+                    //                                         Id = q.Id,
+                    //                                         Question = q.PostQuestion,
+                    //                                         OwnerUserID = q.OwnerUserID,
+                    //                                         OwnerUserName = u.UserName,
+                    //                                         UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
+                    //                                         HashTags = q.HashTags,
+                    //                                         YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
+                    //                                         NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
+                    //                                         CreationDate = q.CreationDate,
+                    //                                         IsBookmark = db.BookMarks.Where(b => b.UserId == UserId && b.QuestionId == id).Select(b => b.IsBookmark.HasValue ? b.IsBookmark.Value : false).FirstOrDefault(),
+                    //                                     }).FirstOrDefault();
+                    #endregion
                     questionDetail.Comments = this.SortedComments(id, UserId);
-
                     return questionDetail;
                     // return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "AllOpinion"));
                 }
@@ -1836,24 +1840,29 @@ namespace opozee.Controllers.API
         {
             try
             {
-                var cList = (from e in db.Opinions
-                             join t in db.Users on e.CommentedUserId equals t.UserID
-                             where e.QuestId == id
-                             select new Comments
-                             {
-                                 Id = e.Id,
-                                 Comment = e.Comment,
-                                 CommentedUserId = t.UserID,
-                                 Name = t.FirstName + " " + t.LastName,
-                                 UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
-                                 LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
-                                 DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
-                                 Likes = db.Notifications.Where(p => p.CommentedUserId == UserId && p.CommentId == e.Id).Select(b => b.Like.HasValue ? b.Like.Value : false).FirstOrDefault(),
-                                 DisLikes = db.Notifications.Where(p => p.CommentedUserId == UserId && p.CommentId == e.Id).Select(b => b.Dislike.HasValue ? b.Dislike.Value : false).FirstOrDefault(),
-                                 CommentedUserName = t.UserName,
-                                 IsAgree = e.IsAgree,
-                                 CreationDate = e.CreationDate
-                             }).ToList();
+                #region Old Code
+                //var cList = (from e in db.Opinions
+                //                join t in db.Users on e.CommentedUserId equals t.UserID
+                //                where e.QuestId == id
+                //                select new Comments
+                //                {
+                //                    Id = e.Id,
+                //                    Comment = e.Comment,
+                //                    CommentedUserId = t.UserID,
+                //                    Name = t.FirstName + " " + t.LastName,
+                //                    UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                //                    LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                //                    DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                //                    Likes = db.Notifications.Where(p => p.CommentedUserId == UserId && p.CommentId == e.Id).Select(b => b.Like.HasValue ? b.Like.Value : false).FirstOrDefault(),
+                //                    DisLikes = db.Notifications.Where(p => p.CommentedUserId == UserId && p.CommentId == e.Id).Select(b => b.Dislike.HasValue ? b.Dislike.Value : false).FirstOrDefault(),
+                //                    CommentedUserName = t.UserName,
+                //                    IsAgree = e.IsAgree,
+                //                    CreationDate = e.CreationDate
+                //                }).ToList();
+                #endregion
+                var cList = db.Database.SqlQuery<Comments>("SP_SortedComments @id,@UserId",
+                      new SqlParameter("@id", id),
+                      new SqlParameter("@UserId", UserId)).ToList();
 
                 var YesComments = cList.Where(x => x.IsAgree == true).OrderByDescending(x => (x.LikesCount - x.DislikesCount)).ToList();
                 var NoComments = cList.Where(x => x.IsAgree == false).OrderByDescending(x => (x.LikesCount - x.DislikesCount)).ToList();
@@ -2037,7 +2046,7 @@ namespace opozee.Controllers.API
                                                     select o.Dislikes).Sum(),
                                    TotalReferred = db.Referrals.Where(x => x.ReferralUserId == u.UserID).ToList().Count(),
                                    ReferralCode = u.ReferralCode,
-                                   TotalPostedBeliefs = db.Opinions.Where (x=> x.CommentedUserId == u.UserID ).ToList().Count()
+                                   TotalPostedBeliefs = db.Opinions.Where(x => x.CommentedUserId == u.UserID).ToList().Count()
                                }).FirstOrDefault();
 
                 return UserProfile;
@@ -2423,32 +2432,46 @@ namespace opozee.Controllers.API
             return ObjToken;
         }
 
+        public Opinion GetOpinionById(int CommentId)
+        {
+            return db.Database
+                .SqlQuery<Opinion>("SELECT *  FROM Opinion WHERE Id=@CommentId",
+                    new SqlParameter("@CommentId", CommentId)).FirstOrDefault();
+        }
+
+        public Token GetTokenByUserId(int UserId)
+        {
+            return db.Database
+                .SqlQuery<Token>("SELECT *  FROM Token WHERE UserId=@UserId",
+                    new SqlParameter("@UserId", UserId)).FirstOrDefault();
+        }
 
         [HttpPost]
         [Route("api/WebApi/PostLikeDislikeWeb")]
         public void PostLikeDislikeWeb(PostLikeDislikeModel Model)
         {
-
-
             Notification notification = null;
             Opinion opinion;
-
             string action = "";
             PushNotifications pNoty = new PushNotifications();
             try
             {
                 int prevScore = 0;
                 int newScore = 0;
-                opinion = db.Opinions.Where(p => p.Id == Model.CommentId).FirstOrDefault();
+                //var opinionOld = db.Opinions.Where(p => p.Id == Model.CommentId).FirstOrDefault();
+                opinion = GetOpinionById(Model.CommentId);
                 prevScore = Math.Max((int)(opinion.Likes - opinion.Dislikes), 0);
 
+                notification = db.Database.SqlQuery<Notification>("SELECT *  FROM Notification WHERE CommentedUserId=@CommentedUserId AND questId=@questId AND CommentId=@CommentId",
+                           new SqlParameter("@CommentedUserId", Model.CommentedUserId),
+                           new SqlParameter("@questId", Model.QuestId),
+                           new SqlParameter("@CommentId", Model.CommentId)).FirstOrDefault();
 
-                notification = db.Notifications.Where(x => x.CommentedUserId == Model.CommentedUserId && x.questId == Model.QuestId && x.CommentId == Model.CommentId).FirstOrDefault();
+                //var notificationOld = db.Notifications.Where(x => x.CommentedUserId == Model.CommentedUserId && x.questId == Model.QuestId && x.CommentId == Model.CommentId).FirstOrDefault();
 
                 if (notification == null)
                 {
-
-
+                    #region Old Code
                     //if (Model.CommentStatus == CommentStatus.DisLike)
                     //{
                     //    notification.Dislike = true;
@@ -2471,19 +2494,31 @@ namespace opozee.Controllers.API
                     //    notification.Dislike = false;
                     //    action = "remove dislike";
                     //}
+                    #endregion
+                    int _checkInsert = db.Database.ExecuteSqlCommand(
+                                "INSERT INTO Notification (CommentedUserId,CommentId,questId,[Like],Dislike,Comment,CreationDate)" +
+                                " VALUES(@CommentedUserId,@CommentId,@questId,@Like,@Dislike,@Comment,@CreationDate)",
+                                new SqlParameter("CommentedUserId", Model.CommentedUserId),
+                                new SqlParameter("CommentId", Model.CommentId),
+                                new SqlParameter("questId", Model.QuestId),
+                                new SqlParameter("Like", Convert.ToBoolean(Model.Likes)),
+                                new SqlParameter("Dislike", Convert.ToBoolean(Model.Dislikes)),
+                                new SqlParameter("Comment", false),
+                                new SqlParameter("CreationDate", Model.CreationDate)
+                                );
 
-
-                    notification = new Notification();
-                    notification.CommentedUserId = Model.CommentedUserId;
-                    notification.CommentId = Model.CommentId;
-                    notification.questId = Model.QuestId;
-                    notification.Like = Convert.ToBoolean(Model.Likes);
-                    notification.Dislike = Convert.ToBoolean(Model.Dislikes);
-                    notification.Comment = false;
-                    notification.CreationDate = Model.CreationDate;
-                    // notification.Status = 3;
-                    db.Notifications.Add(notification);
-                    db.SaveChanges();
+                    //notification = new Notification();
+                    //notification.CommentedUserId = Model.CommentedUserId;
+                    //notification.CommentId = Model.CommentId;
+                    //notification.questId = Model.QuestId;
+                    //notification.Like = Convert.ToBoolean(Model.Likes);
+                    //notification.Dislike = Convert.ToBoolean(Model.Dislikes);
+                    //notification.Comment = false;
+                    //notification.CreationDate = Model.CreationDate;
+                    //// notification.Status = 3;
+                    //db.Notifications.Add(notification);
+                    //db.SaveChanges();
+                    #region Old Code
 
                     //opinion = db.Opinions.Where(p => p.Id == Model.CommentId).FirstOrDefault();
 
@@ -2578,37 +2613,46 @@ namespace opozee.Controllers.API
 
                     //        pNoty.SendNotification_Android(commentOwner.DeviceToken, finalMessage, "QD", questId.ToString());
                     //    } }
+                    #endregion
 
-
-                    opinion.Likes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Like == true).Count();
-                    opinion.Dislikes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Dislike == true).Count();
-                    newScore = Math.Max((int)(opinion.Likes - opinion.Dislikes), 0);
-                    db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-
-
-
+                    //newScore = Math.Max((int)(opinion.Likes - opinion.Dislikes), 0);
+                    //opinion.Likes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Like == true).Count();
+                    //opinion.Dislikes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Dislike == true).Count();
+                    //db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
+                    //db.SaveChanges();
                 }
                 else
                 {
+                    int _checkUpdate =  db.Database.ExecuteSqlCommand("UPDATE Notification SET [Like]=@Like, Dislike=@Dislike, Comment=@Comment, CreationDate=@CreationDate " +
+                                " WHERE CommentedUserId=@CommentedUserId AND questId=@questId AND CommentId=@CommentId",
+                                    new SqlParameter("CommentedUserId", Model.CommentedUserId),
+                                    new SqlParameter("CommentId", Model.CommentId),
+                                    new SqlParameter("questId", Model.QuestId),
+                                    new SqlParameter("Like", Convert.ToBoolean(Model.Likes)),
+                                    new SqlParameter("Dislike", Convert.ToBoolean(Model.Dislikes)),
+                                    new SqlParameter("Comment", false),
+                                    new SqlParameter("CreationDate", Model.CreationDate));
 
+                    //notification.CommentedUserId = Model.CommentedUserId;
+                    //notification.CommentId = Model.CommentId;
+                    //notification.questId = Model.QuestId;
+                    #region Old Code
+                    ////if (Model.LikeOrDislke){
+                    ////    notification.Like = Convert.ToBoolean(Model.Likes);
+                    ////}
+                    ////else{
+                    ////    notification.Dislike = Convert.ToBoolean(Model.Dislikes);
+                    ////}
+                    #endregion
+                    //notification.Like = Convert.ToBoolean(Model.Likes);
+                    //notification.Dislike = Convert.ToBoolean(Model.Dislikes);
+                    //notification.CreationDate = Model.CreationDate;
+                    //notification.Comment = false;
+                    //// notification.Status = 3;
+                    //db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
+                    //db.SaveChanges();
 
-                    notification.CommentedUserId = Model.CommentedUserId;
-                    notification.CommentId = Model.CommentId;
-                    notification.questId = Model.QuestId;
-                    //if (Model.LikeOrDislke){
-                    //    notification.Like = Convert.ToBoolean(Model.Likes);
-                    //}
-                    //else{
-                    //    notification.Dislike = Convert.ToBoolean(Model.Dislikes);
-                    //}
-                    notification.Like = Convert.ToBoolean(Model.Likes);
-                    notification.Dislike = Convert.ToBoolean(Model.Dislikes);
-                    notification.CreationDate = Model.CreationDate;
-                    notification.Comment = false;
-                    // notification.Status = 3;
-                    db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    #region Old Code
                     //opinion = db.Opinions.Where(p => p.Id == Model.CommentId).FirstOrDefault();
 
                     ///notification to mobile app
@@ -2624,8 +2668,6 @@ namespace opozee.Controllers.API
                     //    notification.Dislike = false;
                     //    action = "like";
                     //}
-
-
 
 
                     //int questId = opinion[0].QuestId;
@@ -2692,33 +2734,45 @@ namespace opozee.Controllers.API
                     //        pNoty.SendNotification_Android(commentOwner.DeviceToken, finalMessage, "QD", questId.ToString());
                     //    }
                     //}
+                    #endregion
 
-
-                    opinion.Likes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Like == true).Count();
-                    opinion.Dislikes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Dislike == true).Count();
-                    newScore = Math.Max((int)(opinion.Likes - opinion.Dislikes), 0);
-                    db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-
-
-
+                    //opinion.Likes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Like == true).Count();
+                    //opinion.Dislikes = db.Notifications.Where(p => p.CommentId == opinion.Id && p.Dislike == true).Count();
+                    //db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
+                    //db.SaveChanges();
                 }
 
+                var opinion_sp = db.Database.ExecuteSqlCommand("UPDATE Opinion SET Likes=(SELECT COUNT(*) FROM Notification WHERE CommentId=@CommentId AND [Like]=1), "
+                    + "Dislikes=(SELECT COUNT(*) FROM Notification WHERE CommentId=@CommentId AND Dislike=1) "
+                    + "WHERE Id=@CommentId", new SqlParameter("@CommentId", Model.CommentId));
+
+                opinion = GetOpinionById(Model.CommentId);
+                newScore = Math.Max((int)(opinion.Likes - opinion.Dislikes), 0);
+
                 //give or take tokens 
+                //var Token_sp = db.Database.ExecuteSqlCommand("EXEC SP_UpdateTokenOnLikeDislike @CommentedUserId,@prevScore,@newScore",
+                //               new SqlParameter("@CommentedUserId", opinion.CommentedUserId),
+                //                new SqlParameter("@prevScore", prevScore),
+                //                 new SqlParameter("@newScore", newScore));
 
-                Token userToken = db.Tokens.Where(x => x.UserId == opinion.CommentedUserId).FirstOrDefault();
 
-                userToken.BalanceToken = userToken.BalanceToken - prevScore + newScore;
-                db.Entry(userToken).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                var userToken = GetTokenByUserId(opinion.CommentedUserId);
+                var token = db.Database.ExecuteSqlCommand("UPDATE Token SET BalanceToken=@BalanceToken WHERE UserId=@CommentedUserId",
+                  new SqlParameter("@CommentedUserId", userToken.UserId),
+                  new SqlParameter("@BalanceToken", userToken.BalanceToken - prevScore + newScore));
+
+                //Token userToken = db.Tokens.Where(x => x.UserId == opinion.CommentedUserId).FirstOrDefault();
+                //userToken.BalanceToken = userToken.BalanceToken - prevScore + newScore;
+                //db.Entry(userToken).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
 
                 //Task.Run(() => this.LikeDislikeNotification(Model, notification));
-
             }
             catch (Exception ex)
             {
-
             }
+           // return GetAllOpinionWeb(Model.QuestId.ToString(), Model.CommentedUserId);
+            //return Ok();
         }
 
         public Boolean LikeDislikeNotification(PostLikeDislikeModel Model, Notification notification)
