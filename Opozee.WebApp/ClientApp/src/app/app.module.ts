@@ -67,6 +67,7 @@ import { MixpanelService } from './_services/mixpanel.service';
 import { InviteComponent } from './user/invite/invite.component';
 import { BountyQuestionsComponent } from './question/bounty-questions/bounty-questions.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
+import { SafeHtmlPipe } from './Shared/safe-html-pipe';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -102,7 +103,8 @@ export function getAuthServiceConfigs() {
     NgxEditorModule,
     AngularFontAwesomeModule,
     JwSocialButtonsModule,
-   BsDropdownModule.forRoot()
+    BsDropdownModule.forRoot(),
+    
   ],
   declarations: [
     AppComponent,
@@ -132,7 +134,8 @@ export function getAuthServiceConfigs() {
     ConfirmationDialogComponent,
     EarnStatsComponent,
     InviteComponent,
-    BountyQuestionsComponent
+    BountyQuestionsComponent,
+    SafeHtmlPipe
   
   ],
   entryComponents: [

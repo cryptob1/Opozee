@@ -47,6 +47,9 @@ namespace Opozee.Models.API
         public int TotalPostedQuestion { get; set; }
         public int? TotalLikes { get; set; }
         public int? TotalDislikes { get; set; }
+        public int? TotalPostedBeliefs { get; set; }
+ 
+
         public bool IsSocialLogin { get; set; }
         public DateTime? LastLoginDate { get; set; }
 

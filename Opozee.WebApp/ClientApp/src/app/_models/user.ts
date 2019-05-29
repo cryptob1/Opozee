@@ -136,7 +136,9 @@ export class UserProfileModel {
   Password: string;
   TotalDislikes: string;
   TotalLikes: number;
+  TotalReferred: number;
   TotalPostedQuestion: number;
+  TotalPostedBeliefs: number;
   UserID: number;
   UserName: string;
 

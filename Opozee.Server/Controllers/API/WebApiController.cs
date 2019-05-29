@@ -2036,7 +2036,8 @@ namespace opozee.Controllers.API
                                                     where o.CommentedUserId == userid && q.IsDeleted == false
                                                     select o.Dislikes).Sum(),
                                    TotalReferred = db.Referrals.Where(x => x.ReferralUserId == u.UserID).ToList().Count(),
-                                   ReferralCode = u.ReferralCode
+                                   ReferralCode = u.ReferralCode,
+                                   TotalPostedBeliefs = db.Opinions.Where (x=> x.CommentedUserId == u.UserID ).ToList().Count()
                                }).FirstOrDefault();
 
                 return UserProfile;
