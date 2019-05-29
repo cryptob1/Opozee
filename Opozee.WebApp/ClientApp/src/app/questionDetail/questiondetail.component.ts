@@ -81,11 +81,8 @@ export class Questiondetail implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
-
-
  
-    if (this.localStorageUser != null) {
- 
+    if (this.localStorageUser != null) { 
       mixpanelService.init(this.localStorageUser['Email'])
     }
    // this.PostQuestionDetailModel.PostQuestionDetailModel = new PostQuestionDetail();
@@ -97,13 +94,8 @@ export class Questiondetail implements OnInit {
   //}
 
   html2text(text) {
-
     return String(text).replace(/<[^>]+>/gm, '').replace(/&amp;/g, "&").replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-
-
-  
-  
-  }
+}
 
 
   ngOnInit() {
@@ -119,8 +111,7 @@ export class Questiondetail implements OnInit {
     //}
 
     this.route.params.subscribe(
-      params => {
-        
+      params => {        
         this.getQuestionDetail();
       }
     );
@@ -136,7 +127,7 @@ export class Questiondetail implements OnInit {
 
   percentage: number = 0;
 
-  getQuestionDetail() {
+  getQuestionDetail(fromLikeBtn?) {
     
     this.userService.getquestionDetails(this.Id, this.localStorageUser.Id).subscribe(data => {
       
@@ -154,8 +145,7 @@ export class Questiondetail implements OnInit {
         }
         else {
           scoreNo = scoreNo + (_score > 0 ? _score : 0); 
-        }
-       
+        }       
       })
 
       this.percentage = (scoreYes / (scoreYes + scoreNo)) * 100;
@@ -173,35 +163,24 @@ export class Questiondetail implements OnInit {
 
       this.PostQuestionDetailModel.postQuestionDetail = data['PostQuestionDetail'] as PostQuestionDetail;
 
-
       this.shareUrl = "https://opozee.com/qid/" + (this.PostQuestionDetailModel.postQuestionDetail.Id);
       this.sharetext = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
-
-
-      console.log(this.PostQuestionDetailModel);
-      this.getAllSliderQuestionlist(this.Id, this.PostQuestionDetailModel.postQuestionDetail.HashTags);
       
-
+      console.log(this.PostQuestionDetailModel);
+      if (!fromLikeBtn)
+        this.getAllSliderQuestionlist(this.Id, this.PostQuestionDetailModel.postQuestionDetail.HashTags);
     });
   }
    
 
-  private getAllSliderQuestionlist(qid: number, hashtags: string) {
-     
-
-
+  private getAllSliderQuestionlist(qid: number, hashtags: string) { 
     this.userService.getSimilarQuestionsList(qid, hashtags).subscribe(data => {
-
       this.PercentageCalc(data);
-      this.sliderData = data
-       
- 
+      this.sliderData = data;
     },
       error => {
       });
-  }
-
-  
+  }  
 
   private PercentageCalc(data) {
     let scoreYes = 0;
@@ -231,17 +210,17 @@ export class Questiondetail implements OnInit {
     })
   }
 
-  saveLikeclick(Likes, index) {
-
-    if (this.PostQuestionDetailModel.comments[index].CommentedUserId == this.localStorageUser.Id) { 
-
+  saveLikeclick(Likes, index, qDetail?) {
+    
+    if (this.PostQuestionDetailModel.comments[index].CommentedUserId == this.localStorageUser.Id) {
       this.toastr.error('', 'You cant vote on your own beliefs.', { timeOut: 5000 });
-     return;
-  }
-    if (this.localStorageUser.Id== 133) {
+      return;
+    }
+
+    if (this.localStorageUser.Id == 133) {
       this.toastr.error('', 'You cant vote as an anonyomous user.', { timeOut: 5000 });
-  return
-  }
+      return
+    }
 
     if (!Likes) { //hitting like
       
@@ -259,6 +238,8 @@ export class Questiondetail implements OnInit {
       this.dataModel.CreationDate = new Date();
       this.SaveLikeDislike(this.dataModel);
       this.mixpanelService.track('Liked');
+      this.loading = true;
+      qDetail.LikesCount += 1;
     }
     else {
       this.imageShowLike = -1;
@@ -274,13 +255,12 @@ export class Questiondetail implements OnInit {
       this.dataModel.CreationDate = new Date();
       this.SaveLikeDislike(this.dataModel);
       this.mixpanelService.track('Unlike');
-
+      this.loading = true;
+      qDetail.LikesCount -= 1;
     }
   }
 
-
-
-  saveDislikeclick(DisLikes, index) {
+  saveDislikeclick(DisLikes, index, qDetail?) {
 
     if (this.PostQuestionDetailModel.comments[index].CommentedUserId == this.localStorageUser.Id) {
 
@@ -308,6 +288,7 @@ export class Questiondetail implements OnInit {
       this.dataModel.CreationDate = new Date();
       this.SaveLikeDislike(this.dataModel);
       this.mixpanelService.track('Dislike');
+      qDetail.DislikesCount += 1;
     }
     else {
       this.imageShowDislike = -1;
@@ -324,7 +305,7 @@ export class Questiondetail implements OnInit {
       this.dataModel.CreationDate = new Date();
       this.SaveLikeDislike(this.dataModel);
       this.mixpanelService.track('UnDislike');
-
+      qDetail.DislikesCount -= 1;
     }
 
   }
@@ -344,8 +325,6 @@ export class Questiondetail implements OnInit {
     this.dataModel.CommentedUserId = this.localStorageUser.Id
     this.dataModel.OpinionAgreeStatus = 0
     this.Isclicked = true;
-
-
   }
 
   cancelclick() {
@@ -354,10 +333,9 @@ export class Questiondetail implements OnInit {
   }
 
   saveOpinionclick() {
-
-    ;
+    
     this.submitted = true;
-    ;
+    
     if (this.dataModel.Comment == '' || this.dataModel.Comment == undefined) {
       return;
     }
@@ -367,7 +345,7 @@ export class Questiondetail implements OnInit {
     this.userService.saveOpinionPost(this.dataModel)
       .pipe(first())
       .subscribe(data => {
-        ;
+        
         if (data.BalanceToken <= 0) {
 
           this.toastr.error('Token Blance 0', 'You have 0 tokens in your account. Please email us to refill the account to post opinion.', { timeOut: 5000 });
@@ -395,15 +373,16 @@ export class Questiondetail implements OnInit {
   }
 
   SaveLikeDislike(dataModel) {
-    ;
+
     this.loading = true;
     this.userService.SaveLikeDislikeService(this.dataModel)
       .pipe(first())
       .subscribe(data => {
-        ;
         this.loading = false;
-        this.getQuestionDetail();
+
         //this.toastr.success('Data save successfully', '');
+       this.getQuestionDetail(true);
+        //this.QuestionDetailsData(data);
         this.dataModel = {
           'QuestId': 0, 'Comment': '',
           'CommentedUserId': 0,
@@ -419,15 +398,52 @@ export class Questiondetail implements OnInit {
       },
         error => {
           //this.alertService.error(error);
-          //this.loading = false;
+          this.loading = false;
         });
+  }
+
+  private QuestionDetailsData(data) {
+    this.PostQuestionDetailModel = data as BookMarkQuestionVM;
+    this.PostQuestionDetailModel.comments = data['Comments'] as Comments[];
+
+    let scoreYes = 0;
+    let scoreNo = 0;
+
+    this.PostQuestionDetailModel.comments.map((x) => {
+
+      let _score = x.LikesCount - x.DislikesCount;
+      if (x.IsAgree) {
+        scoreYes = scoreYes + (_score > 0 ? _score : 0);
+      }
+      else {
+        scoreNo = scoreNo + (_score > 0 ? _score : 0);
+      }
+    })
+
+    this.percentage = (scoreYes / (scoreYes + scoreNo)) * 100;
+
+
+    let _countLike = data['Comments'].map(c => c.LikesCount);
+    var sumLike = _countLike.reduce(function (a, b) { return a + b; }, 0);
+
+    let _countDislike = data['Comments'].map(c => c.DislikesCount);
+    var sumDisLike = _countDislike.reduce(function (a, b) { return a + b; }, 0);
+
+    let _count = data['Comments'].length;
+
+    this.countReactionScore = sumLike + sumDisLike + _count;
+
+    this.PostQuestionDetailModel.postQuestionDetail = data['PostQuestionDetail'] as PostQuestionDetail;
+
+    this.shareUrl = "https://opozee.com/qid/" + (this.PostQuestionDetailModel.postQuestionDetail.Id);
+    this.sharetext = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
 
   }
 
 
   saveBookmarkQuestion(IsBookmark) {
 
-    ;
+    
     var dataBookMarkModel = {
       'QuestionId': this.Id,
       'IsBookmark': true,
