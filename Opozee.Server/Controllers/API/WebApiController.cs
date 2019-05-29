@@ -671,7 +671,7 @@ namespace opozee.Controllers.API
                     //                               select new UserNotifications { TotalRecordcount = n1.Id }).ToList().Count();
 
 
-                    var userNotifications = (from q in db.Questions
+                    var userNotification = (from q in db.Questions
                                               join o in db.Opinions on q.Id equals o.QuestId
                                               join n in db.Notifications on o.Id equals n.CommentId
                                               join u in db.Users on n.CommentedUserId equals u.UserID
@@ -701,7 +701,7 @@ namespace opozee.Controllers.API
                                               }).ToList(); //.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
 
 
-                    foreach (var data in userNotifications)
+                    foreach (var data in userNotification)
                     {
                         //data.TotalRecordcount = userNotifications1.Count;
                         data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName, false, IsActive);
@@ -738,15 +738,15 @@ namespace opozee.Controllers.API
                
                     foreach (var obj in getRefferalBaseData)
                     {
-                        userNotifications.Add(obj);
+                        userNotification.Add(obj);
                     }
 
-                    foreach (var data in userNotifications)
+                    foreach (var data in userNotification)
                     {
-                        data.TotalRecordcount = userNotifications.Count;
+                        data.TotalRecordcount = userNotification.Count;
                     }
-                    userNotifications = userNotifications.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
-                    return userNotifications.Where(p => p.Message != "").ToList();
+                    userNotification = userNotification.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
+                    return userNotification.Where(p => p.Message != "").ToList();
                 }
                 else
                 {
