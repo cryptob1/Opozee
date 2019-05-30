@@ -451,7 +451,21 @@ span.profile_left p {
     color: #fff;
   }
 
+.belief-time i {
+  font-size: 11px;
+  color: grey;
+  padding: 0px 0px 0px 0px;
+  float: right;
+}
+
 @media(max-width:480px) {
+  .belief-time i {
+    font-size: 9px;
+    color: grey;
+    padding: 0px 0px 0px 0px;
+    float: right;
+  }
+
   .user_left .username1 {
     width: 80px;
     overflow: hidden;
