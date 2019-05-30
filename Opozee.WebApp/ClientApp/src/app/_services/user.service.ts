@@ -389,4 +389,12 @@ export class UserService {
     })
   }
 
+  emailVerification(userId, code) {
+    return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/EmailVerification?Id=' + userId + '&Code=' + code, {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+      })
+    })
+  }
+
 }

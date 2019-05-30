@@ -60,12 +60,12 @@ namespace opozee.Controllers.API
         public void Delete(int id)
         {
         }
-
-
+        
         [HttpPost]
         [Route("api/WebApi/RegisterUser")]
-        public HttpResponseMessage RegisterUser(User users)
+        public async Task<dynamic> RegisterUser(User users)
         {
+            dynamic _response = new ExpandoObject();
             try
             {
                 if (!ModelState.IsValid)
@@ -84,7 +84,10 @@ namespace opozee.Controllers.API
                 string strThumbnailImage = users.ImageURL;
                 if (entity != null)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "User Exists"));
+                    _response.success = false;
+                    _response.message = "User Exists.";
+                    return _response;
+                   // return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "User Exists"));
                 }
                 else
                 {
@@ -120,28 +123,27 @@ namespace opozee.Controllers.API
                     //    entity.SocialType = ThirdPartyType.Twitter.ToString();
                     //}
 
-
-                    var v = db.Users.Where(a => a.Email == users.Email).FirstOrDefault();
-
-                    if (v != null)
+                    
+                    if (CheckEmailExist(users.Email))
                     {
-                        return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Email already registered.", "Message"));
+                        _response.success = false;
+                        _response.message = "Email already registered.";
+                        return _response;
+                        //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Email already registered.", "Message"));
                     }
 
-
-                    v = db.Users.Where(a => a.UserName == users.UserName).FirstOrDefault();
-
-                    if (v != null)
+                    if (CheckUserNameExist(users.UserName).isExist)
                     {
-                        return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Username already exists.", "Message"));
+                        _response.success = false;
+                        _response.message = "Username already exists.";
+                        return _response;
+                        //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Username already exists.", "Message"));
                     }
-
 
                     if (users.ImageURL != null && users.ImageURL != "")
                     {
                         try
                         {
-
                             string strTempImageSave = OpozeeLibrary.Utilities.ResizeImage.Download_Image(users.ImageURL);
                             string profileFilePath = _SiteURL + "/ProfileImage/" + strTempImageSave;
                             strIamgeURLfordb = profileFilePath;
@@ -158,15 +160,16 @@ namespace opozee.Controllers.API
                         entity.ImageURL = _SiteURL + "/ProfileImage/opozee-profile.png";
                     }
                     entity.ReferralCode = Helper.GenerateReferralCode();
+                    entity.EmailConfirmed = false;
                     db.Users.Add(entity);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     int userID = entity.UserID;
                     token.TotalToken = 500;
                     token.BalanceToken = 500;
                     token.UserId = userID;
                     db.Tokens.Add(token);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
 
                     if (users.ReferralCode != null)
                     {
@@ -182,8 +185,7 @@ namespace opozee.Controllers.API
                                 referral.CreationDate = DateTime.Now;
                                 referral.IsDeleted = false;
                                 db.Referrals.Add(referral);
-                                db.SaveChanges();
-
+                                await db.SaveChangesAsync();
 
                                 var getUserIdBased = db.Tokens.Where(x => x.UserId == userID).FirstOrDefault();
                                 if (getUserIdBased != null)
@@ -191,7 +193,7 @@ namespace opozee.Controllers.API
                                     getUserIdBased.TotalToken = getUserIdBased.TotalToken + 10;
                                     getUserIdBased.BalanceToken = getUserIdBased.BalanceToken + 10;
                                     //getUserIdBased.UserId = userID;
-                                    db.SaveChanges();
+                                    await db.SaveChangesAsync();
                                 }
 
                                 var getReferralUserId = db.Tokens.Where(x => x.UserId == ReferralUserId).FirstOrDefault();
@@ -207,7 +209,7 @@ namespace opozee.Controllers.API
                                     notification.ReferralId = referral.Id;
                                     notification.CreationDate = DateTime.Now.ToUniversalTime(); ;
                                     db.Notifications.Add(notification);
-                                    db.SaveChanges();
+                                    await db.SaveChangesAsync();
                                 }
                             }
                         }
@@ -215,17 +217,100 @@ namespace opozee.Controllers.API
                     }
                     entity = db.Users.Find(userID);
 
-                    return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "UserData"));
+                    if (entity != null)
+                    {
+                        try
+                        {
+                            string URL = WebConfigurationManager.AppSettings["ConfirmationURL"];
+                            URL = URL == null ? "https://opozee.com" : URL;
+
+                            string recepientName = entity.FirstName + " " + entity.LastName;
+                            string recepientEmail = entity.Email;
+                            string subject = "Please confirm your email address | Opozee";
+                            bool isHtml = true;
+
+                            string pathHTMLFile = HttpContext.Current.Server.MapPath("~/Content/mail-template/EmailVerificationTemplate.html");
+                            string TEMPLATE = File.ReadAllText(pathHTMLFile);
+                            TEMPLATE = TEMPLATE.Replace("##CONFIRM-URL##", $"{URL}/" + "verification?id=" + entity.UserID + "&code=" + entity.ReferralCode.ToLower());
+
+                            string body = TEMPLATE;
+
+                            (bool success, string errorMsg) = await EmailSender.SendEmailAsync(recepientName, recepientEmail, subject, body, isHtml);
+                            _response.success = success;
+
+                            if (success)
+                                _response.message = "Confirmation mail has been send. Please check you inbox.";
+                            else
+                                _response.message = "Please check your email and try again.";
+
+                            _response.data = entity;
+                            return _response;
+                        }
+                        catch (Exception ex)
+                        {
+                        }                       
+                    }
+
+                    _response.success = true;
+                    _response.data = entity;
+                    _response.message = "Registration successful."; //if it reaches here
+                    return _response;
                 }
             }
             catch (Exception ex)
             {
                 OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
-
-                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "UserData"));
+                _response.success = false;
+                _response.message = ex.Message;
+                return _response;
+                //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "UserData"));
             }
         }
 
+        [HttpGet]
+        [Route("api/WebApi/EmailVerification")]
+        public async Task<dynamic> EmailVerification(int Id, string code)
+        {
+            dynamic _response = new ExpandoObject();
+            try
+            {
+                if (Id <= 0 || string.IsNullOrEmpty(code))
+                {
+                    _response.success = false;
+                    _response.message = "Invalid email confirmation link.";
+                    return _response;
+                }
+
+                var user = db.Users.Where(x => x.UserID == Id && x.ReferralCode.ToLower() == code.ToLower()).FirstOrDefault();
+
+                if (user == null)
+                {
+                    _response.success = false;
+                    _response.message = "Invalid email confirmation link.";
+                    return _response;
+                }
+
+                if (user.EmailConfirmed == true)
+                    _response.message = "Email has already been confirmed.";
+                else
+                {
+                    user.EmailConfirmed = true;
+                    db.SaveChanges();
+                    _response.message = "Email address has been confirmed.";
+                }
+
+                _response.success = true;
+                _response.data = user;
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+                _response.success = false;
+                _response.message = ex.Message;
+                return _response;
+            }
+        }
 
         [HttpPost]
         [Route("api/WebApi/Login")]
@@ -235,50 +320,58 @@ namespace opozee.Controllers.API
             using (OpozeeDbEntities db = new OpozeeDbEntities())
             {
                 // UserLogin userlogin = new UserLogin();
-                var v1 = db.Users.Select(s => s).ToList();
+                //var v1 = db.Users.Select(s => s).ToList();
                 var v = db.Users.Where(a => a.Email == login.Email && (a.IsAdmin ?? false) == false).FirstOrDefault();
                 if (v != null)
                 {
-                    ObjLogin.Token = AesCryptography.Encrypt(login.Password);
-                    ObjLogin.Token = AesCryptography.Decrypt(ObjLogin.Token);
-                    if (string.Compare(AesCryptography.Encrypt(login.Password), v.Password) == 0)
+                    if (v.EmailConfirmed == true)
                     {
-                        //int timeout = login.RememberMe ? 525600 : 20; // 525600 min = 1 year
-                        //var ticket = new FormsAuthenticationTicket(login.EmailID, login.RememberMe, timeout);
-                        //string encrypted = FormsAuthentication.Encrypt(ticket);
-                        //var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted);
-                        //cookie.Expires = DateTime.Now.AddMinutes(timeout);
-                        //cookie.HttpOnly = true;
-                        //Response.Cookies.Add(cookie);
-
-                        //userlogin.EmailID = login.EmailID;
-                        //userlogin.Password = login.Password;
-                        login.Id = v.UserID;
-                        ObjLogin.Id = v.UserID;
-                        ObjLogin.Email = v.Email;
-                        ObjLogin.ImageURL = v.ImageURL;
-
-                        ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault() == null
-                        ? 0 : db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault().BalanceToken ?? 0;
-
-                        var totalRef = db.Referrals.Where(x => x.ReferralUserId == v.UserID).ToList();
-                        ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
-                        //update once logged-in
-                        try
+                        ObjLogin.Token = AesCryptography.Encrypt(login.Password);
+                        ObjLogin.Token = AesCryptography.Decrypt(ObjLogin.Token);
+                        if (string.Compare(AesCryptography.Encrypt(login.Password), v.Password) == 0)
                         {
-                            v.ModifiedDate = DateTime.Now.ToUniversalTime();
-                            db.Entry(v).State = System.Data.Entity.EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                        catch { }
-                        ObjLogin.LastLoginDate = v.ModifiedDate;
-                        ObjLogin.ReferralCode = v.ReferralCode;
-                        ObjLogin.IsSocialLogin = false;
+                            //int timeout = login.RememberMe ? 525600 : 20; // 525600 min = 1 year
+                            //var ticket = new FormsAuthenticationTicket(login.EmailID, login.RememberMe, timeout);
+                            //string encrypted = FormsAuthentication.Encrypt(ticket);
+                            //var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted);
+                            //cookie.Expires = DateTime.Now.AddMinutes(timeout);
+                            //cookie.HttpOnly = true;
+                            //Response.Cookies.Add(cookie);
 
-                        return ObjLogin;
+                            //userlogin.EmailID = login.EmailID;
+                            //userlogin.Password = login.Password;
+                            login.Id = v.UserID;
+                            ObjLogin.Id = v.UserID;
+                            ObjLogin.Email = v.Email;
+                            ObjLogin.ImageURL = v.ImageURL;
+
+                            ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault() == null
+                            ? 0 : db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault().BalanceToken ?? 0;
+
+                            var totalRef = db.Referrals.Where(x => x.ReferralUserId == v.UserID).ToList();
+                            ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
+                            //update once logged-in
+                            try
+                            {
+                                v.ModifiedDate = DateTime.Now.ToUniversalTime();
+                                db.Entry(v).State = System.Data.Entity.EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                            catch { }
+                            ObjLogin.LastLoginDate = v.ModifiedDate;
+                            ObjLogin.ReferralCode = v.ReferralCode;
+                            ObjLogin.IsSocialLogin = false;
+
+                            return ObjLogin;
+                        }
+                        else
+                        {
+                            return ObjLogin;
+                        }
                     }
                     else
                     {
+                        ObjLogin.Id = -1;
                         return ObjLogin;
                     }
                 }
@@ -301,7 +394,7 @@ namespace opozee.Controllers.API
                 using (OpozeeDbEntities db = new OpozeeDbEntities())
                 {
                     var _user = db.Database
-                        .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserID] = @UserID AND [IsAdmin] = 0", new SqlParameter("@UserID", id))
+                        .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserID] = @UserID AND [IsAdmin] = 0 AND EmailConfirmed=1", new SqlParameter("@UserID", id))
                         .FirstOrDefault();
 
                     if (_user != null)
@@ -398,18 +491,7 @@ namespace opozee.Controllers.API
                                                select o.Likes).Sum(),
                              }).ToList();
 
-
-
-
-
-
-
-
-
                 return questList;
-
-
-
             }
             catch (Exception ex)
             {
@@ -503,6 +585,7 @@ namespace opozee.Controllers.API
             }
             return Result;
         }
+
         [HttpPost]
         [Route("api/WebApi/CheckDuplicateQuestions")]
         public bool CheckDuplicateQuestions([FromBody] Question postQuestion)
@@ -552,7 +635,6 @@ namespace opozee.Controllers.API
             Token ObjToken = null;
             try
             {
-
                 if (!ModelState.IsValid)
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Invalid State", "Question"));
@@ -563,6 +645,12 @@ namespace opozee.Controllers.API
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Insufficient Tokens", "Question"));
                 }
 
+                var user = db.Users.Where(x => x.UserID == postQuestion.OwnerUserID && x.EmailConfirmed == true).FirstOrDefault();
+                if (user == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Please confirm email address", "Question"));
+                }
+
                 //if (!string.IsNullOrEmpty(postQuestion.PostQuestion))
                 //{
                 //    if (CheckDuplicateQuestion(postQuestion.PostQuestion))
@@ -570,8 +658,7 @@ namespace opozee.Controllers.API
                 //}
 
                 Question quest = null;
-                quest = db.Questions.Where(p => p.Id == postQuestion.Id
-                                       ).FirstOrDefault();
+                quest = db.Questions.Where(p => p.Id == postQuestion.Id).FirstOrDefault();
                 //if (quest != null)
                 //{
                 //    quest.PostQuestion = postQuestion.PostQuestion;
@@ -2383,7 +2470,12 @@ namespace opozee.Controllers.API
             Notification notification = null;
             try
             {
-
+                var user = db.Users.Where(x => x.UserID == Model.CommentedUserId && x.EmailConfirmed == true).FirstOrDefault();
+                if (user == null)
+                {
+                    ObjToken.BalanceToken = -2;
+                    return ObjToken;
+                }
 
                 ObjToken = db.Tokens.Where(x => x.UserId == Model.CommentedUserId).FirstOrDefault();
                 if (ObjToken.BalanceToken <= 0)
@@ -3349,6 +3441,7 @@ namespace opozee.Controllers.API
                     }
                     // entity.ImageURL = strIamgeURLfordb;
                     entity.ReferralCode = Helper.GenerateReferralCode();
+                    entity.EmailConfirmed = true;
                     db.Users.Add(entity);
                     db.SaveChanges();
 

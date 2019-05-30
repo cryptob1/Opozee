@@ -286,6 +286,7 @@
     <Content Include="Content\img\user4.png" />
     <Content Include="Content\img\user5.png" />
     <Content Include="Content\mail-template\ContactMailTemplate.html" />
+    <Content Include="Content\mail-template\EmailVerificationTemplate.html" />
     <Content Include="Content\mail-template\WelcomeMailTemplate.html" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\scripts\demo\chart-area-demo.js" />

@@ -68,6 +68,7 @@ import { InviteComponent } from './user/invite/invite.component';
 import { BountyQuestionsComponent } from './question/bounty-questions/bounty-questions.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { SafeHtmlPipe } from './Shared/safe-html-pipe';
+import { EmailVerificationComponent } from './user/email-verification/email-verification.component';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -135,6 +136,7 @@ export function getAuthServiceConfigs() {
     EarnStatsComponent,
     InviteComponent,
     BountyQuestionsComponent,
+    EmailVerificationComponent,
     SafeHtmlPipe
   
   ],
