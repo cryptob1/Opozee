@@ -16,7 +16,7 @@ export class AuthenticationService {
 
 
   login(login) {
-    debugger;
+    //debugger;
     //return this.http.post(`${config.apiUrl}/opozee/api/MobileApi/Login`, login, {
     //  headers: new HttpHeaders({
     //    'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='

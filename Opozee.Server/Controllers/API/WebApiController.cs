@@ -1,4 +1,5 @@
-﻿using opozee.Enums;
+﻿using Newtonsoft.Json;
+using opozee.Enums;
 using Opozee.Models;
 using Opozee.Models.API;
 using Opozee.Models.Models;
@@ -7,6 +8,7 @@ using Opozee.Server.Services;
 using OpozeeLibrary.API;
 using OpozeeLibrary.PushNotfication;
 using OpozeeLibrary.Utilities;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -311,6 +313,7 @@ namespace opozee.Controllers.API
                 return _response;
             }
         }
+                
 
         [HttpPost]
         [Route("api/WebApi/Login")]
@@ -330,6 +333,31 @@ namespace opozee.Controllers.API
                         ObjLogin.Token = AesCryptography.Decrypt(ObjLogin.Token);
                         if (string.Compare(AesCryptography.Encrypt(login.Password), v.Password) == 0)
                         {
+
+                            try
+                            {
+                                //string _apiURL = "http://localhost:61545/";
+                                string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
+
+                                var client = new RestClient($"{_apiURL}OpozeeGrantResourceOwnerCredentialSecret");
+                                var request = new RestRequest(Method.POST);
+                                request.AddHeader("content-type", "application/x-www-form-urlencoded");
+
+                                request.AddParameter("application/x-www-form-urlencoded",
+                                    $"username={v.Email}&password={v.Password}&grant_type=password", 
+                                    ParameterType.RequestBody);
+
+                                IRestResponse response = client.Execute(request);
+
+                                AuthToken _authToken = JsonConvert.DeserializeObject<AuthToken>(response.Content);
+                                ObjLogin.AuthToken = _authToken;
+                            }
+                            catch(Exception ex)
+                            {
+                                ObjLogin.Id = 0;
+                                return ObjLogin;
+                            }
+
                             //int timeout = login.RememberMe ? 525600 : 20; // 525600 min = 1 year
                             //var ticket = new FormsAuthenticationTicket(login.EmailID, login.RememberMe, timeout);
                             //string encrypted = FormsAuthentication.Encrypt(ticket);
@@ -340,7 +368,7 @@ namespace opozee.Controllers.API
 
                             //userlogin.EmailID = login.EmailID;
                             //userlogin.Password = login.Password;
-                            login.Id = v.UserID;
+                            //login.Id = v.UserID;
                             ObjLogin.Id = v.UserID;
                             ObjLogin.Email = v.Email;
                             ObjLogin.ImageURL = v.ImageURL;
@@ -359,6 +387,7 @@ namespace opozee.Controllers.API
                             }
                             catch { }
                             ObjLogin.LastLoginDate = v.ModifiedDate;
+                            ObjLogin.UserName = v.UserName;
                             ObjLogin.ReferralCode = v.ReferralCode;
                             ObjLogin.IsSocialLogin = false;
 
@@ -384,6 +413,7 @@ namespace opozee.Controllers.API
         }
 
 
+        [Authorize]
         [HttpGet]
         [Route("api/WebApi/GetUserById")]
         public UserLoginWeb GetUserById(int id)
@@ -469,6 +499,7 @@ namespace opozee.Controllers.API
             return (false, null);
         }
 
+        [Authorize]
         [HttpGet]
         [Route("api/WebApi/GetQuestion")]
         public List<PostQuestionDetail> GetQuestion()
@@ -500,6 +531,7 @@ namespace opozee.Controllers.API
             }
         }
 
+        [Authorize]
         [HttpGet]
         [Route("api/WebApi/GetUserALLRecords")]
         public List<PostQuestionDetailWEB> GetUserALLRecords()
@@ -628,6 +660,8 @@ namespace opozee.Controllers.API
         }
 
         #region "Post Question" 
+
+        [Authorize]
         [HttpPost]
         [Route("api/WebApi/PostQuestionWeb")]
         public HttpResponseMessage PostQuestionWeb([FromBody] Question postQuestion)
@@ -713,8 +747,10 @@ namespace opozee.Controllers.API
                 return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "Question"));
             }
         }
+
         #endregion
 
+        [Authorize]
         [HttpPost]
         [Route("api/WebApi/GetAllNotificationByUser")]
         public List<UserNotifications> GetAllNotificationByUser(PagingModel Model)
@@ -722,7 +758,6 @@ namespace opozee.Controllers.API
             List<UserNotifications> userNotifications2 = new List<UserNotifications>();
             try
             {
-
                 try
                 {
                     var user = db.Database
@@ -889,7 +924,7 @@ namespace opozee.Controllers.API
             }
         }
 
-
+        [Authorize]
         [HttpPost]
         [Route("api/WebApi/GetProfileNotificationByUser")]
         public List<UserNotifications> GetProfileNotificationByUser(PagingModel Model)
@@ -2148,6 +2183,7 @@ namespace opozee.Controllers.API
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Route("api/WebApi/DeleteMyQuestion")]
         public Question DeleteMyQuestion(PostQuestionModel postQuestion)
@@ -2182,6 +2218,7 @@ namespace opozee.Controllers.API
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Route("api/WebApi/DeleteMyBelief")]
         public Opinion DeleteMyBelief(PostQuestionModel model)
@@ -2296,6 +2333,7 @@ namespace opozee.Controllers.API
 
 
         #region "Edit User Profile" 
+        [Authorize]
         [HttpPost]
         [Route("api/WebApi/EditUserProfileWeb")]
         public dynamic EditUserProfileWeb(UserModelProfileEditWeb Model)
@@ -2460,7 +2498,7 @@ namespace opozee.Controllers.API
             public int Count { get; set; }
         }
 
-
+        [Authorize]
         [HttpPost]
         [Route("api/WebApi/PostOpinionWeb")]
         public Token PostOpinionWeb(PostAnswerWeb Model)
@@ -2538,6 +2576,7 @@ namespace opozee.Controllers.API
                     new SqlParameter("@UserId", UserId)).FirstOrDefault();
         }
 
+        [Authorize]
         [HttpPost]
         [Route("api/WebApi/PostLikeDislikeWeb")]
         public void PostLikeDislikeWeb(PostLikeDislikeModel Model)
@@ -3064,8 +3103,7 @@ namespace opozee.Controllers.API
 
             return true;
         }
-
-
+        
         public string GenerateTagsForQuestionWeb(bool? like, bool? dislike, bool? comment, string UserName)
         {
             string Tag = "";
@@ -3163,7 +3201,7 @@ namespace opozee.Controllers.API
         #endregion
 
 
-
+        [Authorize]
         [HttpPost]
         [Route("api/WebApi/UploadProfileWeb")]
         public HttpResponseMessage UploadProfileWeb()
@@ -3373,6 +3411,30 @@ namespace opozee.Controllers.API
                     ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
                     ObjLogin.IsSocialLogin = true;
 
+                    try
+                    {
+                        //string _apiURL = "http://localhost:61545/";
+                        string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
+
+                        var client = new RestClient($"{_apiURL}OpozeeGrantResourceOwnerCredentialSecret");
+                        var request = new RestRequest(Method.POST);
+                        request.AddHeader("content-type", "application/x-www-form-urlencoded");
+
+                        request.AddParameter("application/x-www-form-urlencoded",
+                            $"username={entity.Email}&password={entity.Password}&grant_type=password",
+                            ParameterType.RequestBody);
+
+                        IRestResponse response = client.Execute(request);
+
+                        AuthToken _authToken = JsonConvert.DeserializeObject<AuthToken>(response.Content);
+                        ObjLogin.AuthToken = _authToken;
+                    }
+                    catch (Exception ex)
+                    {
+                        ObjLogin.Id = 0;
+                        return ObjLogin;
+                    }
+
                     _response.success = true;
                     _response.data = ObjLogin;
                     return _response;
@@ -3463,6 +3525,30 @@ namespace opozee.Controllers.API
                     ObjLogin.BalanceToken = token.BalanceToken ?? 0;
                     ObjLogin.IsSocialLogin = true;
 
+                    try
+                    {
+                        //string _apiURL = "http://localhost:61545/";
+                        string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
+
+                        var client = new RestClient($"{_apiURL}OpozeeGrantResourceOwnerCredentialSecret");
+                        var request = new RestRequest(Method.POST);
+                        request.AddHeader("content-type", "application/x-www-form-urlencoded");
+
+                        request.AddParameter("application/x-www-form-urlencoded",
+                            $"username={entity.Email}&password={entity.Password}&grant_type=password",
+                            ParameterType.RequestBody);
+
+                        IRestResponse response = client.Execute(request);
+
+                        AuthToken _authToken = JsonConvert.DeserializeObject<AuthToken>(response.Content);
+                        ObjLogin.AuthToken = _authToken;
+                    }
+                    catch (Exception ex)
+                    {
+                        ObjLogin.Id = 0;
+                        return ObjLogin;
+                    }
+
                     _response.success = true;
                     _response.data = ObjLogin;
                     return _response;
@@ -3474,8 +3560,8 @@ namespace opozee.Controllers.API
             catch (Exception ex)
             {
                 LogHelper.CreateLog3(ex, Request);
-                _response.success = true;
-                _response.data = ObjLogin;
+                _response.success = false;
+                _response.message = ex.Message;
                 return _response;
                 //return ObjLogin;
                 //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "UserData"));
@@ -3584,7 +3670,8 @@ namespace opozee.Controllers.API
         }
         #endregion
 
-        #region "Post Question" 
+        #region "Post Question"
+        [Authorize]
         [HttpPost]
         [Route("api/WebApi/EditPostQuestionWeb")]
         public Question EditPostQuestionWeb([FromBody] PostQuestionModel postQuestion)
@@ -3626,6 +3713,7 @@ namespace opozee.Controllers.API
 
 
         #region "Delete Question" 
+        [Authorize]
         [HttpPost]
         [Route("api/WebApi/DeletePostQuestionWeb")]
         public Question DeletePostQuestionWeb(PostQuestionModel postQuestion)

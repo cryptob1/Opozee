@@ -4,7 +4,7 @@ import { RequestOptions } from '@angular/http';
 import { Http, Headers, Response } from '@angular/http';
 import { HttpHeaders } from '@angular/common/http';
 import { User, Question, NotificationsModel, PostQuestionDetail, BookMarkQuestion, UserProfileModel } from '../_models';
-import { UserEditProfileModel } from '../_models/user';
+import { UserEditProfileModel, LocalStorageUser } from '../_models/user';
 import { QuestionListing } from '../_models/question';
 import { config } from 'process';
 import { AppConfigService } from '../appConfigService';
@@ -14,6 +14,7 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class UserService {
 
+  _authorizationHeader: string;
   myAppUrl: string = ""
   constructor(private http: HttpClient, appConfigService: AppConfigService) {
     //let headers: Headers = new Headers();
@@ -23,8 +24,21 @@ export class UserService {
     //headers.append('Authorization', 'Basic b3Bvc2VlOm9wb3NlZTk5IQ==');
     //let options = new RequestOptions({ headers: headers });
 
+    let _currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (_currentUser)
+      if (_currentUser.AuthToken)
+        this._authorizationHeader = _currentUser.AuthToken.token_type + ' ' + _currentUser.AuthToken.access_token;
 
     this.myAppUrl = appConfigService.baseURL;
+  }
+
+  private getAuthorizationHeader(): string {
+    let _currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (_currentUser)
+      if (_currentUser.AuthToken)
+        this._authorizationHeader = _currentUser.AuthToken.token_type + ' ' + _currentUser.AuthToken.access_token;
+
+    return this._authorizationHeader ? this._authorizationHeader : 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
   }
 
   //const httpOptions = {
@@ -36,7 +50,7 @@ export class UserService {
   getAllquestion() {
     return this.http.get<QuestionListing[]>(this.myAppUrl + 'opozee/api/WebApi/GetQuestion', {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -44,7 +58,7 @@ export class UserService {
   getUserById(id: number) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetUserById' + id, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -56,7 +70,7 @@ export class UserService {
   register(user: any) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/RegisterUser', user, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -73,7 +87,7 @@ export class UserService {
   getUserRecords() {
     return this.http.get<QuestionListing[]>(this.myAppUrl + 'opozee/api/WebApi/GetUserALLRecords', {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -83,7 +97,7 @@ export class UserService {
   getPopularHasTags() {
     return this.http.get<any[]>(this.myAppUrl + 'opozee/api/WebApi/GetPopularHashTags', {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -91,7 +105,7 @@ export class UserService {
   checkDuplicateQuestions(question) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/CheckDuplicateQuestions', question, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -100,7 +114,7 @@ export class UserService {
   CheckDuplicateBelief(belief) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/CheckDuplicateBelief', belief, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -109,7 +123,7 @@ export class UserService {
   checkReferralCode(code: string) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/CheckReferralCode?referralCode=' + code, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
 
@@ -119,7 +133,7 @@ export class UserService {
   postQuestionweb(question) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/postquestionweb', question, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
 
@@ -129,7 +143,7 @@ export class UserService {
   getAllNotification(Model) {
     return this.http.post<NotificationsModel[]>(this.myAppUrl + 'opozee/api/WebApi/GetAllNotificationByUser',Model, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -137,7 +151,7 @@ export class UserService {
   getTabOneNotification(Model) {
     return this.http.post<NotificationsModel[]>(this.myAppUrl + 'opozee/api/WebApi/GetProfileNotificationByUser', Model, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
     }
@@ -145,7 +159,7 @@ export class UserService {
     deleteMyQuestion(model) {
         return this.http.post<NotificationsModel[]>(this.myAppUrl + 'opozee/api/WebApi/DeleteMyQuestion', model, {
             headers: new HttpHeaders({
-                'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+                'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
             })
         })
     }
@@ -153,7 +167,7 @@ export class UserService {
     deleteMyBelief(model) {
         return this.http.post<NotificationsModel[]>(this.myAppUrl + 'opozee/api/WebApi/DeleteMyBelief', model, {
             headers: new HttpHeaders({
-                'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+                'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
             })
         })
     }
@@ -162,7 +176,7 @@ export class UserService {
   //getAllQuestionlist(questionGetModel) {
   //  return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllPostsWeb?UserId=' + userId + '&Search=' + search +'&pageNumber'+, {
   //    headers: new HttpHeaders({
-  //      'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+  //      'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
 
   //    })
 
@@ -173,7 +187,7 @@ export class UserService {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetBountyQuestions?StartDate='
       + startDate + '&EndDate=' + endDate, {
         headers: new HttpHeaders({
-          'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+          'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
         })
       })
   }
@@ -181,7 +195,7 @@ export class UserService {
   getTopEarners(days: number) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetTopEarners?days=' + days ,  {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -190,7 +204,7 @@ export class UserService {
   getAllQuestionlist(questionGetModel) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllPostsWeb', questionGetModel, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
 
@@ -199,7 +213,7 @@ export class UserService {
   getSimilarQuestionsList(qid: number, tags: string) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetSimilarQuestionsWeb?qid='+qid+'&tags='+tags , {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
 
@@ -208,7 +222,7 @@ export class UserService {
   getAllSliderQuestionlist(questionGetModel) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllSliderPostsWeb', questionGetModel, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
 
@@ -218,7 +232,7 @@ export class UserService {
   getquestionDetails(Id: number, UserId: number) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllOpinionWeb?questId=' + Id + '&UserId=' + UserId, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     }).pipe(map(data => { return data }
     ))
@@ -228,7 +242,7 @@ export class UserService {
   getUserProfileWeb(userid: number) {
     return this.http.get<UserProfileModel>(this.myAppUrl + 'opozee/api/WebApi/GetUserProfileWeb?userid=' + userid, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     }).pipe(map(profiledata => { return profiledata }
 
@@ -238,7 +252,7 @@ export class UserService {
   editUserprofile(Model): Observable<any> {
     return this.http.post(this.myAppUrl + 'opozee/api/WebApi/EditUserProfileWeb', Model, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
 
@@ -251,7 +265,7 @@ export class UserService {
     formData.append('userId', userId);
     return this.http.post(this.myAppUrl + 'opozee/api/WebApi/UploadProfileWeb', formData, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
 
@@ -262,7 +276,7 @@ export class UserService {
   getEditUserProfileWeb(userid: number) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetEditUserProfileWeb?userid=' + userid, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     }).pipe(map(profiledata => { return profiledata }
 
@@ -272,7 +286,7 @@ export class UserService {
     checkNotification(userId) {
         return this.http.get<any[]>(this.myAppUrl + 'opozee/api/WebApi/CheckNotification?userId=' + userId, {
             headers: new HttpHeaders({
-                'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+                'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
             })
         })
     }
@@ -281,7 +295,7 @@ export class UserService {
   saveOpinionPost(Model) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/PostOpinionWeb', Model, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
 
@@ -292,7 +306,7 @@ export class UserService {
   GetAllTaggedDropService() {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllTaggedDropWeb', {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     }).pipe(map(profiledata => { return profiledata }
 
@@ -303,7 +317,7 @@ export class UserService {
   SaveLikeDislikeService(Model) {
     return this.http.post(this.myAppUrl + 'opozee/api/WebApi/PostLikeDislikeWeb', Model, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
 
@@ -313,7 +327,7 @@ export class UserService {
 
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/BookMarkQuestionWeb', Model, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
 
     })
@@ -324,7 +338,7 @@ export class UserService {
 
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllBookMarkWebById/?userid=' + userid, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
 
     })
@@ -333,7 +347,7 @@ export class UserService {
   getquestionDetails1(Id: number, UserId: number) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllOpinionWeb?questId=' + Id + '&UserId=' + UserId, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     }).pipe(map(data => { return data }
     ))
@@ -342,7 +356,7 @@ export class UserService {
   getQuestionListEditService(Model) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/GetAllPostsQuestionEditWeb' , Model , {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     }).pipe(map(data => { return data }
     ))
@@ -352,7 +366,7 @@ export class UserService {
   getpostedQuestionwebService(QuestionId) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/GetPostedQuestionEditWeb?QuestionId=' + QuestionId, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -360,7 +374,7 @@ export class UserService {
   editPostQuestionwebService(question) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/EditPostQuestionWeb', question, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -368,7 +382,7 @@ export class UserService {
   deletePostQuestionwebService(question) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/DeletePostQuestionWeb', question, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -376,7 +390,7 @@ export class UserService {
   sendContactMail(contact) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/SendContactMail', contact, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -384,7 +398,7 @@ export class UserService {
   sendWelcomeMail(contact) {
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/SendWelcomMail', contact, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
@@ -392,7 +406,7 @@ export class UserService {
   emailVerification(userId, code) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/EmailVerification?Id=' + userId + '&Code=' + code, {
       headers: new HttpHeaders({
-        'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ=='
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
     })
   }
