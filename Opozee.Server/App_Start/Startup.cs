@@ -17,7 +17,7 @@ namespace Opozee.Server.App_Start
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/OpozeeGrantResourceOwnerCredentialSecret"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(120),
+                AccessTokenExpireTimeSpan = TimeSpan.FromHours(168), //1Week=168h => 168*60=10080 Minutes
                 Provider = new AuthorizationServerProvider(),
                 RefreshTokenProvider = new RefreshTokenProvider()
             };

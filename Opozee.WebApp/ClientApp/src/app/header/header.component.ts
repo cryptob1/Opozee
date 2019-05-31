@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit {
   @ViewChild('resetPassword') resetPassword: ResetPassword;
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
 
+  showPopup: boolean = false;
   model: any = {};
   loading = false;
   returnUrl: string;
@@ -42,7 +43,14 @@ export class HeaderComponent implements OnInit {
     constructor(private dataSharingService: DataSharingService, private route: ActivatedRoute, private router: Router,
       private userService: UserService) {
 
-    this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
+      this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
+
+      if (JSON.parse(localStorage.getItem('popupShown')) || this.localStorageUser != null) {
+        this.showPopup = false;
+      }
+      else {
+        localStorage.setItem('popupShown', 'true')
+      }
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -125,6 +133,16 @@ export class HeaderComponent implements OnInit {
     //this.dataModel.UserLoggedId = this.userId;
     //console.log('data22', this.dataModel);
     this.resetPassword.show();
+  }
+
+  hidePopup() {
+    this.showPopup = false;
+  }
+
+  popup() {
+    this.showPopup = true;
+    window.scroll(0, 0);
+    //document.getElementById('popup-container').classList.add('show'); 
   }
  
 }
