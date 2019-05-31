@@ -31,7 +31,7 @@ import { EditPostquestion } from './question/editPosttedQuestion/editPostquestio
 
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { Ng2EmojiModule } from 'ng2-emoji';
-
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -105,7 +105,7 @@ export function getAuthServiceConfigs() {
     AngularFontAwesomeModule,
     JwSocialButtonsModule,
     BsDropdownModule.forRoot(),
-    
+    InfiniteScrollModule
   ],
   declarations: [
     AppComponent,

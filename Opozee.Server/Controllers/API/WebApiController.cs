@@ -844,6 +844,7 @@ namespace opozee.Controllers.API
                                                    CommentedUserId = r.ReferralUserId,
                                                    UserId = r.UserId,
                                                    UserName = db.Users.Where(x => x.UserID == r.UserId).FirstOrDefault().UserName,
+                                                   Name = db.Users.Where(x => x.UserID == r.UserId).FirstOrDefault().UserName,
                                                    //Like = ((n.Like ?? false) ? true : false),
                                                    //Dislike = ((n.Dislike ?? false) ? true : false),
                                                    //Comment = ((n.Comment ?? false) ? true : false),

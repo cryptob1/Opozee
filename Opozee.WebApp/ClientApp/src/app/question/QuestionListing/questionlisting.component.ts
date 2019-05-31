@@ -223,7 +223,6 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       }
     }, error => {
       this.isRecordLoaded = false;
-
     });
     this.isRecordLoaded = false;
   }
@@ -316,7 +315,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     }
 
     this.isRecordLoaded = true;
-    window.scrollTo(0, 0);
+    //window.scrollTo(0, 0);
   }
 
   getPager(totalItems: number, currentPage: number = 1, pageSize: number = 10) {
@@ -370,4 +369,40 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       pages: pages
     };
   }
+
+  onScroll() {
+    console.log(new Date().getTime());
+
+    this.questionGetModel.PageNumber += 1;
+    this.questionGetModel.PageSize = 10;
+    //debugger
+    this.userService.getAllQuestionlist(this.questionGetModel).subscribe(data => {
+
+      if (data) {
+        if (data.length > 0) {
+
+          for (var i = 0; i < data.length; i++) {
+            this.PostQuestionDetailList.push(data[i]);
+          }
+
+          this.questionGetModel.TotalRecords = data[0].TotalRecordcount
+
+          if (this.qid != -1) {
+            this.PostQuestionDetailList[0].comments = data[0]['Comments'];
+          }
+          //----------------------------------
+          this.PercentageCalc(data);
+          // this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
+          //this.isRecordLoaded = true
+        } else {
+          // this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
+          //this.isRecordLoaded = true
+        }
+
+      }
+    }, error => {
+    });
+
+  }
+
 }
