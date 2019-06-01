@@ -100,7 +100,7 @@ export class ProfileComponent implements OnInit {
                             });
                         } catch (err) { }
 
-                        console.log("profileData",this.profileData);
+                        //console.log("profileData",this.profileData);
                         this.PagingModel.TotalRecords = data[0].TotalRecordcount
                     }
                     else {

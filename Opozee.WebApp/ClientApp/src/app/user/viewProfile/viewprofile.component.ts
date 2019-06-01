@@ -50,7 +50,7 @@ export class ViewProfileComponent implements OnInit {
     this.userService.getUserProfileWeb(this.Id).pipe(first()).subscribe(data => {
       debugger;
       this.userProfiledata = data
-      console.log(data);
+      //console.log(data);
     });
   }
 

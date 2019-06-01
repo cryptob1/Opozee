@@ -37,13 +37,13 @@
 
                   <span *ngIf="temp?.IsAgree && !temp?.RefferalStatus" class="profile">
                     <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user">
-                    <a href="javascript:void(0);" style="font-weight: 400" [routerLink]="['/viewprofile/', temp?.CommentedUserId]"> @{{temp?.UserName}}: </a>{{temp?.Message}}
+                    <a href="javascript:void(0);" style="font-weight: 400" [routerLink]="['/viewprofile/', temp?.NotificationUserId]"> @{{temp?.UserName}}: </a>{{temp?.Message}}
                     <span>{{ temp.CreationDate+'Z' | date:'medium' | timeAgo }}</span>
                   </span>
 
                   <span *ngIf="!temp?.IsAgree && !temp?.RefferalStatus" class="profile">
                     <img src="{{temp.Image}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user">
-                    <a href="javascript:void(0);" style="font-weight: 400" [routerLink]="['/viewprofile/', temp?.CommentedUserId]"> @{{temp?.UserName}}: </a>{{temp?.Message}}
+                    <a href="javascript:void(0);" style="font-weight: 400" [routerLink]="['/viewprofile/', temp?.NotificationUserId]"> @{{temp?.UserName}}: </a>{{temp?.Message}}
                     <span>{{ temp.CreationDate+'Z' | date:'medium' | timeAgo }}</span>
                   </span>
 

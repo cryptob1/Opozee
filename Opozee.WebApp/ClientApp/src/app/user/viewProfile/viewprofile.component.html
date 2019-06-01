@@ -44,7 +44,7 @@
           <strong>{{userProfiledata?.TotalDislikes}}</strong>
         </div>
         <div class="tocken">
-          <img src="../../../assets/images/iq.png" alt="coin" />
+          <img src="../../../assets/images/coin.png" alt="coin" />
           <label>Referrals :</label>
           <strong>{{userProfiledata?.TotalReferred}}</strong>
         </div>
@@ -76,8 +76,8 @@
               <a data-title="Q" [routerLink]="['/questiondetail/', temp.QuestionId]">
                 <div class="message-container" [innerHTML]="temp?.Question | emojis"></div>
               </a>
-              <p *ngIf="temp?.CreationDate" class="  text-right small text-nowrap" style="color:grey;font-size:10px;font-weight:400">
-                {{ temp?.CreationDate+'Z' | date:'medium' | timeAgo }}
+              <p *ngIf="temp?.QOCreationDate" class="  text-right small text-nowrap" style="color:grey;font-size:10px;font-weight:400">
+                {{ temp?.QOCreationDate+'Z' | date:'medium' | timeAgo }}
               </p>
               <!--<small style="color:grey;font-size:10px;font-weight:500">@{{temp.UserName}}</small>-->
             </strong>

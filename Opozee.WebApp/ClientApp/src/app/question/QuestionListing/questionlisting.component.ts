@@ -371,7 +371,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
   onScroll() {
-    console.log(new Date().getTime());
+    //console.log(new Date().getTime());
 
     this.questionGetModel.PageNumber += 1;
     this.questionGetModel.PageSize = 10;

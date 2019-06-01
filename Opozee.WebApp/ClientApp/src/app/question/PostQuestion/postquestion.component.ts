@@ -183,7 +183,7 @@ export class PostQuestionComponent implements OnInit {
 
         if (data) {
           if (data.Response.Question) {
-            console.log(data.Response.Question);
+            //console.log(data.Response.Question);
             this.alertService.success('Question Posted', true);
             this.mixpanelService.track('Posted Belief');
             this.router.navigate(['questiondetail/' + data.Response.Question]);

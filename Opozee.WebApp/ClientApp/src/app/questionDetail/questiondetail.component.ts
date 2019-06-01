@@ -31,7 +31,7 @@ export class Questiondetail implements OnInit {
   Isclicked: boolean = false;
   comment: '';
   submitted: boolean = false;
-  imageShowLike: number = -1;;
+  imageShowLike: number = -1;
   imageShowDislike: number = -1;
   isWanttoSentComment: boolean = false;
   animal: string;
@@ -73,6 +73,7 @@ export class Questiondetail implements OnInit {
     private mixpanelService: MixpanelService
   ) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
+
 
     if (this.route.snapshot.params["Id"]) {
       this.Id = this.route.snapshot.params["Id"];
@@ -166,7 +167,7 @@ export class Questiondetail implements OnInit {
       this.shareUrl = "https://opozee.com/qid/" + (this.PostQuestionDetailModel.postQuestionDetail.Id);
       this.sharetext = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
       
-      console.log(this.PostQuestionDetailModel);
+      //console.log(this.PostQuestionDetailModel);
       if (!fromLikeBtn)
         this.getAllSliderQuestionlist(this.Id, this.PostQuestionDetailModel.postQuestionDetail.HashTags);
     });
@@ -210,8 +211,34 @@ export class Questiondetail implements OnInit {
     })
   }
 
+  private checkTooManyLikes() {
+    let now = Date.now();
+    let count = 0;
+    let lastVoteTime = new Date(JSON.parse(localStorage.getItem('lastVoteTime')));
+    console.log(now);
+    console.log(lastVoteTime);
+    if ((now.valueOf() - lastVoteTime.valueOf()) < 2 * 60 * 1000) {
+      count = +localStorage.getItem('voteCount') ;
+
+      localStorage.setItem('voteCount', count + 1+"");
+      if (count > 5) {
+        return false;
+      }
+    }
+    else {
+    localStorage.setItem('voteCount', "1");
+    localStorage.setItem('lastVoteTime', now.toString());
+    }
+    return true;
+  }
+
+
   saveLikeclick(Likes, index, qDetail?) {
-    
+    if (!this.checkTooManyLikes()) {
+      this.toastr.error('', 'Too many Votes. Slow down!', { timeOut: 5000 });
+      return;
+    }
+
     if (this.PostQuestionDetailModel.comments[index].CommentedUserId == this.localStorageUser.Id) {
       this.toastr.error('', 'You cant vote on your own beliefs.', { timeOut: 5000 });
       return;
@@ -261,7 +288,10 @@ export class Questiondetail implements OnInit {
   }
 
   saveDislikeclick(DisLikes, index, qDetail?) {
-
+    if (!this.checkTooManyLikes()) {
+      this.toastr.error('', 'Too many Votes. Slow down!', { timeOut: 5000 });
+      return;
+    }
     if (this.PostQuestionDetailModel.comments[index].CommentedUserId == this.localStorageUser.Id) {
 
       this.toastr.error('', 'You can\'t vote on your own beliefs.', { timeOut: 5000 });
@@ -491,8 +521,7 @@ export class Questiondetail implements OnInit {
     //this.isWanttoSentComment = true
     this.dataModel.QuestId = this.Id;
     this.dataModel.CommentedUserId = +this.localStorageUser.Id;
-
-    console.log('data22', this.dataModel);
+ 
     this.dialogPostBelief.show(this.dataModel);
 
   }

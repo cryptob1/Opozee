@@ -54,7 +54,7 @@ export class DialogPostBelief implements OnInit {
         
     this.editorConfigModal;
     this.postBeliefForm = this.formBuilder.group({
-      Comment: ['', [Validators.required, Validators.maxLength(300)]],
+      Comment: ['', [Validators.required, Validators.maxLength(400)]],
       OpinionAgreeStatus: [this.dataModel.OpinionAgreeStatus],
       QuestId: [this.dataModel.QuestId],
       CommentedUserId: [this.dataModel.CommentedUserId]

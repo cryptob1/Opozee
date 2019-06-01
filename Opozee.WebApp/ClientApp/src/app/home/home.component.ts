@@ -59,7 +59,7 @@ export class HomeComponent implements OnInit {
   private getUserALLRecords() {
     this.userService.getUserRecords().pipe(first()).subscribe(users => {
       this.questionListing = users;
-      console.log(this.questionListing);
+      //console.log(this.questionListing);
     });
   }
 

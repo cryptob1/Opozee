@@ -809,6 +809,7 @@ namespace opozee.Controllers.API
                                                 Opinion = o.Comment,
                                                 Image = u.ImageURL,
                                                 CommentedUserId = o.CommentedUserId,
+                                                NotificationUserId= n.CommentedUserId,
                                                 Name = db.Users.Where(x => x.UserID == o.CommentedUserId).FirstOrDefault().UserName,
                                                 UserName = u.UserName,
                                                 Like = ((n.Like ?? false) ? true : false),
@@ -842,6 +843,7 @@ namespace opozee.Controllers.API
                                                    //Opinion = o.Comment,
                                                    Image = u.ImageURL,
                                                    CommentedUserId = r.ReferralUserId,
+                                                   NotificationUserId = n.CommentedUserId,
                                                    UserId = r.UserId,
                                                    UserName = db.Users.Where(x => x.UserID == r.UserId).FirstOrDefault().UserName,
                                                    Name = db.Users.Where(x => x.UserID == r.UserId).FirstOrDefault().UserName,
@@ -893,6 +895,7 @@ namespace opozee.Controllers.API
                                                   Opinion = o.Comment,
                                                   Image = u.ImageURL,
                                                   CommentedUserId = o.CommentedUserId,
+                                                  NotificationUserId = n.CommentedUserId,
                                                   Name = db.Users.Where(x => x.UserID == o.CommentedUserId).FirstOrDefault().UserName,
                                                   UserName = u.UserName,
                                                   Like = ((n.Like ?? false) ? true : false),
@@ -981,7 +984,7 @@ namespace opozee.Controllers.API
                                             NotificationId = n.Id,
                                             //IsValidToDelete = this.CheckIsValidToDeleteOpinion(o)
                                             QOCreationDate = o.CreationDate
-                                        }).ToList().OrderByDescending(x => x.NotificationId).ToList().Skip(skip).Take(pageSize).ToList();
+                                        }).ToList().OrderByDescending(x => x.OpinionId).ToList().Skip(skip).Take(pageSize).ToList();
 
                     List<UserNotifications> NewLoggeduserBelief = new List<UserNotifications>();
                     foreach (var data in _userProfileData)
@@ -2586,9 +2589,34 @@ namespace opozee.Controllers.API
             Opinion opinion;
             string action = "";
             PushNotifications pNoty = new PushNotifications();
+
+
             try
             {
-                int prevScore = 0;
+                //check if too many likes
+
+                //SqlConnection connection = new SqlConnection(con);
+                //SqlCommand command1 = new SqlCommand("[SP_activity_limit]", connection);
+                //command1.CommandType = System.Data.CommandType.StoredProcedure;
+
+                //command1.Parameters.Add("@userid", SqlDbType.Int).Value = Model.CommentedUserId;
+
+                //connection.Open();
+                //SqlDataReader reader = command1.ExecuteReader();
+
+
+
+                //UsersEarnings objitem = null;
+                //while (reader.Read())
+                //{
+                //    if (Convert.ToInt32(reader["count"]) > 5){
+                //        return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Too many votes. Take a break!", "Votes"));
+                //    }
+                     
+                //}
+                    
+
+                    int prevScore = 0;
                 int newScore = 0;
                 //var opinionOld = db.Opinions.Where(p => p.Id == Model.CommentId).FirstOrDefault();
                 opinion = GetOpinionById(Model.CommentId);

@@ -90,7 +90,7 @@ export class ForgotPassword implements OnInit {
     this.authenticationService.forgotPassword(this.forgotForm.value)
       .pipe(first())
       .subscribe(data => {
-        console.log(data);
+        //console.log(data);
       },
         error => {
           this.alertService.error(error);

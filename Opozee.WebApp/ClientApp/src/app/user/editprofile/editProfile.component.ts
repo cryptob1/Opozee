@@ -98,7 +98,7 @@ export class EditProfileComponent implements OnInit {
       .subscribe(data => {
         this.loading = false;
         if (data) {
-          console.log('editUserprofile: ', data);
+          //console.log('editUserprofile: ', data);
           if (data.success) {
             this.toastr.success('', 'Change successful!', { timeOut: 1000 });
           } else {

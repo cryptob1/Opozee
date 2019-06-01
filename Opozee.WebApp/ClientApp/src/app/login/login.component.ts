@@ -212,7 +212,7 @@ export class LoginComponent implements OnInit {
               
               if (data) {
                 if (data.success) {
-                  console.log(data)
+                  //console.log(data)
                   this.loading = false;
                   this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
                     this.dataSharingService.loginsetstate(data.data);
@@ -295,7 +295,7 @@ export class LoginComponent implements OnInit {
   }
 
   openforgotpasswordModel() {
-    console.log('here');
+     
     this.forgotPassword.show();
 
 

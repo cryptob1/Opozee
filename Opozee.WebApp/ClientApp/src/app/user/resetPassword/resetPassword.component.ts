@@ -89,7 +89,7 @@ export class ResetPassword implements OnInit {
     this.authenticationService.resetPassword(model)
       .pipe(first())
       .subscribe(data => {
-        console.log(data);
+       // console.log(data);
       },
         error => {
           this.alertService.error(error);

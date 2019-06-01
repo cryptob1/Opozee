@@ -47,7 +47,7 @@ export class BountyQuestionsComponent implements OnInit {
   }
 
   onStartDateChange(event, date) {
-    console.log('event', event.target.value,event)
+    //console.log('event', event.target.value,event)
     if (date == 'start') {
       this.startDate = event.target.value;
     } else if (date == 'end') {

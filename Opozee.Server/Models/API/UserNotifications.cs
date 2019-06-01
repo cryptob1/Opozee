@@ -15,7 +15,8 @@ namespace Opozee.Models.API
         public int? OpinionId { get; set; }
         public string Opinion { get; set; }
         public int? CommentedUserId { get; set; }
-        
+        public int? NotificationUserId { get; set; }
+         
         public string UserName { get; set; }
         public string Name { get; set; }
         public bool? Like { get; set; }
