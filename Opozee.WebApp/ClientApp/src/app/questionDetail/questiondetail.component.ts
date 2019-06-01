@@ -212,12 +212,11 @@ export class Questiondetail implements OnInit {
   }
 
   private checkTooManyLikes() {
-    let now = Date.now();
+    let now = Date.now().valueOf();
     let count = 0;
-    let lastVoteTime = new Date(JSON.parse(localStorage.getItem('lastVoteTime')));
-    console.log(now);
-    console.log(lastVoteTime);
-    if ((now.valueOf() - lastVoteTime.valueOf()) < 2 * 60 * 1000) {
+    let lastVoteTime = new Date(JSON.parse(localStorage.getItem('lastVoteTime'))).valueOf();
+ 
+    if ((now - lastVoteTime ) < 2 * 60 * 1000) {
       count = +localStorage.getItem('voteCount') ;
 
       localStorage.setItem('voteCount', count + 1+"");

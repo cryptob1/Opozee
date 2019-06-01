@@ -49,7 +49,8 @@ export class NotificationsModel {
   IsAgree: boolean;
   OpinionList: any;
   RefferalStatus: boolean;
-
+  QOCreationDate: Date;
+  CommentedUserId: number;
 }
 
 

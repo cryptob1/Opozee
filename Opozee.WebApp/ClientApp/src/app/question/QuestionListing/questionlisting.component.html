@@ -152,7 +152,7 @@
                       <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
                       <!--<span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>-->
                       <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
-                      0"
+                     
                       <div *ngIf="temp.YesCount == 0 && temp.NoCount ==0">
                         <!--<span class="percentage">NO : 0 %</span>-->
                         <!--<span class="percentage_yes"> - </span>-->

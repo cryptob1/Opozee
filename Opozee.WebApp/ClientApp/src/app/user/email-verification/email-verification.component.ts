@@ -28,17 +28,22 @@ export class EmailVerificationComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
+    this.toastr.toastrConfig.timeOut = 1000000;
+    this.toastr.toastrConfig.positionClass = 'toast-bottom-full-width';
+    this.toastr.toastrConfig.preventDuplicates = true;
+    this.toastr.toastrConfig.closeButton = true;
+
     this.userService.emailVerification(this.userId, this.code)
       .pipe(first())
       .subscribe(
         data => {
           if (data.success) {
-            this.toastr.success('', data.message, { timeOut: 5000 });
+            this.toastr.success('', data.message, { timeOut: 5000000 });
             this.router.navigate(['/login']);
           }
           else {
-            this.toastr.error('', data.message, { timeOut: 5000 });
+            this.toastr.error('', data.message, { timeOut: 5000000 });
             this.router.navigate(['/login']);
           }
         },

@@ -41,7 +41,15 @@ export class RegisterComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       referralCode: [this.referral]
     });
+
+    this.toastr.toastrConfig.timeOut = 1000000;
+    this.toastr.toastrConfig.positionClass = 'toast-bottom-full-width';
+    this.toastr.toastrConfig.preventDuplicates = true;
+    this.toastr.toastrConfig.closeButton = true;
+     
     //this.registerForm.referral=this.referral;
+
+
   }
 
   // convenience getter for easy access to form fields
@@ -89,7 +97,7 @@ export class RegisterComponent implements OnInit {
         data => {
           if (data) {
             if (data.success) {
-              this.toastr.success('', data.message, { timeOut: 8000 });
+              this.toastr.success('', data.message, {  });
               let _user = data.data;
               let contact = {
                 'userName': _user.UserName,
