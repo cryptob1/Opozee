@@ -72,7 +72,7 @@
 
                   <div ExternalLink>
                     <h1>{{temp?.IsAgree ? 'Yes' : 'No'}}</h1>
-
+                    <small class="belief-time"><i>{{temp?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
                     <p [innerHTML]="temp?.Comment"></p>
 
                   </div>
@@ -88,12 +88,10 @@
                         <span class="like" style="cursor:pointer"><img [attr.disabled]="loading" src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp)">{{temp?.LikesCount}}</span>
                         <span class="like" style="cursor:pointer"><img [attr.disabled]="loading" src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp)" />{{temp?.DislikesCount}}</span>
                       </div>
-                      <div class="date_like">
-                      </div>
-                  
 
-</span>
-                    </div>
+                      <div class="date_like"></div>
+                    </span>
+                  </div>
                 </div>
 
                 <!--<div class="no_feedback" *ngIf="!temp.IsAgree">
@@ -188,8 +186,6 @@
                         <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
                       </a>
                     </strong>
-
-
 
                     <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
                       <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></div>

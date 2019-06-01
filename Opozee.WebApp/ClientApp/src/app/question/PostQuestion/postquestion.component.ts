@@ -181,8 +181,6 @@ export class PostQuestionComponent implements OnInit {
       .pipe(first())
       .subscribe(data => {
 
-        console.log(data);
-        debugger;
         if (data) {
           if (data.Response.Question) {
             console.log(data.Response.Question);

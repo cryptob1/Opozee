@@ -113,10 +113,10 @@ export class LoginComponent implements OnInit {
       .pipe(first())
       .subscribe(data => {
         //debugger;
-        if (data.Id != 0) {
+        if (data.Id > 0) {
 
           this.loading = false;
-          this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
+          this.toastr.success('', 'Login successfully!', { timeOut: 1000 });
           this.dataSharingService.loginsetstate(data);
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(data));
@@ -126,7 +126,10 @@ export class LoginComponent implements OnInit {
 
           this.router.navigateByUrl(this.returnUrl);
         }
-
+        else if (data.Id == -1) {
+          this.loading = false;
+          this.toastr.error('', 'Please confirm your email address.', { timeOut: 2000 });
+        }
         else {
           this.loading = false;
           this.toastr.error('Invalid User', 'please check user name or Password !', { timeOut: 2000 });

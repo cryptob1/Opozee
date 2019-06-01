@@ -26,6 +26,8 @@ namespace Opozee.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Email required")]
         public string Email { get; set; }
 
+        public string UserName { get; set; }
+
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password required")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
@@ -39,5 +41,15 @@ namespace Opozee.Models
         public string ReferralCode { get; set; }
         public int TotalReferred { get; set; }
         public bool IsSocialLogin { get; set; }
+
+        public AuthToken AuthToken { get; set; }
+    }
+
+    public class AuthToken
+    {
+        public string access_token { get; set; }
+        public string token_type { get; set; }
+        public int expires_in { get; set; }
+        public string refresh_token { get; set; }
     }
 }

@@ -112,6 +112,7 @@
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="CreatedDate" Type="datetime" Nullable="false" />
           <Property Name="ReferralCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="EmailConfirmed" Type="bit" />
         </EntityType>
         <Function Name="SP_GetBountyQuestions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="StartDate" Type="datetime" Mode="In" />
@@ -241,6 +242,7 @@
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ReferralCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" />
         </EntityType>
         <ComplexType Name="SP_GetBountyQuestions_Result">
           <Property Type="Int32" Name="BountyId" Nullable="false" />
@@ -364,6 +366,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="oposeeDbModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
                 <ScalarProperty Name="ReferralCode" ColumnName="ReferralCode" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />

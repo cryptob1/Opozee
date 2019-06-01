@@ -184,6 +184,13 @@ padding: 0px;
   padding: 0px 0px 0px 0px;
 }
 
+.belief-time i {
+  font-size: 11px;
+  color: grey;
+  padding: 0px 0px 0px 0px;
+  float:right;
+}
+
 
 .cover_hello {
   width: 90%;
@@ -247,7 +254,7 @@ margin:2px;
 
 }
 .message-container{
-  /*word-break: break-all;*/
+  word-break: break-word;
 }
 
 /*media query*/
@@ -280,6 +287,13 @@ margin:2px;
     color: grey;
     padding: 0px 0px 0px 0px;
     float: left;
+  }
+
+  .belief-time i {
+    font-size: 9px;
+    color: grey;
+    padding: 0px 0px 0px 0px;
+    float: right;
   }
 
   .col-sm-12 {

@@ -44,6 +44,7 @@
                           <h1>  Yes</h1>
                           <b>@{{bounty?.MostYesLiked?.CommentedUserName}}:</b>
                           <small class="message-container" [innerHTML]="bounty?.MostYesLiked.Comment | emojis"></small>
+                          <small><sup>{{bounty?.MostYesLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</sup></small>
                         </div>
                       </div>
 
@@ -52,6 +53,7 @@
                           <h1>  No</h1>
                           <b>@{{bounty?.MostNoLiked?.CommentedUserName}}:</b>
                           <small class="message-container" [innerHTML]="bounty?.MostNoLiked.Comment | emojis"></small>
+                          <small><sup>{{bounty?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</sup></small>
                         </div>
                       </div>
 
@@ -84,7 +86,9 @@
 
       <div class="container" style="margin:60px 0px 40px 0px" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded"></div>
 
-      <div class="col-sm-12">
+      
+      <div class="col-sm-12" infiniteScroll (scrolled)="onScroll()" [infiniteScrollDistance]="1"
+         [infiniteScrollThrottle]="200" [scrollWindow]="true">
 
         <div class="cover_hello">
           <a [routerLink]="qid == -1 ?  ['/postquestion',0] : ['/questiondetail/',qid]" href="javascript:void(0)">
@@ -135,8 +139,6 @@
                   </a>
                 </strong>
 
-
-
                 <ng-container *ngFor="let tag of temp?.HashTags?.split(',')">
                   <div class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></div>
 
@@ -150,6 +152,7 @@
                       <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
                       <!--<span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>-->
                       <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
+                      0"
                       <div *ngIf="temp.YesCount == 0 && temp.NoCount ==0">
                         <!--<span class="percentage">NO : 0 %</span>-->
                         <!--<span class="percentage_yes"> - </span>-->
@@ -160,25 +163,21 @@
                 </div>
 
 
-                <div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
+                <div class="liked_ones clearfix yes_feedback" *ngIf="temp?.MostYesLiked">
 
                   <div ExternalLink>
                     <h1>  Yes</h1>
-                    <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment "></p>
-
-
+                    <small class="belief-time"><i>{{temp?.MostYesLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
+                    <p class="message-container" [innerHTML]=" temp?.MostYesLiked?.Comment "></p>
                   </div>
-
-
-
 
                   <div class="row">
                     <div class="col-sm-6 text-left">
                       <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
 
-                        <span class="icon"><img src="{{temp.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
+                        <span class="icon"><img src="{{temp?.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
                         <span class="username">
-                          @ {{temp.MostYesLiked?.CommentedUserName}}
+                          @ {{temp?.MostYesLiked?.CommentedUserName}}
                         </span>
                       </div>
                     </div>
@@ -194,12 +193,11 @@
                 <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
                   <div ExternalLink>
                     <h1>  No</h1>
-                    <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment "></p>
+                    <small class="belief-time"><i>{{temp?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
+                    <p class="message-container" [innerHTML]="temp?.MostNoLiked?.Comment "></p>
                   </div>
 
-
                   <div class="row">
-
 
                     <div class="col-sm-6 text-left">
                       <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostNoLiked?.CommentedUserId]">
@@ -321,14 +319,13 @@
           </li>
 
 
-
         </ul>
 
 
       </div>
 
-       
-      <div class="navigation_cover" *ngIf="isRecordLoaded && PostQuestionDetailList?.length>1">
+
+      <!--<div class="navigation_cover" *ngIf="isRecordLoaded && PostQuestionDetailList?.length>1">
 
         <div class="container">
           <div class="text-center" style="cursor:pointer">
@@ -347,7 +344,8 @@
           </div>
         </div>
 
-      </div>
+      </div>-->
+
     </div>
 
     <!--<tweet url="{{shareUrl}}{{temp.Id}}" text="{{temp.Question}}{{sharetext}}"></tweet>-->

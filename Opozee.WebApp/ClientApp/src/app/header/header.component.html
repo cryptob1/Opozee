@@ -75,6 +75,13 @@
                 <div class="dropdown-menu">
                   <a class="dropdown-item" (click)="navbar();" [routerLink]="['/profile/', loginData.Id]">Profile</a>
                   <!--<a class="dropdown-item" style="cursor:pointer !important" (click)="openResetModal()">Reset Password</a>-->
+
+                  <a class="dropdown-item" href="javascript:void(0)" (click)="popup()">Help</a>
+                  <a class="dropdown-item" (click)="navbar();" [routerLink]="['/faq/']">FAQ</a>
+                  <a class="dropdown-item" (click)="navbar();" href="mailto:contactus@opozee.com">Contact Us</a>
+                  <a class="dropdown-item" (click)="navbar();" [routerLink]="['/aboutus/']">About Us</a>
+
+
                   <a class="dropdown-item" style="cursor:pointer !important" (click)="logout()">Log Out</a>
                 </div>
               </div>
@@ -87,5 +94,37 @@
     </nav>
   </header>
 </div>
+
+<div *ngIf="showPopup" class="popup-container" ng-disable-scroll="showPopup">
+  <div class="popup-content">
+    <span class="popup-text">
+      <h5> Welcome to Opozee!</h5>
+      <p>
+        Our mission is to build a decentralized open-source social network that helps users converge to <b>shared beliefs</b> and promotes <b>conversation health</b>. <br />
+
+      </p>
+      <h5>How Opozee works:</h5>
+      <div class="popup-step">
+        <div class="step-items">
+          <strong>Step 1:</strong> Sign up and join the community! <br /><br />
+          <strong>Step 2:</strong> Post a “yes/no” question or your beliefs in response to existing questions. <br /><br />
+          <strong>Step 3:</strong> Earn Opozee Coins (OPZ) when people up-vote your beliefs.<br /><br />
+        </div>
+
+        <div class="step-items">
+          <img src="https://opozee.com:81/Content/Upload/ProfileImage/opozee_howto.gif" />
+        </div>
+
+      </div>
+      <h5>What’s in it for me:</h5>
+      <p>
+        500 Opozee Coins (OPZ) for signing up and earn more as you participate in the network. <br /><br /> Every OPZ coin holder is a <b>shareholder</b> in the network with a claim on the network's growth and profitability. As the value of the network increases, so will the value of OPZ coins.
+      </p>
+    </span>
+    <span class="popup-close" (click)="hidePopup()">X</span>
+  </div>
+</div>
+
+
 <reset-password #resetPassword ></reset-password>
 

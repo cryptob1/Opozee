@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit {
   get f() { return this.registerForm.controls; }
 
   onSubmit() {
-    debugger
+    
     this.submitted = true;
     let _referralCode = this.registerForm.get('referralCode').value;
     // stop here if form is invalid
@@ -87,33 +87,32 @@ export class RegisterComponent implements OnInit {
       .pipe(first())
       .subscribe(
         data => {
-          this.alertService.success('Registration successful', true);
-
-          if (data.Response) {
-            //console.log(data.Response);
-            if (data.Response.UserData) {
-              let _user = data.Response.UserData;
+          if (data) {
+            if (data.success) {
+              this.toastr.success('', data.message, { timeOut: 8000 });
+              let _user = data.data;
               let contact = {
-                'userName': _user.userName,
+                'userName': _user.UserName,
                 'firstName': '',
                 'lastName': '',
                 'email': _user.Email
               }
-              this.sendWelcomeMail(contact);
-
-              this.toastr.success('Registration', 'Successful.', { timeOut: 5000 });
+              //this.sendWelcomeMail(contact);
+              //this.toastr.success('Registration', 'Successful.', { timeOut: 5000 });
               this.mixpanelService.init(_user.Email);
               this.mixpanelService.track('Signedup');
               this.router.navigate(['/login']);
-
+              this.loading = false;
             }
-            else if (data.Response.Code = 1) {
-              this.toastr.error('Registration Failed', data.Response.Status, { timeOut: 8000 });
-              //this.router.navigate(['/login']);
+            else {
+              this.toastr.error('Registration Failed', data.message, { timeOut: 8000 });
               this.loading = false;
             }
           }
-
+          else {
+            this.toastr.error('', 'Registration Failed', { timeOut: 8000 });
+            this.loading = false;
+          }
         },
         error => {
           this.alertService.error(error);

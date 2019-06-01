@@ -138,7 +138,10 @@ export class DialogPostBelief implements OnInit {
       .subscribe(data => {
         
         this.loading = false;
-        if (data.BalanceToken <= 0) {
+        if (data.BalanceToken == -2) {
+          this.toastr.error('', 'Please confirm your email address.', { timeOut: 5000 });
+        }
+        else if (data.BalanceToken <= 0) {
           this.toastr.error('Token Blance 0', 'You have 0 tokens in your account. Please email us to refill the account to post opinion.', { timeOut: 5000 });
         }
         else {

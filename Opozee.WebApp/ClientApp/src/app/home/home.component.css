@@ -41,7 +41,7 @@
     }
   }
 
-  .popup-content {
+.popup-content {
   width: 650px;
   padding-top: 10px;
   padding: 40px;
@@ -53,6 +53,7 @@
   left: 0;
   right: 0;
   margin: 0 auto;
+  border: 1px solid #eeeeee;
 }
 
 .popup-close {
@@ -114,7 +115,6 @@
 }
 
 
-
 /*media query*/
 @media(max-width: 767px) {
 
@@ -127,6 +127,7 @@
     width: calc(100% - 30px);
     top: 35px;
   }
+ 
 }
 
 
@@ -145,6 +146,10 @@
   .t_label {
     display: none;
     
+  }
+
+  .step-items img {
+    width: 100%;
   }
 
  }

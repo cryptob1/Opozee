@@ -60,4 +60,13 @@ namespace opozee.Enums
         public static string Failure = "Failure";
         public static string Available = "Available";
     }
+
+    public enum STATUS
+    {
+        SUCCESS = 1,
+        WRONG_PASSWORD = -1,
+        EMAIL_NOT_VERIFIED = -2,
+        NOT_EXIST = -3,
+        EXCEPTION = -4,
+    }
 }

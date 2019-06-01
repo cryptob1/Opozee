@@ -22,17 +22,14 @@ export class HomeComponent implements OnInit {
   
   constructor(private userService: UserService,private route: ActivatedRoute,
     private router: Router) {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));  
 
     if (JSON.parse(localStorage.getItem('popupShown')) || this.currentUser != null) {
       this.showPopup = false;
     }
-    else {
-      
+    else {      
       localStorage.setItem('popupShown', 'true')
     }
-
   }
 
   ngOnInit() {
@@ -41,21 +38,14 @@ export class HomeComponent implements OnInit {
     this.getHastagsRecords();
   }
 
-  hidePopup( ) {
-    
+  hidePopup( ) {    
     this.showPopup = false;
-
- 
-
   } 
 
-  popup() {
- 
+  popup() { 
     this.showPopup = true;
     window.scroll(0, 0);
-
-    //document.getElementById('popup-container').classList.add('show');
- 
+    //document.getElementById('popup-container').classList.add('show'); 
   }
 
 

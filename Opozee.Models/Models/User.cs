@@ -30,5 +30,6 @@ namespace Opozee.Models.Models
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public string ReferralCode { get; set; }
+        public Nullable<bool> EmailConfirmed { get; set; }
     }
 }
