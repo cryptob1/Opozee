@@ -40,7 +40,7 @@ export class DialogPostBelief implements OnInit {
   }
 
 
-  @ViewChild('dialogPostBelief') public dialogPostBelief: ModalDirective;
+  @ViewChild('dialogPostBelief', { static: true }) public dialogPostBelief: ModalDirective;
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
 
 

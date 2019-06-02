@@ -20,7 +20,7 @@ import { MixpanelService } from '../_services/mixpanel.service';
 
 export class Questiondetail implements OnInit {
 
-  @ViewChild('dialogPostBelief') dialogPostBelief: DialogPostBelief;
+  @ViewChild('dialogPostBelief', { static: true }) dialogPostBelief: DialogPostBelief;
 
   model: any = {};
   postOpinionForm: FormGroup;

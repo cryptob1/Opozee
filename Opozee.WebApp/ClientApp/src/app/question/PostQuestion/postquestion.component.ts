@@ -17,7 +17,7 @@ import { MixpanelService } from '../../_services/mixpanel.service';
 })
 export class PostQuestionComponent implements OnInit {
 
-  @ViewChild('confirmationDialogComponent') confirmationDialogComponent: ConfirmationDialogComponent;
+  @ViewChild('confirmationDialogComponent', { static: true }) confirmationDialogComponent: ConfirmationDialogComponent;
   @Output() event: EventEmitter<any> = new EventEmitter<any>();
 
   questionPostForm: FormGroup;

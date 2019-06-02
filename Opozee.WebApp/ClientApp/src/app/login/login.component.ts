@@ -20,7 +20,7 @@ import { MixpanelService } from '../_services/mixpanel.service';
 export class LoginComponent implements OnInit {
 
   
-  @ViewChild('forgotPassword') forgotPassword: ForgotPassword;
+  @ViewChild('forgotPassword', { static: true }) forgotPassword: ForgotPassword;
 
   Counter: number = 0;
 

@@ -48,7 +48,7 @@ export class ResetPassword implements OnInit {
   }
 
 
-  @ViewChild('resetPassword') public resetPassword: ModalDirective;
+  @ViewChild('resetPassword', { static: true }) public resetPassword: ModalDirective;
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
 
 
