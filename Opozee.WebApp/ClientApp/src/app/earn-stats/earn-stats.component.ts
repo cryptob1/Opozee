@@ -6,7 +6,7 @@ import { UserService } from '../_services/user.service';
 import { first } from 'rxjs/operators';
 import {  UserEarnModel } from '../_models/user';
 import { PostQuestionDetail, BookMarkQuestionVM } from '../_models/user';
-import { debounce } from 'rxjs/operator/debounce';
+
  
 
 @Component({

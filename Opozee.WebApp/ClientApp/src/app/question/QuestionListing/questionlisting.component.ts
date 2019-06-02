@@ -5,8 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User, LocalStorageUser, PostQuestionDetail } from '../../_models';
 import { UserService } from '../../_services';
 
-import { Subscription } from 'rxjs';
-import { ISubscription } from 'rxjs/Subscription';
+import { Subscription ,  SubscriptionLike as ISubscription } from 'rxjs';
 import { MixpanelService } from '../../_services/mixpanel.service';
 import { AppConfigService } from '../../appConfigService';
  
