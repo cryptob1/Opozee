@@ -87,8 +87,8 @@
       <div class="container" style="margin:60px 0px 40px 0px" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded"></div>
 
       
-      <div class="col-sm-12"  infiniteScroll (scrolled)="onScroll($event)" [infiniteScrollDistance]="0.8"  [infiniteScrollThrottle]="200"
-           [scrollWindow]="true"  >
+      <div class="col-sm-12" infiniteScroll (scrolled)="onScroll()" [infiniteScrollDistance]="1"
+         [infiniteScrollThrottle]="200" [scrollWindow]="true">
 
         <div class="cover_hello">
           <a [routerLink]="qid == -1 ?  ['/postquestion',0] : ['/questiondetail/',qid]" href="javascript:void(0)">
