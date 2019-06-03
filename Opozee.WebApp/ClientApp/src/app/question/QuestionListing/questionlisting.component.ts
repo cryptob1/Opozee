@@ -137,7 +137,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     //this.questionGetModel.PageNumber = localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
 
     this.questionGetModel.PageNumber = 1;
-    this.questionGetModel.PageSize = 12;
+    this.questionGetModel.PageSize = 10;
     this.questionGetModel.TotalRecords = 5;
     this.questionGetModel.Sort = 0;
     this.getAllQuestionlist(this.questionGetModel);
@@ -164,9 +164,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
   private getAllQuestionlist(questionGetModel) {
-
-    //console.log('questionGetModel', questionGetModel)
-
+    
     this.userService.getAllQuestionlist(questionGetModel).subscribe(data => {
 
       if (data) {
@@ -178,6 +176,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
           if (this.qid != -1) {
             this.PostQuestionDetailList[0].comments = data[0]['Comments'];
           }
+          console.log('page=', questionGetModel.PageNumber, 'records=', this.PostQuestionDetailList.length)
 
           ////----Slider
           //this.sliderData = [];
@@ -216,7 +215,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
           //  }
           //});
           //----------------------------------
-          this.PercentageCalc(data);
+          this.PercentageCalc(this.PostQuestionDetailList);
           //this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
           this.isRecordLoaded = true
         } else {
@@ -232,31 +231,34 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
   private PercentageCalc(data) {
-    let scoreYes = 0;
-    let scoreNo = 0;
-    let _score = 0;
-    data.map((x) => {
+    try {
+      let scoreYes = 0;
+      let scoreNo = 0;
+      let _score = 0;
+      data.map((x) => {
 
-      if (x.Comments) {
+        if (x.Comments) {
 
-        x.Comments.map(y => {
+          x.Comments.map(y => {
 
-          _score = y.LikesCount - y.DislikesCount;
-          if (y.IsAgree) {
-            scoreYes = scoreYes + (_score > 0 ? _score : 0);
-          }
-          else {
-            scoreNo = scoreNo + (_score > 0 ? _score : 0);
-          }
-        });
-      }
+            _score = y.LikesCount - y.DislikesCount;
+            if (y.IsAgree) {
+              scoreYes = scoreYes + (_score > 0 ? _score : 0);
+            }
+            else {
+              scoreNo = scoreNo + (_score > 0 ? _score : 0);
+            }
+          });
+        }
 
-      x.percentage = +((scoreYes / (scoreYes + scoreNo)) * 100);
-      if (isNaN(x.percentage))
-        x.percentage = 0;
-      scoreYes = 0;
-      scoreNo = 0;
-    })
+        x.percentage = +((scoreYes / (scoreYes + scoreNo)) * 100);
+        if (isNaN(x.percentage))
+          x.percentage = 0;
+        scoreYes = 0;
+        scoreNo = 0;
+      })
+    }
+    catch (err) { }
   }
 
   private getAllQuestionlistPaging(questionGetModel) {
@@ -374,44 +376,45 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   //  };
   //}
  
-  onScroll(event) { 
+  onScroll(event) {
 
-      //console.log("ssss");
-      //console.log(event);
-      //console.log(window.pageYOffset);
-      this.questionGetModel.PageNumber += 1;
-      this.questionGetModel.PageSize = 12;
+    //console.log("ssss");
+    //console.log(event);
+    //console.log(window.pageYOffset);
+    this.questionGetModel.PageNumber += 1;
+    this.questionGetModel.PageSize = 10;
 
-    console.log('onScroll', this.questionGetModel.PageNumber)
-      //debugger
-      this.userService.getAllQuestionlist(this.questionGetModel).subscribe(data => {
+    //debugger
+    this.userService.getAllQuestionlist(this.questionGetModel).subscribe(data => {
 
-        if (data) {
-          if (data.length > 0) {
+      if (data) {
+        if (data.length > 0) {
 
-            for (var i = 0; i < data.length; i++) {
-              this.PostQuestionDetailList.push(data[i]);
-            }
-
-            this.questionGetModel.TotalRecords = data[0].TotalRecordcount
-
-            if (this.qid != -1) {
-              this.PostQuestionDetailList[0].comments = data[0]['Comments'];
-            }
-            //----------------------------------
-            this.PercentageCalc(this.PostQuestionDetailList);
-            //console.log('onScroll data', this.PostQuestionDetailList)
-            // this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
-            //this.isRecordLoaded = true
-          } else {
-            // this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
-            //this.isRecordLoaded = true
+          for (var i = 0; i < data.length; i++) {
+            this.PostQuestionDetailList.push(data[i]);
           }
 
+          this.questionGetModel.TotalRecords = data[0].TotalRecordcount
+
+          if (this.qid != -1) {
+            this.PostQuestionDetailList[0].comments = data[0]['Comments'];
+          }
+          //----------------------------------
+          this.PercentageCalc(this.PostQuestionDetailList);
+
+          console.log('onScroll page=', this.questionGetModel.PageNumber, 'records=', this.PostQuestionDetailList.length)
+
+          // this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
+          //this.isRecordLoaded = true
+        } else {
+          // this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
+          //this.isRecordLoaded = true
         }
-      }, error => {
-      });
-    
+
+      }
+    }, error => {
+    });
+
   }
 
   responseData(data: any, pageSize: number): any {
