@@ -14,6 +14,8 @@
           </div>
           <!--<h2>{{userProfiledata?.FirstName }} {{userProfiledata?.LastName}}</h2>-->
           <h4>@{{userProfiledata?.UserName}} </h4>
+          <label>Opozee Network Ownership:</label>
+          <strong class="bg-success">{{userProfiledata?.BalanceToken/100000000  | percent:'1.3-4'}}</strong>
           <div>
             <span><a href="javascript:void(0)" routerLink="/invites"><i class="fa fa-share-alt" aria-hidden="true"></i> Refer & earn coins</a></span>
           </div>
