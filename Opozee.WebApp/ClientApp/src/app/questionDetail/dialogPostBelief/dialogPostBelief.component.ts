@@ -6,7 +6,7 @@ import { UserService } from '../../_services/user.service';
 import { ToastrService } from 'ngx-toastr';
 import { first, retry } from 'rxjs/operators';
 import { MixpanelService } from '../../_services/mixpanel.service';
-import { DOCUMENT } from "@angular/common";
+import { DOCUMENT } from '@angular/platform-browser';
 
 @Component({
   selector: 'dialog-post-belief',
