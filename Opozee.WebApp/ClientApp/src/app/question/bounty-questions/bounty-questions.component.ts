@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
 import { Location } from "@angular/common";
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { first } from 'rxjs/operators';
-
+import { debounce } from 'rxjs/operator/debounce';
 import { UserService } from '../../_services';
 import { LocalStorageUser } from '../../_models';
 import { AppConfigService } from '../../appConfigService';

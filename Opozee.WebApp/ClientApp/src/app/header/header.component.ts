@@ -1,5 +1,3 @@
-
-import {interval as observableInterval,  Observable } from 'rxjs';
 import { Component, OnInit, Output, HostListener, ViewChild, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataSharingService } from '../dataSharingService';
@@ -7,6 +5,8 @@ import { User, LocalStorageUser, PostQuestionDetail, UserProfileModel } from '..
 import { UserService } from '../_services';
 import { ResetPassword } from '../user/resetPassword/resetPassword.component';
 import { first } from 'rxjs/operators';
+import 'rxjs/add/observable/interval';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'header-component',
@@ -82,7 +82,7 @@ export class HeaderComponent implements OnInit {
             this.isAuthenticateUserId = this.localStorageUser.Id;
             this.loginData = this.localStorageUser;
 
-             observableInterval(100000)
+             Observable.interval(100000)
                  .subscribe((val) => {  this.checkNotification() });
 
             this.checkNotification()

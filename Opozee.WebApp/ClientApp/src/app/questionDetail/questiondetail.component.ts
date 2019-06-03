@@ -6,7 +6,7 @@ import { UserService } from '../_services/user.service';
 import { first } from 'rxjs/operators';
 import { LocalStorageUser, Comments } from '../_models/user';
 import { PostQuestionDetail, BookMarkQuestionVM } from '../_models/user';
-
+import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
 import { DialogPostBelief } from '../questionDetail/dialogPostBelief/dialogPostBelief.component';
 import { HttpUrlEncodingCodec } from '@angular/common/http';
