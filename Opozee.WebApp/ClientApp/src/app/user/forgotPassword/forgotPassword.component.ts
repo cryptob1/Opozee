@@ -41,7 +41,7 @@ export class ForgotPassword implements OnInit {
   }
 
 
-  @ViewChild('forgotPassword', { static: true }) public forgotPassword: ModalDirective;
+  @ViewChild('forgotPassword') public forgotPassword: ModalDirective;
 
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
 

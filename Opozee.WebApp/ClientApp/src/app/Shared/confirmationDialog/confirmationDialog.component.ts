@@ -9,7 +9,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 })
 export class ConfirmationDialogComponent implements OnInit {
 
-  @ViewChild('confirmationDialogComponent', { static: true }) public confirmationDialogComponent: ModalDirective;
+  @ViewChild('confirmationDialogComponent') public confirmationDialogComponent: ModalDirective;
   @Output() event: EventEmitter<any> = new EventEmitter<any>();
 
   //@Input() title: string;

@@ -15,7 +15,7 @@ import { first } from 'rxjs/operators';
 })
 
 export class HeaderComponent implements OnInit {
-  @ViewChild('resetPassword', { static: true }) resetPassword: ResetPassword;
+  @ViewChild('resetPassword') resetPassword: ResetPassword;
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
 
   showPopup: boolean = false;
