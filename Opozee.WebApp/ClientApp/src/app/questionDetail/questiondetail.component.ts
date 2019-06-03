@@ -266,6 +266,9 @@ export class Questiondetail implements OnInit {
       this.mixpanelService.track('Liked');
       this.loading = true;
       qDetail.LikesCount += 1;
+      if (qDetail.DisLikes) qDetail.DislikesCount -= 1;
+      qDetail.Likes = true;
+      qDetail.DisLikes = false;
     }
     else {
       this.imageShowLike = -1;
@@ -283,6 +286,9 @@ export class Questiondetail implements OnInit {
       this.mixpanelService.track('Unlike');
       this.loading = true;
       qDetail.LikesCount -= 1;
+      if (qDetail.DisLikes) qDetail.DislikesCount -= 1;
+      qDetail.Likes = false;      
+      qDetail.DisLikes = false;
     }
   }
 
@@ -318,6 +324,9 @@ export class Questiondetail implements OnInit {
       this.SaveLikeDislike(this.dataModel);
       this.mixpanelService.track('Dislike');
       qDetail.DislikesCount += 1;
+      if (qDetail.Likes) qDetail.LikesCount -= 1;
+      qDetail.Likes = false;
+      qDetail.DisLikes = true;
     }
     else {
       this.imageShowDislike = -1;
@@ -335,6 +344,9 @@ export class Questiondetail implements OnInit {
       this.SaveLikeDislike(this.dataModel);
       this.mixpanelService.track('UnDislike');
       qDetail.DislikesCount -= 1;
+      if (qDetail.Likes) qDetail.LikesCount -= 1;
+      qDetail.Likes = false;
+      qDetail.DisLikes = false;
     }
 
   }
@@ -410,8 +422,15 @@ export class Questiondetail implements OnInit {
         this.loading = false;
 
         //this.toastr.success('Data save successfully', '');
-       this.getQuestionDetail(true);
-        //this.QuestionDetailsData(data);
+       //this.getQuestionDetail(true);
+
+        try {
+          this.userService.getquestionDetails(this.Id, this.localStorageUser.Id)
+            .subscribe(data => {
+            });
+        }
+        catch (err) { }
+
         this.dataModel = {
           'QuestId': 0, 'Comment': '',
           'CommentedUserId': 0,
