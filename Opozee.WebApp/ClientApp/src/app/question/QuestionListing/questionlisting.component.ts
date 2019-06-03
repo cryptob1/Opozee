@@ -136,6 +136,8 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
     //this.questionGetModel.PageNumber = localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
 
+    this.questionGetModel.PageNumber = 1;
+    this.questionGetModel.PageSize = 12;
     this.questionGetModel.TotalRecords = 5;
     this.questionGetModel.Sort = 0;
     this.getAllQuestionlist(this.questionGetModel);
@@ -163,19 +165,20 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
   private getAllQuestionlist(questionGetModel) {
 
+    //console.log('questionGetModel', questionGetModel)
+
     this.userService.getAllQuestionlist(questionGetModel).subscribe(data => {
 
       if (data) {
         if (data.length > 0) {
- 
-          this.PostQuestionDetailList = data;
+
+          this.PostQuestionDetailList = this.responseData(data, questionGetModel.PageSize);
           this.questionGetModel.TotalRecords = data[0].TotalRecordcount
 
           if (this.qid != -1) {
             this.PostQuestionDetailList[0].comments = data[0]['Comments'];
           }
- 
-           
+
           ////----Slider
           //this.sliderData = [];
 
@@ -373,13 +376,13 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
  
   onScroll(event) { 
 
-      console.log("ssss");
-      console.log(event);
-      console.log(window.pageYOffset);
+      //console.log("ssss");
+      //console.log(event);
+      //console.log(window.pageYOffset);
       this.questionGetModel.PageNumber += 1;
-      this.questionGetModel.PageSize = 10;
+      this.questionGetModel.PageSize = 12;
 
-      console.log(this.questionGetModel.PageNumber);
+    console.log('onScroll', this.questionGetModel.PageNumber)
       //debugger
       this.userService.getAllQuestionlist(this.questionGetModel).subscribe(data => {
 
@@ -396,7 +399,8 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
               this.PostQuestionDetailList[0].comments = data[0]['Comments'];
             }
             //----------------------------------
-            this.PercentageCalc(data);
+            this.PercentageCalc(this.PostQuestionDetailList);
+            //console.log('onScroll data', this.PostQuestionDetailList)
             // this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
             //this.isRecordLoaded = true
           } else {
@@ -408,6 +412,16 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       }, error => {
       });
     
+  }
+
+  responseData(data: any, pageSize: number): any {
+    try {
+      if (data) return data.slice(0, pageSize)
+      else return data;
+    }
+    catch (err) {
+      return data;
+    }
   }
 
 }
