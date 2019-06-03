@@ -101,15 +101,21 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    debugger;
+    //debugger;
     // stop here if form is invalid
     if (this.loginForm.invalid) {
       return;
     }
+    else {
+      this.loginUser(this.loginForm.value);
+    }
+  }
+
+  loginUser(_model) {
 
     this.loading = true;
- 
-    this.authenticationService.login(this.loginForm.value)
+
+    this.authenticationService.login(_model)
       .pipe(first())
       .subscribe(data => {
         //debugger;
@@ -121,29 +127,29 @@ export class LoginComponent implements OnInit {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(data));
           //this.router.navigate(['']);
-          this.mixpanelService.init(this.loginForm.value.Email);
+          this.mixpanelService.init(_model.Email);
           this.mixpanelService.track('Login with email');
 
           this.router.navigateByUrl(this.returnUrl);
         }
         else if (data.Id == -1) {
           this.loading = false;
-          this.toastr.error('', 'Please confirm your email address.', { timeOut: 2000 });
+          this.toastr.error('', 'Please confirm your email address.', { timeOut: 3000 });
         }
         else {
           this.loading = false;
-          this.toastr.error('Invalid User', 'please check user name or Password !', { timeOut: 2000 });
+          this.toastr.error('Invalid User', 'please check user name or Password !', { timeOut: 3000 });
         }
       },
         error => {
           this.alertService.error(error);
           this.loading = false;
-          this.toastr.error('Error Logging in', error.message+'', { timeOut: 2000 });
+          this.toastr.error('Error Logging in', error.message + '', { timeOut: 3000 });
         });
   }
   
   socialSignIn(socialPlatform: string) {
-    debugger;
+    
     let socialPlatformProvider;
     if (socialPlatform == "facebook") {
       socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
@@ -253,7 +259,7 @@ export class LoginComponent implements OnInit {
   }
 
   loginwithTwitteSecond(event) {
-    debugger
+    
     var data = event.currentTarget.value.split('_')
 
     this.thirdPartyModel.ThirdPartyId = data[0];
@@ -297,8 +303,6 @@ export class LoginComponent implements OnInit {
   openforgotpasswordModel() {
      
     this.forgotPassword.show();
-
-
     this.mixpanelService.init('Anon');
     this.mixpanelService.track('Frogot password');
 

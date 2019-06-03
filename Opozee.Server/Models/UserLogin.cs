@@ -42,6 +42,8 @@ namespace Opozee.Models
         public int TotalReferred { get; set; }
         public bool IsSocialLogin { get; set; }
 
+        public bool IsVerificationLogin { get; set; }
+
         public AuthToken AuthToken { get; set; }
     }
 

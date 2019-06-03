@@ -301,6 +301,9 @@ namespace opozee.Controllers.API
                     _response.message = "Email address has been confirmed.";
                 }
 
+                //user.ReferralCode = AesCryptography.Decrypt(user.Password);
+                //user.Password = null;
+
                 _response.success = true;
                 _response.data = user;
                 return _response;
@@ -324,6 +327,12 @@ namespace opozee.Controllers.API
             {
                 // UserLogin userlogin = new UserLogin();
                 //var v1 = db.Users.Select(s => s).ToList();
+
+                if (login.IsVerificationLogin == true)
+                {
+                    login.Password = AesCryptography.Decrypt(login.Password);
+                }
+
                 var v = db.Users.Where(a => a.Email == login.Email && (a.IsAdmin ?? false) == false).FirstOrDefault();
                 if (v != null)
                 {
