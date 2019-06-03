@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, HostListener, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, HostListener, ViewChild, EventEmitter, OnDestroy, Inject, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataSharingService } from '../dataSharingService';
 import { User, LocalStorageUser, PostQuestionDetail, UserProfileModel } from '../_models/user';
@@ -7,6 +7,7 @@ import { ResetPassword } from '../user/resetPassword/resetPassword.component';
 import { first } from 'rxjs/operators';
 import 'rxjs/add/observable/interval';
 import { Observable } from 'rxjs/Observable';
+import { DOCUMENT } from '@angular/platform-browser';
 
 @Component({
   selector: 'header-component',
@@ -14,7 +15,7 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./header.component.css']
 })
 
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('resetPassword') resetPassword: ResetPassword;
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
 
@@ -40,8 +41,8 @@ export class HeaderComponent implements OnInit {
   }
 
 
-    constructor(private dataSharingService: DataSharingService, private route: ActivatedRoute, private router: Router,
-      private userService: UserService) {
+  constructor(private dataSharingService: DataSharingService, private route: ActivatedRoute, private router: Router,
+    private userService: UserService, @Inject(DOCUMENT) private document: Document, private renderer: Renderer2) {
 
       this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -86,9 +87,14 @@ export class HeaderComponent implements OnInit {
                  .subscribe((val) => {  this.checkNotification() });
 
             this.checkNotification()
-        }
+      }
 
-    }
+
+  }
+
+  ngOnDestroy(): void {
+    this.renderer.removeClass(this.document.body, 'popup-backdrop')
+  }
 
     checkNotification() {
         this.userService.checkNotification(this.localStorageUser.Id)
@@ -137,11 +143,13 @@ export class HeaderComponent implements OnInit {
 
   hidePopup() {
     this.showPopup = false;
+    this.renderer.removeClass(this.document.body, 'popup-backdrop')
   }
 
   popup() {
     this.showPopup = true;
     window.scroll(0, 0);
+    this.renderer.addClass(this.document.body, 'popup-backdrop')
     //document.getElementById('popup-container').classList.add('show'); 
   }
  

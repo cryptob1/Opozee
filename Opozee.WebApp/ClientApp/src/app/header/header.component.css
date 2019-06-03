@@ -1,6 +1,7 @@
 header {
   position: relative;
 }
+
 nav.navbar.navbar-default.navbar-fixed-top {
   position: relative !important;
   margin: 0px;
@@ -300,7 +301,7 @@ header .container-fluid {
   top: 50px;
   left: 0;
   right: 0;
-  margin: 0 auto;
+  margin: 0 auto 20px auto;
   border: 1px solid #eeeeee;
 }
 
@@ -399,5 +400,19 @@ header .container-fluid {
   .t_label {
     display: none;
   }
+}
+
+.model-popup {
+  background: rgba(0, 0, 0, 0.66);
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  -webkit-animation: popup_anime linear 1000ms forwards;
+  animation: popup_anime linear 1000ms forwards;
+  opacity: 0.75;
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
 }
 
