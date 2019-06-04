@@ -47,6 +47,15 @@ export class UserService {
   //    'Authorization': 'my-auth-token'
   //  })
   //}
+
+  getPushNotification() {
+    return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/PushNotification', {
+      headers: new HttpHeaders({
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
+      })
+    })
+  }
+
   getAllquestion() {
     return this.http.get<QuestionListing[]>(this.myAppUrl + 'opozee/api/WebApi/GetQuestion', {
       headers: new HttpHeaders({

@@ -421,6 +421,26 @@ namespace opozee.Controllers.API
 
         }
 
+        public class PushNotificationVM
+        {
+            public string title { get; set; }
+            public string body { get; set; }
+            public string icon { get; set; }
+        }
+        //getPushNotification
+        [HttpGet]
+        [Route("api/WebApi/PushNotification")]
+        public PushNotificationVM PushNotification()
+        {
+            //later will fetch data from db
+            var _response = new PushNotificationVM()
+            {
+                title = "500 Opozee Coins (OPZ) for signing up",
+                icon = "assets/images/OpozeeIcon.png",
+                body = "Every OPZ coin holder is a shareholder in the network with a claim on the network's growth and profitability. As the value of the network increases, so will the value of OPZ coins."
+            };
+            return _response;
+        }
 
         [Authorize]
         [HttpGet]
