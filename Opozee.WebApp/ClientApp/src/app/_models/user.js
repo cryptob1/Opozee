@@ -33,6 +33,12 @@ var Following = /** @class */ (function () {
     return Following;
 }());
 exports.Following = Following;
+var FollowerUser = /** @class */ (function () {
+    function FollowerUser() {
+    }
+    return FollowerUser;
+}());
+exports.FollowerUser = FollowerUser;
 var BookMarkQuestion = /** @class */ (function () {
     function BookMarkQuestion() {
         this.comments = [];

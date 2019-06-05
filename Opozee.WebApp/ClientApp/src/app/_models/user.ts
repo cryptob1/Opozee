@@ -134,15 +134,12 @@ export class PostQuestionDetail {
 export class UserEarnModel {
   Id: number;
   OwnerUserName: string;
-
   Earnings: number;
-  
 
 }
 
 
 export class UserProfileModel {
-
   BalanceToken: number;
   Email: string;
   FirstName: string;
@@ -156,18 +153,17 @@ export class UserProfileModel {
   TotalPostedBeliefs: number;
   UserID: number;
   UserName: string;
-
+  HasFollowed: boolean;
+  Followers: number;
+  Followings: number;
 }
 
 
 export class UserEditProfileModel {
-
   Email: string;
   FirstName: string;
   ImageURL: string;
   LastName: string;
   Password: string;
   UserID: number;
-
-
 }

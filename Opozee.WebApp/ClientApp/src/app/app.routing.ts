@@ -40,6 +40,7 @@ const appRoutes: Routes = [
   { path: 'questiondetail/:Id', component: Questiondetail, canActivate: [AuthGuard] },
   { path: 'profile/:Id', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'viewprofile/:Id', component: ViewProfileComponent },
+  { path: 'viewuser/:Id', component: ViewProfileComponent },
   { path: 'score', component: EarnStatsComponent },
   { path: 'bounty-questions', component: BountyQuestionsComponent },
   { path: 'editprofile/:Id', component: EditProfileComponent, canActivate: [AuthGuard] },

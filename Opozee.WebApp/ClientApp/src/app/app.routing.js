@@ -40,6 +40,7 @@ var appRoutes = [
     { path: 'questiondetail/:Id', component: questiondetail_component_1.Questiondetail, canActivate: [index_4.AuthGuard] },
     { path: 'profile/:Id', component: profile_component_1.ProfileComponent, canActivate: [index_4.AuthGuard] },
     { path: 'viewprofile/:Id', component: viewprofile_component_1.ViewProfileComponent },
+    { path: 'viewuser/:Id', component: viewprofile_component_1.ViewProfileComponent },
     { path: 'score', component: earn_stats_component_1.EarnStatsComponent },
     { path: 'bounty-questions', component: bounty_questions_component_1.BountyQuestionsComponent },
     { path: 'editprofile/:Id', component: editProfile_component_1.EditProfileComponent, canActivate: [index_4.AuthGuard] },

@@ -14,12 +14,14 @@ export class ProfileComponent implements OnInit {
   userProfiledata: UserProfileModel
   //userProfiledata: {}
   localStorageUser: LocalStorageUser
+  followersList: any
+  followingList: any
 
   notification: NotificationsModel[] = [];
   profileData: any[] = [];
 
-  getUserIdbasedData: any;
-  getUserFollowerData: any;
+  //getUserIdbasedData: any;
+  //getUserFollowerData: any;
 
   pager: any = {};
   // paged items
@@ -30,11 +32,10 @@ export class ProfileComponent implements OnInit {
   //followingModel = { 'UserId': 0, 'Following': 0, IsFollowing: false }
 
 
-    constructor(private route: ActivatedRoute, private userService: UserService
-        , private toastr: ToastrService) {
+  constructor(private route: ActivatedRoute, private userService: UserService, private toastr: ToastrService) {
     if (this.route.snapshot.params["Id"]) {
       this.Id = this.route.snapshot.params["Id"];
-      
+
       this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
       this.onchangeTab('mybeliefs')
       //this.getTabOneNotification(this.PagingModel)
@@ -43,24 +44,91 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  onchangeTabFollowers(data) {
+  ngOnInit() {
     this.PagingModel.UserId = this.localStorageUser.Id;
-    this.PagingModel.CheckedTab = data;
-    //this.getTabFollowers(this.PagingModel);
+    this.getUserProfile();
   }
 
-  private getTabFollowers(PagingModel) {
-    this.getUserFollowerData = [];
+  private getTabOneNotification(PagingModel) {
+    this.profileData = [];
     var Id = this.localStorageUser.Id;
-    this.userService.getMyFollowers(PagingModel)
+    this.userService.getTabOneNotification(PagingModel)
       .pipe(first()).toPromise()
       .then(data => {
-        this.getUserFollowerData = data;
-        console.log('aa', data);
+
+        this.profileData = [];
+
+        if (data) {
+          if (data.length > 0) {
+            this.profileData = data;
+
+            try {
+              this.profileData = this.profileData.map((x) => {
+                if (x.QOCreationDate) {
+                  let Valid10MinDate = new Date(x.QOCreationDate);
+                  Valid10MinDate.setMinutes(Valid10MinDate.getMinutes() + 30);
+
+                  let currentDate = new Date().toISOString().substring(0, new Date().toISOString().length - 1);
+                  //console.log(Valid10MinDate, new Date(currentDate));
+                  if (Valid10MinDate.getTime() > new Date(currentDate).getTime()) {
+                    x.IsValidToDelete = true;
+                  }
+                }
+                return x;
+              });
+            } catch (err) { }
+
+            //console.log("profileData",this.profileData);
+            this.PagingModel.TotalRecords = data[0].TotalRecordcount
+          }
+          else {
+            this.PagingModel.TotalRecords = 0;
+          }
+          this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
+          this.isRecordLoaded = true
+        }
+        this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
+        this.isRecordLoaded = true
+
       }, error => {
         this.isRecordLoaded = false;
 
       });
+
+  }
+
+  private onFollowTab(tab) {
+    this.PagingModel.UserId = this.localStorageUser.Id;
+    this.PagingModel.PageNumber = 1;
+    this.PagingModel.PageSize = 10;
+    this.followersList = [];
+    this.followingList = [];
+
+    if (tab === 1) {
+      this.isRecordLoaded = true;
+      this.userService.getMyFollowers(this.PagingModel)
+        .pipe(first()).toPromise()
+        .then(data => {
+          this.followersList = data;
+          console.log('followersList', data);
+          this.isRecordLoaded = false;
+        }, error => {
+          this.isRecordLoaded = false;
+
+        });
+    }
+    else if (tab === 2) {
+      this.isRecordLoaded = true;
+      this.userService.getMyFollowing(this.PagingModel)
+        .pipe(first()).toPromise()
+        .then(data => {
+          this.followingList = data;
+          console.log('followingList', data);
+          this.isRecordLoaded = false;
+        }, error => {
+          this.isRecordLoaded = false;
+        });
+    }
   }
 
   onchangeTab(data) {
@@ -88,59 +156,6 @@ export class ProfileComponent implements OnInit {
     });
   }
   
-  ngOnInit() {
-    this.getUserProfile();
-    this.PagingModel.UserId = this.localStorageUser.Id;
-  }
-
-    private getTabOneNotification(PagingModel) {
-        this.profileData = [];
-        var Id = this.localStorageUser.Id;
-        this.userService.getTabOneNotification(PagingModel)
-            .pipe(first()).toPromise()
-            .then(data => {
-
-                this.profileData = [];
-
-                if (data) {
-                    if (data.length > 0) {
-                        this.profileData = data;
-
-                        try {
-                            this.profileData = this.profileData.map((x) => {
-                                if (x.QOCreationDate) {
-                                    let Valid10MinDate = new Date(x.QOCreationDate);
-                                    Valid10MinDate.setMinutes(Valid10MinDate.getMinutes() + 30);
-
-                                    let currentDate = new Date().toISOString().substring(0, new Date().toISOString().length - 1);
-                                    //console.log(Valid10MinDate, new Date(currentDate));
-                                    if (Valid10MinDate.getTime() > new Date(currentDate).getTime()) {
-                                        x.IsValidToDelete = true;
-                                    }
-                                }
-                                return x;
-                            });
-                        } catch (err) { }
-
-                        //console.log("profileData",this.profileData);
-                        this.PagingModel.TotalRecords = data[0].TotalRecordcount
-                    }
-                    else {
-                        this.PagingModel.TotalRecords = 0;
-                    }
-                    this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
-                    this.isRecordLoaded = true
-                }
-                this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
-                this.isRecordLoaded = true
-
-            }, error => {
-                this.isRecordLoaded = false;
-
-            });
-
-    }
-
   ///
   PagingPagesload(PageNumber, PageSize) {
     
@@ -217,7 +232,7 @@ export class ProfileComponent implements OnInit {
     };
   }
 
-    deleteQuestionBelief(tab, qData) {
+  deleteQuestionBelief(tab, qData) {
         if (tab === 'myquestions') {
             var questionModel = { 'Id': qData.QuestionId, 'OwnerUserID': this.localStorageUser.Id }
             this.userService.deleteMyQuestion(questionModel)
@@ -260,5 +275,32 @@ export class ProfileComponent implements OnInit {
         }
     }
 
+  Unfollow(userId, tab) {
+
+    let model = {
+      UserId: this.localStorageUser.Id,
+      IsFollowing: true,
+      Following: userId
+    }
+
+    this.userService.unfollowUser(model).pipe(first())
+      .subscribe(data => {
+        this.getUserProfile();
+        this.onFollowTab(tab);
+    });
+  }
+
+  Follow(userId, tab) {
+    let model = {
+      UserId: this.localStorageUser.Id,
+      IsFollowing: true,
+      Following: userId
+    }
+    this.userService.followUser(model).pipe(first())
+      .subscribe(data => {
+        this.getUserProfile();
+        this.onFollowTab(tab);
+    });
+  }
 
 }

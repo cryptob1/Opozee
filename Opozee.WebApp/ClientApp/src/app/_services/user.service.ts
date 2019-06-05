@@ -444,4 +444,20 @@ export class UserService {
     })
   }
 
+  unfollowUser(Model) {
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/UnfollowUser', Model, {
+      headers: new HttpHeaders({
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
+      })
+    })
+  }
+
+  followUser(Model) {
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/Following', Model, {
+      headers: new HttpHeaders({
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
+      })
+    })
+  }
+
 }

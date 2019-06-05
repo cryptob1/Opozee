@@ -70,12 +70,16 @@
       <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" (click)="onchangeTab('mybeliefs')" href="#mybeliefs">My Beliefs</a></li>
         <li><a data-toggle="tab" (click)="onchangeTab('myquestions')" href="#myquestions">My Questions</a></li>
-        <!--<li><a data-toggle="tab" (click)="onchangeTabFollowers('myFollowing')" href="#myFollowing">My Following</a></li>
-        <li><a data-toggle="tab" (click)="onchangeTabFollowers('myFollowers')" href="#myFollowers">My Followers</a></li>-->
+        <li><a data-toggle="tab" (click)="onFollowTab(1)" href="#myFollowers">Followers ({{userProfiledata?.Followers}})</a></li>
+        <li><a data-toggle="tab" (click)="onFollowTab(2)" href="#myFollowing">Followings ({{userProfiledata?.Followings}})</a></li>
       </ul>
 
       <div class="tab-content">
+
         <div id="mybeliefs" class="tab-pane fade in active">
+
+          <span class="no-record" *ngIf="profileData?.length==0 && !isRecordLoaded">No Record Found.</span>
+
           <span class="cover_ntfctn_border questions-field" *ngFor="let temp of profileData; let i=index">
 
             <strong style="border-color: #D2F3C8">
@@ -89,9 +93,7 @@
               <p *ngIf="temp?.QOCreationDate" class="  text-right small text-nowrap" style="color:grey;font-size:10px;font-weight:400">
                 {{ temp?.QOCreationDate+'Z' | date:'medium' | timeAgo }}
               </p>
-              <!--<p class="  text-right small text-nowrap" style="color:grey;font-size:10px;font-weight:400">
-
-        </p>-->
+              <!--<p class="  text-right small text-nowrap" style="color:grey;font-size:10px;font-weight:400"> </p>-->
 
             </strong>
 
@@ -105,7 +107,7 @@
 
         <div id="myquestions" class="tab-pane fade in">
 
-          <span *ngIf="profileData?.length==0">No Record Found.</span>
+          <span class="no-record" *ngIf="profileData?.length==0 && !isRecordLoaded">No Record Found.</span>
           <div *ngIf="profileData?.length>0">
             <span class="cover_ntfctn_border questions-field" *ngFor="let temp1 of profileData; let i=index">
               <strong>
@@ -146,62 +148,42 @@
 
         </div>
 
+        <div id="myFollowers" class="tab-pane fade in">
+
+          <span class="no-record" *ngIf="followersList?.length==0 && !isRecordLoaded">No Record Found.</span>
+          <div>
+            <span class="cover_ntfctn_border questions-field" *ngFor="let follower of followersList; let i=index">
+              <strong>
+                <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/viewprofile/', follower?.FollowerId]">
+                  <img src="{{follower?.ImageURL}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" style="width: 45px;" alt="user">
+                  <div ExternalLink class="message-container" style="display:inline-block"><b>{{follower?.UserName}}</b></div>
+                </a>
+                <span>
+                  <button *ngIf="follower?.HasFollowBack" class="btn btn-info" (click)="Unfollow(follower?.FollowerId,1)">Unfollow</button>
+                  <button *ngIf="!follower?.HasFollowBack" class="btn btn-info" (click)="Follow(follower?.FollowerId,1)">Follow</button>
+                </span>
+              </strong>
+            </span>
+          </div>
+        </div>
 
         <div id="myFollowing" class="tab-pane fade in">
 
-          <span></span>
+          <span class="no-record" *ngIf="followingList?.length==0 && !isRecordLoaded">No Record Found.</span>
           <div>
-            <span class="cover_ntfctn_border questions-field" *ngFor="let tempF of getUserFollowerData; let i=index">
+            <span class="cover_ntfctn_border questions-field" *ngFor="let following of followingList; let i=index">
               <strong>
-               
-                <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/viewprofile/', tempF?.FollowerId]">
-                  <img src="{{tempF?.ImageURL}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" style="width: 45px;" alt="user">
-                  <div ExternalLink class="message-container" [innerHTML]=""><b>{{tempF?.UserName}}</b></div>
+                <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/viewprofile/', following?.FollowerId]">
+                  <img src="{{following?.ImageURL}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" style="width: 45px;" alt="user">
+                  <div ExternalLink class="message-container" style="display:inline-block"><b>{{following?.UserName}}</b></div>
                 </a>
                 <span>
-                  <button class="btn btn-info">Following</button>
+                  <button class="btn btn-info" (click)="Unfollow(following?.FollowerId,2)">Unfollow</button>
                 </span>
               </strong>
             </span>
           </div>
-
-
         </div>
-
-
-        <div id="myFollowers" class="tab-pane fade in">
-
-          <span></span>
-          <div>
-            <span class="cover_ntfctn_border questions-field">
-              <strong>
-                <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="">
-                  <img src="../assets/images/user.png" onerror="this.onerror=null;this.src='../assets/images/user.png';" style="width: 45px;" alt="user">
-                  <div ExternalLink class="message-container" [innerHTML]=""><b>Ajay</b></div>
-                </a>
-                <span>
-                  <button type="submit" class="btn btn-info">Follow</button>
-                </span>
-              </strong>
-            </span>
-          </div>
-
-          <div>
-            <span class="cover_ntfctn_border questions-field">
-              <strong>
-                <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="">
-                  <img src="../assets/images/user.png" onerror="this.onerror=null;this.src='../assets/images/user.png';" style="width: 45px;" alt="user">
-                  <div ExternalLink class="message-container" [innerHTML]=""><b>Aman</b></div>
-                </a>
-                <span>
-                  <button type="submit" class="btn btn-info">Follow</button>
-                </span>
-              </strong>
-            </span>
-          </div>
-
-        </div>
-
 
 
       </div>      
@@ -210,5 +192,4 @@
 
 </section>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
 <script src="js/bootstrap.min.js"></script>
