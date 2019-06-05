@@ -16,14 +16,10 @@
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
 
+        
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand logo" href="#"><img src="../../assets/images/logo-brain-white.png" class="img-responsive"></a>
+
+          <a data-toggle="tooltip" class="navbar-brand logo" href="" title="Opozee - See the other side!"><img src="../../assets/images/logo-brain-white.png" class="img-responsive"></a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -44,25 +40,31 @@
             <li><a (click)="navbar();" [routerLink]="['/']">Home</a></li>
             <li><a (click)="navbar();" [routerLink]="['/postquestion',0]">PostQuestion</a></li>
             <!--<li><a [routerLink]="['/profile/', loginData.Id]">My Beliefs</a></li>-->
-            <li *ngIf="loginData.isAuthenticateUserId == 0 || loginData  == 0"><a (click)="navbar();" [routerLink]="['/login']">Login</a></li>
+            <li *ngIf="loginData.isAuthenticateUserId == 0 || loginData  == 0"><a (click)="navbar();" [routerLink]="['/login']">Login Or Sign Up</a></li>
             <li class="notification" *ngIf="loginData.Id > 0">
               <a (click)="navbar();" [routerLink]="['/notifications']">
                 Notifications <i *ngIf="showNotificationIcon" class="fa fa-circle" aria-hidden="true"></i>
               </a>
             </li>
             <li><a (click)="navbar();" [routerLink]="['/score/']">Rankings</a></li>
+
+            <li *ngIf="loginData.isAuthenticateUserId == 0 || loginData  == 0" ><a (click)="popup();" href="javascript:void(0)">Help</a></li>
+
+            
+
+
             <!--<a class="dropdown-item" style="cursor:pointer !important" (click)="openResetModal()">Reset Password</a>-->
             <!--<li class="notification" *ngIf="loginData.Id > 0"><a (click)="navbar();" [routerLink]="['/profile/', loginData.Id]">Profile</a></li>-->
             <!--<li class="notification">
-              <div class="header-ddl " style="cursor:pointer">
-                <a class=" dropdown-toggle " data-toggle="dropdown">Game</a>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" (click)="navbar();" [routerLink]="['/score/']">Rankings</a>
-                  <a class="dropdown-item" (click)="navbar();" [routerLink]="['/bounty-questions/']">Bounty</a>
+    <div class="header-ddl " style="cursor:pointer">
+      <a class=" dropdown-toggle " data-toggle="dropdown">Game</a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" (click)="navbar();" [routerLink]="['/score/']">Rankings</a>
+        <a class="dropdown-item" (click)="navbar();" [routerLink]="['/bounty-questions/']">Bounty</a>
 
-                </div>
-              </div>
-            </li>-->
+      </div>
+    </div>
+  </li>-->
             <!--<span class="bell-icon"><i class="fa fa-bell" aria-hidden="true"></i>  <span></span></span>-->
             <!--<li *ngIf="isAuthenticateUserId"><a (click)="navbar();" [routerLink]="['/bookmark',0]">Bookmarks</a></li>-->
             <li>
@@ -95,13 +97,13 @@
   </header>
 </div>
 
-<div *ngIf="showPopup" class="popup-container model-popup" ng-disable-scroll="showPopup">
-  <div class="popup-content">
+<div *ngIf="showPopup" class="popup-container model-popup" ng-disable-scroll="showPopup"  >
+  <div class="popup-content" (click)="hidePopup()">
     <span class="popup-text">
       <h5> Welcome to Opozee!</h5>
       <p>
-        Our mission is to build a decentralized open-source social network that helps users converge to <b>shared beliefs</b> and promotes <b>conversation health</b>. <br />
-
+        Our mission is to build a decentralized social network that provides a safe space for users to share their beliefs without fear of trolls and haters. <br /> <br />
+        Opozee is user owned and pays its users in equity to write insightful content.
       </p>
       <h5>How Opozee works:</h5>
       <div class="popup-step">
@@ -111,7 +113,7 @@
           <strong>Step 3:</strong> Earn Opozee Coins (OPZ) when people up-vote your beliefs.<br /><br />
         </div>
 
-        <div class="step-items">
+        <div class="step-img">
           <img src="https://opozee.com:81/Content/Upload/ProfileImage/opozee_howto.gif" />
         </div>
 

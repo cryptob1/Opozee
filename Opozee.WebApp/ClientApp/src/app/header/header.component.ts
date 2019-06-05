@@ -45,8 +45,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private userService: UserService, @Inject(DOCUMENT) private document: Document, private renderer: Renderer2) {
 
       this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
-
-      if (JSON.parse(localStorage.getItem('popupShown')) || this.localStorageUser != null) {
+    this.showPopup = true;
+    if (this.localStorageUser != null) {//JSON.parse(localStorage.getItem('popupShown')) ||
         this.showPopup = false;
       }
       else {
