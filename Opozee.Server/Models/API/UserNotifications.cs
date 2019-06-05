@@ -35,6 +35,7 @@ namespace Opozee.Models.API
         public bool IsValidToDelete { get; set; }
         public bool RefferalStatus { get; set; }
     }
+
     public class UserProfile
     {
         public int UserID { get; set; }
@@ -48,15 +49,16 @@ namespace Opozee.Models.API
         public int TotalPostedQuestion { get; set; }
         public int? TotalLikes { get; set; }
         public int? TotalDislikes { get; set; }
-        public int? TotalPostedBeliefs { get; set; }
- 
-
+        public int? TotalPostedBeliefs { get; set; } 
         public bool IsSocialLogin { get; set; }
         public DateTime? LastLoginDate { get; set; }
-
+        public int Followers { get; set; }
+        public int Followings { get; set; }
+        public bool HasFollowed { get; set; }
         public string ReferralCode { get; set; }
         public int TotalReferred { get; set; }
     }
+
     public class OtherUsers
     {
         public int UserID { get; set; }
@@ -84,6 +86,7 @@ namespace Opozee.Models.API
         public string UserName { get; set; }
         public string ImageURL { get; set; }
         public bool? IsFollowing { get; set; }
+        public bool? HasFollowBack { get; set; }
         public DateTime? CreationDate { get; set; }
     }
 }

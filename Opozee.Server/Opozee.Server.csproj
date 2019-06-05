@@ -295,6 +295,7 @@
     <Compile Include="Models\API\QuestionDetail.cs" />
     <Compile Include="Models\API\UserNotifications.cs" />
     <Compile Include="Models\DashBoard.cs" />
+    <Compile Include="Models\FollowerVM.cs" />
     <Compile Include="Models\UserLogin.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\ViewModelUser.cs" />
@@ -2038,6 +2039,14 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="SQL Scripts\Bounty table.sql" />
+    <Content Include="SQL Scripts\EmailConfirmed column.sql" />
+    <Content Include="SQL Scripts\Follower Table.sql" />
+    <Content Include="SQL Scripts\Referral table.sql" />
+    <Content Include="SQL Scripts\SP_DeactivateBountyQuestion.sql" />
+    <Content Include="SQL Scripts\SP_DeleteBountyQuestion.sql" />
+    <Content Include="SQL Scripts\SP_GetBountyQuestions.sql" />
+    <Content Include="SQL Scripts\SP_SetBountyQuestions.sql" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

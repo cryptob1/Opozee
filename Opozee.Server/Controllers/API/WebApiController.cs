@@ -346,8 +346,8 @@ namespace opozee.Controllers.API
 
                             try
                             {
-                                //string _apiURL = "http://localhost:61545/";
-                                string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
+                                string _apiURL = "http://localhost:61545/";
+                                //string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
 
                                 var client = new RestClient($"{_apiURL}OpozeeGrantResourceOwnerCredentialSecret");
                                 var request = new RestRequest(Method.POST);
@@ -385,13 +385,20 @@ namespace opozee.Controllers.API
                             ObjLogin.ImageURL = v.ImageURL;
 
                             ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault() == null
-                            ? 0 : db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault().BalanceToken ?? 0;
+                                ? 0 : db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault().BalanceToken ?? 0;
 
                             var totalRef = db.Referrals.Where(x => x.ReferralUserId == v.UserID).ToList();
                             ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
-                            //update once logged-in
+                            
                             try
                             {
+                                ObjLogin.Followers = db.Followers.Where(x => x.FollowedId == v.UserID && x.IsFollowing == true).ToList() == null
+                                    ? 0 : db.Followers.Where(x => x.FollowedId == v.UserID && x.IsFollowing == true).ToList().Count;
+
+                                ObjLogin.Followings = db.Followers.Where(x => x.UserId == v.UserID && x.IsFollowing == true).ToList() == null
+                                    ? 0 : db.Followers.Where(x => x.UserId == v.UserID && x.IsFollowing == true).ToList().Count;
+                                
+                                //update once logged-in
                                 v.ModifiedDate = DateTime.Now.ToUniversalTime();
                                 db.Entry(v).State = System.Data.Entity.EntityState.Modified;
                                 db.SaveChanges();
@@ -2171,6 +2178,16 @@ namespace opozee.Controllers.API
             UserProfile UserProfile = new UserProfile();
             try
             {
+                bool _hasFollowBack = false;
+                try
+                {
+                    var _currentUser = db.Users.Where(x => x.Email == HttpContext.Current.User.Identity.Name).FirstOrDefault();
+                    if (_currentUser != null) {
+                        var follow = db.Followers.Where(x => x.UserId == _currentUser.UserID && x.FollowedId == userid && x.IsFollowing == true).FirstOrDefault();
+                        _hasFollowBack = follow == null ? false : true;
+                    }
+                }
+                catch { }
                 db.Configuration.LazyLoadingEnabled = false;
                 if (!ModelState.IsValid)
                 {
@@ -2204,7 +2221,10 @@ namespace opozee.Controllers.API
                                                     select o.Dislikes).Sum(),
                                    TotalReferred = db.Referrals.Where(x => x.ReferralUserId == u.UserID).ToList().Count(),
                                    ReferralCode = u.ReferralCode,
-                                   TotalPostedBeliefs = db.Opinions.Where(x => x.CommentedUserId == u.UserID).ToList().Count()
+                                   TotalPostedBeliefs = db.Opinions.Where(x => x.CommentedUserId == u.UserID).ToList().Count(),
+                                   Followers = db.Followers.Where(y => y.FollowedId == u.UserID && y.IsFollowing == true).ToList().Count(),
+                                   Followings = db.Followers.Where(z => z.UserId == u.UserID && z.IsFollowing == true).ToList().Count(),
+                                   HasFollowed = _hasFollowBack
                                }).FirstOrDefault();
 
                 return UserProfile;
@@ -3468,6 +3488,12 @@ namespace opozee.Controllers.API
                     ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == entity.UserID).FirstOrDefault() == null
                         ? 0 : db.Tokens.Where(x => x.UserId == entity.UserID).FirstOrDefault().BalanceToken ?? 0;
 
+                    ObjLogin.Followers = db.Followers.Where(x => x.FollowedId == entity.UserID && x.IsFollowing == true).ToList() == null
+                        ? 0 : db.Followers.Where(x => x.FollowedId == entity.UserID && x.IsFollowing == true).ToList().Count;
+
+                    ObjLogin.Followings = db.Followers.Where(x => x.UserId == entity.UserID && x.IsFollowing == true).ToList() == null
+                        ? 0 : db.Followers.Where(x => x.UserId == entity.UserID && x.IsFollowing == true).ToList().Count;
+
                     var totalRef = db.Referrals.Where(x => x.ReferralUserId == entity.UserID).ToList();
                     ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
                     ObjLogin.IsSocialLogin = true;
@@ -3585,6 +3611,12 @@ namespace opozee.Controllers.API
                     ObjLogin.ImageURL = entity.ImageURL;
                     ObjLogin.BalanceToken = token.BalanceToken ?? 0;
                     ObjLogin.IsSocialLogin = true;
+
+                    ObjLogin.Followers = db.Followers.Where(x => x.FollowedId == entity.UserID && x.IsFollowing == true).ToList() == null
+                        ? 0 : db.Followers.Where(x => x.FollowedId == entity.UserID && x.IsFollowing == true).ToList().Count;
+
+                    ObjLogin.Followings = db.Followers.Where(x => x.UserId == entity.UserID && x.IsFollowing == true).ToList() == null
+                        ? 0 : db.Followers.Where(x => x.UserId == entity.UserID && x.IsFollowing == true).ToList().Count;
 
                     try
                     {
@@ -3889,8 +3921,10 @@ namespace opozee.Controllers.API
                 db.Configuration.LazyLoadingEnabled = false;
                 if (!ModelState.IsValid)
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
+                    _response.success = false;
+                    return _response;
                 }
+
                 Follower follower = db.Followers.Where(x => x.FollowedId == follow.Following && x.UserId == follow.UserId).FirstOrDefault();
 
                 if (follower == null)
@@ -3899,7 +3933,7 @@ namespace opozee.Controllers.API
                     follower.CreationDate = DateTime.UtcNow;
                     follower.FollowedId = follow.Following;
                     follower.UserId = follow.UserId;
-                    follower.IsFollowing = follow.IsFollowing;
+                    follower.IsFollowing = true;
                     db.Followers.Add(follower);
                     db.SaveChanges();
                 }
@@ -3908,7 +3942,7 @@ namespace opozee.Controllers.API
                     follower.CreationDate = DateTime.UtcNow;
                     follower.FollowedId = follow.Following;
                     follower.UserId = follow.UserId;
-                    follower.IsFollowing = follow.IsFollowing;
+                    follower.IsFollowing = true;
                     db.SaveChanges();
                 }
                 _response.success = true;
@@ -3926,7 +3960,45 @@ namespace opozee.Controllers.API
                 return _response;
             }
         }
-        
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/WebApi/UnfollowUser")]
+        public dynamic UnfollowUser(FollowerVM follow)
+        {
+            dynamic _response = new ExpandoObject();
+            try
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                if (!ModelState.IsValid)
+                {
+                    _response.success = false;
+                    return _response;
+                }
+
+                Follower follower = db.Followers.Where(x => x.FollowedId == follow.Following && x.UserId == follow.UserId).FirstOrDefault();
+
+                if (follower != null)
+                {
+                    db.Followers.Remove(follower);
+                    db.SaveChanges();
+                }
+                _response.success = true;
+                return _response;
+
+                //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, follower, "followerData"));
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+                //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "Question"));
+
+                _response.success = false;
+                return _response;
+            }
+        }
+
+
         [Authorize]
         [HttpPost]
         [Route("api/WebApi/GetMyFollowers")]
@@ -3943,21 +4015,22 @@ namespace opozee.Controllers.API
                 int pageSize = Model.PageSize > 0 ? Model.PageSize : 10; // set your page size, which is number of records per page
                 int page = Model.PageNumber;
                 int skip = pageSize * (page - 1);
-                
+
                 followers = (from f in db.Followers
-                             join u in db.Users on f.UserId equals u.UserID
-                             where f.UserId == Model.UserId
+                                 //join u in db.Users on f.FollowedId equals u.UserID
+                             where f.FollowedId == Model.UserId && f.IsFollowing == true
                              select new FollowerUsers
                              {
-                                 UserID = u.UserID, //my userid
-                                 FollowerId = f.FollowedId,
-                                 UserName = db.Users.Where(u => u.UserID == f.FollowedId).FirstOrDefault().UserName,
-                                 ImageURL = db.Users.Where(u => u.UserID == f.FollowedId).FirstOrDefault().ImageURL,
+                                 UserID = f.FollowedId, //my userid
+                                 FollowerId = f.UserId,
+                                 UserName = db.Users.Where(u => u.UserID == f.UserId).FirstOrDefault().UserName,
+                                 ImageURL = db.Users.Where(u => u.UserID == f.UserId).FirstOrDefault().ImageURL,
+                                 HasFollowBack = db.Followers.Where(x => x.UserId == f.UserId && x.IsFollowing == true).FirstOrDefault() == null ? false : true,
                                  IsFollowing = f.IsFollowing,
                                  CreationDate = f.CreationDate
                              }).OrderByDescending(x => x.CreationDate).Skip(skip).Take(pageSize).ToList();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
             }
             return followers;
@@ -3981,14 +4054,15 @@ namespace opozee.Controllers.API
                 int skip = pageSize * (page - 1);
 
                 following = (from f in db.Followers
-                             join u in db.Users on f.FollowedId equals u.UserID
-                             where f.FollowedId == Model.UserId
+                                 //join u in db.Users on f.UserId equals u.UserID
+                             where f.UserId == Model.UserId && f.IsFollowing == true
                              select new FollowerUsers
                              {
-                                 UserID = f.FollowedId, //my userid
-                                 FollowerId = f.UserId,
-                                 UserName = db.Users.Where(u => u.UserID == f.UserId).FirstOrDefault().UserName,
-                                 ImageURL = db.Users.Where(u => u.UserID == f.UserId).FirstOrDefault().ImageURL,
+                                 UserID = f.UserId, //my userid
+                                 FollowerId = f.FollowedId,
+                                 UserName = db.Users.Where(u => u.UserID == f.FollowedId).FirstOrDefault().UserName,
+                                 ImageURL = db.Users.Where(u => u.UserID == f.FollowedId).FirstOrDefault().ImageURL,
+                                 HasFollowBack = db.Followers.Where(x => x.FollowedId == f.UserId && x.IsFollowing == true).FirstOrDefault() == null ? false : true,
                                  IsFollowing = f.IsFollowing,
                                  CreationDate = f.CreationDate
                              }).OrderByDescending(x => x.CreationDate).Skip(skip).Take(pageSize).ToList();
@@ -3998,7 +4072,7 @@ namespace opozee.Controllers.API
             }
             return following;
         }
-
+        
         #endregion
 
         static string UppercaseFirst(string s)
