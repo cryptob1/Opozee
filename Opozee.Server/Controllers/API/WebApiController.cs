@@ -4025,7 +4025,7 @@ namespace opozee.Controllers.API
                                  FollowerId = f.UserId,
                                  UserName = db.Users.Where(u => u.UserID == f.UserId).FirstOrDefault().UserName,
                                  ImageURL = db.Users.Where(u => u.UserID == f.UserId).FirstOrDefault().ImageURL,
-                                 HasFollowBack = db.Followers.Where(x => x.UserId == f.UserId && x.IsFollowing == true).FirstOrDefault() == null ? false : true,
+                                 HasFollowBack = db.Followers.Where(x => x.UserId == f.FollowedId && x.FollowedId == f.UserId && x.IsFollowing == true).FirstOrDefault() == null ? false : true,
                                  IsFollowing = f.IsFollowing,
                                  CreationDate = f.CreationDate
                              }).OrderByDescending(x => x.CreationDate).Skip(skip).Take(pageSize).ToList();
@@ -4062,7 +4062,7 @@ namespace opozee.Controllers.API
                                  FollowerId = f.FollowedId,
                                  UserName = db.Users.Where(u => u.UserID == f.FollowedId).FirstOrDefault().UserName,
                                  ImageURL = db.Users.Where(u => u.UserID == f.FollowedId).FirstOrDefault().ImageURL,
-                                 HasFollowBack = db.Followers.Where(x => x.FollowedId == f.UserId && x.IsFollowing == true).FirstOrDefault() == null ? false : true,
+                                 HasFollowBack = db.Followers.Where(x => x.FollowedId == f.UserId && x.UserId == f.FollowedId && x.IsFollowing == true).FirstOrDefault() == null ? false : true,
                                  IsFollowing = f.IsFollowing,
                                  CreationDate = f.CreationDate
                              }).OrderByDescending(x => x.CreationDate).Skip(skip).Take(pageSize).ToList();

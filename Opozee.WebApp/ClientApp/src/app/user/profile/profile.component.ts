@@ -97,7 +97,7 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  private onFollowTab(tab) {
+  onFollowTab(tab) {
     this.PagingModel.UserId = this.localStorageUser.Id;
     this.PagingModel.PageNumber = 1;
     this.PagingModel.PageSize = 10;

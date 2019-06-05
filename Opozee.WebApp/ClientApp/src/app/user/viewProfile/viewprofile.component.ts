@@ -85,7 +85,7 @@ export class ViewProfileComponent implements OnInit {
   }
   
 
-  private onFollowTab(tab) {
+  onFollowTab(tab) {
 
     this.PagingModel.UserId = this.Id;
     this.PagingModel.PageNumber = 1;
