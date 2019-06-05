@@ -4,7 +4,7 @@ import { RequestOptions } from '@angular/http';
 import { Http, Headers, Response } from '@angular/http';
 import { HttpHeaders } from '@angular/common/http';
 import { User, Question, NotificationsModel, PostQuestionDetail, BookMarkQuestion, UserProfileModel } from '../_models';
-import { UserEditProfileModel, LocalStorageUser } from '../_models/user';
+import { UserEditProfileModel, LocalStorageUser, FollowerUser, Following } from '../_models/user';
 import { QuestionListing } from '../_models/question';
 import { config } from 'process';
 import { AppConfigService } from '../appConfigService';
@@ -414,6 +414,30 @@ export class UserService {
 
   emailVerification(userId, code) {
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/EmailVerification?Id=' + userId + '&Code=' + code, {
+      headers: new HttpHeaders({
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
+      })
+    })
+  }
+
+  getMyFollowers(Model) {
+    return this.http.post<FollowerUser[]>(this.myAppUrl + 'opozee/api/WebApi/GetMyFollowers', Model, {
+      headers: new HttpHeaders({
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
+      })
+    })
+  }
+
+  getMyFollowing(Model) {
+    return this.http.post<FollowerUser[]>(this.myAppUrl + 'opozee/api/WebApi/GetMyFollowing', Model, {
+      headers: new HttpHeaders({
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
+      })
+    })
+  }
+
+  postFollowing(Model) {
+    return this.http.post<Following[]>(this.myAppUrl + 'opozee/api/WebApi/Following', Model, {
       headers: new HttpHeaders({
         'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })

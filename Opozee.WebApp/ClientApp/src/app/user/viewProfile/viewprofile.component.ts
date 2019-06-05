@@ -13,6 +13,7 @@ import { UserProfileModel } from '../../_models/user';
 export class ViewProfileComponent implements OnInit {
 
   Id: number;
+  Follow: string;
   userProfiledata: UserProfileModel
   //userProfiledata: {}
   localStorageUser: LocalStorageUser
@@ -20,7 +21,7 @@ export class ViewProfileComponent implements OnInit {
   notification: NotificationsModel[] = [];
 
   PagingModel = { 'UserId': 0, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, IsChecked: true, CheckedTab: "mybeliefs" }
-
+  followingModel = { 'UserId': 0, 'Following': 0, IsFollowing: false }
 
   constructor(private route: ActivatedRoute, private userService: UserService ) {
     if (this.route.snapshot.params["Id"]) {
@@ -30,7 +31,23 @@ export class ViewProfileComponent implements OnInit {
       this.onchangeTab('mybeliefs')
       this.getTabOneNotification(this.PagingModel)
     }
+    this.Follow = "Follow";
   }
+
+
+  onFollowClick() {
+    debugger
+    this.followingModel.UserId = this.localStorageUser.Id;
+    this.followingModel.IsFollowing = true;
+    this.followingModel.Following = this.Id;
+
+    this.userService.postFollowing(this.followingModel).pipe(first()).subscribe(followings => {
+      // debugger;
+      console.log(followings);
+    });
+
+  }
+
 
   onchangeTab(data) {
     debugger

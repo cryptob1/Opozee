@@ -53,6 +53,20 @@ export class NotificationsModel {
   CommentedUserId: number;
 }
 
+export class Following {
+  id: number;
+  UserId: number;
+  Following: number;
+  IsFollowing: boolean;
+}
+
+export class FollowerUser {
+  UserID: number;
+  FollowerId: number;
+  UserName: string;
+  ImageURL: string;
+  IsFollowing: boolean;
+}
 
 
 export class BookMarkQuestion {

@@ -35,6 +35,7 @@ namespace Opozee.Models.Models
         public virtual DbSet<Bounty> Bounties { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Referral> Referrals { get; set; }
+        public virtual DbSet<Follower> Followers { get; set; }
     
         public virtual ObjectResult<SP_GetTopLikes_Result> SP_GetTopLikes()
         {

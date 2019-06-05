@@ -27,6 +27,12 @@ var NotificationsModel = /** @class */ (function () {
     return NotificationsModel;
 }());
 exports.NotificationsModel = NotificationsModel;
+var Following = /** @class */ (function () {
+    function Following() {
+    }
+    return Following;
+}());
+exports.Following = Following;
 var BookMarkQuestion = /** @class */ (function () {
     function BookMarkQuestion() {
         this.comments = [];

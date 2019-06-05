@@ -3,6 +3,7 @@ using opozee.Enums;
 using Opozee.Models;
 using Opozee.Models.API;
 using Opozee.Models.Models;
+using Opozee.Server.Models;
 using Opozee.Server.Models.API;
 using Opozee.Server.Services;
 using OpozeeLibrary.API;
@@ -364,6 +365,7 @@ namespace opozee.Controllers.API
                             catch(Exception ex)
                             {
                                 ObjLogin.Id = 0;
+                                ObjLogin.Token = null;
                                 return ObjLogin;
                             }
 
@@ -404,6 +406,7 @@ namespace opozee.Controllers.API
                         }
                         else
                         {
+                            ObjLogin.Token = null;
                             return ObjLogin;
                         }
                     }
@@ -3873,6 +3876,130 @@ namespace opozee.Controllers.API
         }
         #endregion
 
+        #region "Follower/Following"
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/WebApi/Following")]
+        public dynamic SetFollowing(FollowerVM follow)
+        {
+            dynamic _response = new ExpandoObject();
+            try
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
+                }
+                Follower follower = db.Followers.Where(x => x.FollowedId == follow.Following && x.UserId == follow.UserId).FirstOrDefault();
+
+                if (follower == null)
+                {
+                    follower = new Follower();
+                    follower.CreationDate = DateTime.UtcNow;
+                    follower.FollowedId = follow.Following;
+                    follower.UserId = follow.UserId;
+                    follower.IsFollowing = follow.IsFollowing;
+                    db.Followers.Add(follower);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    follower.CreationDate = DateTime.UtcNow;
+                    follower.FollowedId = follow.Following;
+                    follower.UserId = follow.UserId;
+                    follower.IsFollowing = follow.IsFollowing;
+                    db.SaveChanges();
+                }
+                _response.success = true;
+                _response.data = follower;
+                return _response;
+
+                //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, follower, "followerData"));
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+                //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "Question"));
+
+                _response.success = false;
+                return _response;
+            }
+        }
+        
+        [Authorize]
+        [HttpPost]
+        [Route("api/WebApi/GetMyFollowers")]
+        public List<FollowerUsers> GetMyFollowers(PagingModel Model)
+        {
+            var followers = new List<FollowerUsers>();
+            if (!ModelState.IsValid)
+            {
+                return followers;
+            }
+
+            try
+            {
+                int pageSize = Model.PageSize > 0 ? Model.PageSize : 10; // set your page size, which is number of records per page
+                int page = Model.PageNumber;
+                int skip = pageSize * (page - 1);
+                
+                followers = (from f in db.Followers
+                             join u in db.Users on f.UserId equals u.UserID
+                             where f.UserId == Model.UserId
+                             select new FollowerUsers
+                             {
+                                 UserID = u.UserID, //my userid
+                                 FollowerId = f.FollowedId,
+                                 UserName = db.Users.Where(u => u.UserID == f.FollowedId).FirstOrDefault().UserName,
+                                 ImageURL = db.Users.Where(u => u.UserID == f.FollowedId).FirstOrDefault().ImageURL,
+                                 IsFollowing = f.IsFollowing,
+                                 CreationDate = f.CreationDate
+                             }).OrderByDescending(x => x.CreationDate).Skip(skip).Take(pageSize).ToList();
+            }
+            catch(Exception ex)
+            {
+            }
+            return followers;
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/WebApi/GetMyFollowing")]
+        public List<FollowerUsers> GetMyFollowing(PagingModel Model)
+        {
+            var following = new List<FollowerUsers>();
+            if (!ModelState.IsValid)
+            {
+                return following;
+            }
+
+            try
+            {
+                int pageSize = Model.PageSize > 0 ? Model.PageSize : 10; // set your page size, which is number of records per page
+                int page = Model.PageNumber;
+                int skip = pageSize * (page - 1);
+
+                following = (from f in db.Followers
+                             join u in db.Users on f.FollowedId equals u.UserID
+                             where f.FollowedId == Model.UserId
+                             select new FollowerUsers
+                             {
+                                 UserID = f.FollowedId, //my userid
+                                 FollowerId = f.UserId,
+                                 UserName = db.Users.Where(u => u.UserID == f.UserId).FirstOrDefault().UserName,
+                                 ImageURL = db.Users.Where(u => u.UserID == f.UserId).FirstOrDefault().ImageURL,
+                                 IsFollowing = f.IsFollowing,
+                                 CreationDate = f.CreationDate
+                             }).OrderByDescending(x => x.CreationDate).Skip(skip).Take(pageSize).ToList();
+            }
+            catch (Exception ex)
+            {
+            }
+            return following;
+        }
+
+        #endregion
 
         static string UppercaseFirst(string s)
         {

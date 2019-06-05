@@ -18,7 +18,8 @@ export class ProfileComponent implements OnInit {
   notification: NotificationsModel[] = [];
   profileData: any[] = [];
 
-  getUserIdbasedData : any;
+  getUserIdbasedData: any;
+  getUserFollowerData: any;
 
   pager: any = {};
   // paged items
@@ -26,6 +27,7 @@ export class ProfileComponent implements OnInit {
   isRecordLoaded: boolean = false;
 
   PagingModel = { 'UserId': 0, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, IsChecked: true, CheckedTab: "mybeliefs" }
+  //followingModel = { 'UserId': 0, 'Following': 0, IsFollowing: false }
 
 
     constructor(private route: ActivatedRoute, private userService: UserService
@@ -39,6 +41,26 @@ export class ProfileComponent implements OnInit {
       this.PagingModel.PageNumber = 1;
       this.PagingModel.TotalRecords = 5
     }
+  }
+
+  onchangeTabFollowers(data) {
+    this.PagingModel.UserId = this.localStorageUser.Id;
+    this.PagingModel.CheckedTab = data;
+    //this.getTabFollowers(this.PagingModel);
+  }
+
+  private getTabFollowers(PagingModel) {
+    this.getUserFollowerData = [];
+    var Id = this.localStorageUser.Id;
+    this.userService.getMyFollowers(PagingModel)
+      .pipe(first()).toPromise()
+      .then(data => {
+        this.getUserFollowerData = data;
+        console.log('aa', data);
+      }, error => {
+        this.isRecordLoaded = false;
+
+      });
   }
 
   onchangeTab(data) {
