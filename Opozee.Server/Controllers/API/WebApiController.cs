@@ -346,8 +346,8 @@ namespace opozee.Controllers.API
 
                             try
                             {
-                                string _apiURL = "http://localhost:61545/";
-                                //string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
+                                //string _apiURL = "http://localhost:61545/";
+                                string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
 
                                 var client = new RestClient($"{_apiURL}OpozeeGrantResourceOwnerCredentialSecret");
                                 var request = new RestRequest(Method.POST);
