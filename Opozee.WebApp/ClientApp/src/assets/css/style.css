@@ -14,6 +14,10 @@ body.popup-backdrop {
   display: inline-block;
   vertical-align: middle;
 }
+
+.no-record{
+  padding:5px;
+}
 /********banner css start*******/
 .banner {
   min-height: 310px;

@@ -13,17 +13,20 @@ import { UserProfileModel } from '../../_models/user';
 export class ViewProfileComponent implements OnInit {
 
   Id: number;
-  Follow: string;
+  _follow: string;
   userProfiledata: UserProfileModel
   //userProfiledata: {}
   localStorageUser: LocalStorageUser
+  followersList: any
+  followingList: any
 
+  isRecordLoaded: boolean = false;
   notification: NotificationsModel[] = [];
 
   PagingModel = { 'UserId': 0, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, IsChecked: true, CheckedTab: "mybeliefs" }
   followingModel = { 'UserId': 0, 'Following': 0, IsFollowing: false }
 
-  constructor(private route: ActivatedRoute, private userService: UserService ) {
+  constructor(private route: ActivatedRoute, private userService: UserService, private router: Router) {
     if (this.route.snapshot.params["Id"]) {
       this.Id = this.route.snapshot.params["Id"];
 
@@ -31,9 +34,13 @@ export class ViewProfileComponent implements OnInit {
       this.onchangeTab('mybeliefs')
       this.getTabOneNotification(this.PagingModel)
     }
-    this.Follow = "Follow";
+    this._follow = "Follow";
   }
 
+  ngOnInit() {
+    this.getUserProfile();
+    this.PagingModel.UserId = this.Id;
+  }
 
   onFollowClick() {
     debugger
@@ -41,16 +48,14 @@ export class ViewProfileComponent implements OnInit {
     this.followingModel.IsFollowing = true;
     this.followingModel.Following = this.Id;
 
-    this.userService.postFollowing(this.followingModel).pipe(first()).subscribe(followings => {
+    this.userService.postFollowing(this.followingModel).pipe(first())
+      .subscribe(followings => {
       // debugger;
       console.log(followings);
     });
-
   }
 
-
   onchangeTab(data) {
-    debugger
     this.PagingModel.UserId = this.Id;
     this.PagingModel.CheckedTab = data;
     if (this.PagingModel.CheckedTab ==='mybeliefs') {
@@ -58,36 +63,98 @@ export class ViewProfileComponent implements OnInit {
     }
     else {
       this.getTabOneNotification(this.PagingModel)
-    }
-   
+    }   
   }
 
   getUserProfile() {
     //var Id = this.localStorageUser.Id;
-    this.userService.getUserProfileWeb(this.Id).pipe(first()).subscribe(data => {
+    this.userService.getUserProfileWeb(this.Id).pipe(first())
+      .subscribe(data => {
       debugger;
       this.userProfiledata = data
       //console.log(data);
     });
   }
-
-
-  ngOnInit() {
-    this.getUserProfile();
-    this.PagingModel.UserId = this.Id;
-  }
-
+    
   private getTabOneNotification(PagingModel) {
-    debugger
     var Id = this.Id;
     this.userService.getTabOneNotification(PagingModel).pipe(first()).subscribe(Notifications => {
-     // debugger;
-      console.log(Notifications);
+      //console.log(Notifications);
       this.notification = Notifications;
     });
   }
   
 
+  private onFollowTab(tab) {
 
+    this.PagingModel.UserId = this.Id;
+    this.PagingModel.PageNumber = 1;
+    this.PagingModel.PageSize = 10;
+    this.followersList = [];
+    this.followingList = [];
+
+    if (tab === 1) {
+      this.isRecordLoaded = true;
+      this.userService.getMyFollowers(this.PagingModel)
+        .pipe(first()).toPromise()
+        .then(data => {
+          this.followersList = data;
+          console.log('followersList', data);
+          this.isRecordLoaded = false;
+        }, error => {
+          this.isRecordLoaded = false;
+
+        });
+    }
+    else if (tab === 2) {
+      this.isRecordLoaded = true;
+      this.userService.getMyFollowing(this.PagingModel)
+        .pipe(first()).toPromise()
+        .then(data => {
+          this.followingList = data;
+          console.log('followingList', data);
+          this.isRecordLoaded = false;
+        }, error => {
+          this.isRecordLoaded = false;
+        });
+    }
+  }
+
+  viewProfile(id) {
+    if (id === this.localStorageUser.Id) {
+      this.router.navigate(['/profile/', id]);
+    }
+    else {
+      this.router.navigateByUrl('/viewuser/' + id, { skipLocationChange: true }).then(() =>
+        this.router.navigate(['/viewprofile/', id]));
+    }
+  }
+
+  Unfollow(userId, tab) {
+    let model = {
+      UserId: this.localStorageUser.Id,
+      IsFollowing: true,
+      Following: userId
+    }
+
+    this.userService.unfollowUser(model).pipe(first())
+      .subscribe(data => {
+        this.getUserProfile();
+        this.onFollowTab(tab);
+      });
+  }
+
+  Follow(userId, tab) {
+    let model = {
+      UserId: this.localStorageUser.Id,
+      IsFollowing: true,
+      Following: userId
+    }
+    this.userService.followUser(model).pipe(first())
+      .subscribe(data => {
+        this.getUserProfile();
+        this.onFollowTab(tab);
+      });
+  }
 
 }
