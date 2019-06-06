@@ -571,8 +571,9 @@ span.bell-icon i {
 }
 
 .cover_questions.image_question .icon img {
-  width: 25px;
-  height: 25px;
+ 
+  width: 27px;
+  height: 27px;
   border-radius: 100%;
 }
 

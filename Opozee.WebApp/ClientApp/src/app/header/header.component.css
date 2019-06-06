@@ -367,10 +367,10 @@ header .container-fluid {
   }
   .step-items strong {
     display: block;
-    text-align: center;
+    text-align: left;
     color: #0acfc0;
   }
-
+   
  
 .popup-text h5 {
   padding: 15px 0 5px;
