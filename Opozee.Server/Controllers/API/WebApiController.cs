@@ -2303,8 +2303,9 @@ namespace opozee.Controllers.API
 
         [HttpGet]
         [Route("api/WebApi/CheckNotification")]
-        public List<Notification> CheckNotification(int userId)
+        public dynamic CheckNotification(int userId)
         {
+            dynamic _response = new ExpandoObject();
             try
             {
                 var user = db.Database
@@ -2331,11 +2332,58 @@ namespace opozee.Controllers.API
                                      select n).ToList();
                 }
 
-                return _notification;
+                _response.notification = _notification;
+
+
+               // var alertResult = db.Notifications.Where(x => x.CommentedUserId == user.UserID && x.CreationDate >= user.ModifiedDate).ToList();
+                DateTime currentDate = DateTime.UtcNow;
+                DateTime dateFrom = currentDate.AddSeconds(-100);
+                //public string GenerateNotificationTags(bool? like, bool? dislike, bool? comment, string UserName, bool you, bool yours)
+                List<alertNotifications> alertResult = new List<alertNotifications>();
+
+                alertResult = (from q in db.Questions
+                                  join n in db.Notifications on q.Id equals n.questId 
+                                  where q.OwnerUserID == user.UserID && q.IsDeleted == false &&
+                                  n.CreationDate >= dateFrom && n.CreationDate <= currentDate
+                                  select new alertNotifications
+                                  {
+                                      CommentedUserId = n.CommentedUserId,
+                                      UserName = db.Users.Where(x => x.UserID == n.CommentedUserId).FirstOrDefault().UserName,
+                                      Like = ((n.Like ?? false) ? true : false),
+                                      Dislike = ((n.Dislike ?? false) ? true : false),
+                                      Comment = ((n.Comment ?? false) ? true : false),
+                                  }).ToList();
+                foreach (var data in alertResult)
+                {
+                    data.Message = '@'+data.UserName +' '+ GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName, false, true).TrimEnd(':');
+                }
+
+                //if(alertResult == null || alertResult.Count>0)
+                //{
+                //alertResult = (from q in db.Questions
+                //               join o in db.Opinions on q.Id equals o.QuestId
+                //               join n in db.Notifications on o.Id equals n.CommentId
+                //               where o.CommentedUserId == user.UserID && q.IsDeleted == false &&
+                //               n.CreationDate >= dateFrom && n.CreationDate <= currentDate
+                //               select new alertNotifications
+                //               {
+                //                   CommentedUserId = n.CommentedUserId,
+                //                   UserName = db.Users.Where(x => x.UserID == n.CommentedUserId).FirstOrDefault().UserName,
+                //                   Like = ((n.Like ?? false) ? true : false),
+                //                   Dislike = ((n.Dislike ?? false) ? true : false),
+                //                   Comment = ((n.Comment ?? false) ? true : false),
+                //               }).ToList();
+                //}
+
+
+
+                _response.alert = alertResult;
+
+                return _response;
             }
             catch (Exception ex)
             {
-                return null;
+                return _response;
             }
         }
         #endregion

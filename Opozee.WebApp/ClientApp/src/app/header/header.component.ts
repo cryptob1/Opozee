@@ -8,6 +8,7 @@ import { first } from 'rxjs/operators';
 import 'rxjs/add/observable/interval';
 import { Observable } from 'rxjs/Observable';
 import { DOCUMENT } from '@angular/platform-browser';
+import { Toast } from 'ngx-toastr';
 
 @Component({
   selector: 'header-component',
@@ -88,29 +89,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
             this.checkNotification()
       }
-
-
   }
 
   ngOnDestroy(): void {
     this.renderer.removeClass(this.document.body, 'popup-backdrop')
   }
 
-    checkNotification() {
-        this.userService.checkNotification(this.localStorageUser.Id)
-            .pipe(first())
-            .subscribe(data => {
-                if (data) {
-                    this.showNotificationIcon = data.length > 0 ? true : false;
-                }
-                else 
-                    this.showNotificationIcon = false;
-            },
-                error => {
-                    console.log('error: ', error)
-                    this.showNotificationIcon = false;
-                });
-    }
+  checkNotification() {
+    this.userService.checkNotification(this.localStorageUser.Id)
+      .pipe(first())
+      .subscribe(data => {
+        //alert('checkNotification');
+        if (data) {
+          if (data.notification) {
+            this.showNotificationIcon = data.notification.length > 0 ? true : false;
+          }
+          else this.showNotificationIcon = false;
+        }
+        else this.showNotificationIcon = false;
+      },
+        error => {
+          console.log('error: ', error)
+          this.showNotificationIcon = false;
+        });
+  }
 
   searchText(e) {    
     if (e.keyCode == 13) {

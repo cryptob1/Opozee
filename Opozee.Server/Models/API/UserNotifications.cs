@@ -36,6 +36,20 @@ namespace Opozee.Models.API
         public bool RefferalStatus { get; set; }
     }
 
+
+    public class alertNotifications
+    {
+        public int? CommentedUserId { get; set; }
+        public string UserName { get; set; }
+        public string Name { get; set; }
+        public bool? Like { get; set; }
+        public bool? Dislike { get; set; }
+        public bool? Comment { get; set; }
+        public string Tag { get; set; }
+        public string Message { get; set; }
+   
+    }
+
     public class UserProfile
     {
         public int UserID { get; set; }

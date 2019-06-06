@@ -293,7 +293,7 @@ export class UserService {
   }
 
     checkNotification(userId) {
-        return this.http.get<any[]>(this.myAppUrl + 'opozee/api/WebApi/CheckNotification?userId=' + userId, {
+        return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/CheckNotification?userId=' + userId, {
             headers: new HttpHeaders({
                 'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
             })
