@@ -347,7 +347,7 @@ namespace opozee.Controllers.API
                             try
                             {
                                 //string _apiURL = "http://localhost:61545/";
-                                string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
+                               string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
 
                                 var client = new RestClient($"{_apiURL}OpozeeGrantResourceOwnerCredentialSecret");
                                 var request = new RestRequest(Method.POST);
@@ -436,6 +436,16 @@ namespace opozee.Controllers.API
             public string title { get; set; }
             public string body { get; set; }
             public string icon { get; set; }
+        }
+
+       public enum Reaction
+        {
+           Thoughtful = 1,
+            Factual = 2,
+            Funny = 3,
+            NotMaterial = 4,
+            Fakenews = 5,
+            Biased = 6
         }
         //getPushNotification
         [HttpGet]
@@ -2036,7 +2046,9 @@ namespace opozee.Controllers.API
                 for (var i = 1; i < cList.Count + 1; i++)
                 {
                     Comments comment = null;
-
+                    //int commentId = cList[i].Id;
+                    //var likeCountList = db.Notifications.Where(p => p.CommentId == commentId && p.Like == true).ToList();
+                    //var dislikeCountList = db.Notifications.Where(p => p.CommentId == commentId && p.Dislike == true).ToList();
                     if (i % 2 == 0) //even=no
                     {
                         if (NoComments.Count > 0)
@@ -2344,6 +2356,7 @@ namespace opozee.Controllers.API
                 alertResult = (from q in db.Questions
                                   join n in db.Notifications on q.Id equals n.questId 
                                   where q.OwnerUserID == user.UserID && q.IsDeleted == false &&
+                                  n.CommentedUserId != user.UserID &&
                                   n.CreationDate >= dateFrom && n.CreationDate <= currentDate
                                   select new alertNotifications
                                   {
@@ -2756,15 +2769,16 @@ namespace opozee.Controllers.API
                     //}
                     #endregion
                     int _checkInsert = db.Database.ExecuteSqlCommand(
-                                "INSERT INTO Notification (CommentedUserId,CommentId,questId,[Like],Dislike,Comment,CreationDate)" +
-                                " VALUES(@CommentedUserId,@CommentId,@questId,@Like,@Dislike,@Comment,@CreationDate)",
+                                "INSERT INTO Notification (CommentedUserId,CommentId,questId,[Like],Dislike,Comment,CreationDate,ReactionType)" +
+                                " VALUES(@CommentedUserId,@CommentId,@questId,@Like,@Dislike,@Comment,@CreationDate,@ReactionType)",
                                 new SqlParameter("CommentedUserId", Model.CommentedUserId),
                                 new SqlParameter("CommentId", Model.CommentId),
                                 new SqlParameter("questId", Model.QuestId),
                                 new SqlParameter("Like", Convert.ToBoolean(Model.Likes)),
                                 new SqlParameter("Dislike", Convert.ToBoolean(Model.Dislikes)),
                                 new SqlParameter("Comment", false),
-                                new SqlParameter("CreationDate", Model.CreationDate)
+                                new SqlParameter("CreationDate", Model.CreationDate),
+                                 new SqlParameter("ReactionType", Model.ReactionType)
                                 );
 
                     //notification = new Notification();
@@ -2883,7 +2897,7 @@ namespace opozee.Controllers.API
                 }
                 else
                 {
-                    int _checkUpdate =  db.Database.ExecuteSqlCommand("UPDATE Notification SET [Like]=@Like, Dislike=@Dislike, Comment=@Comment, CreationDate=@CreationDate " +
+                    int _checkUpdate =  db.Database.ExecuteSqlCommand("UPDATE Notification SET [Like]=@Like, Dislike=@Dislike, Comment=@Comment, CreationDate=@CreationDate,ReactionType=@ReactionType " +
                                 " WHERE CommentedUserId=@CommentedUserId AND questId=@questId AND CommentId=@CommentId",
                                     new SqlParameter("CommentedUserId", Model.CommentedUserId),
                                     new SqlParameter("CommentId", Model.CommentId),
@@ -2891,7 +2905,8 @@ namespace opozee.Controllers.API
                                     new SqlParameter("Like", Convert.ToBoolean(Model.Likes)),
                                     new SqlParameter("Dislike", Convert.ToBoolean(Model.Dislikes)),
                                     new SqlParameter("Comment", false),
-                                    new SqlParameter("CreationDate", Model.CreationDate));
+                                    new SqlParameter("CreationDate", Model.CreationDate),
+                                     new SqlParameter("ReactionType", Model.ReactionType));
 
                     //notification.CommentedUserId = Model.CommentedUserId;
                     //notification.CommentId = Model.CommentId;

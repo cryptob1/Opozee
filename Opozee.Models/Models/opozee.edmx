@@ -54,6 +54,7 @@
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="Status" Type="int" />
           <Property Name="ReferralId" Type="int" />
+          <Property Name="ReactionType" Type="int" />
         </EntityType>
         <EntityType Name="Opinion">
           <Key>
@@ -68,6 +69,7 @@
           <Property Name="Dislikes" Type="int" />
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ReactionType" Type="int" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -210,6 +212,7 @@
           <Property Name="Dislikes" Type="Int32" />
           <Property Name="CreationDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ReactionType" Type="Int32" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -306,6 +309,7 @@
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" />
           <Property Name="ReferralId" Type="Int32" />
+          <Property Name="ReactionType" Type="Int32" />
         </EntityType>
         <EntityType Name="Referral">
           <Key>
@@ -348,6 +352,7 @@
           <EntitySetMapping Name="Opinions">
             <EntityTypeMapping TypeName="oposeeDbModel.Opinion">
               <MappingFragment StoreEntitySet="Opinion">
+                <ScalarProperty Name="ReactionType" ColumnName="ReactionType" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="Dislikes" ColumnName="Dislikes" />
@@ -451,6 +456,7 @@
           <EntitySetMapping Name="Notifications">
             <EntityTypeMapping TypeName="oposeeDbModel.Notification">
               <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="ReactionType" ColumnName="ReactionType" />
                 <ScalarProperty Name="ReferralId" ColumnName="ReferralId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />

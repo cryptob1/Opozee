@@ -11,6 +11,17 @@ import { ToastrService } from 'ngx-toastr';
 import { DialogPostBelief } from '../questionDetail/dialogPostBelief/dialogPostBelief.component';
 import { HttpUrlEncodingCodec } from '@angular/common/http';
 import { MixpanelService } from '../_services/mixpanel.service';
+import { PopoverModule } from "ngx-popover";
+
+enum Reaction {
+  Thoughtful = 1,
+  Factual = 2,
+  Funny = 3,
+  NotMaterial = 4,
+  Fakenews = 5,
+  Biased = 6
+}
+
 
 @Component({
   selector: 'questiondetail-component',
@@ -21,6 +32,7 @@ import { MixpanelService } from '../_services/mixpanel.service';
 export class Questiondetail implements OnInit {
 
   @ViewChild('dialogPostBelief') dialogPostBelief: DialogPostBelief;
+ 
 
   model: any = {};
   postOpinionForm: FormGroup;
@@ -44,7 +56,8 @@ export class Questiondetail implements OnInit {
   encoder: HttpUrlEncodingCodec = new HttpUrlEncodingCodec();
 
   sliderData: PostQuestionDetail[] = [];
-
+  
+  display = 'none';
 
 
   dataModel = {
@@ -56,6 +69,7 @@ export class Questiondetail implements OnInit {
     'CommentId': 0,
     'CreationDate': new Date(),
     'LikeOrDislke': false,
+    'ReactionType':0
   }
   
   localStorageUser: LocalStorageUser;
@@ -73,8 +87,8 @@ export class Questiondetail implements OnInit {
     private mixpanelService: MixpanelService
   ) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
-
-
+  
+    
     if (this.route.snapshot.params["Id"]) {
       this.Id = this.route.snapshot.params["Id"];
     }
@@ -110,14 +124,14 @@ export class Questiondetail implements OnInit {
     //  YesCount: 0,
     //  NoCount: 0
     //}
-
+    
     this.route.params.subscribe(
       params => {        
         this.getQuestionDetail();
       }
     );
 
-
+    
     this.postOpinionForm = this.formBuilder.group({
       firstName: ['', Validators.required],
     });
@@ -232,7 +246,9 @@ export class Questiondetail implements OnInit {
   }
 
 
-  saveLikeclick(Likes, index, qDetail?) {
+  saveLikeclick(Likes, index, qDetail?,reactionType?,pop?) {
+    
+    //alert(reactionType);
     if (!this.checkTooManyLikes()) {
       this.toastr.error('', 'Too many Votes. Slow down!', { timeOut: 5000 });
       return;
@@ -259,16 +275,18 @@ export class Questiondetail implements OnInit {
       this.dataModel.Comment = this.comment;
       this.dataModel.CommentedUserId = this.localStorageUser.Id;
       this.dataModel.LikeOrDislke = true;
+      this.dataModel.ReactionType = reactionType;
       //this.Isclicked = true;
       this.dataModel.CommentId = this.PostQuestionDetailModel.comments[index].Id;
       this.dataModel.CreationDate = new Date();
-      this.SaveLikeDislike(this.dataModel);
+      this.SaveLikeDislike(this.dataModel, qDetail);
       this.mixpanelService.track('Liked');
       this.loading = true;
       qDetail.LikesCount += 1;
       if (qDetail.DisLikes) qDetail.DislikesCount -= 1;
       qDetail.Likes = true;
       qDetail.DisLikes = false;
+      pop.hide();
     }
     else {
       this.imageShowLike = -1;
@@ -279,20 +297,22 @@ export class Questiondetail implements OnInit {
       this.dataModel.Comment = this.comment;
       this.dataModel.CommentedUserId = this.localStorageUser.Id;
       this.dataModel.LikeOrDislke = true;
+      this.dataModel.ReactionType = reactionType;
       //this.Isclicked = true;
       this.dataModel.CommentId = this.PostQuestionDetailModel.comments[index].Id;
       this.dataModel.CreationDate = new Date();
-      this.SaveLikeDislike(this.dataModel);
+      this.SaveLikeDislike(this.dataModel, qDetail);
       this.mixpanelService.track('Unlike');
       this.loading = true;
       qDetail.LikesCount -= 1;
       if (qDetail.DisLikes) qDetail.DislikesCount -= 1;
       qDetail.Likes = false;      
       qDetail.DisLikes = false;
+      pop.hide();
     }
   }
 
-  saveDislikeclick(DisLikes, index, qDetail?) {
+  saveDislikeclick(DisLikes, index, qDetail?, reactionType?, pop?) {
     if (!this.checkTooManyLikes()) {
       this.toastr.error('', 'Too many Votes. Slow down!', { timeOut: 5000 });
       return;
@@ -318,15 +338,17 @@ export class Questiondetail implements OnInit {
       this.dataModel.CommentedUserId = this.localStorageUser.Id;
       this.dataModel.OpinionAgreeStatus = 0;
       this.dataModel.LikeOrDislke = false;
+      this.dataModel.ReactionType = reactionType;
       //this.Isclicked = true;
       this.dataModel.CommentId = this.PostQuestionDetailModel.comments[index].Id;
       this.dataModel.CreationDate = new Date();
-      this.SaveLikeDislike(this.dataModel);
+      this.SaveLikeDislike(this.dataModel, qDetail);
       this.mixpanelService.track('Dislike');
       qDetail.DislikesCount += 1;
       if (qDetail.Likes) qDetail.LikesCount -= 1;
       qDetail.Likes = false;
       qDetail.DisLikes = true;
+      pop.hide();
     }
     else {
       this.imageShowDislike = -1;
@@ -338,15 +360,17 @@ export class Questiondetail implements OnInit {
       this.dataModel.CommentedUserId = this.localStorageUser.Id;
       this.dataModel.OpinionAgreeStatus = 0;
       this.dataModel.LikeOrDislke = false;
+      this.dataModel.ReactionType = reactionType;
       //  this.Isclicked = true;
       this.dataModel.CommentId = this.PostQuestionDetailModel.comments[index].Id;
       this.dataModel.CreationDate = new Date();
-      this.SaveLikeDislike(this.dataModel);
+      this.SaveLikeDislike(this.dataModel, qDetail);
       this.mixpanelService.track('UnDislike');
       qDetail.DislikesCount -= 1;
       if (qDetail.Likes) qDetail.LikesCount -= 1;
       qDetail.Likes = false;
       qDetail.DisLikes = false;
+      pop.hide();
     }
 
   }
@@ -413,20 +437,29 @@ export class Questiondetail implements OnInit {
     //this.router.navigate(['/questions'], { queryParams: { tag: 1 } });
   }
 
-  SaveLikeDislike(dataModel) {
 
+  SaveLikeDislike(dataModel, qDetail) {
+    
     this.loading = true;
     this.userService.SaveLikeDislikeService(this.dataModel)
       .pipe(first())
       .subscribe(data => {
         this.loading = false;
-
+    
         //this.toastr.success('Data save successfully', '');
        //this.getQuestionDetail(true);
 
         try {
           this.userService.getquestionDetails(this.Id, this.localStorageUser.Id)
             .subscribe(data => {
+              let __data = data.Comments.filter(x => x.Id === qDetail.Id)
+              console.log('updated', data);
+              qDetail.LikesThoughtfullCount = __data[0].LikesThoughtfullCount;
+              qDetail.LikesFactualCount = __data[0].LikesFactualCount;
+              qDetail.LikesFunnyCount = __data[0].LikesFunnyCount;
+              qDetail.DislikesNoMaterialCount = __data[0].DislikesNoMaterialCount;
+              qDetail.DislikesFakeNewsCount = __data[0].DislikesFakeNewsCount;
+              qDetail.DislikesBiasedCount = __data[0].DislikesBiasedCount;
             });
         }
         catch (err) { }
@@ -440,6 +473,7 @@ export class Questiondetail implements OnInit {
           'CommentId': 0,
           'CreationDate': new Date(),
           'LikeOrDislke': false,
+          'ReactionType': 0
         }
         //this.router.navigate(['/questiondetail/', this.Id]);
 

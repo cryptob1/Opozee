@@ -494,3 +494,8 @@ span.profile_left p {
       border: 0px;
     }
 }
+
+
+popover-content span img{
+  cursor:pointer
+}

@@ -26,5 +26,6 @@ namespace Opozee.Models.Models
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> ReferralId { get; set; }
+        public Nullable<int> ReactionType { get; set; }
     }
 }

@@ -67,7 +67,7 @@
 
             <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
               <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
-                
+
                 <div [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']">
 
                   <div ExternalLink>
@@ -88,12 +88,12 @@
 
                         <span class="like" style="cursor:pointer">
                           <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like"
-                               (click)="!loading && saveLikeclick(temp?.Likes,index,temp)">{{temp?.LikesCount}}
+                               [popover]="myPopoverLikes">{{temp?.LikesCount}}
                         </span>
 
                         <span class="like" style="cursor:pointer">
                           <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like"
-                               (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp)" />{{temp?.DislikesCount}}
+                              [popover]="PopoverDislikes"  />{{temp?.DislikesCount}}
                         </span>
 
                       </div>
@@ -104,24 +104,68 @@
                 </div>
 
                 <!--<div class="no_feedback" *ngIf="!temp.IsAgree">
-                  {{temp.IsAgree}}
-                  <p>{{temp.Comment}}</p>
-                  <span class="profile_bottom_cover">
-                    <span class="user_left">
-                      <img src="../../assets/images/user.png" alt="user"><span>@{{temp.CommentedUserName}}</span>
+    {{temp.IsAgree}}
+    <p>{{temp.Comment}}</p>
+    <span class="profile_bottom_cover">
+      <span class="user_left">
+        <img src="../../assets/images/user.png" alt="user"><span>@{{temp.CommentedUserName}}</span>
+      </span>
+      <div class="like_images">
+        <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp.Likes,index)">{{temp.LikesCount}}</span>
+        <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp.DisLikes,index)" />{{temp.DislikesCount}}</span>
+
+      </div>
+      <div class="date_like">
+      </div>
+    </span>
+  </div>-->
+                <div class="dummy1">
+                  <popover-content #myPopoverLikes
+                                   placement="top"
+                                   [animation]="true"
+                                   [closeOnClickOutside]="true">
+
+                    <span>
+                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/facebook_like.gif" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,1,myPopoverLikes)" title="Thoughtful">
+                      {{temp?.LikesThoughtfullCount}}
                     </span>
-                    <div class="like_images">
-                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp.Likes,index)">{{temp.LikesCount}}</span>
-                      <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp.DisLikes,index)" />{{temp.DislikesCount}}</span>
+                    <span>
+                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/Lovegif.gif" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
+                      {{temp?.LikesFactualCount}}
+                    </span>
+                    <span>
+                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/Hahagif.gif" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
+                      {{temp?.LikesFunnyCount}}
+                    </span>
+                   
+                  </popover-content>
+                </div>
+                <div class="dummy2">
+                  <popover-content #PopoverDislikes
+                                   placement="top"
+                                   [animation]="true"
+                                   [closeOnClickOutside]="true">
 
-                    </div>
-                    <div class="date_like">
-                    </div>
-                  </span>
-                </div>-->
-
+                    <span>
+                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/wowgif.gif" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" title="Not Material">
+                      {{temp?.DislikesNoMaterialCount}}
+                    </span>
+                    <span>
+                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/sadgif.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)" title="Fakenews">
+                      {{temp?.DislikesFakeNewsCount}}
+                    </span>
+                    <span>
+                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/angrygif.gif" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)" title="Biased">
+                      {{temp?.DislikesBiasedCount}}
+                    </span>
+                   
+                  </popover-content>
+                </div>
               </span>
             </span>
+
+            
+
             <div class="cover_hello" *ngIf="Id">
               <i class="fa fa-plus" aria-hidden="true" (click)="openBeliefModal()">&nbsp;New Belief</i> 
             </div>

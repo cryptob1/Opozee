@@ -44,8 +44,8 @@ namespace Opozee.Models.API
         public int Likes { get; set; }
         public bool OpinionAgreeStatus { get; set; }
         public int Dislikes { get; set; }
-
         public bool LikeOrDislke { get; set; }
+        public int ReactionType { get; set; }
 
     }
 

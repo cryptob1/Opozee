@@ -80,6 +80,13 @@ namespace Opozee.Models.API
         public bool Likes { get; set; }
         public bool DisLikes { get; set; }
         public bool? IsAgree { get; set; }
+
+        public int LikesThoughtfullCount { get; set; }
+        public int LikesFactualCount { get; set; }
+        public int LikesFunnyCount { get; set; }
+        public int DislikesNoMaterialCount { get; set; }
+        public int DislikesFakeNewsCount { get; set; }
+        public int DislikesBiasedCount { get; set; }
     }
 
 

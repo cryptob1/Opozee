@@ -70,6 +70,7 @@ import { BountyQuestionsComponent } from './question/bounty-questions/bounty-que
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { SafeHtmlPipe } from './Shared/safe-html-pipe';
 import { EmailVerificationComponent } from './user/email-verification/email-verification.component';
+import { PopoverModule } from "ngx-popover";
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -107,7 +108,8 @@ export function getAuthServiceConfigs() {
     JwSocialButtonsModule,
     BsDropdownModule.forRoot(),
     InfiniteScrollModule,
-    PushNotificationsModule
+    PushNotificationsModule,
+    PopoverModule
   ],
   declarations: [
     AppComponent,
