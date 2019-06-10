@@ -18,6 +18,12 @@ using System.Web;
 using MvcPaging;
 using OpozeeLibrary.PushNotfication;
 using System.Configuration;
+using RestSharp;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
+using System.Dynamic;
+using Opozee.Server.Services;
+using System.IO;
 
 namespace opozee.Controllers.API
 {
@@ -1687,7 +1693,204 @@ namespace opozee.Controllers.API
 
 
 
+        ///
 
+
+
+        [HttpPost]
+        [Route("api/MobileApi/Login")]
+        public dynamic Login(UserLoginWeb login)
+        {
+
+            dynamic _response = new ExpandoObject();
+            UserLoginWeb ObjLogin = new UserLoginWeb();
+            using (OpozeeDbEntities db = new OpozeeDbEntities())
+            {
+                // UserLogin userlogin = new UserLogin();
+                //var v1 = db.Users.Select(s => s).ToList();
+
+                if (login.IsVerificationLogin == true)
+                {
+                    login.Password = AesCryptography.Decrypt(login.Password);
+                }
+
+                var v = db.Users.Where(a => a.Email == login.Email && (a.IsAdmin ?? false) == false).FirstOrDefault();
+                if (v != null)
+                {
+                    if (v.EmailConfirmed == true)
+                    {
+                        ObjLogin.Token = AesCryptography.Encrypt(login.Password);
+                        ObjLogin.Token = AesCryptography.Decrypt(ObjLogin.Token);
+                        if (string.Compare(AesCryptography.Encrypt(login.Password), v.Password) == 0)
+                        {
+
+                            try
+                            {
+                                //string _apiURL = "http://localhost:61545/";
+                                string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
+
+                                var client = new RestClient($"{_apiURL}OpozeeGrantResourceOwnerCredentialSecret");
+                                var request = new RestRequest(Method.POST);
+                                request.AddHeader("content-type", "application/x-www-form-urlencoded");
+
+                                request.AddParameter("application/x-www-form-urlencoded",
+                                    $"username={v.Email}&password={v.Password}&grant_type=password",
+                                    ParameterType.RequestBody);
+
+                                IRestResponse response = client.Execute(request);
+
+                                AuthToken _authToken = JsonConvert.DeserializeObject<AuthToken>(response.Content);
+                                ObjLogin.AuthToken = _authToken;
+                            }
+                            catch (Exception ex)
+                            {
+                                ObjLogin.Id = 0;
+                                ObjLogin.Token = null;
+                               // return ObjLogin;
+                                _response.success = false;
+                                _response.message = "Please check user name or Password !";
+                                return _response;
+
+                            }
+
+                            //int timeout = login.RememberMe ? 525600 : 20; // 525600 min = 1 year
+                            //var ticket = new FormsAuthenticationTicket(login.EmailID, login.RememberMe, timeout);
+                            //string encrypted = FormsAuthentication.Encrypt(ticket);
+                            //var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted);
+                            //cookie.Expires = DateTime.Now.AddMinutes(timeout);
+                            //cookie.HttpOnly = true;
+                            //Response.Cookies.Add(cookie);
+
+                            //userlogin.EmailID = login.EmailID;
+                            //userlogin.Password = login.Password;
+                            //login.Id = v.UserID;
+                            ObjLogin.Id = v.UserID;
+                            ObjLogin.Email = v.Email;
+                            ObjLogin.ImageURL = v.ImageURL;
+
+                            ObjLogin.BalanceToken = db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault() == null
+                                ? 0 : db.Tokens.Where(x => x.UserId == v.UserID).FirstOrDefault().BalanceToken ?? 0;
+
+                            var totalRef = db.Referrals.Where(x => x.ReferralUserId == v.UserID).ToList();
+                            ObjLogin.TotalReferred = totalRef == null ? 0 : totalRef.Count;
+
+                            try
+                            {
+                                ObjLogin.Followers = db.Followers.Where(x => x.FollowedId == v.UserID && x.IsFollowing == true).ToList() == null
+                                    ? 0 : db.Followers.Where(x => x.FollowedId == v.UserID && x.IsFollowing == true).ToList().Count;
+
+                                ObjLogin.Followings = db.Followers.Where(x => x.UserId == v.UserID && x.IsFollowing == true).ToList() == null
+                                    ? 0 : db.Followers.Where(x => x.UserId == v.UserID && x.IsFollowing == true).ToList().Count;
+
+                                //update once logged-in
+                                v.ModifiedDate = DateTime.Now.ToUniversalTime();
+                                db.Entry(v).State = System.Data.Entity.EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                            catch { }
+                            ObjLogin.LastLoginDate = v.ModifiedDate;
+                            ObjLogin.UserName = v.UserName;
+                            ObjLogin.ReferralCode = v.ReferralCode;
+                            ObjLogin.IsSocialLogin = false;
+
+                            //return ObjLogin;
+                            _response.success = HttpStatusCode.OK;
+                            _response.message = "Login successfully!";
+                            _response.data = ObjLogin;
+                            return _response; 
+                        }
+                        else
+                        {
+                            ObjLogin.Token = null;
+                            //return ObjLogin;
+                            _response.success = HttpStatusCode.BadRequest;
+                            _response.message = "Please check user name or Password !";
+                            return _response;
+                        }
+                    }
+                    else
+                    {
+                        ObjLogin.Id = -1;
+                        //return ObjLogin;
+                        _response.success = HttpStatusCode.BadRequest;
+                        _response.message = "Please confirm your email address.";
+                        return _response;
+                    }
+                }
+                else
+                {
+                    // return ObjLogin;
+                    _response.success = HttpStatusCode.BadRequest;
+                    _response.message = "Please check user name or Password !";
+                    return _response;
+                }
+            }
+
+        }
+
+
+        private bool CheckEmailExist(string Email)
+        {
+            try
+            {
+                return db.Database
+                    .SqlQuery<int>("SELECT COUNT(*) FROM [Users] WHERE [Email] = @email", new SqlParameter("@email", Email))
+                    .FirstOrDefault() > 0 ? true : false;
+            }
+            catch (Exception ex)
+            {
+            }
+            return false;
+        }
+
+
+        private (bool IsValidCode, int? ReferralUserId) CheckIfValidReferralCode(string referralCode)
+        {
+            using (OpozeeDbEntities db = new OpozeeDbEntities())
+            {
+                try
+                {
+                    var ReferralUser = db.Database
+                           .SqlQuery<User>("SELECT * FROM [Users] WHERE [ReferralCode] = @referralCode",
+                                new SqlParameter("@referralCode", referralCode))
+                           .FirstOrDefault();
+
+                    if (ReferralUser == null)
+                        return (false, null);
+
+                    return (true, ReferralUser.UserID);
+                }
+                catch { }
+            }
+            return (false, null);
+        }
+
+        private (bool isExist, User user) CheckUserNameExist(string UserName)
+        {
+            try
+            {
+                var user = this.GetByUserName(UserName);
+                return user == null ? (false, user) : (true, user);
+            }
+            catch (Exception ex)
+            {
+            }
+            return (false, null);
+        }
+
+        private User GetByUserName(string UserName)
+        {
+            try
+            {
+                return db.Database
+                    .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserName] = @username", new SqlParameter("@username", UserName))
+                    .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+            }
+            return null;
+        }
 
     }
 }
