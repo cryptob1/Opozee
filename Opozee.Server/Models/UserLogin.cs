@@ -46,6 +46,9 @@ namespace Opozee.Models
         public int Followers { get; set; }
         public int Followings { get; set; }
 
+        public string DeviceType { get; set; }
+        public string DeviceToken { get; set; }
+
         public AuthToken AuthToken { get; set; }
     }
 
