@@ -286,6 +286,7 @@
     </Compile>
     <Compile Include="Models\API\BountyQuestionsVM.cs" />
     <Compile Include="Models\API\ContactMail.cs" />
+    <Compile Include="Models\API\CrashEMailVM.cs" />
     <Compile Include="Models\API\InputSignInWithThirdParty.cs" />
     <Compile Include="Models\API\LikeDislike.cs" />
     <Compile Include="Models\API\MultipartFiles.cs" />
