@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Dynamic;
 using Opozee.Server.Services;
 using System.IO;
+using Opozee.Server.Models.API;
 
 namespace opozee.Controllers.API
 {
@@ -1259,9 +1260,10 @@ namespace opozee.Controllers.API
                 int userid = 0;
                 string firstname = "";
                 string lastname = "";
+                string username = "";
+
                 if (httpContext.Request.Form["UserID"] == "")
                 {
-
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Info, "provide UserID"));
                 }
                 else
@@ -1276,8 +1278,8 @@ namespace opozee.Controllers.API
                 if (httpContext.Request.Form["LastName"] != "")
                 {
                     lastname = httpContext.Request.Form["LastName"].ToString();
-
                 }
+                
                 //ViewModelUser User = new ViewModelUser();
                 string strIamgeURLfordb = null;
                 string _SiteRoot = WebConfigurationManager.AppSettings["SiteImgPath"];
@@ -1295,9 +1297,18 @@ namespace opozee.Controllers.API
 
                 if (entity != null)
                 {
+                    if (httpContext.Request.Form["UserName"] != "")
+                    {
+                        username = httpContext.Request.Form["UserName"].ToString();
+                        var userExist = db.Database
+                        .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserName] = @username and ", new SqlParameter("@username", username))
+                        .FirstOrDefault();
+                    }
+
                     //entity.ImageURL = "";
                     entity.FirstName = firstname;
                     entity.LastName = lastname;
+                    entity.UserName = username;
                     entity.ModifiedDate = DateTime.Now;
                     if (HttpContext.Current.Request.Files.Count > 0)
                     {
@@ -1689,31 +1700,17 @@ namespace opozee.Controllers.API
 
         }
         #endregion
-
-
-
-
+        
         ///
-
-
-
         [HttpPost]
         [Route("api/MobileApi/Login")]
         public dynamic Login(UserLoginWeb login)
         {
-
             dynamic _response = new ExpandoObject();
             UserLoginWeb ObjLogin = new UserLoginWeb();
             using (OpozeeDbEntities db = new OpozeeDbEntities())
             {
-                // UserLogin userlogin = new UserLogin();
-                //var v1 = db.Users.Select(s => s).ToList();
-
-                if (login.IsVerificationLogin == true)
-                {
-                    login.Password = AesCryptography.Decrypt(login.Password);
-                }
-
+                
                 var v = db.Users.Where(a => a.Email == login.Email && (a.IsAdmin ?? false) == false).FirstOrDefault();
                 if (v != null)
                 {
@@ -1723,7 +1720,6 @@ namespace opozee.Controllers.API
                         ObjLogin.Token = AesCryptography.Decrypt(ObjLogin.Token);
                         if (string.Compare(AesCryptography.Encrypt(login.Password), v.Password) == 0)
                         {
-
                             try
                             {
                                 //string _apiURL = "http://localhost:61545/";
@@ -1744,26 +1740,12 @@ namespace opozee.Controllers.API
                             }
                             catch (Exception ex)
                             {
-                                ObjLogin.Id = 0;
-                                ObjLogin.Token = null;
-                               // return ObjLogin;
                                 _response.success = false;
-                                _response.message = "Please check user name or Password !";
+                                _response.data = null;
+                                _response.message = "Please check user name or Password!";
                                 return _response;
-
                             }
 
-                            //int timeout = login.RememberMe ? 525600 : 20; // 525600 min = 1 year
-                            //var ticket = new FormsAuthenticationTicket(login.EmailID, login.RememberMe, timeout);
-                            //string encrypted = FormsAuthentication.Encrypt(ticket);
-                            //var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted);
-                            //cookie.Expires = DateTime.Now.AddMinutes(timeout);
-                            //cookie.HttpOnly = true;
-                            //Response.Cookies.Add(cookie);
-
-                            //userlogin.EmailID = login.EmailID;
-                            //userlogin.Password = login.Password;
-                            //login.Id = v.UserID;
                             ObjLogin.Id = v.UserID;
                             ObjLogin.Email = v.Email;
                             ObjLogin.ImageURL = v.ImageURL;
@@ -1783,35 +1765,37 @@ namespace opozee.Controllers.API
                                     ? 0 : db.Followers.Where(x => x.UserId == v.UserID && x.IsFollowing == true).ToList().Count;
 
                                 //update once logged-in
+                                v.DeviceType = !string.IsNullOrEmpty(login.DeviceType) ? login.DeviceType : v.DeviceType;
+                                v.DeviceToken = !string.IsNullOrEmpty(login.DeviceToken) ? login.DeviceToken : v.DeviceToken;
                                 v.ModifiedDate = DateTime.Now.ToUniversalTime();
                                 db.Entry(v).State = System.Data.Entity.EntityState.Modified;
                                 db.SaveChanges();
                             }
                             catch { }
+
                             ObjLogin.LastLoginDate = v.ModifiedDate;
                             ObjLogin.UserName = v.UserName;
                             ObjLogin.ReferralCode = v.ReferralCode;
                             ObjLogin.IsSocialLogin = false;
+                            ObjLogin.DeviceType = v.DeviceType;
+                            ObjLogin.DeviceToken = v.DeviceToken;
 
-                            //return ObjLogin;
                             _response.success = HttpStatusCode.OK;
-                            _response.message = "Login successfully!";
+                            _response.message = "Login successful!";
                             _response.data = ObjLogin;
                             return _response; 
                         }
                         else
                         {
-                            ObjLogin.Token = null;
-                            //return ObjLogin;
+                            _response.data = null;
                             _response.success = HttpStatusCode.BadRequest;
-                            _response.message = "Please check user name or Password !";
+                            _response.message = "Please check user name or Password!";
                             return _response;
                         }
                     }
                     else
                     {
-                        ObjLogin.Id = -1;
-                        //return ObjLogin;
+                        _response.data = null;
                         _response.success = HttpStatusCode.BadRequest;
                         _response.message = "Please confirm your email address.";
                         return _response;
@@ -1819,12 +1803,54 @@ namespace opozee.Controllers.API
                 }
                 else
                 {
-                    // return ObjLogin;
+                    _response.data = null;
                     _response.success = HttpStatusCode.BadRequest;
-                    _response.message = "Please check user name or Password !";
+                    _response.message = "Please check user name or Password!";
                     return _response;
                 }
             }
+
+        }
+
+        [HttpPost]
+        [Route("api/MobileApi/CrashEMail")]
+        public async Task<dynamic> CrashEMail(CrashEMailVM model)
+        {
+            dynamic _response = new ExpandoObject();
+            try
+            {
+                string recepientName = "Paras";
+                string recepientEmail = string.IsNullOrEmpty(model.Email) ? "test.ducktale@gmail.com" : model.Email;
+                string subject = "Crash Exception Info | Opozee apk testing";
+
+                var _user = db.Users.Where(a => a.UserID == model.UserId).FirstOrDefault();
+                var _name = _user == null ? recepientName : "UserId: " + _user.UserID + "<br/>Username: " + _user.UserName + "<br/>Email: " + _user.Email;
+                _name += string.IsNullOrEmpty(model.Info) ? "" : "<br/><b>Info: </b>" + model.Info;
+
+                bool isHtml = true;
+                string pathHTMLFile = HttpContext.Current.Server.MapPath("~/Content/mail-template/ContactMailTemplate.html");
+                string TEMPLATE = File.ReadAllText(pathHTMLFile);
+                TEMPLATE = TEMPLATE.Replace("##MESSAGE##", model.Exception);
+                TEMPLATE = TEMPLATE.Replace("##NAME##", _name);
+                TEMPLATE = TEMPLATE.Replace("##PHONE##", "");
+                TEMPLATE = TEMPLATE.Replace("##EMAIL##", "");
+
+                string body = TEMPLATE.Replace("Thanks & Regards", "User Info:").Replace("Message:","<b>Crash Exception:</b>").Replace("Opozee Team", "Opozee Tester");
+
+                (bool success, string errorMsg) = await EmailSender.SendEmailAsync(recepientName, recepientEmail, subject, body, isHtml);
+
+                _response.success = success;
+
+                if (!success)
+                {
+                    _response.message = errorMsg;
+                    return BadRequest(errorMsg);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return _response;
 
         }
 
