@@ -2349,17 +2349,18 @@ namespace opozee.Controllers.API
 
                // var alertResult = db.Notifications.Where(x => x.CommentedUserId == user.UserID && x.CreationDate >= user.ModifiedDate).ToList();
                 DateTime currentDate = DateTime.UtcNow;
-                DateTime dateFrom = currentDate.AddSeconds(-100);
+                DateTime dateFrom = currentDate.AddSeconds(-60);
                 //public string GenerateNotificationTags(bool? like, bool? dislike, bool? comment, string UserName, bool you, bool yours)
                 List<alertNotifications> alertResult = new List<alertNotifications>();
 
                 alertResult = (from q in db.Questions
                                   join n in db.Notifications on q.Id equals n.questId 
                                   where q.OwnerUserID == user.UserID && q.IsDeleted == false &&
-                                  n.CommentedUserId != user.UserID &&
-                                  n.CreationDate >= dateFrom && n.CreationDate <= currentDate
+                                  n.CommentedUserId != user.UserID && 
+                                  n.CreationDate >= dateFrom && n.CreationDate <= currentDate &&n.Status == null
                                   select new alertNotifications
                                   {
+                                      Id = n.Id,
                                       CommentedUserId = n.CommentedUserId,
                                       UserName = db.Users.Where(x => x.UserID == n.CommentedUserId).FirstOrDefault().UserName,
                                       Like = ((n.Like ?? false) ? true : false),
@@ -2368,8 +2369,27 @@ namespace opozee.Controllers.API
                                   }).ToList();
                 foreach (var data in alertResult)
                 {
-                    data.Message = '@'+data.UserName +' '+ GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName, false, true).TrimEnd(':');
+                    if ((data.Like == false && data.Dislike == false && data.Comment == false)||(data.Like == true && data.Dislike == true && data.Comment == true))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        data.Message = '@' + data.UserName + ' ' + GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName, false, true).TrimEnd(':');
+                    }
                 }
+                List<Notification> listUpdateNotification = new List<Notification>();
+                foreach (var item in alertResult)
+                    {
+                    var notif = db.Notifications.Where(x => x.Id == item.Id).FirstOrDefault();
+                    if (notif != null)
+                    {
+                        notif.Status = 1;
+                        db.SaveChanges();
+                    }
+                }
+                
+
 
                 //if(alertResult == null || alertResult.Count>0)
                 //{
@@ -2897,7 +2917,7 @@ namespace opozee.Controllers.API
                 }
                 else
                 {
-                    int _checkUpdate =  db.Database.ExecuteSqlCommand("UPDATE Notification SET [Like]=@Like, Dislike=@Dislike, Comment=@Comment, CreationDate=@CreationDate,ReactionType=@ReactionType " +
+                    int _checkUpdate =  db.Database.ExecuteSqlCommand("UPDATE Notification SET [Like]=@Like, Dislike=@Dislike, Comment=@Comment, CreationDate=@CreationDate,ReactionType=@ReactionType,Status=@Status " +
                                 " WHERE CommentedUserId=@CommentedUserId AND questId=@questId AND CommentId=@CommentId",
                                     new SqlParameter("CommentedUserId", Model.CommentedUserId),
                                     new SqlParameter("CommentId", Model.CommentId),
@@ -2905,6 +2925,7 @@ namespace opozee.Controllers.API
                                     new SqlParameter("Like", Convert.ToBoolean(Model.Likes)),
                                     new SqlParameter("Dislike", Convert.ToBoolean(Model.Dislikes)),
                                     new SqlParameter("Comment", false),
+                                     new SqlParameter("Status", DBNull.Value),
                                     new SqlParameter("CreationDate", Model.CreationDate),
                                      new SqlParameter("ReactionType", Model.ReactionType));
 

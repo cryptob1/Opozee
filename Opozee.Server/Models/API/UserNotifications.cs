@@ -39,6 +39,7 @@ namespace Opozee.Models.API
 
     public class alertNotifications
     {
+        public int? Id { get; set; }
         public int? CommentedUserId { get; set; }
         public string UserName { get; set; }
         public string Name { get; set; }

@@ -33,7 +33,7 @@ export class Questiondetail implements OnInit {
 
   @ViewChild('dialogPostBelief') dialogPostBelief: DialogPostBelief;
  
-
+  showReaction = false;
   model: any = {};
   postOpinionForm: FormGroup;
   loading = false;
@@ -264,6 +264,7 @@ export class Questiondetail implements OnInit {
       return
     }
 
+    this.loading = true;
     if (!Likes) { //hitting like
       
       this.imageShowLike = index;
@@ -326,6 +327,8 @@ export class Questiondetail implements OnInit {
       this.toastr.error('', 'You cant vote as an anonyomous user.', { timeOut: 5000 });
       return
     }
+
+    this.loading = true;
     if (!DisLikes) { //clicking dislike
       this.imageShowDislike = index;
       //this.imageShowLike = -2;

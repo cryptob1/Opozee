@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
 
-    Observable.interval(100000)
+    Observable.interval(60000)
       .subscribe((val) => {
         this.userService.getPushNotification()
           .subscribe(data => {
@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
 
     if (this.localStorageUser) {
       if (this.localStorageUser.Id) {
-        Observable.interval(100000)
+        Observable.interval(60000)
           .subscribe((val) => { this.checkNotification() });
 
         this.checkNotification()
@@ -81,7 +81,12 @@ export class AppComponent implements OnInit {
               if (data) {
                 if (data.alert) {
                   data.alert.map((x, index) => {
-                    this.toaster.info(x.Message, '', { timeOut: (10000 + index * 600) });
+                    if (x.Message == null) {
+
+                    }
+                    else {
+                      this.toaster.info(x.Message, '', { timeOut: (10000 + index * 600) });
+                    }
                   })
                 }
               }

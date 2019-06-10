@@ -125,19 +125,22 @@
                                    [animation]="true"
                                    [closeOnClickOutside]="true">
 
-                    <span>
-                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/facebook_like.gif" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,1,myPopoverLikes)" title="Thoughtful">
-                      {{temp?.LikesThoughtfullCount}}
-                    </span>
-                    <span>
-                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/Lovegif.gif" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
-                      {{temp?.LikesFactualCount}}
-                    </span>
-                    <span>
-                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/Hahagif.gif" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
-                      {{temp?.LikesFunnyCount}}
-                    </span>
-                   
+                    <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+
+                    <div *ngIf="!loading">
+                      <span>
+                        <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/facebook_like.gif" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,1,myPopoverLikes)" title="Thoughtful">
+                        {{temp?.LikesThoughtfullCount}}
+                      </span>
+                      <span>
+                        <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/Lovegif.gif" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
+                        {{temp?.LikesFactualCount}}
+                      </span>
+                      <span>
+                        <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/Hahagif.gif" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
+                        {{temp?.LikesFunnyCount}}
+                      </span>
+                    </div>
                   </popover-content>
                 </div>
                 <div class="dummy2">
@@ -146,19 +149,22 @@
                                    [animation]="true"
                                    [closeOnClickOutside]="true">
 
-                    <span>
-                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/wowgif.gif" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" title="Not Material">
-                      {{temp?.DislikesNoMaterialCount}}
-                    </span>
-                    <span>
-                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/sadgif.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)" title="Fakenews">
-                      {{temp?.DislikesFakeNewsCount}}
-                    </span>
-                    <span>
-                      <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/angrygif.gif" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)" title="Biased">
-                      {{temp?.DislikesBiasedCount}}
-                    </span>
-                   
+                    <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+
+                    <div *ngIf="!loading">
+                      <span>
+                        <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/wowgif.gif" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" title="Not Material">
+                        {{temp?.DislikesNoMaterialCount}}
+                      </span>
+                      <span>
+                        <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/sadgif.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)" title="Fakenews">
+                        {{temp?.DislikesFakeNewsCount}}
+                      </span>
+                      <span>
+                        <img style="width:50px" [attr.disabled]="loading" src="../../assets/images/angrygif.gif" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)" title="Biased">
+                        {{temp?.DislikesBiasedCount}}
+                      </span>
+                    </div>
                   </popover-content>
                 </div>
               </span>
