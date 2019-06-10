@@ -128,7 +128,6 @@
 
 .carousel-outer {
   padding: 0px;
- 
 }
 
 
@@ -142,8 +141,7 @@
 
 
 .question_box {
-padding: 0px;
-
+  padding: 0px;
 }
 
 .carousel-outer .cover_questions {
@@ -166,7 +164,6 @@ padding: 0px;
 .carousel-control {
   width: 50px;
   background: transparent !important;
- 
 }
 
   .carousel-control i {
@@ -188,7 +185,8 @@ padding: 0px;
   font-size: 11px;
   color: grey;
   padding: 0px 0px 0px 0px;
-  float:right;
+  float: right;
+  margin-top: -12px;
 }
 
 
@@ -211,16 +209,18 @@ padding: 0px;
     cursor: pointer;
   }
 
-.bounty-q{
-margin:2px;
+.bounty-q {
+  margin: 2px;
 }
-.bounty-q small{
-  font-size:13px;
-}
-  .bounty-q small span {
-    font-size: 12px;
-    color: #2c78b9;
+
+  .bounty-q small {
+    font-size: 13px;
   }
+
+    .bounty-q small span {
+      font-size: 12px;
+      color: #2c78b9;
+    }
 
 .yes_feedback h1 {
   width: 30px;
@@ -245,15 +245,14 @@ margin:2px;
   margin-inline-start: 5px;
   margin-left: 5px;
   text-align: center;
-    color: #FAC7C7;
+  color: #FAC7C7;
 }
 
-.btn-group li{
-
+.btn-group li {
   padding: 1px 1px 1px 1px;
-
 }
-.message-container{
+
+.message-container {
   word-break: break-word;
 }
 
@@ -273,7 +272,7 @@ margin:2px;
 @media screen and (max-width: 480px) {
 
   .bounty-q small {
-    display:block;
+    display: block;
     font-size: 13px;
   }
 
@@ -317,6 +316,4 @@ margin:2px;
     padding: 1px;
     box-shadow: unset;
   }
-
-  
 }
