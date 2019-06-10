@@ -34,6 +34,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userProfiledata: UserProfileModel;
     // isExpanded = false;
     showNotificationIcon: boolean = false;
+  numOfNotifications: number = 0;
 
   dataModel = {
 
@@ -103,6 +104,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (data) {
           if (data.notification) {
             this.showNotificationIcon = data.notification.length > 0 ? true : false;
+            this.numOfNotifications = data.notification.length;
           }
           else this.showNotificationIcon = false;
         }
@@ -129,6 +131,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   navbar() {
     document.getElementById('bs-example-navbar-collapse-1').classList.remove('show');
     document.getElementById('bs-example-navbar-collapse-1').classList.remove('in');
+    this.checkNotification();
   }
 
   //resetPassword() {

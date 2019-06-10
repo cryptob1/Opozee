@@ -2,6 +2,7 @@ header {
   position: relative;
 }
 
+
 nav.navbar.navbar-default.navbar-fixed-top {
   position: relative !important;
   margin: 0px;
@@ -32,7 +33,7 @@ a.navbar-brand.logo {
   min-height: 40px !important;
 }
 header .dropdown a {
-  padding: 0px !important;
+  padding: 0px ;
   /*margin-top: 0px;
   width:95%;
   height :auto;*/
@@ -145,7 +146,7 @@ header .container-fluid {
   width: 100%;
 }*/
 .bg-red {
-  background: #50881c !important;
+  background: #50881c;
   color: white;
   font-weight: 300;
 }
@@ -158,6 +159,37 @@ header .container-fluid {
 .bg-green {
   background: #D2F3C8 !important
 }
+
+/*notifcation css*/
+
+.notification .fa-stack i {
+  position: absolute;
+  top: 16%;
+}
+
+.notification .fa-stack .fa-circle {
+  color: white;
+  font-size: 37px;
+}
+
+.notification .fa-bell {
+  position: absolute;
+  left: 3%;
+  top: 2%;
+  color: grey;
+  font-size: 18px;
+}
+
+
+.notification .fa-stack .badge {
+  position: absolute;
+  top: 1px;
+  left: 75%;
+  background: #fa3e3e;
+}
+
+
+
 @media(max-width:1100px) and (min-width:768px) {
   .banner_search-form {
     margin-left: 10px;
@@ -222,6 +254,11 @@ header .container-fluid {
     width: 100%;
   }
 
+  header .dropdown {
+    padding-left: 10px;
+  }
+
+
   /*.dropdown a {
     border-radius: 2% !important;
   }*/
@@ -240,8 +277,18 @@ header .container-fluid {
     float: left;
   }
 
- 
+
+  header .dropdown  {
+    padding-left: 10px;
+  }
+
 }
+
+
+
+
+
+
 .header-ddl .dropdown-menu {
   margin: 0px 0px 0 10px !important;
   float: left;
@@ -255,18 +302,24 @@ header .container-fluid {
     padding: 6px 15px !important;
   }
 
+
+
 @media (min-width:768px) {
   .header-ddl .dropdown-menu {
     margin-top: 40px !important;
   }
 }
 
+
+
+
+
 .notification i {
   top: 65%;
   transform: translate(-0,-35%);
   color: #dc0304;
   cursor: pointer;
-  margin-left: -2px;
+  margin-left: -4px;
 }
 
 
@@ -415,6 +468,8 @@ header .container-fluid {
   .t_label {
     display: none;
   }
+
+
 }
 
 .model-popup {
