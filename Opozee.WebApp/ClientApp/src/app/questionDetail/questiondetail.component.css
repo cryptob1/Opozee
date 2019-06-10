@@ -456,6 +456,8 @@ span.profile_left p {
   color: grey;
   padding: 0px 0px 0px 0px;
   float: right;
+  margin-top: -12px;
+
 }
 
 @media(max-width:480px) {
