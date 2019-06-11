@@ -192,7 +192,7 @@ namespace opozee.Controllers.API
                     //    strIamgeURLfordb = entity.ImageURL;
                     //}
 
-                    entity.ImageURL= "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
+                    entity.ImageURL = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
                     entity.ImageURL = strIamgeURLfordb;
                     db.Users.Add(entity);
                     db.SaveChanges();
@@ -529,7 +529,7 @@ namespace opozee.Controllers.API
                     {
                         return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
                     }
-                    BookMarkQuestion questionDetail = new BookMarkQuestion();
+                    BookMarkQuestionMobile questionDetail = new BookMarkQuestionMobile();
                     int id = Convert.ToInt32(questId);
                     int userId = Convert.ToInt32(userid);
                     //                  title == null ?
@@ -547,7 +547,7 @@ namespace opozee.Controllers.API
                     questionDetail.PostQuestionDetail = (from q in db.Questions
                                                          join u in db.Users on q.OwnerUserID equals u.UserID
                                                          where q.Id == id && q.IsDeleted == false
-                                                         select new BookMarkQuestionDetail
+                                                         select new BookMarkQuestionDetailMobile
                                                          {
                                                              Id = q.Id,
                                                              Question = q.PostQuestion,
@@ -557,14 +557,19 @@ namespace opozee.Controllers.API
                                                              HashTags = q.HashTags,
                                                              Name = u.FirstName + " " + u.LastName,
                                                              IsBookmark = db.BookMarks.Where(b => b.UserId == userId && b.QuestionId == id).Select(b => b.IsBookmark.HasValue ? b.IsBookmark.Value : false).FirstOrDefault(),
-                                                             IsSlider= q.IsSlider ,
+                                                             IsSlider = q.IsSlider,
                                                              IsUserPosted = db.Opinions.Any(cus => cus.CommentedUserId == userId && cus.QuestId == id),
                                                              TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
                                                              TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
                                                              TaggedUsers = db.Users.Where(k => roleIds.Contains(k.UserID)).Select(p => p.FirstName + " " + p.LastName).AsQueryable(),
                                                              YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
                                                              NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
-                                                             CreationDate = q.CreationDate
+                                                             CreationDate = q.CreationDate,
+                                                             ReactionSum = (db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count()
+                                                                           + db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count()
+                                                                           + db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count()
+                                                                           + db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count()),
+                                                             LastActivityTime = (DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
                                                          }).FirstOrDefault();
 
 
@@ -751,7 +756,7 @@ namespace opozee.Controllers.API
 
         [HttpGet]
         [Route("api/MobileApi/GetAllPostsMobile")]
-        public HttpResponseMessage GetAllPostsMobile(int userId,int Pageindex, int Pagesize,int Sort = 1)
+        public HttpResponseMessage GetAllPostsMobile(int userId, int Pageindex, int Pagesize, int Sort = 1)
         {
             //List<PostQuestionDetailWebModel> questionDetail = new List<PostQuestionDetailWebModel>();
             AllUserQuestionsMobile questionDetail = new AllUserQuestionsMobile();
@@ -763,33 +768,33 @@ namespace opozee.Controllers.API
                     return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
                 }
                 questionDetail.PostQuestionDetail = (from q in db.Questions
-                                      join u in db.Users on q.OwnerUserID equals u.UserID
-                                      where q.IsDeleted == false
-                                  select new PostQuestionDetailMobile
-                                      {
-                                          Id = q.Id,
-                                          Question = q.PostQuestion,
-                                          OwnerUserID = q.OwnerUserID,
-                                          OwnerUserName = u.UserName,
-                                          Name = u.FirstName + " " + u.LastName,
-                                          UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
-                                          HashTags = q.HashTags,
-                                          CreationDate = q.CreationDate,
-                                          IsSlider = q.IsSlider,
-                                          YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
-                                          NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
-                                          TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
-                                          TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
+                                                     join u in db.Users on q.OwnerUserID equals u.UserID
+                                                     where q.IsDeleted == false
+                                                     select new PostQuestionDetailMobile
+                                                     {
+                                                         Id = q.Id,
+                                                         Question = q.PostQuestion,
+                                                         OwnerUserID = q.OwnerUserID,
+                                                         OwnerUserName = u.UserName,
+                                                         Name = u.FirstName + " " + u.LastName,
+                                                         UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
+                                                         HashTags = q.HashTags,
+                                                         CreationDate = q.CreationDate,
+                                                         IsSlider = q.IsSlider,
+                                                         YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
+                                                         NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
+                                                         TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
+                                                         TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
 
-                                          ReactionSum = (db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count()
-                                              + db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count()
-                                              + db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count()
-                                              + db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count()),
+                                                         ReactionSum = (db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count()
+                                                                 + db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count()
+                                                                 + db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count()
+                                                                 + db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count()),
 
-                                          //TotalRecordcount = 1,
-                                          LastActivityTime = (DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
+                                                         //TotalRecordcount = 1,
+                                                         LastActivityTime = (DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
 
-                                      }).ToList(); //.OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
+                                                     }).ToList(); //.OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
 
 
 
@@ -906,7 +911,7 @@ namespace opozee.Controllers.API
                 }
                 var data1 = questionDetail;
 
-               // return questionDetail; //.OrderByDescending(p=>p.LastActivityTime);
+                // return questionDetail; //.OrderByDescending(p=>p.LastActivityTime);
                 return Request.CreateResponse(JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "AllUserQuestions"));
             }
             catch (Exception ex)
@@ -1184,7 +1189,7 @@ namespace opozee.Controllers.API
                     }
 
 
-                     
+
 
 
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, notification, "LikeDislikeOpinion"));
@@ -1446,7 +1451,7 @@ namespace opozee.Controllers.API
                 {
                     userid = Convert.ToInt32(httpContext.Request.Form["UserID"].ToString());
                 }
-                if (httpContext.Request.Form["FirstName"] != ""&& httpContext.Request.Form["FirstName"] != null)
+                if (httpContext.Request.Form["FirstName"] != "" && httpContext.Request.Form["FirstName"] != null)
                 {
                     firstname = httpContext.Request.Form["FirstName"].ToString();
 
@@ -1488,10 +1493,10 @@ namespace opozee.Controllers.API
                     }
 
                     //entity.ImageURL = "";
-                    if(!string.IsNullOrEmpty(firstname))
+                    if (!string.IsNullOrEmpty(firstname))
                         entity.FirstName = firstname;
                     else
-                    entity.FirstName = "";
+                        entity.FirstName = "";
 
                     if (!string.IsNullOrEmpty(lastname))
                         entity.LastName = lastname;
@@ -1848,7 +1853,7 @@ namespace opozee.Controllers.API
         [Route("api/MobileApi/GetUserBeliefs")]
         [HttpGet]
         public HttpResponseMessage getUserBeliefs(int userId)
-        { 
+        {
             try
             {
                 db.Configuration.LazyLoadingEnabled = false;
@@ -1857,7 +1862,7 @@ namespace opozee.Controllers.API
                     return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
                 }
 
-        
+
 
                 List<Belief> beliefList = (from belief in db.Opinions
                                            join user in db.Users on belief.CommentedUserId equals user.UserID
@@ -1876,20 +1881,20 @@ namespace opozee.Controllers.API
                                                IsAgree = belief.IsAgree,
                                                CreationDate = belief.CreationDate,
                                                questionText = db.Questions.Where(question => question.Id == belief.QuestId).FirstOrDefault().PostQuestion
-            }).OrderByDescending(p => p.CreationDate).ToList();
+                                           }).OrderByDescending(p => p.CreationDate).ToList();
 
                 return Request.CreateResponse(HttpStatusCode.OK, beliefList);
             }
             catch (Exception ex)
             {
                 OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
-          
-               return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "GetUserBeliefs"));
+
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "GetUserBeliefs"));
             }
 
         }
         #endregion
-        
+
         ///
         [HttpPost]
         [Route("api/MobileApi/Login")]
@@ -1899,7 +1904,7 @@ namespace opozee.Controllers.API
             UserLoginWeb ObjLogin = new UserLoginWeb();
             using (OpozeeDbEntities db = new OpozeeDbEntities())
             {
-                
+
                 var v = db.Users.Where(a => a.Email == login.Email && (a.IsAdmin ?? false) == false).FirstOrDefault();
                 if (v != null)
                 {
@@ -1972,7 +1977,7 @@ namespace opozee.Controllers.API
                             _response.success = HttpStatusCode.OK;
                             _response.message = "Login successful!";
                             _response.data = ObjLogin;
-                            return _response; 
+                            return _response;
                         }
                         else
                         {
@@ -2024,7 +2029,7 @@ namespace opozee.Controllers.API
                 TEMPLATE = TEMPLATE.Replace("##PHONE##", "");
                 TEMPLATE = TEMPLATE.Replace("##EMAIL##", "");
 
-                string body = TEMPLATE.Replace("Thanks & Regards", "User Info:").Replace("Message:","<b>Crash Exception:</b>").Replace("Opozee Team", "Opozee Tester");
+                string body = TEMPLATE.Replace("Thanks & Regards", "User Info:").Replace("Message:", "<b>Crash Exception:</b>").Replace("Opozee Team", "Opozee Tester");
 
                 (bool success, string errorMsg) = await EmailSender.SendEmailAsync(recepientName, recepientEmail, subject, body, isHtml);
 

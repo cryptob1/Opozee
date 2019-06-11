@@ -19,6 +19,16 @@ namespace Opozee.Models.API
         public List<Comments> Comments { get; set; }
 
     }
+
+
+    public class BookMarkQuestionMobile
+    {
+        public BookMarkQuestionDetailMobile PostQuestionDetail { get; set; }
+        public List<Comments> Comments { get; set; }
+
+    }
+
+
     public class AllUserQuestions
     {
 
@@ -98,7 +108,34 @@ namespace Opozee.Models.API
         public IQueryable TaggedUsers { get; set; }
         public bool? IsSlider { get; set; }
     }
-    
+
+
+    public class BookMarkQuestionDetailMobile
+    {
+        public int Id { get; set; }
+        public string Question { get; set; }
+        public int OwnerUserID { get; set; }
+        [Display(Name = "UserName")]
+        public string OwnerUserName { get; set; }
+        public string UserImage { get; set; }
+        public string Name { get; set; }
+        public string HashTags { get; set; }
+        public int? TotalLikes { get; set; }
+        public int? TotalDisLikes { get; set; }
+        public int YesCount { get; set; }
+        public int NoCount { get; set; }
+        public DateTime? CreationDate { get; set; }
+        public bool? IsBookmark { get; set; }
+        public int BookmarkId { get; set; }
+        public bool IsUserPosted { get; set; }
+        public IQueryable TaggedUsers { get; set; }
+        public bool? IsSlider { get; set; }
+
+        public DateTime? LastActivityTime { get; set; }
+        public int? ReactionSum { get; set; }
+    }
+
+
     public class Comments
     {
         public int Id { get; set; }
