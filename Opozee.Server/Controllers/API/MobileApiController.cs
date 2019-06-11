@@ -1446,16 +1446,16 @@ namespace opozee.Controllers.API
                 {
                     userid = Convert.ToInt32(httpContext.Request.Form["UserID"].ToString());
                 }
-                if (httpContext.Request.Form["FirstName"] != "")
+                if (httpContext.Request.Form["FirstName"] != ""&& httpContext.Request.Form["FirstName"] != null)
                 {
                     firstname = httpContext.Request.Form["FirstName"].ToString();
 
                 }
-                if (httpContext.Request.Form["LastName"] != "")
+                if (httpContext.Request.Form["LastName"] != "" && httpContext.Request.Form["LastName"] != null)
                 {
                     lastname = httpContext.Request.Form["LastName"].ToString();
                 }
-                
+
                 //ViewModelUser User = new ViewModelUser();
                 string strIamgeURLfordb = null;
                 string _SiteRoot = WebConfigurationManager.AppSettings["SiteImgPath"];
@@ -1477,13 +1477,26 @@ namespace opozee.Controllers.API
                     {
                         username = httpContext.Request.Form["UserName"].ToString();
                         var userExist = db.Database
-                        .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserName] = @username and ", new SqlParameter("@username", username))
-                        .FirstOrDefault();
+                        .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserName] = @username and UserID !=@UserID", new SqlParameter("@username", username), new SqlParameter("@UserID", userid))
+                        .Count();
+
+                        if (userExist > 0)
+                        {
+                            return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "User Already Exsist.", "UpdateUserProfile"));
+                        }
+                        //if(userExist)
                     }
 
                     //entity.ImageURL = "";
-                    entity.FirstName = firstname;
-                    entity.LastName = lastname;
+                    if(!string.IsNullOrEmpty(firstname))
+                        entity.FirstName = firstname;
+                    else
+                    entity.FirstName = "";
+
+                    if (!string.IsNullOrEmpty(lastname))
+                        entity.LastName = lastname;
+                    else
+                        entity.LastName = "";
                     entity.UserName = username;
                     entity.ModifiedDate = DateTime.Now;
                     if (HttpContext.Current.Request.Files.Count > 0)
