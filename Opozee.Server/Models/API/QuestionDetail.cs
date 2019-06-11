@@ -21,7 +21,15 @@ namespace Opozee.Models.API
     }
     public class AllUserQuestions
     {
+
         public List<PostQuestionDetail> PostQuestionDetail { get; set; }
+        //public List<Comments> Comments { get; set; }
+
+    }
+    public class AllUserQuestionsMobile
+    {
+
+        public List<PostQuestionDetailMobile> PostQuestionDetail { get; set; }
         //public List<Comments> Comments { get; set; }
 
     }
@@ -44,6 +52,31 @@ namespace Opozee.Models.API
         public Comments MostNoLiked { get; set; }
         public bool? IsSlider { get; set; }
     }
+
+    public class PostQuestionDetailMobile
+    {
+        public int Id { get; set; }
+        public string Question { get; set; }
+        public int OwnerUserID { get; set; }
+        [Display(Name = "UserName")]
+        public string OwnerUserName { get; set; }
+        public string Name { get; set; }
+        public string UserImage { get; set; }
+        public string HashTags { get; set; }
+        public int? TotalLikes { get; set; }
+        public int YesCount { get; set; }
+        public int NoCount { get; set; }
+        public int? TotalDisLikes { get; set; }
+        public DateTime? CreationDate { get; set; }
+        public Comments MostYesLiked { get; set; }
+        public Comments MostNoLiked { get; set; }
+        public bool? IsSlider { get; set; }
+
+       
+        public DateTime? LastActivityTime { get; set; }
+        public int? ReactionSum { get; set; }
+    }
+
     public class BookMarkQuestionDetail
     {
         public int Id { get; set; }

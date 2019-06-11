@@ -643,7 +643,12 @@ namespace opozee.Controllers.API
                 return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "AllUserQuestions"));
             }
         }
+
         #endregion
+
+
+
+
 
         #region "Get All Posts" 
         [HttpGet]
@@ -741,6 +746,177 @@ namespace opozee.Controllers.API
             }
         }
         #endregion
+
+
+
+        [HttpGet]
+        [Route("api/MobileApi/GetAllPostsMobile")]
+        public HttpResponseMessage GetAllPostsMobile(int userId,int Pageindex, int Pagesize,int Sort = 1)
+        {
+            //List<PostQuestionDetailWebModel> questionDetail = new List<PostQuestionDetailWebModel>();
+            AllUserQuestionsMobile questionDetail = new AllUserQuestionsMobile();
+            try
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
+                }
+                questionDetail.PostQuestionDetail = (from q in db.Questions
+                                      join u in db.Users on q.OwnerUserID equals u.UserID
+                                      where q.IsDeleted == false
+                                  select new PostQuestionDetailMobile
+                                      {
+                                          Id = q.Id,
+                                          Question = q.PostQuestion,
+                                          OwnerUserID = q.OwnerUserID,
+                                          OwnerUserName = u.UserName,
+                                          Name = u.FirstName + " " + u.LastName,
+                                          UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
+                                          HashTags = q.HashTags,
+                                          CreationDate = q.CreationDate,
+                                          IsSlider = q.IsSlider,
+                                          YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
+                                          NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
+                                          TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
+                                          TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
+
+                                          ReactionSum = (db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count()
+                                              + db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count()
+                                              + db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count()
+                                              + db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count()),
+
+                                          //TotalRecordcount = 1,
+                                          LastActivityTime = (DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
+
+                                      }).ToList(); //.OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
+
+
+
+                if (Sort == 0) //sort by last reaction time
+                {
+                    questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderByDescending(p => p.LastActivityTime).ToPagedList(Pageindex - 1, Pagesize).ToList();
+                }
+                else if (Sort == 1) //sort by most reactions
+                {
+
+                    questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderByDescending(p => p.ReactionSum).ToPagedList(Pageindex - 1, Pagesize).ToList();
+                }
+
+                else if (Sort == 2)// sort by least reactions
+                {
+                    questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderBy(p => p.ReactionSum).ToPagedList(Pageindex - 1, Pagesize).ToList();
+
+                }
+
+                foreach (var data in questionDetail.PostQuestionDetail)
+                {
+                    var opinionList = db.Opinions.Where(p => p.QuestId == data.Id).ToList();
+                    if (opinionList.Count > 0)
+                    {
+
+                        int? maxYesLike = opinionList.Where(p => p.IsAgree == true).Max(i => i.Likes);
+                        int? maxNoLike = opinionList.Where(p => p.IsAgree == false).Max(i => i.Likes);
+                        //int? maxDislike = opinionList.Max(i => i.Dislikes);
+                        if (maxYesLike != null && maxYesLike > 0)
+                        {
+                            data.MostYesLiked = (from e in db.Opinions
+                                                 join t in db.Users on e.CommentedUserId equals t.UserID
+                                                 join n in db.Notifications on e.QuestId equals n.questId
+                                                 where e.IsAgree == true && e.QuestId == data.Id && n.Like == true
+                                                 select new Comments
+                                                 {
+                                                     Id = e.Id,
+                                                     Comment = e.Comment,
+                                                     CommentedUserId = t.UserID,
+                                                     Name = t.FirstName + " " + t.LastName,
+                                                     UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                     IsAgree = e.IsAgree,
+                                                     LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                     DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                     CommentedUserName = t.UserName,
+                                                     CreationDate = e.CreationDate
+                                                 }).OrderByDescending(s => s.LikesCount).ThenByDescending(s => s.CreationDate).FirstOrDefault();
+
+                        }
+                        else if (maxYesLike != null)
+                        {
+                            // get the latest opinion with no votes
+                            data.MostYesLiked = (from e in db.Opinions
+                                                 join t in db.Users on e.CommentedUserId equals t.UserID
+                                                 join n in db.Notifications on e.QuestId equals n.questId
+                                                 where e.IsAgree == true && e.QuestId == data.Id
+                                                 select new Comments
+                                                 {
+                                                     Id = e.Id,
+                                                     Comment = e.Comment,
+                                                     CommentedUserId = t.UserID,
+                                                     Name = t.FirstName + " " + t.LastName,
+                                                     UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                     IsAgree = e.IsAgree,
+                                                     LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                     DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                     CommentedUserName = t.UserName,
+                                                     CreationDate = e.CreationDate
+                                                 }).OrderByDescending(s => s.CreationDate).FirstOrDefault();
+
+                        }
+
+                        if (maxNoLike != null && maxNoLike > 0)
+                        {
+                            data.MostNoLiked = (from e in db.Opinions
+                                                join t in db.Users on e.CommentedUserId equals t.UserID
+                                                join n in db.Notifications on e.QuestId equals n.questId
+                                                where e.IsAgree == false && e.QuestId == data.Id && n.Like == true
+                                                select new Comments
+                                                {
+                                                    Id = e.Id,
+                                                    Comment = e.Comment,
+                                                    CommentedUserId = t.UserID,
+                                                    Name = t.FirstName + " " + t.LastName,
+                                                    UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                    IsAgree = e.IsAgree,
+                                                    LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                    DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                    CommentedUserName = t.UserName,
+                                                    CreationDate = e.CreationDate
+                                                }).OrderByDescending(s => s.LikesCount).ThenByDescending(s => s.CreationDate).FirstOrDefault();
+                        }
+                        else if (maxNoLike != null)
+                        {
+                            data.MostNoLiked = (from e in db.Opinions
+                                                join t in db.Users on e.CommentedUserId equals t.UserID
+                                                join n in db.Notifications on e.QuestId equals n.questId
+                                                where e.IsAgree == false && e.QuestId == data.Id
+                                                select new Comments
+                                                {
+                                                    Id = e.Id,
+                                                    Comment = e.Comment,
+                                                    CommentedUserId = t.UserID,
+                                                    Name = t.FirstName + " " + t.LastName,
+                                                    UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                    IsAgree = e.IsAgree,
+                                                    LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                    DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                    CommentedUserName = t.UserName,
+                                                    CreationDate = e.CreationDate
+                                                }).OrderByDescending(s => s.CreationDate).FirstOrDefault();
+                        }
+                    }
+                }
+                var data1 = questionDetail;
+
+               // return questionDetail; //.OrderByDescending(p=>p.LastActivityTime);
+                return Request.CreateResponse(JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "AllUserQuestions"));
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "AllUserQuestions"));
+                //return questionDetail;
+            }
+        }
+
 
         #region "Like Dislike Opinion" 
         [HttpPost]
@@ -1844,7 +2020,7 @@ namespace opozee.Controllers.API
                 if (!success)
                 {
                     _response.message = errorMsg;
-                    return BadRequest(errorMsg);
+                    return BadRequest(_response);
                 }
             }
             catch (Exception ex)
