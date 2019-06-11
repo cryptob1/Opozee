@@ -183,8 +183,8 @@ header .container-fluid {
 
 .notification .fa-stack .badge {
   position: absolute;
-  top: 1px;
-  left: 75%;
+  top: -6px;
+  left: 70%;
   background: #fa3e3e;
 }
 

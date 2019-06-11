@@ -139,7 +139,7 @@
   }
 
     .taglist h4 a{
-      font-size: 12px;
+      font-size: 14px;
     }
 
 
@@ -152,5 +152,13 @@
     width: 100%;
   }
 
+   
+
  }
 
+
+
+.container {
+  padding-right: 2px;
+  padding-left: 2px;
+}

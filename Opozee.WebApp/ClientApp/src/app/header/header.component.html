@@ -51,7 +51,7 @@
             <li><a (click)="navbar();" [routerLink]="['/score/']">Rankings</a></li>
 
             <!--<li><a [routerLink]="['/profile/', loginData.Id]">My Beliefs</a></li>-->
-            <li *ngIf="loginData.isAuthenticateUserId == 0 || loginData  == 0"><a (click)="navbar();" [routerLink]="['/login']">Login Or Sign Up</a></li>
+            <li *ngIf="loginData.isAuthenticateUserId == 0 || loginData  == 0"><a (click)="navbar();" [routerLink]="['/login']">Login/Sign Up</a></li>
             <li class="notification" *ngIf="loginData.Id > 0">
               <a (click)="navbar();" [routerLink]="['/notifications']">
 
