@@ -849,7 +849,7 @@ namespace opozee.Controllers.API
                                             join n in db.Notifications on o.Id equals n.CommentId
                                             join u in db.Users on n.CommentedUserId equals u.UserID
                                             where ((q.OwnerUserID == Model.UserId && o.CommentedUserId != Model.UserId && n.Comment == true) || //someone left a comment
-                                            (o.CommentedUserId == Model.UserId && n.Comment == false)) && q.IsDeleted == false  //someone left a vote
+                                            (o.CommentedUserId == Model.UserId && n.Comment != true)) && q.IsDeleted == false  //someone left a vote
                                             select new UserNotifications
                                             {
                                                 UserId = q.OwnerUserID,
@@ -1163,6 +1163,10 @@ namespace opozee.Controllers.API
             else if (dislike == true && like == false && comment == true)
             {
                 Tag = UserName + " Has Disliked and given opinion on your Question.";
+            }
+            else if (dislike == false && like == false && comment == false)
+            {
+                Tag = UserName + " Has removed his/her Vote.";
             }
 
             return Tag;
