@@ -6,6 +6,7 @@ import { first } from 'rxjs/operators';
 import { PostQuestionDetail, BookMarkQuestion, LocalStorageUser} from '../_models/user';
 import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'bookmark-component',
@@ -181,13 +182,23 @@ export class BookmarkQuestion implements OnInit {
         this.loading = false;
         this.router.navigate(['/questiondetail/', this.Id]);
       },
-        error => {
+      error => {
+        if (error.status == 401) {
+          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          Observable.interval(1000)
+            .subscribe((val) => {
+              this.logout();
+            });
+        }
           //this.alertService.error(error);
           //this.loading = false;
         });
   }
 
-
+  logout() {
+    localStorage.removeItem('currentUser');
+    window.location.reload();
+  }
 
   SaveLikeDislike(dataModel) {
     debugger;
@@ -198,7 +209,14 @@ export class BookmarkQuestion implements OnInit {
         this.loading = false;
         this.router.navigate(['/questiondetail/', this.Id]);
       },
-        error => {
+      error => {
+        if (error.status == 401) {
+          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          Observable.interval(1000)
+            .subscribe((val) => {
+              this.logout();
+            });
+        }
           //this.alertService.error(error);
           //this.loading = false;
         });

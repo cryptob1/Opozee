@@ -3,6 +3,8 @@ import { first } from 'rxjs/operators';
 import { User, NotificationsModel, LocalStorageUser } from '../_models';
 import { QuestionListing } from '../_models/question';
 import { UserService } from '../_services';
+import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -26,7 +28,7 @@ export class NotificationComponent implements OnInit {
   // paged items
   pagedItems: any[];
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private toastr: ToastrService) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
@@ -74,10 +76,20 @@ export class NotificationComponent implements OnInit {
       this.setPageonpageLoad(this.PagingModel.PageNumber, this.PagingModel.TotalRecords)
       this.isRecordLoaded = true
     }, error => {
+      if (error.status == 401) {
+        this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+        Observable.interval(1000)
+          .subscribe((val) => {
+            this.logout();
+          });
+      }
       this.isRecordLoaded = false;
     });
   }
-   
+  logout() {
+    localStorage.removeItem('currentUser');
+    window.location.reload();
+  }
 
   PagingPagesload(PageNumber, PageSize) {
     this.PagingModel.PageNumber = PageNumber;

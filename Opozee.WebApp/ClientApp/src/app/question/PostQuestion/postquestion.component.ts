@@ -8,6 +8,7 @@ import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationDialogComponent } from '../../Shared/confirmationDialog/confirmationDialog.component';
 import { MixpanelService } from '../../_services/mixpanel.service';
+import { Observable } from 'rxjs';
 
 //import { ConfirmationDialogService } from '../../Shared/confirmationDialog/confirmationDialog.service';
 
@@ -214,9 +215,21 @@ export class PostQuestionComponent implements OnInit {
 
       },
         error => {
-          this.alertService.error(error);
+          //this.alertService.error(error);
+          if (error.status == 401) {
+            this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+            Observable.interval(1000)
+              .subscribe((val) => {
+                this.logout();
+              });
+          }
           this.loading = false;
         });
+  }
+
+  logout() {
+    localStorage.removeItem('currentUser');
+    window.location.reload();
   }
 
   onItemSelect(e) {

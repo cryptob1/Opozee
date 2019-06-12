@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { LocalStorageUser, NotificationsModel } from '../../_models';
 import { UserProfileModel } from '../../_models/user';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 
 @Component({ templateUrl: 'profile.component.html' })
@@ -91,12 +92,22 @@ export class ProfileComponent implements OnInit {
         this.isRecordLoaded = true
 
       }, error => {
+        if (error.status == 401) {
+          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          Observable.interval(1000)
+            .subscribe((val) => {
+              this.logout();
+            });
+        }
         this.isRecordLoaded = false;
 
       });
 
   }
-
+  logout() {
+    localStorage.removeItem('currentUser');
+    window.location.reload();
+  }
   onFollowTab(tab) {
     this.PagingModel.UserId = this.localStorageUser.Id;
     this.PagingModel.PageNumber = 1;
@@ -113,6 +124,13 @@ export class ProfileComponent implements OnInit {
           console.log('followersList', data);
           this.isRecordLoaded = false;
         }, error => {
+          if (error.status == 401) {
+            this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+            Observable.interval(1000)
+              .subscribe((val) => {
+                this.logout();
+              });
+          }
           this.isRecordLoaded = false;
 
         });
@@ -126,6 +144,13 @@ export class ProfileComponent implements OnInit {
           console.log('followingList', data);
           this.isRecordLoaded = false;
         }, error => {
+          if (error.status == 401) {
+            this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+            Observable.interval(1000)
+              .subscribe((val) => {
+                this.logout();
+              });
+          }
           this.isRecordLoaded = false;
         });
     }
@@ -250,7 +275,15 @@ export class ProfileComponent implements OnInit {
                     }
                 },
                     error => {
-                        console.log('error: ', error)
+                     
+                      if (error.status == 401) {
+                        this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+                        Observable.interval(1000)
+                          .subscribe((val) => {
+                            this.logout();
+                          });
+                      }
+                      console.log('error: ', error)
                     });
         }
         else if (tab === 'mybeliefs') {
@@ -270,11 +303,19 @@ export class ProfileComponent implements OnInit {
                     }
                 },
                     error => {
-                        console.log('error: ', error)
+                      
+                      if (error.status == 401) {
+                        this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+                        Observable.interval(1000)
+                          .subscribe((val) => {
+                            this.logout();
+                          });
+                      }
+                      console.log('error: ', error)
                     });
         }
     }
-
+  
   Unfollow(userId, tab) {
 
     let model = {

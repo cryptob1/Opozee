@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { first, retry } from 'rxjs/operators';
 import { MixpanelService } from '../../_services/mixpanel.service';
 import { DOCUMENT } from '@angular/platform-browser';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'dialog-post-belief',
@@ -155,12 +156,25 @@ export class DialogPostBelief implements OnInit {
 
       },
         error => {
+          
+          if (error.status == 401) {
+            this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+            Observable.interval(1000)
+              .subscribe((val) => {
+                this.logout();
+              });
+          }
           this.toastr.error('Error', 'Something went wrong, please try again.');
           this.loading = false;
           //this.alertService.error(error);
         });
   }
-     
+
+  logout() {
+    localStorage.removeItem('currentUser');
+    window.location.reload();
+  }
+
   setOpinionAgreeStatus(status: number) {
     this.dataModel.OpinionAgreeStatus = status;
   }

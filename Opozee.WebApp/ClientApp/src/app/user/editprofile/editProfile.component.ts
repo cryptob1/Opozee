@@ -7,6 +7,7 @@ import { UserEditProfileModel } from '../../_models/user';
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http'
 import { LocalStorageUser } from '../../_models';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 
 @Component({ templateUrl: 'editProfile.component.html' })
@@ -108,11 +109,21 @@ export class EditProfileComponent implements OnInit {
       },
         error => {
           //this.alertService.error(error);
+          if (error.status == 401) {
+            this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+            Observable.interval(1000)
+              .subscribe((val) => {
+                this.logout();
+              });
+          }
           this.loading = false;
         });
   }
 
-
+  logout() {
+    localStorage.removeItem('currentUser');
+    window.location.reload();
+  }
   handleFileInput(file: FileList) {
     this.fileToUpload = file.item(0);
 
@@ -138,8 +149,20 @@ export class EditProfileComponent implements OnInit {
         this.toastr.success('Image', 'Change successful!', { timeOut: 1000 });
       },
       error => {
-        this.toastr.error('Failed to upload image -', error.message + '', { timeOut: 2000 });
+        if (error.status == 401) {
+          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          Observable.interval(1000)
+            .subscribe((val) => {
+              this.logout();
+            });
+        }
+        else {
+          this.toastr.error('Failed to upload image -', error.message + '', { timeOut: 2000 });
+        }
+       
       }
     );
-  } 
+  }
+
+
 }

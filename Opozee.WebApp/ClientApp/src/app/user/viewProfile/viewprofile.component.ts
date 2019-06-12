@@ -4,7 +4,8 @@ import { UserService } from '../../_services/user.service';
 import { first } from 'rxjs/operators';
 import { LocalStorageUser, NotificationsModel } from '../../_models';
 import { UserProfileModel } from '../../_models/user';
-
+import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 @Component({
   templateUrl: 'viewProfile.component.html'
@@ -26,7 +27,7 @@ export class ViewProfileComponent implements OnInit {
   PagingModel = { 'UserId': 0, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, IsChecked: true, CheckedTab: "mybeliefs" }
   followingModel = { 'UserId': 0, 'Following': 0, IsFollowing: false }
 
-  constructor(private route: ActivatedRoute, private userService: UserService, private router: Router) {
+  constructor(private route: ActivatedRoute, private userService: UserService, private router: Router, private toastr: ToastrService) {
     if (this.route.snapshot.params["Id"]) {
       this.Id = this.route.snapshot.params["Id"];
 
@@ -52,7 +53,19 @@ export class ViewProfileComponent implements OnInit {
       .subscribe(followings => {
       // debugger;
       console.log(followings);
-    });
+      },
+      error => {
+        if (error.status == 401) {
+          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          Observable.interval(1000)
+            .subscribe((val) => {
+              this.logout();
+            });
+        }
+        else {
+        
+        }
+      });
   }
 
   onchangeTab(data) {
@@ -81,10 +94,22 @@ export class ViewProfileComponent implements OnInit {
     this.userService.getTabOneNotification(PagingModel).pipe(first()).subscribe(Notifications => {
       //console.log(Notifications);
       this.notification = Notifications;
+    }, error => {
+      if (error.status == 401) {
+        this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+        Observable.interval(1000)
+          .subscribe((val) => {
+            this.logout();
+          });
+      }
+      this.isRecordLoaded = false;
     });
   }
   
-
+  logout() {
+    localStorage.removeItem('currentUser');
+    window.location.reload();
+  }
   onFollowTab(tab) {
 
     this.PagingModel.UserId = this.Id;
@@ -102,6 +127,13 @@ export class ViewProfileComponent implements OnInit {
           console.log('followersList', data);
           this.isRecordLoaded = false;
         }, error => {
+          if (error.status == 401) {
+            this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+            Observable.interval(1000)
+              .subscribe((val) => {
+                this.logout();
+              });
+          }
           this.isRecordLoaded = false;
 
         });
@@ -115,6 +147,13 @@ export class ViewProfileComponent implements OnInit {
           console.log('followingList', data);
           this.isRecordLoaded = false;
         }, error => {
+          if (error.status == 401) {
+            this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+            Observable.interval(1000)
+              .subscribe((val) => {
+                this.logout();
+              });
+          }
           this.isRecordLoaded = false;
         });
     }
@@ -141,6 +180,15 @@ export class ViewProfileComponent implements OnInit {
       .subscribe(data => {
         this.getUserProfile();
         this.onFollowTab(tab);
+      }, error => {
+        if (error.status == 401) {
+          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          Observable.interval(1000)
+            .subscribe((val) => {
+              this.logout();
+            });
+        }
+       
       });
   }
 
@@ -154,6 +202,15 @@ export class ViewProfileComponent implements OnInit {
       .subscribe(data => {
         this.getUserProfile();
         this.onFollowTab(tab);
+      }, error => {
+        if (error.status == 401) {
+          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          Observable.interval(1000)
+            .subscribe((val) => {
+              this.logout();
+            });
+        }
+       
       });
   }
 

@@ -5,6 +5,7 @@ import { User, LocalStorageUser, PostQuestionDetail } from '../../_models';
 import { UserService } from '../../_services';
 
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 @Component({ templateUrl: 'postedQuestionEditList.component.html', styleUrls: ['./postedQuestionEditList.component.css']  })
 export class PostedQuestionEditList implements OnInit {
@@ -105,12 +106,21 @@ export class PostedQuestionEditList implements OnInit {
 
       },
         error => {
-     
+          if (error.status == 401) {
+            this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+            Observable.interval(1000)
+              .subscribe((val) => {
+                this.logout();
+              });
+          }
   
         });
     
   }
-
+  logout() {
+    localStorage.removeItem('currentUser');
+    window.location.reload();
+  }
   
   PagingPagesload(PageNumber, PageSize) {
     debugger;

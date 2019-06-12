@@ -6,6 +6,7 @@ import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { debounce } from 'rxjs/operator/debounce';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 @Component({ templateUrl: 'editPostquestion.component.html', styleUrls: ['./editPostquestion.component.css'] })
 export class EditPostquestion implements OnInit {
@@ -88,12 +89,24 @@ export class EditPostquestion implements OnInit {
    ;
 
       },
-        error => {
+      error => {
+        if (error.status == 401) {
+          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          Observable.interval(1000)
+            .subscribe((val) => {
+              this.logout();
+            });
+        }
+        else {
           this.alertService.error(error);
           this.loading = false;
+        }
         });
   }
-
+  logout() {
+    localStorage.removeItem('currentUser');
+    window.location.reload();
+  }
 
 
   getpostedEditQuestionweb() {

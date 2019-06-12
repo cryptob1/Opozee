@@ -12,6 +12,7 @@ import { DialogPostBelief } from '../questionDetail/dialogPostBelief/dialogPostB
 import { HttpUrlEncodingCodec } from '@angular/common/http';
 import { MixpanelService } from '../_services/mixpanel.service';
 import { PopoverModule } from "ngx-popover";
+import { Observable } from 'rxjs';
 
 enum Reaction {
   Thoughtful = 1,
@@ -138,6 +139,9 @@ export class Questiondetail implements OnInit {
 
     this.getQuestionDetail()
     this.mixpanelService.track('questiondetail:' + this.Id);
+
+
+ 
   }
 
   percentage: number = 0;
@@ -148,7 +152,7 @@ export class Questiondetail implements OnInit {
       
       this.PostQuestionDetailModel = data as BookMarkQuestionVM;
       this.PostQuestionDetailModel.comments = data['Comments'] as Comments[];
-      
+      console.log('asdf',this.PostQuestionDetailModel);
       let scoreYes = 0;
       let scoreNo = 0;
 
@@ -247,7 +251,7 @@ export class Questiondetail implements OnInit {
 
 
   saveLikeclick(Likes, index, qDetail?,reactionType?,pop?) {
-    
+    debugger
     //alert(reactionType);
     if (!this.checkTooManyLikes()) {
       this.toastr.error('', 'Too many Votes. Slow down!', { timeOut: 5000 });
@@ -431,6 +435,13 @@ export class Questiondetail implements OnInit {
         error => {
           //this.alertService.error(error);
           //this.loading = false;
+          if (error.status == 401) {
+            this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+            Observable.interval(1000)
+              .subscribe((val) => {
+                this.logout();
+              });
+          }
         });
   }
 
@@ -442,7 +453,7 @@ export class Questiondetail implements OnInit {
 
 
   SaveLikeDislike(dataModel, qDetail) {
-    
+    debugger
     this.loading = true;
     this.userService.SaveLikeDislikeService(this.dataModel)
       .pipe(first())
@@ -481,10 +492,24 @@ export class Questiondetail implements OnInit {
         //this.router.navigate(['/questiondetail/', this.Id]);
 
       },
-        error => {
+      error => {
+          debugger
           //this.alertService.error(error);
+        if (error.status == 401) {
+          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          Observable.interval(1000)
+            .subscribe((val) => {
+              this.logout();
+            });
+        }
+          //this.router.navigate(['login']);
           this.loading = false;
         });
+  }
+
+  logout() {
+    localStorage.removeItem('currentUser');
+    window.location.reload();
   }
 
   private QuestionDetailsData(data) {
