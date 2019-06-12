@@ -438,15 +438,16 @@ namespace opozee.Controllers.API
             public string icon { get; set; }
         }
 
-       public enum Reaction
+        public enum Reaction
         {
-           Thoughtful = 1,
+            Thoughtful = 1,
             Factual = 2,
             Funny = 3,
-            NotMaterial = 4,
+            Illogical = 4,
             Fakenews = 5,
-            Biased = 6
+            OffTopic = 6
         }
+         
         //getPushNotification
         [HttpGet]
         [Route("api/WebApi/PushNotification")]
@@ -455,12 +456,13 @@ namespace opozee.Controllers.API
             //later will fetch data from db
             var _response = new PushNotificationVM()
             {
-                title = "500 Opozee Coins (OPZ) for signing up",
+                title = "Opozee - You have unread notifications!",
                 icon = "assets/images/OpozeeIcon.png",
-                body = "Every OPZ coin holder is a shareholder in the network with a claim on the network's growth and profitability. As the value of the network increases, so will the value of OPZ coins."
+                body = "Click   to check your notifications."
             };
             return _response;
         }
+
 
         [Authorize]
         [HttpGet]
@@ -2352,7 +2354,8 @@ namespace opozee.Controllers.API
                 DateTime dateFrom = currentDate.AddSeconds(-60);
                 //public string GenerateNotificationTags(bool? like, bool? dislike, bool? comment, string UserName, bool you, bool yours)
                 List<alertNotifications> alertResult = new List<alertNotifications>();
-
+                
+                //if there are any notifications in the last 24 hours that have not been read yet
                 alertResult = (from q in db.Questions
                                   join n in db.Notifications on q.Id equals n.questId 
                                   where q.OwnerUserID == user.UserID && q.IsDeleted == false &&
@@ -2570,59 +2573,60 @@ namespace opozee.Controllers.API
         public List<PopularTag> GetPopularHashTags()
         {
             List<PopularTag> TopPopularHashTags = new List<PopularTag>();
-            //try
-            //{
-            //    db.Configuration.LazyLoadingEnabled = false;
-
-
-            //    var PopularHashTagsList = (from q in db.Questions
-            //                                   //join u in db.Users on q.OwnerUserID equals u.UserID
-            //                               where q.IsDeleted == false
-            //                               select new
-            //                               {
-            //                                   HashTag = q.HashTags,
-            //                                   QuestionId = q.Id
-            //                               }).ToList();
-
-
-            //    int count = 0;
-
-            //    foreach (var item in PopularHashTagsList)
-            //    {
-
-            //        string[] splitHastags =  item.HashTag.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            //        foreach (var tag in splitHastags)
-            //        {
-            //            PopularTag _hashtag = new PopularTag();
-            //            _hashtag.HashTag = tag;
-            //            //_hashtag.QuestionId = item.QuestionId;
-            //            //_hashtag.Count = PopularHashTagsList.Where(x => x.HashTag.Contains(tag)).ToList().Count;
-            //            TopPopularHashTags.Add(_hashtag);
-            //        }
-            //    }
-
-            //    foreach (var tag in TopPopularHashTags)
-            //    {
-            //        tag.Count = TopPopularHashTags.Where(x => x.HashTag == tag.HashTag).ToList().Count;
-            //    }
-
-            //    TopPopularHashTags = TopPopularHashTags.OrderByDescending(x => x.Count).Distinct().ToList();
-            //}
-            //catch (Exception ex)
-            //{
-            //    OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
-            //}
-
-            string[] tags = { "crypto", "health", "sports", "uspolitics", "india" };
-
-            foreach (var tag in tags)
+            try
             {
-                PopularTag _hashtag = new PopularTag();
-                _hashtag.HashTag = tag;
+                db.Configuration.LazyLoadingEnabled = false;
 
-                TopPopularHashTags.Add(_hashtag);
+                DateTime from_date = DateTime.UtcNow.AddDays(-10).Date;
+                
+
+                var PopularHashTagsList = (from q in db.Questions
+                                               //join u in db.Users on q.OwnerUserID equals u.UserID
+                                           where q.IsDeleted == false && q.CreationDate > from_date
+                                           select new
+                                           {
+                                               HashTag = q.HashTags,
+                                               QuestionId = q.Id
+                                           }).ToList();
+
+                 
+
+                foreach (var item in PopularHashTagsList)
+                {
+
+                    string[] splitHastags = item.HashTag.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (var tag in splitHastags)
+                    {
+                        PopularTag _hashtag = new PopularTag();
+                        _hashtag.HashTag = tag;
+                        //_hashtag.QuestionId = item.QuestionId;
+                        //_hashtag.Count = PopularHashTagsList.Where(x => x.HashTag.Contains(tag)).ToList().Count;
+                        TopPopularHashTags.Add(_hashtag);
+                    }
+                }
+
+                foreach (var tag in TopPopularHashTags)
+                {
+                    tag.Count = TopPopularHashTags.Where(x => x.HashTag == tag.HashTag).ToList().Count;
+                }
+
+                TopPopularHashTags = TopPopularHashTags.OrderByDescending(x => x.Count).Distinct().ToList();
             }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+            }
+
+            //string[] tags = { "crypto", "health", "sports", "uspolitics", "india" };
+
+            //foreach (var tag in TopPopularHashTags)
+            //{
+            //    PopularTag _hashtag = new PopularTag();
+            //    _hashtag.HashTag = tag;
+
+            //    TopPopularHashTags.Add(_hashtag);
+            //}
 
             return TopPopularHashTags;
         }
@@ -2662,7 +2666,7 @@ namespace opozee.Controllers.API
                 ObjOpinion.QuestId = Model.QuestId;
                 ObjOpinion.Comment = Model.Comment;
                 ObjOpinion.CommentedUserId = Model.CommentedUserId;
-                ObjOpinion.CreationDate = DateTime.Now.ToUniversalTime(); ;
+                ObjOpinion.CreationDate = DateTime.Now.ToUniversalTime(); 
                 ObjOpinion.Likes = Model.Likes;
                 ObjOpinion.IsAgree = Model.OpinionAgreeStatus;
                 ObjOpinion.Dislikes = Model.Dislikes;

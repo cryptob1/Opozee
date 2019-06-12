@@ -316,4 +316,16 @@
     padding: 1px;
     box-shadow: unset;
   }
+
+
+  .container-fluid {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+
+  .container {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+
 }

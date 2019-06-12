@@ -26,7 +26,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   qid = -1;
   //questionListing: QuestionListing[] = [];
   PostQuestionDetailList: PostQuestionDetail[] = [];
-  showPopup: boolean = true;
+ 
 
   isRecordLoaded: boolean = false;
   percentage: number = 0; 
@@ -59,14 +59,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     }
 
 
-    if (JSON.parse(localStorage.getItem('popupShown')) || this.localStorageUser != null) {
-      this.showPopup = false;
-    }
-    else {
-
-      localStorage.setItem('popupShown', 'true')
-    }
-
+ 
 
     if (this.route.snapshot.params["search"]) {
       this.search = this.route.snapshot.params["search"];
@@ -280,12 +273,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     });
   }
 
-
-  hidePopup() {
-
-    this.showPopup = false;
-
-  }
+   
 
   goToqDetail() {
     this.router.navigate(['/questiondetail/', this.qid]);

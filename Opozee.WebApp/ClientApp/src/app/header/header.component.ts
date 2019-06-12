@@ -48,11 +48,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
     this.showPopup = true;
-    if (this.localStorageUser != null) {//JSON.parse(localStorage.getItem('popupShown')) ||
-        this.showPopup = false;
-      }
-      else {
-        localStorage.setItem('popupShown', 'true')
+    //if (this.localStorageUser != null) {//
+    if (localStorage.getItem('popupShown') ==null)  {
+      this.showPopup = true;
+      localStorage.setItem('popupShown', '1')
+    }
+    else if (JSON.parse(localStorage.getItem('popupShown')) == '1') {
+      this.showPopup = true;
+      localStorage.setItem('popupShown', '2')
+    }
+    else {
+      this.showPopup = false;
       }
   }
 

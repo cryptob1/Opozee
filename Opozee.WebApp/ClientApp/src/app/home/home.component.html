@@ -3,7 +3,7 @@
 
 <div class="mains">
 
-  <section class="trending" style="padding-top:35px;" *ngIf="popularhastags?.length>0">
+  <section class="trending" style="padding-top:25px; padding-bottom:0px;" *ngIf="popularhastags?.length>0">
     <div class="container">
 
       <div class="row">
@@ -85,7 +85,7 @@
     <div>
 
 
-      <div *ngIf="showPopup" class="popup-container" ng-disable-scroll="showPopup">
+      <!--<div *ngIf="showPopup" class="popup-container" ng-disable-scroll="showPopup">
         <div class="popup-content">
           <span class="popup-text">
             <h5> Welcome to Opozee!</h5>
@@ -113,7 +113,7 @@
           </span>
           <span class="popup-close" (click)="hidePopup()">X</span>
         </div>
-      </div>
+      </div>-->
 
 
 
@@ -122,7 +122,7 @@
           <div class="row">
             <div class="col-sm-12">
               <ul>
-                <li>    <a href="javascript:void(0)" (click)="popup()">Help</a></li>
+                <li>    <a href="javascript:void(0)" (click)="popup()"> </a></li>
                 <li>   <a [routerLink]="['/faq/']">FAQ</a></li>
                 <li>   <a [routerLink]="['/aboutus/']">About Us</a></li>
 
