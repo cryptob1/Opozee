@@ -572,10 +572,10 @@ span.bell-icon i {
 }
 
 .cover_questions.image_question .icon img {
- 
-  width: 27px;
-  height: 27px;
+  width: 100%;
+  height: 100%;
   border-radius: 100%;
+  vertical-align: inherit
 }
 
 .cover_questions .cover_analysis .left > span {
