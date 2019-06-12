@@ -1319,6 +1319,7 @@ namespace opozee.Controllers.API
                                           join n in db.Notifications on o.Id equals n.CommentId
                                           join u in db.Users on o.CommentedUserId equals u.UserID
                                           where q.OwnerUserID == id && q.IsDeleted == false
+                                          && n.CommentedUserId != id
                                           select new UserNotifications
                                           {
                                               QuestionId = q.Id,
@@ -1329,7 +1330,7 @@ namespace opozee.Controllers.API
                                               Image = u.ImageURL,
                                               Name = u.FirstName + " " + u.LastName,
                                               CommentedUserId = o.CommentedUserId,
-                                              UserName = u.UserName,
+                                              UserName = db.Users.Where(x => x.UserID == n.CommentedUserId).FirstOrDefault().UserName,
                                               Like = ((n.Like ?? false) ? true : false),
                                               Dislike = ((n.Dislike ?? false) ? true : false),
                                               Comment = ((n.Comment ?? false) ? true : false),
