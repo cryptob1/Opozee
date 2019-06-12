@@ -279,7 +279,7 @@ namespace opozee.Controllers.API
                             User data = db.Users.Find(items);
                             if (data != null)
                             {
-                                string finalMessage = questionOwner.FirstName + " " + questionOwner.LastName + " has tagged you in question";
+                                string finalMessage = questionOwner.UserName + " has tagged you in question";
 
                                 pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage, "QD", questID.ToString());
                             }
@@ -373,7 +373,7 @@ namespace opozee.Controllers.API
                         if (quest.OwnerUserID != postAnswer.CommentedUserId)
                         {
                             //***** Notification to question owner
-                            string finalMessage = GenerateTagsForQuestion(false, false, true, user.FirstName + " " + user.LastName);
+                            string finalMessage = GenerateTagsForQuestion(false, false, true, user.UserName);
 
                             pushNotifications.SendNotification_Android(questOwner.DeviceToken, finalMessage, "QD", postAnswer.QuestId.ToString());
                             //***** Notification to Tagged Users
@@ -389,7 +389,7 @@ namespace opozee.Controllers.API
                                         User data = db.Users.Find(items);
                                         if (data != null)
                                         {
-                                            string finalMessage1 = user.FirstName + " " + user.LastName + " has given opinion on question in which you're tagged in.";
+                                            string finalMessage1 = user.UserName + " has given opinion on question in which you're tagged in.";
 
                                             pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", postAnswer.QuestId.ToString());
                                         }
@@ -410,7 +410,7 @@ namespace opozee.Controllers.API
                                     User data = db.Users.Find(items);
                                     if (data != null)
                                     {
-                                        string finalMessage = user.FirstName + " " + user.LastName + " has given opinion on question in which you're tagged in.";
+                                        string finalMessage = user.UserName + " has given opinion on question in which you're tagged in.";
 
                                         pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage, "QD", postAnswer.QuestId.ToString());
                                     }
@@ -988,7 +988,7 @@ namespace opozee.Controllers.API
                         if (ques.OwnerUserID != notification.CommentedUserId)
                         {
                             //***** Notification to question owner
-                            string finalMessage = GenerateTagsForQuestion(notification.Like, notification.Dislike, false, user.FirstName + " " + user.LastName);
+                            string finalMessage = GenerateTagsForQuestion(notification.Like, notification.Dislike, false, user.UserName);
 
                             pNoty.SendNotification_Android(questOwner.DeviceToken, finalMessage, "QD", questId.ToString());
 
@@ -1005,7 +1005,7 @@ namespace opozee.Controllers.API
                                         User data = db.Users.Find(items);
                                         if (data != null)
                                         {
-                                            string finalMessage1 = user.FirstName + " " + user.LastName + " has " + action + " question in which you're tagged in.";
+                                            string finalMessage1 = user.UserName + " has " + action + " question in which you're tagged in.";
 
                                             pNoty.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", questId.ToString());
                                         }
@@ -1026,7 +1026,7 @@ namespace opozee.Controllers.API
                                     User data = db.Users.Find(items);
                                     if (data != null)
                                     {
-                                        string finalMessage = user.FirstName + " " + user.LastName + " has " + action + " question in which you're tagged in.";
+                                        string finalMessage = user.UserName + " has " + action + " question in which you're tagged in.";
 
                                         pNoty.SendNotification_Android(data.DeviceToken, finalMessage, "QD", questId.ToString());
                                     }
@@ -1036,7 +1036,7 @@ namespace opozee.Controllers.API
                         if (commentOwner.UserID != notification.CommentedUserId)
                         {
                             //***** Notification to question owner
-                            string finalMessage = GenerateTagsForOpinion(notification.Like, notification.Dislike, false, user.FirstName + " " + user.LastName);
+                            string finalMessage = GenerateTagsForOpinion(notification.Like, notification.Dislike, false, user.UserName);
 
                             pNoty.SendNotification_Android(commentOwner.DeviceToken, finalMessage, "QD", questId.ToString());
                         }
@@ -1121,7 +1121,7 @@ namespace opozee.Controllers.API
                         if (ques.OwnerUserID != notification.CommentedUserId)
                         {
                             //***** Notification to question owner
-                            string finalMessage = GenerateTagsForQuestion(notification.Like, notification.Dislike, false, user.FirstName + " " + user.LastName);
+                            string finalMessage = GenerateTagsForQuestion(notification.Like, notification.Dislike, false, user.UserName);
 
                             pushNotifications.SendNotification_Android(questOwner.DeviceToken, finalMessage, "QD", questId.ToString());
                             //***** Notification to Tagged Users
@@ -1137,7 +1137,7 @@ namespace opozee.Controllers.API
                                         User data = db.Users.Find(items);
                                         if (data != null)
                                         {
-                                            string finalMessage1 = user.FirstName + " " + user.LastName + " has " + action + " question in which you're tagged in.";
+                                            string finalMessage1 = user.UserName + " has " + action + " question in which you're tagged in.";
 
                                             pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", questId.ToString());
                                         }
@@ -1158,7 +1158,7 @@ namespace opozee.Controllers.API
                                     User data = db.Users.Find(items);
                                     if (data != null)
                                     {
-                                        string finalMessage = user.FirstName + " " + user.LastName + " has " + action + " question in which you're tagged in.";
+                                        string finalMessage = user.UserName + " has " + action + " question in which you're tagged in.";
 
                                         pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage, "QD", questId.ToString());
                                     }
@@ -1168,7 +1168,7 @@ namespace opozee.Controllers.API
                         if (commentOwner.UserID != notification.CommentedUserId)
                         {
                             //***** Notification to question owner
-                            string finalMessage = GenerateTagsForOpinion(notification.Like, notification.Dislike, false, user.FirstName + " " + user.LastName);
+                            string finalMessage = GenerateTagsForOpinion(notification.Like, notification.Dislike, false, user.UserName);
 
                             pushNotifications.SendNotification_Android(commentOwner.DeviceToken, finalMessage, "QD", questId.ToString());
                         }
