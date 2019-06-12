@@ -37,27 +37,41 @@
 
             </div>
 
-            <!--<div class="col-sm-6">
+
+            <div class="col-sm-12">
               <div class="form-group">
-                <label for="username">First Name</label>
-                <input type="text" formControlName="firstName" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" placeholder="Enter first name" />
+                <label for="userinfo">Background</label>
+                <p class="text-info small text-left" style="font-size: 10px; margin-bottom: 0px"> Example- Developer @ Opozee.com , Worked @ FB, Google, Apple.</p>
+                <input type="text" formControlName="userInfo" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.userInfo.errors }" placeholder="Enter profile" />
                 <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-                  <div *ngIf="f.email.errors.required">First name required</div>
+                  <div *ngIf="f.email.errors.required">*User Profile Required</div>
                 </div>
 
               </div>
 
             </div>
 
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label for="username">Last Name</label>
-                <input type="text" formControlName="lastName" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" placeholder="Enter last name" />
-                <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-                  <div *ngIf="f.lastName.errors.required">last name required</div>
-                </div>
-              </div>
-            </div>-->
+            <!--<div class="col-sm-6">
+    <div class="form-group">
+      <label for="username">First Name</label>
+      <input type="text" formControlName="firstName" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" placeholder="Enter first name" />
+      <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
+        <div *ngIf="f.email.errors.required">First name required</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-sm-6">
+    <div class="form-group">
+      <label for="username">Last Name</label>
+      <input type="text" formControlName="lastName" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" placeholder="Enter last name" />
+      <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+        <div *ngIf="f.lastName.errors.required">last name required</div>
+      </div>
+    </div>
+  </div>-->
 
 
             <div class="col-sm-6" *ngIf="!isSocialLogin">
@@ -79,7 +93,7 @@
                   <small *ngIf="f.password.errors.required">*Password required</small>
                   <small *ngIf="!f.password.errors.required && f.password.errors">*Password must be at least 6 characters</small>
                 </div>
-               
+
 
               </div>
 

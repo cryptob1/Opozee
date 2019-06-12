@@ -4,7 +4,7 @@ export class User {
   password: string;
   firstName: string;
   lastName: string;
-
+  info: string;
 }
 
 
@@ -156,6 +156,7 @@ export class UserProfileModel {
   HasFollowed: boolean;
   Followers: number;
   Followings: number;
+  UserInfo: string;
 }
 
 
@@ -166,4 +167,5 @@ export class UserEditProfileModel {
   LastName: string;
   Password: string;
   UserID: number;
+  UserInfo: string;
 }
