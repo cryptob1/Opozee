@@ -958,7 +958,7 @@ namespace opozee.Controllers.API
                                                   //TotalRecordcount = TotalRecordNotification,
                                                   NotificationId = n.Id,
                                                   RefferalStatus = false
-                                              }).ToList().OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
+                                              }).ToList();//.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
 
 
                     foreach (var data in userNotifications1)
@@ -967,7 +967,7 @@ namespace opozee.Controllers.API
                         data.Message = GenerateNotificationTags(data.Like, data.Dislike, data.Comment, data.UserName, false, IsActive);
                         data.Tag = (data.Like == true) ? "Up-Vote" : (data.Dislike == true) ? "Down-Vote" : (data.Comment == true) ? "Belief" : "";
                     }
-
+                    userNotifications1 = userNotifications1.OrderByDescending(x => x.NotificationId).Skip(skip).Take(pageSize).ToList();
                     return userNotifications1.Where(p => p.Message != "").ToList();
                 }
 
