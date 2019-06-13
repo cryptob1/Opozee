@@ -595,7 +595,7 @@ namespace opozee.Controllers.API
                                                    LikesFunnyCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true && p.ReactionType == 3).Count(),
                                                    DislikesNoMaterialCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && (p.ReactionType == 4 || p.ReactionType == null)).Count(),
                                                    DislikesFakeNewsCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 5 ).Count(),
-                                                   DislikesBiasedCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 5).Count(),
+                                                   DislikesBiasedCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 6).Count(),
 
 
                                                }).OrderByDescending(p => p.CreationDate).ToPagedList(Pageindex - 1, Pagesize).ToList();
@@ -980,7 +980,7 @@ namespace opozee.Controllers.API
                     notification.CommentId = likeDislike.CommentId;
                     notification.questId = likeDislike.questId;
                     notification.ReactionType = likeDislike.ReactionType;
-                    notification.ModifiedDate = DateTime.Now;
+                    notification.ModifiedDate = DateTime.UtcNow;
                     db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
@@ -1103,7 +1103,7 @@ namespace opozee.Controllers.API
                     notification.CommentedUserId = likeDislike.CommentedUserId;
                     notification.CommentId = likeDislike.CommentId;
                     notification.questId = likeDislike.questId;
-                    notification.CreationDate = DateTime.Now;
+                    notification.CreationDate = DateTime.UtcNow;
                     notification.ReactionType = likeDislike.ReactionType;
                     db.Notifications.Add(notification);
                     db.SaveChanges();

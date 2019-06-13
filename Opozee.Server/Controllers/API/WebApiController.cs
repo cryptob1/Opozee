@@ -2807,7 +2807,7 @@ namespace opozee.Controllers.API
                                 new SqlParameter("Like", Convert.ToBoolean(Model.Likes)),
                                 new SqlParameter("Dislike", Convert.ToBoolean(Model.Dislikes)),
                                 new SqlParameter("Comment", false),
-                                new SqlParameter("CreationDate", Model.CreationDate),
+                                new SqlParameter("CreationDate", Model.CreationDate.ToUniversalTime()),
                                  new SqlParameter("ReactionType", Model.ReactionType)
                                 );
 
@@ -2927,7 +2927,7 @@ namespace opozee.Controllers.API
                 }
                 else
                 {
-                    int _checkUpdate =  db.Database.ExecuteSqlCommand("UPDATE Notification SET [Like]=@Like, Dislike=@Dislike, Comment=@Comment, CreationDate=@CreationDate,ReactionType=@ReactionType,Status=@Status " +
+                    int _checkUpdate =  db.Database.ExecuteSqlCommand("UPDATE Notification SET [Like]=@Like, Dislike=@Dislike, Comment=@Comment, ModifiedDate=@ModifiedDate,ReactionType=@ReactionType,Status=@Status " +
                                 " WHERE CommentedUserId=@CommentedUserId AND questId=@questId AND CommentId=@CommentId",
                                     new SqlParameter("CommentedUserId", Model.CommentedUserId),
                                     new SqlParameter("CommentId", Model.CommentId),
@@ -2936,7 +2936,7 @@ namespace opozee.Controllers.API
                                     new SqlParameter("Dislike", Convert.ToBoolean(Model.Dislikes)),
                                     new SqlParameter("Comment", false),
                                      new SqlParameter("Status", DBNull.Value),
-                                    new SqlParameter("CreationDate", Model.CreationDate),
+                                    new SqlParameter("ModifiedDate", DateTime.UtcNow),
                                      new SqlParameter("ReactionType", Model.ReactionType));
 
                     //notification.CommentedUserId = Model.CommentedUserId;
