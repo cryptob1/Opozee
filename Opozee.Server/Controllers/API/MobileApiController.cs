@@ -25,6 +25,7 @@ using System.Dynamic;
 using Opozee.Server.Services;
 using System.IO;
 using Opozee.Server.Models.API;
+using Opozee.Server.Models;
 
 namespace opozee.Controllers.API
 {
@@ -1406,6 +1407,18 @@ namespace opozee.Controllers.API
         {
             try
             {
+                bool _hasFollowBack = false;
+                try
+                {
+                    var _currentUser = db.Users.Where(x => x.Email == HttpContext.Current.User.Identity.Name).FirstOrDefault();
+                    if (_currentUser != null)
+                    {
+                        var follow = db.Followers.Where(x => x.UserId == _currentUser.UserID && x.FollowedId == userid && x.IsFollowing == true).FirstOrDefault();
+                        _hasFollowBack = follow == null ? false : true;
+                    }
+                }
+                catch { }
+
                 db.Configuration.LazyLoadingEnabled = false;
                 if (!ModelState.IsValid)
                 {
@@ -1435,6 +1448,9 @@ namespace opozee.Controllers.API
                                                     join o in db.Opinions on q.Id equals o.QuestId
                                                     where q.OwnerUserID == userid && q.IsDeleted == false
                                                     select o.Dislikes).Sum(),
+                                   Followers = db.Followers.Where(y => y.FollowedId == u.UserID && y.IsFollowing == true).ToList().Count(),
+                                   Followings = db.Followers.Where(z => z.UserId == u.UserID && z.IsFollowing == true).ToList().Count(),
+                                   HasFollowed = _hasFollowBack
                                }).FirstOrDefault();
 
 
@@ -2024,6 +2040,169 @@ namespace opozee.Controllers.API
             }
 
         }
+
+
+        [HttpPost]
+        [Route("api/MobileApi/Following")]
+        public HttpResponseMessage SetFollowing(FollowerVM follow)
+        {
+            //dynamic _response = new ExpandoObject();
+            try
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
+                }
+
+                Follower follower = db.Followers.Where(x => x.FollowedId == follow.Following && x.UserId == follow.UserId).FirstOrDefault();
+
+                if (follower == null)
+                {
+                    follower = new Follower();
+                    follower.CreationDate = DateTime.UtcNow;
+                    follower.FollowedId = follow.Following;
+                    follower.UserId = follow.UserId;
+                    follower.IsFollowing = true;
+                    db.Followers.Add(follower);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    follower.CreationDate = DateTime.UtcNow;
+                    follower.FollowedId = follow.Following;
+                    follower.UserId = follow.UserId;
+                    follower.IsFollowing = true;
+                    db.SaveChanges();
+                }
+                //_response.success = true;
+                //_response.data = follower;
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, follower, "followerData"));
+                //return _response;
+
+                //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, follower, "followerData"));
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+               return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "followerData"));
+
+                //_response.success = false;
+                //return _response;
+            }
+        }
+
+        [HttpPost]
+        [Route("api/MobileApi/UnfollowUser")]
+        public HttpResponseMessage UnfollowUser(FollowerVM follow)
+        {
+           // dynamic _response = new ExpandoObject();
+            try
+            {
+                db.Configuration.LazyLoadingEnabled = false;
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
+                }
+
+                Follower follower = db.Followers.Where(x => x.FollowedId == follow.Following && x.UserId == follow.UserId).FirstOrDefault();
+
+                if (follower != null)
+                {
+                    db.Followers.Remove(follower);
+                    db.SaveChanges();
+                }
+                //_response.success = true;
+                //return _response;
+
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, null, "UnfollowUser"));
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "UnfollowUser"));
+
+                //_response.success = false;
+                //return _response;
+            }
+        }
+
+        [HttpPost]
+        [Route("api/MobileApi/GetMyFollowers")]
+        public HttpResponseMessage GetMyFollowers(PagingModel Model)
+        {
+            //dynamic _response = new ExpandoObject();
+            var followers = new List<FollowerUsers>();
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
+            }
+
+            try
+            {
+                int pageSize = Model.PageSize > 0 ? Model.PageSize : 10; // set your page size, which is number of records per page
+                int page = Model.PageNumber;
+                int skip = pageSize * (page - 1);
+
+                followers = (from f in db.Followers
+                                 //join u in db.Users on f.FollowedId equals u.UserID
+                             where f.FollowedId == Model.UserId && f.IsFollowing == true
+                             select new FollowerUsers
+                             {
+                                 UserID = f.FollowedId, //my userid
+                                 FollowerId = f.UserId,
+                                 UserName = db.Users.Where(u => u.UserID == f.UserId).FirstOrDefault().UserName,
+                                 ImageURL = db.Users.Where(u => u.UserID == f.UserId).FirstOrDefault().ImageURL,
+                                 HasFollowBack = db.Followers.Where(x => x.UserId == f.FollowedId && x.FollowedId == f.UserId && x.IsFollowing == true).FirstOrDefault() == null ? false : true,
+                                 IsFollowing = f.IsFollowing,
+                                 CreationDate = f.CreationDate
+                             }).OrderByDescending(x => x.CreationDate).Skip(skip).Take(pageSize).ToList();
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "GetMyFollowers"));
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, followers, "GetMyFollowers"));
+            //return followers;
+        }
+        [HttpPost]
+        [Route("api/MobileApi/GetMyFollowing")]
+        public HttpResponseMessage GetMyFollowing(PagingModel Model)
+        {
+            //dynamic _response = new ExpandoObject();
+            var following = new List<FollowerUsers>();
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
+            }
+
+            try
+            {
+                int pageSize = Model.PageSize > 0 ? Model.PageSize : 10; // set your page size, which is number of records per page
+                int page = Model.PageNumber;
+                int skip = pageSize * (page - 1);
+
+                following = (from f in db.Followers
+                                 //join u in db.Users on f.UserId equals u.UserID
+                             where f.UserId == Model.UserId && f.IsFollowing == true
+                             select new FollowerUsers
+                             {
+                                 UserID = f.UserId, //my userid
+                                 FollowerId = f.FollowedId,
+                                 UserName = db.Users.Where(u => u.UserID == f.FollowedId).FirstOrDefault().UserName,
+                                 ImageURL = db.Users.Where(u => u.UserID == f.FollowedId).FirstOrDefault().ImageURL,
+                                 HasFollowBack = db.Followers.Where(x => x.FollowedId == f.UserId && x.UserId == f.FollowedId && x.IsFollowing == true).FirstOrDefault() == null ? false : true,
+                                 IsFollowing = f.IsFollowing,
+                                 CreationDate = f.CreationDate
+                             }).OrderByDescending(x => x.CreationDate).Skip(skip).Take(pageSize).ToList();
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "GetMyFollowing"));
+            }
+            return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, following, "GetMyFollowing"));
+        }
+
 
         [HttpPost]
         [Route("api/MobileApi/CrashEMail")]
