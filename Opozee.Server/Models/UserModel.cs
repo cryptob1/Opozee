@@ -27,6 +27,10 @@ namespace Opozee.Models
         public string Email { get; set; }
 
 
+        [Display(Name = "User Info")]
+        public string UserInfo { get; set; }
+
+
         [Display(Name = "Password required")]
         public string Password { get; set; }
         public string ImageURL { get; set; }

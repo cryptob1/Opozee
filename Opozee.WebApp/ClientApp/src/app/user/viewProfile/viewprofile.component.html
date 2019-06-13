@@ -14,6 +14,7 @@
           </div>
           <!--<h2>{{userProfiledata?.FirstName }} {{userProfiledata?.LastName}}</h2>-->
           <h4>@{{userProfiledata?.UserName}} </h4>
+          <h5 class="bg-info small">{{userProfiledata?.UserInfo }}</h5> <br /><br />
           <label>Opozee Network Ownership:</label>
           <strong class="bg-success">{{userProfiledata?.BalanceToken/100000000  | percent:'1.3-4'}}</strong>
           <span>

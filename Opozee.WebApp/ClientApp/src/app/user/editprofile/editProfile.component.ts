@@ -40,6 +40,7 @@ export class EditProfileComponent implements OnInit {
       lastName: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      userInfo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(200)]],
       userId: [''],
       IsSocialLogin: [this.isSocialLogin]
     });
@@ -76,6 +77,7 @@ export class EditProfileComponent implements OnInit {
         this.edtiProfileForm.controls['email'].setValue(data.Email);
         this.edtiProfileForm.controls['password'].setValue(data.Password);
         this.edtiProfileForm.controls['userId'].setValue(data.UserId);
+        this.edtiProfileForm.controls['userInfo'].setValue(data.UserInfo);
         this.imageUrl = data.ImageURL;
         this.isSocialLogin = data.IsSocialLogin;
         this.formControlOnSocialLogin(data.IsSocialLogin);
