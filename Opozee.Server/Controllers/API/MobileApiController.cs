@@ -572,7 +572,6 @@ namespace opozee.Controllers.API
                                                              LastActivityTime = (DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
                                                          }).FirstOrDefault();
 
-
                     questionDetail.Comments = (from e in db.Opinions
                                                join t in db.Users on e.CommentedUserId equals t.UserID
                                                where e.QuestId == id
@@ -589,7 +588,16 @@ namespace opozee.Controllers.API
                                                    DisLikes = db.Notifications.Where(p => p.CommentedUserId == userId && p.CommentId == e.Id).Select(b => b.Dislike.HasValue ? b.Dislike.Value : false).FirstOrDefault(),
                                                    CommentedUserName = t.UserName,
                                                    IsAgree = e.IsAgree,
-                                                   CreationDate = e.CreationDate
+                                                   CreationDate = e.CreationDate,
+
+                                                   LikesThoughtfullCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true &&(p.ReactionType == 1 || p.ReactionType == null)).Count(),
+                                                   LikesFactualCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true && p.ReactionType == 2 ).Count(),
+                                                   LikesFunnyCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true && p.ReactionType == 3).Count(),
+                                                   DislikesNoMaterialCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && (p.ReactionType == 4 || p.ReactionType == null)).Count(),
+                                                   DislikesFakeNewsCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 5 ).Count(),
+                                                   DislikesBiasedCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 5).Count(),
+
+
                                                }).OrderByDescending(p => p.CreationDate).ToPagedList(Pageindex - 1, Pagesize).ToList();
 
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "AllOpinion"));
@@ -971,6 +979,7 @@ namespace opozee.Controllers.API
                     notification.CommentedUserId = likeDislike.CommentedUserId;
                     notification.CommentId = likeDislike.CommentId;
                     notification.questId = likeDislike.questId;
+                    notification.ReactionType = likeDislike.ReactionType;
                     notification.ModifiedDate = DateTime.Now;
                     db.Entry(notification).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -1095,7 +1104,7 @@ namespace opozee.Controllers.API
                     notification.CommentId = likeDislike.CommentId;
                     notification.questId = likeDislike.questId;
                     notification.CreationDate = DateTime.Now;
-
+                    notification.ReactionType = likeDislike.ReactionType;
                     db.Notifications.Add(notification);
                     db.SaveChanges();
                     int questID = notification.Id;
