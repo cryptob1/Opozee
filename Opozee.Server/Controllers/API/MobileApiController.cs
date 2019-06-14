@@ -1403,19 +1403,15 @@ namespace opozee.Controllers.API
         #region "Get User Profile" 
         [HttpGet]
         [Route("api/MobileApi/GetUserProfile")]
-        public HttpResponseMessage GetUserProfile(int userid)
+        public HttpResponseMessage GetUserProfile(int userId, int viewUserId)
         {
             try
             {
                 bool _hasFollowBack = false;
                 try
                 {
-                    var _currentUser = db.Users.Where(x => x.Email == HttpContext.Current.User.Identity.Name).FirstOrDefault();
-                    if (_currentUser != null)
-                    {
-                        var follow = db.Followers.Where(x => x.UserId == _currentUser.UserID && x.FollowedId == userid && x.IsFollowing == true).FirstOrDefault();
-                        _hasFollowBack = follow == null ? false : true;
-                    }
+                    var follow = db.Followers.Where(x => x.UserId == userId && x.FollowedId == viewUserId && x.IsFollowing == true).FirstOrDefault();
+                    _hasFollowBack = follow == null ? false : true;
                 }
                 catch { }
 
@@ -1429,7 +1425,7 @@ namespace opozee.Controllers.API
 
                 UserProfile = (from t in db.Tokens
                                join u in db.Users on t.UserId equals u.UserID
-                               where u.UserID == userid
+                               where u.UserID == viewUserId
                                select new UserProfile
                                {
                                    UserID = u.UserID,
@@ -1439,14 +1435,14 @@ namespace opozee.Controllers.API
                                    Email = u.Email,
                                    ImageURL = u.ImageURL,
                                    BalanceToken = t.BalanceToken,
-                                   TotalPostedQuestion = db.Questions.Where(p => p.OwnerUserID == userid && p.IsDeleted == false).Count(),
+                                   TotalPostedQuestion = db.Questions.Where(p => p.OwnerUserID == viewUserId && p.IsDeleted == false).Count(),
                                    TotalLikes = (from q in db.Questions
                                                  join o in db.Opinions on q.Id equals o.QuestId
-                                                 where q.OwnerUserID == userid && q.IsDeleted == false
+                                                 where q.OwnerUserID == viewUserId && q.IsDeleted == false
                                                  select o.Likes).Sum(),
                                    TotalDislikes = (from q in db.Questions
                                                     join o in db.Opinions on q.Id equals o.QuestId
-                                                    where q.OwnerUserID == userid && q.IsDeleted == false
+                                                    where q.OwnerUserID == viewUserId && q.IsDeleted == false
                                                     select o.Dislikes).Sum(),
                                    Followers = db.Followers.Where(y => y.FollowedId == u.UserID && y.IsFollowing == true).ToList().Count(),
                                    Followings = db.Followers.Where(z => z.UserId == u.UserID && z.IsFollowing == true).ToList().Count(),
