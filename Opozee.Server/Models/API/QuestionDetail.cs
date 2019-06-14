@@ -140,6 +140,7 @@ namespace Opozee.Models.API
     {
         public int Id { get; set; }
         public string Comment { get; set; }
+        public string LongForm { get; set; }
         public int CommentedUserId { get; set; }
         public string CommentedUserName { get; set; }
         public int LikesCount { get; set; }

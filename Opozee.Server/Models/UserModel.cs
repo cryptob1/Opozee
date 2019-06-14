@@ -52,6 +52,8 @@ namespace Opozee.Models
         public int Likes { get; set; }
         public bool OpinionAgreeStatus { get; set; }
         public int Dislikes { get; set; }
+
+        public string LongForm { get; set; }
     }
 
 

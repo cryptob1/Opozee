@@ -24,5 +24,6 @@ namespace Opozee.Models.Models
         public Nullable<System.DateTime> CreationDate { get; set; }
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<int> ReactionType { get; set; }
+        public string LongForm { get; set; }
     }
 }

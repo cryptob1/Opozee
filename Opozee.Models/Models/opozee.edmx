@@ -70,6 +70,7 @@
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="ReactionType" Type="int" />
+          <Property Name="LongForm" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -214,6 +215,7 @@
           <Property Name="CreationDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="ReactionType" Type="Int32" />
+          <Property Name="LongForm" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -354,6 +356,7 @@
           <EntitySetMapping Name="Opinions">
             <EntityTypeMapping TypeName="oposeeDbModel.Opinion">
               <MappingFragment StoreEntitySet="Opinion">
+                <ScalarProperty Name="LongForm" ColumnName="LongForm" />
                 <ScalarProperty Name="ReactionType" ColumnName="ReactionType" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />

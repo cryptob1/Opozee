@@ -30,7 +30,7 @@ export class DialogPostBelief implements OnInit {
     "translate": "yes",
     "enableToolbar": true,
     "showToolbar": false,
-    "placeholder": "Share your belief..",
+    "placeholder": "Share your belief in 400 characters or less..",
     "imageEndPoint": "",
     "toolbar": [
       ["bold", "italic", "underline", "fontSize", "color"],
@@ -56,6 +56,7 @@ export class DialogPostBelief implements OnInit {
     this.editorConfigModal;
     this.postBeliefForm = this.formBuilder.group({
       Comment: ['', [Validators.required, Validators.maxLength(400)]],
+      LongForm: [''],
       OpinionAgreeStatus: [this.dataModel.OpinionAgreeStatus],
       QuestId: [this.dataModel.QuestId],
       CommentedUserId: [this.dataModel.CommentedUserId]
@@ -134,6 +135,7 @@ export class DialogPostBelief implements OnInit {
   saveOpinionPost(model) {
     
     this.loading = true;
+    console.log(model);
     this.userService.saveOpinionPost(model)
       .pipe(first())
       .subscribe(data => {

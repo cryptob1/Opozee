@@ -1716,6 +1716,7 @@ namespace opozee.Controllers.API
                                                       {
                                                           Id = e.Id,
                                                           Comment = e.Comment,
+                                                    
                                                           CommentedUserId = t.UserID,
                                                           Name = t.FirstName + " " + t.LastName,
                                                           UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
@@ -2671,6 +2672,7 @@ namespace opozee.Controllers.API
                 Token token = new Token();
                 ObjOpinion.QuestId = Model.QuestId;
                 ObjOpinion.Comment = Model.Comment;
+                ObjOpinion.LongForm = Model.LongForm;
                 ObjOpinion.CommentedUserId = Model.CommentedUserId;
                 ObjOpinion.CreationDate = DateTime.Now.ToUniversalTime(); 
                 ObjOpinion.Likes = Model.Likes;
