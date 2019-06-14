@@ -591,12 +591,12 @@ namespace opozee.Controllers.API
                                                    IsAgree = e.IsAgree,
                                                    CreationDate = e.CreationDate,
 
-                                                   LikesThoughtfullCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true &&(p.ReactionType == 1 || p.ReactionType == null)).Count(),
+                                                   LikesThoughtfulCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true &&(p.ReactionType == 1 || p.ReactionType == null)).Count(),
                                                    LikesFactualCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true && p.ReactionType == 2 ).Count(),
                                                    LikesFunnyCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true && p.ReactionType == 3).Count(),
-                                                   DislikesNoMaterialCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && (p.ReactionType == 4 || p.ReactionType == null)).Count(),
+                                                   DislikesIrrationalCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && (p.ReactionType == 4 || p.ReactionType == null)).Count(),
                                                    DislikesFakeNewsCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 5 ).Count(),
-                                                   DislikesBiasedCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 6).Count(),
+                                                   DislikesOffTopicCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 6).Count(),
 
 
                                                }).OrderByDescending(p => p.CreationDate).ToPagedList(Pageindex - 1, Pagesize).ToList();
