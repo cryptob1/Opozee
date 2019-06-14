@@ -443,7 +443,7 @@ namespace opozee.Controllers.API
             Thoughtful = 1,
             Factual = 2,
             Funny = 3,
-            Illogical = 4,
+            Irrational = 4,
             Fakenews = 5,
             OffTopic = 6
         }

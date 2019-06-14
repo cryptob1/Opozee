@@ -18,9 +18,9 @@ enum Reaction {
   Thoughtful = 1,
   Factual = 2,
   Funny = 3,
-  NotMaterial = 4,
+  Irrational = 4,
   Fakenews = 5,
-  Biased = 6
+  OffTopic = 6
 }
 
 
@@ -468,12 +468,12 @@ export class Questiondetail implements OnInit {
             .subscribe(data => {
               let __data = data.Comments.filter(x => x.Id === qDetail.Id)
               console.log('updated', data);
-              qDetail.LikesThoughtfullCount = __data[0].LikesThoughtfullCount;
+              qDetail.LikesThoughtfulCount = __data[0].LikesThoughtfulCount;
               qDetail.LikesFactualCount = __data[0].LikesFactualCount;
               qDetail.LikesFunnyCount = __data[0].LikesFunnyCount;
-              qDetail.DislikesNoMaterialCount = __data[0].DislikesNoMaterialCount;
+              qDetail.DislikesIrrationalCount = __data[0].DislikesIrrationalCount;
               qDetail.DislikesFakeNewsCount = __data[0].DislikesFakeNewsCount;
-              qDetail.DislikesBiasedCount = __data[0].DislikesBiasedCount;
+              qDetail.DislikesOffTopicCount = __data[0].DislikesOffTopicCount;
             });
         }
         catch (err) { }
