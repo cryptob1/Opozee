@@ -3,7 +3,7 @@
 
   <div class="model fade in show" role="dialog" aria-labelledby="dialog-auto-name">
 
-    <form name="postBeliefForm" [formGroup] = "postBeliefForm" #f="ngForm" (ngSubmit)="f.form.valid && submitForm()">
+    <form name="postBeliefForm" [formGroup] = "postBeliefForm" #f="ngForm" (ngSubmit)="f.form.valid && submitForm()" >
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -46,6 +46,8 @@
                               [config]="editorConfigModal"
                               formControlName="Comment"
                               (paste)="onPaste($event)"
+                              (keydown)="keyUp($event)"
+                              
                               name="Comment">
               </app-ngx-editor>
 

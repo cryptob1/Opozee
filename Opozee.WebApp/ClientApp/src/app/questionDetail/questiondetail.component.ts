@@ -13,6 +13,7 @@ import { HttpUrlEncodingCodec } from '@angular/common/http';
 import { MixpanelService } from '../_services/mixpanel.service';
 import { PopoverModule } from "ngx-popover";
 import { Observable } from 'rxjs';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 enum Reaction {
   Thoughtful = 1,
@@ -46,7 +47,7 @@ export class Questiondetail implements OnInit {
   submitted: boolean = false;
   imageShowLike: number = -1;
   imageShowDislike: number = -1;
-  isWanttoSentComment: boolean = false;
+ 
   animal: string;
   name: string;
   countReactionScore: number;
@@ -152,7 +153,7 @@ export class Questiondetail implements OnInit {
       
       this.PostQuestionDetailModel = data as BookMarkQuestionVM;
       this.PostQuestionDetailModel.comments = data['Comments'] as Comments[];
-      console.log('asdf',this.PostQuestionDetailModel);
+ 
       let scoreYes = 0;
       let scoreNo = 0;
 
@@ -401,7 +402,7 @@ export class Questiondetail implements OnInit {
 
   cancelclick() {
     this.Isclicked = false;
-    this.isWanttoSentComment = false;
+ 
   }
 
   saveOpinionclick() {

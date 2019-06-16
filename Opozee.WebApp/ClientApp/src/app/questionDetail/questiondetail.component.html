@@ -76,100 +76,107 @@
                     <p [innerHTML]="temp?.Comment"></p>
 
                   </div>
-                  <div class="row">
-                    <span class="profile_bottom_cover">
 
-                      <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                        <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
-                        <span class="username1">@{{temp?.CommentedUserName}}</span>
-                      </span>
+                  <span class="longform" *ngIf="temp?.LongForm!=null">
+                    <div class="row">
 
-                      <div class="like_images">
+                      <a class="collapseButton " data-toggle="collapse" [href]="['#'+temp?.Id]" role="button" aria-expanded="false"
+                         aria-controls="collapseExample">
+                        <img src="../../assets/images/detail.png" style="width: 24px; border: hidden;" />
+                      </a>
 
-                        <span class="like" style="cursor:pointer">
-                          <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like"
-                               [popover]="myPopoverLikes"  >{{temp?.LikesCount}}
-                        </span>
-
-                        <span class="like" style="cursor:pointer">
-                          <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like"
-                              [popover]="PopoverDislikes"  />{{temp?.DislikesCount}}
-                        </span>
-
+                      <div class="collapse longform" [id]="[temp?.Id]">
+                        <div class="card card-body">
+                          <p [innerHTML]="temp?.LongForm"> </p>
+                        </div>
                       </div>
 
-                      <div class="date_like"></div>
-                    </span>
+                    </div>
+                  </span>
+
+
+
+                    <div class="row">
+                      <span class="profile_bottom_cover">
+
+                        <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
+                          <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
+                          <span class="username1">@{{temp?.CommentedUserName}}</span>
+                        </span>
+
+                        <div class="like_images">
+
+                          <span class="like" style="cursor:pointer">
+                            <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like"
+                                 [popover]="myPopoverLikes">{{temp?.LikesCount}}
+                          </span>
+
+                          <span class="like" style="cursor:pointer">
+                            <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like"
+                                 [popover]="PopoverDislikes" />{{temp?.DislikesCount}}
+                          </span>
+
+                        </div>
+
+
+
+
+
+
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                <!--<div class="no_feedback" *ngIf="!temp.IsAgree">
-    {{temp.IsAgree}}
-    <p>{{temp.Comment}}</p>
-    <span class="profile_bottom_cover">
-      <span class="user_left">
-        <img src="../../assets/images/user.png" alt="user"><span>@{{temp.CommentedUserName}}</span>
-      </span>
-      <div class="like_images">
-        <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like" (click)="saveLikeclick(temp.Likes,index)">{{temp.LikesCount}}</span>
-        <span class="like" style="cursor:pointer"><img src="../../assets/images/{{(temp.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp.DisLikes,index)" />{{temp.DislikesCount}}</span>
 
-      </div>
-      <div class="date_like">
-      </div>
-    </span>
-  </div>-->
-                <div class="dummy1">
-                  <popover-content #myPopoverLikes
-                                   placement="top"
-                                   [animation]="true"
-                                   [closeOnClickOutside]="true"
-                                   
-                                   >
+                  <div class="dummy1">
+                    <popover-content #myPopoverLikes
+                                     placement="top"
+                                     [animation]="true"
+                                     [closeOnClickOutside]="true">
 
-                    <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                      <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
 
-                    <div *ngIf="!loading">
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/thoughtful.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,1,myPopoverLikes)" title="Thoughtful">
-                        &nbsp;{{temp?.LikesThoughtfulCount}}&nbsp;
-                      </span>
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/factual.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
-                        &nbsp;{{temp?.LikesFactualCount}}&nbsp;
-                      </span>
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/funny.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
-                        &nbsp;{{temp?.LikesFunnyCount}}&nbsp;
-                      </span>
-                    </div>
-                  </popover-content>
-                </div>
-                <div class="dummy2">
-                  <popover-content #PopoverDislikes
-                                   placement="top"
-                                   [animation]="true"
-                                   [closeOnClickOutside]="true">
+                      <div *ngIf="!loading">
+                        <span>
+                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/thoughtful.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,1,myPopoverLikes)" title="Thoughtful">
+                          &nbsp;{{temp?.LikesThoughtfulCount}}&nbsp;
+                        </span>
+                        <span>
+                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/factual.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
+                          &nbsp;{{temp?.LikesFactualCount}}&nbsp;
+                        </span>
+                        <span>
+                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/funny.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
+                          &nbsp;{{temp?.LikesFunnyCount}}&nbsp;
+                        </span>
+                      </div>
+                    </popover-content>
+                  </div>
+                  <div class="dummy2">
+                    <popover-content #PopoverDislikes
+                                     placement="top"
+                                     [animation]="true"
+                                     [closeOnClickOutside]="true">
 
-                    <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                      <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
 
-                    <div *ngIf="!loading">
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/irrational.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" title="Irrational">
-                        &nbsp; {{temp?.DislikesIrrationalCount}}&nbsp;
-                      </span>
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/fakenews.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)" title="Fake News">
-                        &nbsp;{{temp?.DislikesFakeNewsCount}}&nbsp;
-                      </span>
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/offtopic.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)" title="Off Topic">
-                        &nbsp; {{temp?.DislikesOffTopicCount}}&nbsp;
-                      </span>
-                    </div>
-                  </popover-content>
-                </div>
-              </span>
+                      <div *ngIf="!loading">
+                        <span>
+                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/irrational.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" title="Irrational">
+                          &nbsp; {{temp?.DislikesIrrationalCount}}&nbsp;
+                        </span>
+                        <span>
+                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/fakenews.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)" title="Fake News">
+                          &nbsp;{{temp?.DislikesFakeNewsCount}}&nbsp;
+                        </span>
+                        <span>
+                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/offtopic.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)" title="Off Topic">
+                          &nbsp; {{temp?.DislikesOffTopicCount}}&nbsp;
+                        </span>
+                      </div>
+                    </popover-content>
+                  </div>
+</span>
             </span>
 
             
@@ -178,30 +185,7 @@
               <i class="fa fa-plus" aria-hidden="true" (click)="openBeliefModal()">&nbsp;New Belief</i> 
             </div>
 
-            <div class="cover_buttons" *ngIf="isWanttoSentComment">
-              <div class="conatiner">
-                <div class="row">
-                  <div class="col-xs-12 text-center">
-                    <a (click)="clickYes()" style="cursor:pointer">YES</a>
-                    <a (click)="clickNO()" style="cursor:pointer">NO</a>
-
-                    <div class="comment_box" *ngIf="Isclicked">
-                      <textarea [(ngModel)]="dataModel.Comment"></textarea>
-
-
-
-                      <a (click)="saveOpinionclick()" style="cursor:pointer">Submit</a>
-                      <a (click)="cancelclick()" style="cursor:pointer">Cancel</a>
-                      <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                      <div *ngIf="0">Email required</div>
-
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
+           
 
 
           </div>

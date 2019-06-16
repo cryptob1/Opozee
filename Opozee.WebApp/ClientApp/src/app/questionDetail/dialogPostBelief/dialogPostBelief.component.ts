@@ -68,6 +68,18 @@ export class DialogPostBelief implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.postBeliefForm.controls; }
 
+  public keyUp(event: any) {
+    let text = this.postBeliefForm.get('Comment').value;
+ 
+    if (text.length > 400) {
+ 
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+  
+  }
+
 
   public onPaste(e) {
     e.preventDefault;
@@ -88,6 +100,7 @@ export class DialogPostBelief implements OnInit {
 
   close() {
     this.dataModel.Comment = '';
+    this.dataModel.LongForm = '';
     this.dialogPostBelief.hide();
   }
 
@@ -135,7 +148,7 @@ export class DialogPostBelief implements OnInit {
   saveOpinionPost(model) {
     
     this.loading = true;
-    console.log(model);
+    //console.log(model);
     this.userService.saveOpinionPost(model)
       .pipe(first())
       .subscribe(data => {

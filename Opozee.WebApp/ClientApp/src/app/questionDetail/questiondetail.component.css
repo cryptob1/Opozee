@@ -382,8 +382,23 @@ span.profile_left p {
   border: 0.5px solid rgba(0,0,0,0.2);
 }
 
-@media screen and (max-width: 767px) {
+/*accordian*/
+.collapseButton {
+  float: right;
+  text-align: left;
+  margin-left: 15px;
+  margin-right: 15px;
+}
 
+.longform p{
+ 
+  margin-left: 15px;
+  margin-right:15px;
+}
+ 
+
+
+@media screen and (max-width: 767px) {
   .cover_buttons .comment_box textarea {
     width: 100%;
     margin-left: 0%;
