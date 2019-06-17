@@ -52,7 +52,7 @@
                         <div ExternalLink>
                           <h1>  No</h1>
                           <b>@{{bounty?.MostNoLiked?.CommentedUserName}}:</b>
-                          <small class="message-container" [innerHTML]="bounty?.MostNoLiked.Comment | emojis"></small>
+                          <small class="message-container" [innerHTML]="bounty?.MostNoLiked.Comment | emojis "></small>
                           <small><sup>{{bounty?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</sup></small>
                         </div>
                       </div>
@@ -76,13 +76,15 @@
       </div>
     </div>
 
+
+
+
+
     <div class="container">
       <div class="cover_heading">
       </div>
 
-      <div *ngIf="!isRecordLoaded" class="scroller_cover" style="margin:40px 0px 40px 0px">
-        <img src="../../../assets/images/reordloaderImages.gif" />
-      </div>
+
 
       <div class="container" style="margin:60px 0px 40px 0px" *ngIf="PostQuestionDetailList?.length == 0 && isRecordLoaded"></div>
 
@@ -108,8 +110,26 @@
           </ul>
         </div>
 
-        <ul infiniteScroll (scrolled)="onScroll($event)" [infiniteScrollDistance]="0.8"  [infiniteScrollThrottle]="150"
-           [scrollWindow]="true" >
+
+        <div class="trending" *ngIf="popularhastags?.length>0">
+
+          <ul class="nav nav-tabs list-inline" *ngFor="let tag of popularhastags;let i=index">
+ 
+            <li>
+              <a href="javascript:void(0)" data-toggle="tag.HashTag" (click)="switchTab(tag.HashTag)">{{tag.HashTag}}</a>
+            </li>
+
+          </ul>
+
+        </div>
+
+
+        <div *ngIf="!isRecordLoaded" class="scroller_cover" style="margin:40px 0px 40px 0px">
+          <img src="../../../assets/images/reordloaderImages.gif" />
+        </div>
+
+        <ul infiniteScroll (scrolled)="onScroll($event)" [infiniteScrollDistance]="0.8" [infiniteScrollThrottle]="150"
+            [scrollWindow]="true">
 
           <!--Not a QID request-->
           <li *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0 && qid==-1" style=" box-shadow:none">
@@ -145,13 +165,17 @@
                 <div class="cover_analysis">
                   <div class="left">
                     <span> </span>
+                    em
                     <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
                       <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
 
-                      <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
+
+
+                      e
+                        <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
                       <!--<span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>-->
                       <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
-                     
+
                       <div *ngIf="temp.YesCount == 0 && temp.NoCount ==0">
                         <!--<span class="percentage">NO : 0 %</span>-->
                         <!--<span class="percentage_yes"> - </span>-->
@@ -167,7 +191,7 @@
                   <div ExternalLink>
                     <h1>  Yes</h1>
                     <small class="belief-time"><i>{{temp?.MostYesLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
-                    <p class="message-container" [innerHTML]=" temp?.MostYesLiked?.Comment "></p>
+                    <p class="message-container" [innerHTML]=" temp?.MostYesLiked?.Comment  |linky"></p>
                   </div>
 
                   <div class="row">
@@ -193,7 +217,7 @@
                   <div ExternalLink>
                     <h1>  No</h1>
                     <small class="belief-time"><i>{{temp?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
-                    <p class="message-container" [innerHTML]="temp?.MostNoLiked?.Comment "></p>
+                    <p class="message-container" [innerHTML]="temp?.MostNoLiked?.Comment |linky"></p>
                   </div>
 
                   <div class="row">
@@ -250,7 +274,7 @@
 
                 <strong>
                   <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp?.Id]">
-                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
+                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis |linky"></div>
                   </a>
 
 
@@ -283,7 +307,7 @@
 
                       <div ExternalLink>
                         <h1>{{temp1?.IsAgree ? 'Yes' : 'No'}}</h1>
-                        <p style=" font-family: 'Poppins', sans-serif;  font-size: 16px;" [innerHTML]="temp1?.Comment">
+                        <p style=" font-family: 'Poppins', sans-serif;  font-size: 16px;" [innerHTML]="temp1?.Comment ">
                         </p>
                       </div>
 

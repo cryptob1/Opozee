@@ -17,8 +17,6 @@ export class HomeComponent implements OnInit {
   currentUser: User;
   users: User[] = [];
   questionListing: QuestionListing[] = [];
-  popularhastags: any = [];
- 
   
   constructor(private userService: UserService,private route: ActivatedRoute,
     private router: Router) {
@@ -30,7 +28,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     //this.loadAllUsers();
     //this.getUserALLRecords();
-    this.getHastagsRecords();
+
   }
    
   deleteUser(id: number) {
@@ -47,30 +45,5 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  // getting popular Hastags
-  private getHastagsRecords() {
-
-   
-    this.userService.getPopularHasTags().pipe(first()).subscribe(data => {
-
-      this.popularhastags = data.reduce((arr, _item) => {
-        let exists = !!arr.find(x => x.HashTag === _item.HashTag);
-        if (!exists) {
-          arr.push(_item);
-        }
-        
-        return arr;
-      }, []);
-
-    } );
-  }
-
-
-
-  searchForTag(hashtag) {
-    this.router.navigateByUrl('/questionlistings/' + hashtag, { skipLocationChange: true }).then(() =>
-      this.router.navigate(['/questions/', hashtag]));
-    //this.router.navigate(['/questions'], { queryParams: { tag: 1 } });
-  }
 
 }

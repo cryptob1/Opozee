@@ -24,6 +24,9 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   search: string;
   hashTag: boolean = false;
   qid = -1;
+
+  popularhastags: any = [];
+
   //questionListing: QuestionListing[] = [];
   PostQuestionDetailList: PostQuestionDetail[] = [];
  
@@ -106,6 +109,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       this.goToqDetail();
     }
 
+
   }
 
   ngOnDestroy() {
@@ -114,6 +118,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
   initialize() {
+    this.getHastagsRecords();
     this.questionGetModel.isHashTag = this.hashTag;
     this.questionGetModel.qid = this.qid;
 
@@ -137,6 +142,28 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
     this.getBountyQuestionsByDates();
 
+  }
+   
+
+  // getting popular Hastags
+  private getHastagsRecords() {
+
+
+    this.userService.getPopularHasTags().pipe(first()).subscribe(data => {
+
+      this.popularhastags = data.reduce((arr, _item) => {
+        let exists = !!arr.find(x => x.HashTag === _item.HashTag);
+        if (!exists) {
+          arr.push(_item);
+        }
+
+        return arr;
+      }, []);
+
+      this.popularhastags = this.popularhastags.slice(0, 5);
+      this.popularhastags.unshift({ 'HashTag': 'All' });
+      console.log(this.popularhastags[2]);
+    });
   }
 
 
@@ -284,6 +311,26 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       this.router.navigate(['/questions/', hashtag]));
     //this.router.navigate(['/questions'], { queryParams: { tag: 1 } });
   }
+
+
+  switchTab(ht) {
+    if (ht == 'All') {
+      this.questionGetModel.isHashTag = false;
+      this.hashTag = false;
+    } else {
+      this.questionGetModel.isHashTag = ht;
+      this.hashTag = true;
+    }
+    this.getAllQuestionlist(this.questionGetModel);
+  }
+
+
+
+    //this.questionGetModel.isHashTag = this.hashTag;
+    //this.router.navigateByUrl('/questionlistings/' + hashtag, { skipLocationChange: true }).then(() =>
+    //  this.router.navigate(['/questions/', hashtag]));
+    //this.router.navigate(['/questions'], { queryParams: { tag: 1 } });
+  
 
   PagingPagesload(PageNumber, PageSize) {
 
