@@ -24,6 +24,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   search: string;
   hashTag: boolean = false;
   qid = -1;
+  tabIndex = 0;
 
   popularhastags: any = [];
 
@@ -313,7 +314,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
 
-  switchTab(ht) {
+  switchTab(ht, index) {
     if (ht == 'All') {
       this.questionGetModel.isHashTag = false;
       this.hashTag = false;
@@ -321,6 +322,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       this.questionGetModel.isHashTag = ht;
       this.hashTag = true;
     }
+    this.tabIndex = index;
     this.getAllQuestionlist(this.questionGetModel);
   }
 

@@ -102,6 +102,8 @@
           <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle" style="width:150px;">
             Sort By &nbsp;<span class="caret"></span>
           </button>
+
+
           <ul *dropdownMenu class="dropdown-menu" role="menu">
             <li role="menuitem"><a class="dropdown-item" (click)="dropdownSort(0)" href="#">Last Reaction</a></li>
             <li role="menuitem"><a class="dropdown-item" (click)="dropdownSort(1)" href="#">Most Reactions</a></li>
@@ -112,14 +114,22 @@
 
 
         <div class="trending" *ngIf="popularhastags?.length>0">
+          
+          <nav style="padding:5px">
+            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+              <ng-container *ngFor="let tag of popularhastags;let i=index">
+                <a href="javascript:void(0)" class="nav-item nav-link " id="nav-home-tab" [ngClass]="(i==tabIndex)?'active':''"
+                   role="tab" aria-controls="nav-home" aria-selected="true" data-toggle="tag.HashTag" (click)="switchTab(tag.HashTag,i)">{{tag.HashTag}}</a>
+                <span> &nbsp; </span>
+              </ng-container>
+            </div>
+          </nav>
 
-          <ul class="nav nav-tabs list-inline" *ngFor="let tag of popularhastags;let i=index">
- 
-            <li>
+          <!--<ul class="nav nav-tabs list-inline">
+            <li *ngFor="let tag of popularhastags;let i=index">
               <a href="javascript:void(0)" data-toggle="tag.HashTag" (click)="switchTab(tag.HashTag)">{{tag.HashTag}}</a>
             </li>
-
-          </ul>
+          </ul>-->
 
         </div>
 
@@ -191,7 +201,7 @@
                   <div ExternalLink>
                     <h1>  Yes</h1>
                     <small class="belief-time"><i>{{temp?.MostYesLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
-                    <p class="message-container" [innerHTML]=" temp?.MostYesLiked?.Comment  |linky"></p>
+                    <p class="message-container" [innerHTML]=" temp?.MostYesLiked?.Comment"></p>
                   </div>
 
                   <div class="row">
@@ -217,7 +227,7 @@
                   <div ExternalLink>
                     <h1>  No</h1>
                     <small class="belief-time"><i>{{temp?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
-                    <p class="message-container" [innerHTML]="temp?.MostNoLiked?.Comment |linky"></p>
+                    <p class="message-container" [innerHTML]="temp?.MostNoLiked?.Comment"></p>
                   </div>
 
                   <div class="row">
@@ -274,7 +284,7 @@
 
                 <strong>
                   <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp?.Id]">
-                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis |linky"></div>
+                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
                   </a>
 
 
