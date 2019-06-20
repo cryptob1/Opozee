@@ -777,7 +777,7 @@ namespace opozee.Controllers.API
                     return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
                 }
 
-                Search = string.IsNullOrEmpty(Search) ? "" : Search;
+                Search = string.IsNullOrEmpty(Search) ? "" : Search.ToLower() == "all" ? "" : Search;
 
                 questionDetail.PostQuestionDetail = (from q in db.Questions
                                                      join u in db.Users on q.OwnerUserID equals u.UserID
@@ -2324,54 +2324,46 @@ namespace opozee.Controllers.API
         {
             dynamic _response = new ExpandoObject();
             List<PopularTag> TopPopularHashTags = new List<PopularTag>();
-            List<PopularTag> TopPopularHashTagsList = new List<PopularTag>();
-            TopPopularHashTags.Add(new PopularTag { HashTag = "All", Count = 0 });
+            TopPopularHashTags.Add(new PopularTag { HashTag = "All", Count = 99999 });
 
             try
             {
                 db.Configuration.LazyLoadingEnabled = false;
+                DateTime from_date = DateTime.UtcNow.AddDays(-30).Date; //last 30 days hashtag
 
-                DateTime from_date = DateTime.UtcNow.AddDays(-30).Date;
-
-
-                var PopularHashTagsList = (from q in db.Questions
-                                               //join u in db.Users on q.OwnerUserID equals u.UserID
-                                           where q.IsDeleted == false && q.CreationDate > from_date
+                var PopularHashTagsList = (from q in db.Questions //join u in db.Users on q.OwnerUserID equals u.UserID
+                                           where q.IsDeleted == false && q.HashTags != "" //&& q.CreationDate > from_date
                                            select new
                                            {
                                                HashTag = q.HashTags,
                                                QuestionId = q.Id
                                            }).ToList();
 
-
                 foreach (var item in PopularHashTagsList)
                 {
-
-                    string[] splitHastags = item.HashTag.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    var splitHastags = item.HashTag.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    splitHastags.Remove("All");
 
                     foreach (var tag in splitHastags)
                     {
                         PopularTag _hashtag = new PopularTag();
-                        _hashtag.HashTag = Helper.FirstCharToUpper(tag);
-                        //_hashtag.QuestionId = item.QuestionId;
-                        //_hashtag.Count = PopularHashTagsList.Where(x => x.HashTag.Contains(tag)).ToList().Count;
+                        _hashtag.HashTag = Helper.FirstCharToUpper(tag).Replace("#","");
 
-                        //if (TopPopularHashTags.Where(x => x.HashTag == _hashtag.HashTag).FirstOrDefault() == null)
-                        TopPopularHashTags.Add(_hashtag);
+                        var existingTag = TopPopularHashTags.Where(x => x.HashTag == _hashtag.HashTag).FirstOrDefault();
+                        if (existingTag == null)
+                        {
+                            _hashtag.Count = 1;
+                            TopPopularHashTags.Add(_hashtag);
+                        }
+                        else
+                            existingTag.Count += 1;
                     }
                 }
 
-                foreach (var tag in TopPopularHashTags)
-                {
-                    tag.Count = TopPopularHashTags.Where(x => x.HashTag == tag.HashTag).ToList().Count;
-                }
-
                 TopPopularHashTags = TopPopularHashTags.OrderByDescending(x => x.Count).Distinct().ToList();
-
-                foreach (var list in TopPopularHashTags)
+                if (TopPopularHashTags.Count >= 6)
                 {
-                    if (TopPopularHashTagsList.Where(x => x.HashTag == list.HashTag).FirstOrDefault() == null)
-                        TopPopularHashTagsList.Add(list);
+                    TopPopularHashTags = TopPopularHashTags.Take(6).ToList();
                 }
 
             }
@@ -2391,7 +2383,7 @@ namespace opozee.Controllers.API
             //}
 
             _response.success = HttpStatusCode.OK;
-            _response.data = TopPopularHashTagsList;
+            _response.data = TopPopularHashTags;
             return _response;
         }
         #endregion
