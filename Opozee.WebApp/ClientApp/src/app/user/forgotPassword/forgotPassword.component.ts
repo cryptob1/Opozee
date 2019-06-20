@@ -90,7 +90,17 @@ export class ForgotPassword implements OnInit {
     this.authenticationService.forgotPassword(this.forgotForm.value)
       .pipe(first())
       .subscribe(data => {
-        //console.log(data);
+        if (data.success) {
+          this.toastr.success('', data.message, { timeOut: 500000 });
+          let _user = data.data;
+          //console.log('emailVerification user', _user);
+          //this.router.navigate(['/login']);
+        }
+        else {
+          this.toastr.error('', data.message, { timeOut: 5000000 });
+          this.router.navigate(['/login']);
+        }
+        this.loading = false;
       },
         error => {
           this.alertService.error(error);

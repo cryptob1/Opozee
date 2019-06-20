@@ -4,3 +4,8 @@ export interface resetModel {
   newpassword: string; // required, value must be equal to confirm password.
   confirmPassword: string; // required, value must be equal to password.
 }
+
+export interface changePasswordModel {
+  newpassword: string; // required, value must be equal to confirm password.
+  confirmPassword: string; // required, value must be equal to password.
+}

@@ -460,4 +460,12 @@ export class UserService {
     })
   }
 
+  ForgotPWDLinkVerify(userId, code) {
+    return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/ForgotPWDLinkVerify?Id=' + userId + '&Code=' + code, {
+      headers: new HttpHeaders({
+        'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
+      })
+    })
+  }
+
 }

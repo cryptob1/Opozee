@@ -37,35 +37,41 @@ export class AuthenticationService {
   }
 
   loginWithFacebook(model) {
-
     var reqHeader = new HttpHeaders({ 'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ==' });
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/SigninThirdPartyWeb', model, { headers: reqHeader })
       .pipe(map(user => {
         debugger;
         return user;
       }));
-
   }
 
   loginWithGoogle(model) {
-
     var reqHeader = new HttpHeaders({ 'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ==' });
     return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/SigninThirdPartyWeb', model, { headers: reqHeader })
       .pipe(map(user => {
         debugger;
         return user;
       }));
-
   }
 
   resetPassword(model) {
     var reqHeader = new HttpHeaders({ 'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ==' });
-    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/SigninThirdPartyWeb', model, { headers: reqHeader })
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/ChangePassword', model, { headers: reqHeader })
       .pipe(map(data => {
         debugger;
         return data;
       }));
   }
+
+  changePassword(model) {
+    var reqHeader = new HttpHeaders({ 'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ==' });
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/ChangePassword', model, { headers: reqHeader })
+      .pipe(map(data => {
+        debugger;
+        return data;
+      }));
+  }
+
   forgotPassword(model) {
     var reqHeader = new HttpHeaders({ 'Authorization': 'Basic b3Bvc2VlOm9wb3NlZTk5IQ==' });
     return this.http.get<any>(this.myAppUrl + 'opozee/api/WebApi/ForgotPasswordMail?email=' + model.email, { headers: reqHeader })

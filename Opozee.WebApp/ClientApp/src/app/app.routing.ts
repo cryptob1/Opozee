@@ -23,6 +23,7 @@ import { EarnStatsComponent } from './earn-stats/earn-stats.component';
 import { InviteComponent } from './user/invite/invite.component';
 import { BountyQuestionsComponent } from './question/bounty-questions/bounty-questions.component';
 import { EmailVerificationComponent } from './user/email-verification/email-verification.component';
+import { ChangePasswordComponent } from './user/forgotPassword/change-password/change-password.component';
 
 const appRoutes: Routes = [
   { path: 'questionlisting', component: QuestionListingComponent },
@@ -48,7 +49,8 @@ const appRoutes: Routes = [
 
   { path: 'invites', component: InviteComponent, canActivate: [AuthGuard] },
   { path: 'invite/:code', component: InviteComponent },
-  { path: 'verification', component: EmailVerificationComponent },
+  { path: 'verification', component: EmailVerificationComponent }, //
+  { path: 'change-password', component: ChangePasswordComponent },
 
   { path: 'bookmark/:questionId', component: BookmarkQuestion, canActivate: [AuthGuard] },
   { path: 'postedQuestionEditList/:questionId', component: PostedQuestionEditList, canActivate: [AuthGuard] },

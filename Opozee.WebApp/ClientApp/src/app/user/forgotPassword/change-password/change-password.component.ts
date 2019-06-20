@@ -7,6 +7,8 @@ import { first } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { DataSharingService } from '../../../dataSharingService';
 import { MixpanelService } from '../../../_services/mixpanel.service';
+import { changePasswordModel } from '../../../_models/reset.interface';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-change-password',
@@ -20,6 +22,11 @@ export class ChangePasswordComponent implements OnInit {
   userId: number;
   loading = false;
   returnUrl: string = "";
+  public _changePasswordModel: changePasswordModel;
+  dataModel: any;
+  resetForm: FormGroup;
+  submitted = false;
+  passwordmatch: boolean = true;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -45,65 +52,69 @@ export class ChangePasswordComponent implements OnInit {
     this.toastr.toastrConfig.preventDuplicates = true;
     this.toastr.toastrConfig.closeButton = true;
 
-    this.userService.emailVerification(this.userId, this.code)
+    this._changePasswordModel = {
+      newpassword: '',
+      confirmPassword: ''
+    }
+
+    this.loading = true;
+    this.userService.ForgotPWDLinkVerify(this.userId, this.code)
       .pipe(first())
       .subscribe(
         data => {
           if (data.success) {
-            this.toastr.success('', data.message, { timeOut: 500000 });
+            this.toastr.info('', data.message, { timeOut: 5000000 });
             let _user = data.data;
             //console.log('emailVerification user', _user);
-            this.loginUser({ email: _user.Email, password: _user.Password, IsVerificationLogin: true});
             //this.router.navigate(['/login']);
           }
           else {
             this.toastr.error('', data.message, { timeOut: 5000000 });
             this.router.navigate(['/login']);
           }
+          this.loading = false;
         },
         error => {
-          //this.toastr.error('', 'Something went wrong. Please try again.', { timeOut: 5000 });
+          this.toastr.error('', 'Please enter a valid link.', { timeOut: 2000000 });
           this.router.navigate(['/login']);
+          this.loading = false;
         });
   }
 
-
-  loginUser(_model) {
-
+  changePWD(model: changePasswordModel, isValid: boolean) {
+    debugger
+    console.log(isValid);
+    // call API to save customer
+    console.log(model, isValid);
     this.loading = true;
 
-    this.authenticationService.login(_model)
-      .pipe(first())
-      .subscribe(data => {
+    let _params = {
+      Password: model.newpassword,
+      UserId: this.userId
+    }
 
-        if (data.Id > 0) {
+    if (isValid) {
+      this.authenticationService.changePassword(_params)
+        .pipe(first())
+        .subscribe(data => {
+          if (data.success) {
+            this.toastr.success('', data.message, { timeOut: 5000000 });
+            let _user = data.data;
+            //console.log('emailVerification user', _user);
+            this.router.navigate(['/login']);
+          }
+          else {
+            this.toastr.error('', data.message, { timeOut: 5000000 });
+            this.router.navigate(['/login']);
+          }
           this.loading = false;
-          this.toastr.success('', 'Login successfully!', { timeOut: 2000 });
-          this.dataSharingService.loginsetstate(data);
-          // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(data));
-          this.mixpanelService.init(_model.Email);
-          this.mixpanelService.track('Login with email');
-
-          this.router.navigateByUrl(this.returnUrl);
-        }
-        else if (data.Id == -1) {
-          this.loading = false;
-          this.toastr.error('', 'Please confirm your email address.', { timeOut: 3000 });
-          this.router.navigate(['/login']);
-        }
-        else {
-          this.loading = false;
-          this.toastr.error('Invalid User', 'please check user name or Password !', { timeOut: 3000 });
-          this.router.navigate(['/login']);
-        }
-      },
-        error => {
-          this.loading = false;
-          this.toastr.error('Error Logging in', error.message + '', { timeOut: 3000 });
-          this.router.navigate(['/login']);
-        });
+        },
+          error => {
+            // this.alertService.error(error);
+            this.loading = false;
+            this.toastr.error('Error Logging in', error.message + '', { timeOut: 2000000 });
+          });
+    }
   }
-
-
+  
 }

@@ -71,6 +71,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { SafeHtmlPipe } from './Shared/safe-html-pipe';
 import { EmailVerificationComponent } from './user/email-verification/email-verification.component';
 import { PopoverModule } from "ngx-popover";
+import { ChangePasswordComponent } from './user/forgotPassword/change-password/change-password.component';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -141,6 +142,7 @@ export function getAuthServiceConfigs() {
     InviteComponent,
     BountyQuestionsComponent,
     EmailVerificationComponent,
+    ChangePasswordComponent,
     SafeHtmlPipe
   
   ],

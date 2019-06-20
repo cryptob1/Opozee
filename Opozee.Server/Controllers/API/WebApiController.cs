@@ -63,7 +63,7 @@ namespace opozee.Controllers.API
         public void Delete(int id)
         {
         }
-        
+
         [HttpPost]
         [Route("api/WebApi/RegisterUser")]
         public async Task<dynamic> RegisterUser(User users)
@@ -90,7 +90,7 @@ namespace opozee.Controllers.API
                     _response.success = false;
                     _response.message = "User Exists.";
                     return _response;
-                   // return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "User Exists"));
+                    // return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "User Exists"));
                 }
                 else
                 {
@@ -126,7 +126,7 @@ namespace opozee.Controllers.API
                     //    entity.SocialType = ThirdPartyType.Twitter.ToString();
                     //}
 
-                    
+
                     if (CheckEmailExist(users.Email))
                     {
                         _response.success = false;
@@ -251,7 +251,7 @@ namespace opozee.Controllers.API
                         }
                         catch (Exception ex)
                         {
-                        }                       
+                        }
                     }
 
                     _response.success = true;
@@ -318,6 +318,99 @@ namespace opozee.Controllers.API
             }
         }
 
+        public class ChangePassword
+        {
+            public string Password { get; set; }
+            public int UserId { get; set; }
+        }
+
+        [HttpPost]
+        [Route("api/WebApi/ChangePassword")]
+        public async Task<dynamic> ChangePasswordApi(ChangePassword model)
+        {
+            dynamic _response = new ExpandoObject();
+            try
+            {
+                if (string.IsNullOrEmpty(model.Password))
+                {
+                    _response.success = false;
+                    _response.message = "Please enter a valid password";
+                    return _response;
+                }
+
+                var user = db.Users.Where(x => x.UserID == model.UserId).FirstOrDefault();
+
+                if (user == null)
+                {
+                    _response.success = false;
+                    _response.message = "User not found.";
+                    return _response;
+                }
+                else
+                {
+                    user.Password = AesCryptography.Encrypt(model.Password);
+                    db.SaveChanges();
+
+                    _response.message = "Password has been changed successfully.";
+                    _response.success = true;
+                    _response.data = user;
+                    return _response;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+                _response.success = false;
+                _response.message = ex.Message;
+                return _response;
+            }
+        }
+
+
+        [HttpGet]
+        [Route("api/WebApi/ForgotPWDLinkVerify")]
+        public async Task<dynamic> ForgotPWDLinkVerify(int Id, string code)
+        {
+            dynamic _response = new ExpandoObject();
+            try
+            {
+                if (Id <= 0 || string.IsNullOrEmpty(code))
+                {
+                    _response.success = false;
+                    _response.message = "Please enter a valid link.";
+                    return _response;
+                }
+
+                var user = db.Users.Where(x => x.UserID == Id && x.ReferralCode.ToLower() == code.ToLower()).FirstOrDefault();
+
+                if (user == null)
+                {
+                    _response.success = false;
+                    _response.message = "Please enter a valid link.";
+                    return _response;
+                }
+                else
+                {
+                    _response.message = "Please change your password.";
+                }
+
+                //user.ReferralCode = AesCryptography.Decrypt(user.Password);
+                //user.Password = null;
+
+                _response.success = true;
+                _response.data = user;
+                return _response;
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+                _response.success = false;
+                _response.message = ex.Message;
+                return _response;
+            }
+        }
+
         [HttpGet]
         [Route("api/WebApi/ForgotPasswordMail")]
         public async Task<dynamic> ForgotPasswordMail(string email)
@@ -331,41 +424,45 @@ namespace opozee.Controllers.API
                 }
 
                 var entity = db.Users.Where(x => x.Email == email && x.SocialID == null).FirstOrDefault();
-                if (entity != null)
-                {
-                    
-                        //string URL = WebConfigurationManager.AppSettings["ConfirmationURL"];
-                        //URL = URL == null ? "https://opozee.com" : URL;
-
-                        string URL = "http://localhost:4200/";
-                        string recepientName = entity.FirstName + " " + entity.LastName;
-                        string recepientEmail = entity.Email;
-                        string subject = "Please confirm your email address | Opozee";
-                        bool isHtml = true;
-
-                        string pathHTMLFile = HttpContext.Current.Server.MapPath("~/Content/mail-template/ResetPasswordTemplate.html");
-                        string TEMPLATE = File.ReadAllText(pathHTMLFile);
-                        TEMPLATE = TEMPLATE.Replace("##RESET-URL##", $"{URL}/" + "verification?id=" + entity.UserID + "&code=" + entity.ReferralCode.ToLower());
-
-                        string body = TEMPLATE;
-
-                        (bool success, string errorMsg) = await EmailSender.SendEmailAsync(recepientName, recepientEmail, subject, body, isHtml);
-                        _response.success = success;
-
-                        if (success)
-                            _response.message = "Confirmation mail has been send. Please check you inbox.";
-                        else
-                            _response.message = "Please check your email and try again.";
-
-                        _response.data = entity;
-                        return _response;
-                    
-                }
-                else
+                if (entity == null)
                 {
                     _response.message = "Please check your email and try again.";
                     _response.success = false;
                     return _response;
+                }
+                else if (entity.EmailConfirmed != true)
+                {
+                    _response.message = "Your email address is not confirmed yet. Please confirm.";
+                    _response.success = false;
+                    return _response;
+                }
+                else
+                {
+                    string URL = WebConfigurationManager.AppSettings["ConfirmationURL"];
+                    URL = URL == null ? "https://opozee.com" : URL;
+
+                    string recepientName = entity.FirstName + " " + entity.LastName;
+                    string recepientEmail = entity.Email;
+                    string subject = "Please change your password | Opozee";
+                    bool isHtml = true;
+
+                    string pathHTMLFile = HttpContext.Current.Server.MapPath("~/Content/mail-template/ResetPasswordTemplate.html");
+                    string TEMPLATE = File.ReadAllText(pathHTMLFile);
+                    TEMPLATE = TEMPLATE.Replace("##RESET-URL##", $"{URL}/" + "change-password?id=" + entity.UserID + "&code=" + entity.ReferralCode.ToLower());
+
+                    string body = TEMPLATE;
+
+                    (bool success, string errorMsg) = await EmailSender.SendEmailAsync(recepientName, recepientEmail, subject, body, isHtml);
+                    _response.success = success;
+
+                    if (success)
+                        _response.message = "An Email has been send. Please check you inbox.";
+                    else
+                        _response.message = "Please check your email and try again.";
+
+                    _response.data = entity;
+                    return _response;
+
                 }
             }
             catch (Exception ex)
