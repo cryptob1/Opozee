@@ -317,7 +317,67 @@ namespace opozee.Controllers.API
                 return _response;
             }
         }
-                
+
+        [HttpGet]
+        [Route("api/WebApi/ForgotPasswordMail")]
+        public async Task<dynamic> ForgotPasswordMail(string email)
+        {
+            dynamic _response = new ExpandoObject();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
+                }
+
+                var entity = db.Users.Where(x => x.Email == email && x.SocialID == null).FirstOrDefault();
+                if (entity != null)
+                {
+                    
+                        //string URL = WebConfigurationManager.AppSettings["ConfirmationURL"];
+                        //URL = URL == null ? "https://opozee.com" : URL;
+
+                        string URL = "http://localhost:4200/";
+                        string recepientName = entity.FirstName + " " + entity.LastName;
+                        string recepientEmail = entity.Email;
+                        string subject = "Please confirm your email address | Opozee";
+                        bool isHtml = true;
+
+                        string pathHTMLFile = HttpContext.Current.Server.MapPath("~/Content/mail-template/ResetPasswordTemplate.html");
+                        string TEMPLATE = File.ReadAllText(pathHTMLFile);
+                        TEMPLATE = TEMPLATE.Replace("##RESET-URL##", $"{URL}/" + "verification?id=" + entity.UserID + "&code=" + entity.ReferralCode.ToLower());
+
+                        string body = TEMPLATE;
+
+                        (bool success, string errorMsg) = await EmailSender.SendEmailAsync(recepientName, recepientEmail, subject, body, isHtml);
+                        _response.success = success;
+
+                        if (success)
+                            _response.message = "Confirmation mail has been send. Please check you inbox.";
+                        else
+                            _response.message = "Please check your email and try again.";
+
+                        _response.data = entity;
+                        return _response;
+                    
+                }
+                else
+                {
+                    _response.message = "Please check your email and try again.";
+                    _response.success = false;
+                    return _response;
+                }
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+                _response.success = false;
+                _response.message = ex.Message;
+                return _response;
+                //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "UserData"));
+            }
+        }
+
 
         [HttpPost]
         [Route("api/WebApi/Login")]
@@ -3596,8 +3656,8 @@ namespace opozee.Controllers.API
 
                     try
                     {
-                        //string _apiURL = "http://localhost:61545/";
-                        string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
+                        string _apiURL = "http://localhost:61545/";
+                        //string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
 
                         var client = new RestClient($"{_apiURL}OpozeeGrantResourceOwnerCredentialSecret");
                         var request = new RestRequest(Method.POST);
