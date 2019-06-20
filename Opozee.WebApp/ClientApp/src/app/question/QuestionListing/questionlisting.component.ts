@@ -162,6 +162,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       }, []);
 
       this.popularhastags = this.popularhastags.slice(0, 5);
+      
       this.popularhastags.unshift({ 'HashTag': 'All' });
       console.log(this.popularhastags[2]);
     });
@@ -318,11 +319,17 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     if (ht == 'All') {
       this.questionGetModel.isHashTag = false;
       this.hashTag = false;
+      this.search = null;
+      this.questionGetModel.Search = this.search;
     } else {
       this.questionGetModel.isHashTag = ht;
       this.hashTag = true;
+ 
+      this.search = ht;
+      this.questionGetModel.Search = this.search;
     }
     this.tabIndex = index;
+    console.log(this.questionGetModel);
     this.getAllQuestionlist(this.questionGetModel);
   }
 

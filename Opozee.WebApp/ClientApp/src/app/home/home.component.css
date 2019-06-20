@@ -53,7 +53,7 @@
   left: 0;
   right: 0;
   margin: 0 auto;
-  border: 1px solid #eeeeee;
+  border: 1px solid #e9ebeeeee;
 }
 
 .popup-close {
@@ -100,7 +100,7 @@
   flex: 0 0 32%;
   padding: 15px;
   text-align: center;
-  background: #eee;
+  background: #e9ebee;
   border-radius: 5px;
 }
 

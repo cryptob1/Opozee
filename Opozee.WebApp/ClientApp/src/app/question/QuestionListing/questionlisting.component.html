@@ -98,8 +98,8 @@
         </div>
 
         <!--sort by button-->
-        <div *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0 && qid==-1 &&  !hashTag " class="btn-group" dropdown>
-          <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle" style="width:150px;">
+        <div *ngIf="isRecordLoaded && PostQuestionDetailList?.length>0 && qid==-1 " class="btn-group" dropdown>
+          <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle" style="width:120px;">
             Sort By &nbsp;<span class="caret"></span>
           </button>
 
@@ -112,14 +112,14 @@
           </ul>
         </div>
 
-
+        <!--//tabs-->
         <div class="trending" *ngIf="popularhastags?.length>0">
           
           <nav style="padding:5px">
             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
               <ng-container *ngFor="let tag of popularhastags;let i=index">
                 <a href="javascript:void(0)" class="nav-item nav-link " id="nav-home-tab" [ngClass]="(i==tabIndex)?'active':''"
-                   role="tab" aria-controls="nav-home" aria-selected="true" data-toggle="tag.HashTag" (click)="switchTab(tag.HashTag,i)">{{tag.HashTag}}</a>
+                   role="tab" aria-controls="nav-home" aria-selected="true" data-toggle="tag.HashTag" (click)="switchTab(tag.HashTag,i)">#{{tag.HashTag| titlecase}}</a>
                 <span> &nbsp; </span>
               </ng-container>
             </div>
@@ -175,13 +175,13 @@
                 <div class="cover_analysis">
                   <div class="left">
                     <span> </span>
-                    em
+                  
                     <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
                       <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
 
 
 
-                      e
+                     
                         <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
                       <!--<span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>-->
                       <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>

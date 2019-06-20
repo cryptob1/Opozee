@@ -362,7 +362,7 @@ header .container-fluid {
   left: 0;
   right: 0;
   margin: 0 auto 10px auto;
-  border: 1px solid #eeeeee;
+  border: 1px solid #e9ebeeeee;
 }
 
 .popup-close {
@@ -409,7 +409,7 @@ header .container-fluid {
   flex: 0 0 60%;
   padding: 10px;
   /*text-align: center;*/
-  background: #eee;
+  background: #e9ebee;
   border-radius: 5px;
 }
 
