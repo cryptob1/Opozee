@@ -38,6 +38,7 @@ a.navbar-brand.logo {
 
 .inner_pages header {
   min-height: 40px !important;
+  max-height: 40px !important;
 }
 header .dropdown a {
   padding: 0px ;
@@ -54,7 +55,7 @@ header .dropdown a {
   margin: auto;
   float: left;
   margin-top: 5px;
-  margin-left: 120px;
+  margin-left: 100px;
 }
 
 .search-input .form-control {
@@ -201,6 +202,7 @@ header .container-fluid {
   .banner_search-form {
     margin-left: 10px;
     width: 15%;
+    margin-left: 90px;
   }
  
   .nav > li > a {

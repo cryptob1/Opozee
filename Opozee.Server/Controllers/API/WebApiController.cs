@@ -2737,60 +2737,60 @@ namespace opozee.Controllers.API
         public List<PopularTag> GetPopularHashTags()
         {
             List<PopularTag> TopPopularHashTags = new List<PopularTag>();
-            try
-            {
-                db.Configuration.LazyLoadingEnabled = false;
+            //try
+            //{
+            //    db.Configuration.LazyLoadingEnabled = false;
 
-                DateTime from_date = DateTime.UtcNow.AddDays(-30).Date;
+            //    DateTime from_date = DateTime.UtcNow.AddDays(-30).Date;
                 
 
-                var PopularHashTagsList = (from q in db.Questions
-                                               //join u in db.Users on q.OwnerUserID equals u.UserID
-                                           where q.IsDeleted == false && q.CreationDate > from_date
-                                           select new
-                                           {
-                                               HashTag = q.HashTags,
-                                               QuestionId = q.Id
-                                           }).ToList();
+            //    var PopularHashTagsList = (from q in db.Questions
+            //                                   //join u in db.Users on q.OwnerUserID equals u.UserID
+            //                               where q.IsDeleted == false && q.CreationDate > from_date
+            //                               select new
+            //                               {
+            //                                   HashTag = q.HashTags,
+            //                                   QuestionId = q.Id
+            //                               }).ToList();
 
                  
 
-                foreach (var item in PopularHashTagsList)
-                {
+            //    foreach (var item in PopularHashTagsList)
+            //    {
 
-                    string[] splitHastags = item.HashTag.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            //        string[] splitHastags = item.HashTag.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                    foreach (var tag in splitHastags)
-                    {
-                        PopularTag _hashtag = new PopularTag();
-                        _hashtag.HashTag = tag;
-                        //_hashtag.QuestionId = item.QuestionId;
-                        //_hashtag.Count = PopularHashTagsList.Where(x => x.HashTag.Contains(tag)).ToList().Count;
-                        TopPopularHashTags.Add(_hashtag);
-                    }
-                }
+            //        foreach (var tag in splitHastags)
+            //        {
+            //            PopularTag _hashtag = new PopularTag();
+            //            _hashtag.HashTag = tag;
+            //            //_hashtag.QuestionId = item.QuestionId;
+            //            //_hashtag.Count = PopularHashTagsList.Where(x => x.HashTag.Contains(tag)).ToList().Count;
+            //            TopPopularHashTags.Add(_hashtag);
+            //        }
+            //    }
 
-                foreach (var tag in TopPopularHashTags)
-                {
-                    tag.Count = TopPopularHashTags.Where(x => x.HashTag == tag.HashTag).ToList().Count;
-                }
+            //    foreach (var tag in TopPopularHashTags)
+            //    {
+            //        tag.Count = TopPopularHashTags.Where(x => x.HashTag == tag.HashTag).ToList().Count;
+            //    }
 
-                TopPopularHashTags = TopPopularHashTags.OrderByDescending(x => x.Count).Distinct().ToList();
-            }
-            catch (Exception ex)
-            {
-                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
-            }
-
-            //string[] tags = { "crypto", "health", "sports", "uspolitics", "india" };
-
-            //foreach (var tag in TopPopularHashTags)
-            //{
-            //    PopularTag _hashtag = new PopularTag();
-            //    _hashtag.HashTag = tag;
-
-            //    TopPopularHashTags.Add(_hashtag);
+            //    TopPopularHashTags = TopPopularHashTags.OrderByDescending(x => x.Count).Distinct().ToList();
             //}
+            //catch (Exception ex)
+            //{
+            //    OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+            //}
+
+            string[] tags = { "career", "jee", "sports", "crypto", "health" };
+
+            foreach (var tag in tags)
+            {
+                PopularTag _hashtag = new PopularTag();
+                _hashtag.HashTag = tag;
+
+                TopPopularHashTags.Add(_hashtag);
+            }
 
             return TopPopularHashTags;
         }

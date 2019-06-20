@@ -249,7 +249,7 @@
 }
 
 .btn-group{
-  padding-top: 15px;
+  padding-top: 2px;
   float : right;
 }
 
@@ -289,7 +289,7 @@
 
 .nav-fill {
   padding: 10px;
-  padding-top: 15px;
+  padding-top: 2px;
 }
 
   .nav-fill a, .nav-fill a:hover {

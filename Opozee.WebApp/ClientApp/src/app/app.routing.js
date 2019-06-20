@@ -24,6 +24,7 @@ var earn_stats_component_1 = require("./earn-stats/earn-stats.component");
 var invite_component_1 = require("./user/invite/invite.component");
 var bounty_questions_component_1 = require("./question/bounty-questions/bounty-questions.component");
 var email_verification_component_1 = require("./user/email-verification/email-verification.component");
+var change_password_component_1 = require("./user/forgotPassword/change-password/change-password.component");
 var appRoutes = [
     { path: 'questionlisting', component: QuestionListing_1.QuestionListingComponent },
     { path: 'questionlisting/:search', component: QuestionListing_1.QuestionListingComponent },
@@ -48,6 +49,7 @@ var appRoutes = [
     { path: 'invites', component: invite_component_1.InviteComponent, canActivate: [index_4.AuthGuard] },
     { path: 'invite/:code', component: invite_component_1.InviteComponent },
     { path: 'verification', component: email_verification_component_1.EmailVerificationComponent },
+    { path: 'change-password', component: change_password_component_1.ChangePasswordComponent },
     { path: 'bookmark/:questionId', component: bookmark_component_1.BookmarkQuestion, canActivate: [index_4.AuthGuard] },
     { path: 'postedQuestionEditList/:questionId', component: postedQuestionEditList_component_1.PostedQuestionEditList, canActivate: [index_4.AuthGuard] },
     { path: 'editpostedquestion/:qId', component: editPostquestion_component_1.EditPostquestion, canActivate: [index_4.AuthGuard] },

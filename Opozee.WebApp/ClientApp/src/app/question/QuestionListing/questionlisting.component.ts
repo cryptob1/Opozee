@@ -316,13 +316,19 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
 
   switchTab(ht, index) {
+    this.isRecordLoaded = false;
+
+    this.questionGetModel.PageNumber = 1;
+    this.questionGetModel.PageSize = 10;
+    this.questionGetModel.TotalRecords = 5;
+
     if (ht == 'All') {
       this.questionGetModel.isHashTag = false;
       this.hashTag = false;
       this.search = null;
       this.questionGetModel.Search = this.search;
     } else {
-      this.questionGetModel.isHashTag = ht;
+      this.questionGetModel.isHashTag = true;
       this.hashTag = true;
  
       this.search = ht;

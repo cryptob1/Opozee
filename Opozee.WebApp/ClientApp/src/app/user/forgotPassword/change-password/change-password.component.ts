@@ -116,5 +116,11 @@ export class ChangePasswordComponent implements OnInit {
           });
     }
   }
+
+
+
+  close() {
+    
+  }
   
 }

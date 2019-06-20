@@ -77,11 +77,12 @@ export class NotificationComponent implements OnInit {
       this.isRecordLoaded = true
     }, error => {
       if (error.status == 401) {
-        this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
-        Observable.interval(1000)
-          .subscribe((val) => {
-            this.logout();
-          });
+        this.logout();
+        //this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+        //Observable.interval(1000)
+        //  .subscribe((val) => {
+        //    this.logout();
+        //  });
       }
       this.isRecordLoaded = false;
     });
