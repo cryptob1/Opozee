@@ -591,14 +591,13 @@ namespace opozee.Controllers.API
                                                    IsAgree = e.IsAgree,
                                                    CreationDate = e.CreationDate,
 
-                                                   LikesThoughtfulCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true &&(p.ReactionType == 1 || p.ReactionType == null)).Count(),
-                                                   LikesFactualCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true && p.ReactionType == 2 ).Count(),
+                                                   LikesThoughtfulCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true && (p.ReactionType == 1 || p.ReactionType == null)).Count(),
+                                                   LikesFactualCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true && p.ReactionType == 2).Count(),
                                                    LikesFunnyCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true && p.ReactionType == 3).Count(),
                                                    DislikesIrrationalCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && (p.ReactionType == 4 || p.ReactionType == null)).Count(),
-                                                   DislikesFakeNewsCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 5 ).Count(),
+                                                   DislikesFakeNewsCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 5).Count(),
                                                    DislikesOffTopicCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 6).Count(),
-
-
+                                                   SubReaction = db.Notifications.Where(p => p.CommentedUserId == userId && p.CommentId == e.Id).FirstOrDefault() == null ? 0 : db.Notifications.Where(p => p.CommentedUserId == userId && p.CommentId == e.Id).FirstOrDefault().ReactionType ?? 0
                                                }).OrderByDescending(p => p.CreationDate).ToPagedList(Pageindex - 1, Pagesize).ToList();
 
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "AllOpinion"));
@@ -2208,6 +2207,7 @@ namespace opozee.Controllers.API
         public async Task<dynamic> CrashEMail(CrashEMailVM model)
         {
             dynamic _response = new ExpandoObject();
+            _response.success = false;
             try
             {
                 string recepientName = "Paras";
@@ -2235,13 +2235,16 @@ namespace opozee.Controllers.API
                 if (!success)
                 {
                     _response.message = errorMsg;
-                    return BadRequest(_response);
+                    return _response;
                 }
+                _response.message = "EMail has been sent";
+                return _response;
             }
             catch (Exception ex)
             {
+                _response.message = ex.Message;
+                return _response;
             }
-            return _response;
 
         }
 

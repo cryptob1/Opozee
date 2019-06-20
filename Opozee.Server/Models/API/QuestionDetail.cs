@@ -158,6 +158,8 @@ namespace Opozee.Models.API
         public int DislikesIrrationalCount { get; set; }
         public int DislikesFakeNewsCount { get; set; }
         public int DislikesOffTopicCount { get; set; }
+
+        public int SubReaction { get; set; }
     }
 
 
