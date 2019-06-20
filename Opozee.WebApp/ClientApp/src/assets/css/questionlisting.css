@@ -36,7 +36,7 @@ z-index: 9;
     width: 100%;
   }
 .inner_pages .section_second {
-	padding-top: 25px;
+	padding-top: 50px;
 }
 .cover_heading {
   text-align: left;
@@ -219,9 +219,9 @@ border-radius: 50%;
 @media(max-width:420px)
 {
 
-  .inner_pages .section_second {
+  /*.inner_pages .section_second {
     padding-top: 20px;
-  }
+  }*/
     .inner_pages .opinionsList .icon img {
 	max-width: 100%;
   width: 100%;
