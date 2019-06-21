@@ -56,11 +56,13 @@ export class ViewProfileComponent implements OnInit {
       },
       error => {
         if (error.status == 401) {
-          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
-          Observable.interval(1000)
-            .subscribe((val) => {
-              this.logout();
-            });
+          this.logout();
+
+          //this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          //Observable.interval(1000)
+          //  .subscribe((val) => {
+          //    this.logout();
+          //  });
         }
         else {
         
@@ -96,11 +98,13 @@ export class ViewProfileComponent implements OnInit {
       this.notification = Notifications;
     }, error => {
       if (error.status == 401) {
-        this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
-        Observable.interval(1000)
-          .subscribe((val) => {
-            this.logout();
-          });
+        this.logout();
+
+          //this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          //Observable.interval(1000)
+          //  .subscribe((val) => {
+          //    this.logout();
+          //  });
       }
       this.isRecordLoaded = false;
     });
@@ -128,11 +132,13 @@ export class ViewProfileComponent implements OnInit {
           this.isRecordLoaded = false;
         }, error => {
           if (error.status == 401) {
-            this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
-            Observable.interval(1000)
-              .subscribe((val) => {
-                this.logout();
-              });
+            this.logout();
+
+          //this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          //Observable.interval(1000)
+          //  .subscribe((val) => {
+          //    this.logout();
+          //  });
           }
           this.isRecordLoaded = false;
 
@@ -148,11 +154,13 @@ export class ViewProfileComponent implements OnInit {
           this.isRecordLoaded = false;
         }, error => {
           if (error.status == 401) {
-            this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
-            Observable.interval(1000)
-              .subscribe((val) => {
-                this.logout();
-              });
+            this.logout();
+
+          //this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          //Observable.interval(1000)
+          //  .subscribe((val) => {
+          //    this.logout();
+          //  });
           }
           this.isRecordLoaded = false;
         });
@@ -182,11 +190,13 @@ export class ViewProfileComponent implements OnInit {
         this.onFollowTab(tab);
       }, error => {
         if (error.status == 401) {
-          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
-          Observable.interval(1000)
-            .subscribe((val) => {
-              this.logout();
-            });
+          this.logout();
+
+          //this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          //Observable.interval(1000)
+          //  .subscribe((val) => {
+          //    this.logout();
+          //  });
         }
        
       });
@@ -204,11 +214,13 @@ export class ViewProfileComponent implements OnInit {
         this.onFollowTab(tab);
       }, error => {
         if (error.status == 401) {
-          this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
-          Observable.interval(1000)
-            .subscribe((val) => {
-              this.logout();
-            });
+          this.logout();
+
+          //this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
+          //Observable.interval(1000)
+          //  .subscribe((val) => {
+          //    this.logout();
+          //  });
         }
        
       });
