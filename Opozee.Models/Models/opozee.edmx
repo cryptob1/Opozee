@@ -85,6 +85,7 @@
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="IsSlider" Type="bit" />
+          <Property Name="Detail" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Referral">
           <Key>
@@ -230,6 +231,7 @@
           <Property Name="CreationDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="IsSlider" Type="Boolean" />
+          <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Token">
           <Key>
@@ -373,6 +375,7 @@
           <EntitySetMapping Name="Questions">
             <EntityTypeMapping TypeName="oposeeDbModel.Question">
               <MappingFragment StoreEntitySet="Question">
+                <ScalarProperty Name="Detail" ColumnName="Detail" />
                 <ScalarProperty Name="IsSlider" ColumnName="IsSlider" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />

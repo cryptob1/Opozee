@@ -2782,7 +2782,7 @@ namespace opozee.Controllers.API
             //    OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
             //}
 
-            string[] tags = { "career", "jee", "sports", "crypto", "health" };
+            string[] tags = { "isThisTrue", "Career", "Sports", "Crypto", "JEE" };
 
             foreach (var tag in tags)
             {
