@@ -32,7 +32,7 @@
               <!--<p>{{PostQuestionDetailModel.postQuestionDetail.Question}}</p>-->
 
               <div ExternalLink *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question">
-                <p class="message-container mb-0" [innerHTML]="'Q: '+PostQuestionDetailModel?.postQuestionDetail?.Questionlinky:{stripPrefix : true, truncate:15}:{stripPrefix : true, truncate:15} | emojis"></p>
+                <p class="message-container mb-0" [innerHTML]="'Q: '+PostQuestionDetailModel?.postQuestionDetail?.Question| linky:{stripPrefix : true, truncate:15}  | emojis"></p>
                 <p class="mb-30">
                   <small *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question" style="float: left">
                     <tweet url={{shareUrl}} text={{sharetext}}></tweet>
@@ -73,7 +73,7 @@
                   <div ExternalLink>
                     <h1>{{temp?.IsAgree ? 'Yes' : 'No'}}</h1>
                     <small class="belief-time"><i>{{temp?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
-                    <p [innerHTML]="temp?.Comment linky:{stripPrefix : true, truncate:15}"></p>
+                    <p [innerHTML]="temp?.Comment | linky:{stripPrefix : true, truncate:15}"></p>
 
                   </div>
 
@@ -87,7 +87,7 @@
 
                       <div class="collapse longform" [id]="[temp?.Id]">
                         <div class="card card-body">
-                          <p [innerHTML]="temp?.LongForm linky:{stripPrefix : true, truncate:15}"> </p>
+                          <p [innerHTML]="temp?.LongForm | linky:{stripPrefix : true, truncate:15}"> </p>
                         </div>
                       </div>
 

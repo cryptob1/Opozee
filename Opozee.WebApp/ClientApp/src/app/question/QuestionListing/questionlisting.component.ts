@@ -164,7 +164,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       this.popularhastags = this.popularhastags.slice(0, 5);
       
       this.popularhastags.unshift({ 'HashTag': 'All' });
-      console.log(this.popularhastags[2]);
+       
     });
   }
 
@@ -335,7 +335,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       this.questionGetModel.Search = this.search;
     }
     this.tabIndex = index;
-    console.log(this.questionGetModel);
+    //console.log(this.questionGetModel);
     this.getAllQuestionlist(this.questionGetModel);
   }
 

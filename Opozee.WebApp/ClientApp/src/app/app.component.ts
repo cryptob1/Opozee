@@ -76,14 +76,14 @@ export class AppComponent implements OnInit {
       this.userService.checkNotification(this.localStorageUser.Id)
         //.pipe(first())
         .subscribe(data => {
-          console.log('checking....');
+          //console.log('checking....');
           if (this.localStorageUser) {
             if (this.localStorageUser.Id) {
               if (data) {
                 if (data.notification) {
 
                   if (data.notification.length > 0) {
-                    console.log('checking....', data.notification.length);
+                    //console.log('checking....', data.notification.length);
                     let body = "";
                     if (data.notification.length == 1) {
                       body = "You have " + data.notification.length + " unread notification. Click here to see.";
