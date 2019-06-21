@@ -72,6 +72,7 @@ import { SafeHtmlPipe } from './Shared/safe-html-pipe';
 import { EmailVerificationComponent } from './user/email-verification/email-verification.component';
 import { PopoverModule } from "ngx-popover";
 import { ChangePasswordComponent } from './user/forgotPassword/change-password/change-password.component';
+import { LinkyModule } from 'angular-linky';
 
 export function getAuthServiceConfigs() {
   let config = new AuthServiceConfig(
@@ -110,7 +111,8 @@ export function getAuthServiceConfigs() {
     BsDropdownModule.forRoot(),
     InfiniteScrollModule,
     PushNotificationsModule,
-    PopoverModule
+    PopoverModule,
+    LinkyModule
   ],
   declarations: [
     AppComponent,

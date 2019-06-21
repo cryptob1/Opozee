@@ -25,7 +25,7 @@
                                     [config]="editorConfig"
                                     [(ngModel)]="postQuestion">
                     </app-ngx-editor> -->
-                    <textarea class="editor" maxlength="300"
+                    <textarea class="editor" maxlength="500"
                        rows="4" cols="30" resizer="basic" 
                        formControlName="postQuestion" 
                        [(ngModel)]="postQuestion">
@@ -34,7 +34,7 @@
                       *Question is required
                     </div>
                     <div class="alert-danger" *ngIf="questionPostForm.controls['postQuestion'].touched && questionPostForm.controls['postQuestion'].hasError('maxlength')">
-                      *Maximum of 300 characters
+                      *Maximum of 400 characters
                     </div>
                     
 
@@ -57,6 +57,8 @@
          (onSelectAll)="onSelectAll($event)"
          (onDeSelect)="onDeSelect($event)">-->
                   <!--</ng-multiselect-dropdown>-->
+
+
 
                   <div class="form-group" style="width:100%">
                     <label for="hashtagss">Hashtags </label>

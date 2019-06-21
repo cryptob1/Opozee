@@ -25,6 +25,7 @@
     "@angular/router": "^5.2.0",
     "@nguniversal/module-map-ngfactory-loader": "^5.0.0-beta.5",
     "angular-font-awesome": "^3.1.2",
+    "angular-linky": "^1.2.2",
     "angular5-social-login": "^1.0.9",
     "aspnet-prerendering": "^3.0.1",
     "auth0-js": "^9.10.1",

@@ -22,7 +22,7 @@
 
                       <strong>
                         <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', bounty?.QuestionId] :['/qid/', bounty?.QuestionId]">
-                          <span class="message-container" [innerHTML]="'Q: ' + bounty?.PostQuestion | emojis"></span>
+                          <span class="message-container" [innerHTML]="'Q: ' + bounty?.PostQuestion linky:{stripPrefix : true, truncate:15}:{stripPrefix : true} | emojis"></span>
                         </a>
                         <ng-container *ngFor="let tag of bounty?.HashTags?.split(',')">
                           <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></small>
@@ -43,7 +43,7 @@
                         <div ExternalLink>
                           <h1>  Yes</h1>
                           <b>@{{bounty?.MostYesLiked?.CommentedUserName}}:</b>
-                          <small class="message-container" [innerHTML]="bounty?.MostYesLiked.Comment | emojis"></small>
+                          <small class="message-container" [innerHTML]="bounty?.MostYesLiked.Comment linky:{stripPrefix : true, truncate:15} | emojis"></small>
                           <small><sup>{{bounty?.MostYesLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</sup></small>
                         </div>
                       </div>
@@ -52,7 +52,7 @@
                         <div ExternalLink>
                           <h1>  No</h1>
                           <b>@{{bounty?.MostNoLiked?.CommentedUserName}}:</b>
-                          <small class="message-container" [innerHTML]="bounty?.MostNoLiked.Comment | emojis "></small>
+                          <small class="message-container" [innerHTML]="bounty?.MostNoLiked.Comment linky:{stripPrefix : true, truncate:15} | emojis "></small>
                           <small><sup>{{bounty?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</sup></small>
                         </div>
                       </div>
@@ -164,7 +164,7 @@
 
                 <strong>
                   <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
-                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
+                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question linky:{stripPrefix : true, truncate:15} | emojis"></div>
                   </a>
                 </strong>
 
@@ -284,7 +284,7 @@
 
                 <strong>
                   <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp?.Id]">
-                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis"></div>
+                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis  linky:{stripPrefix : true, truncate:15}"></div>
                   </a>
 
 
