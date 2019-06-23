@@ -35,7 +35,7 @@
                 <p class="message-container mb-0" [innerHTML]="'Q: '+PostQuestionDetailModel?.postQuestionDetail?.Question| linky:{stripPrefix : true, truncate:15}  | emojis"></p>
                 <p class="mb-30">
                   <small *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question" style="float: left">
-                    <tweet url={{shareUrl}} text={{sharetext}}></tweet>
+                    
                   </small>
                 </p>
               </div>
@@ -64,35 +64,42 @@
               </div>
             </span>
 
+      
+                <div class="col"   >
+                  &nbsp;
+                  <tweet style="margin-left:-80px;position:absolute" url={{shareUrl}} text={{sharetext}}></tweet>
+                  <fb-like style="margin-top: -2px; margin-left:-10px;position: absolute" url={{shareUrl}}></fb-like>
+                </div>
+                
 
-            <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
-              <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
+              <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
+                <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
 
-                <div [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']">
+                  <div [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']">
 
-                  <div ExternalLink>
-                    <h1>{{temp?.IsAgree ? 'Yes' : 'No'}}</h1>
-                    <small class="belief-time"><i>{{temp?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
-                    <p [innerHTML]="temp?.Comment | linky:{stripPrefix : true, truncate:15}"></p>
-
-                  </div>
-
-                  <span class="longform" *ngIf="temp?.LongForm!=null">
-                    <div class="row">
-
-                      <a class="collapseButton " data-toggle="collapse" [href]="['#'+temp?.Id]" role="button" aria-expanded="false"
-                         aria-controls="collapseExample">
-                        <img src="../../assets/images/detail.png" style="width: 24px; border: hidden;" />
-                      </a>
-
-                      <div class="collapse longform" [id]="[temp?.Id]">
-                        <div class="card card-body">
-                          <p [innerHTML]="temp?.LongForm | linky:{stripPrefix : true, truncate:15}"> </p>
-                        </div>
-                      </div>
+                    <div ExternalLink>
+                      <h1>{{temp?.IsAgree ? 'Yes' : 'No'}}</h1>
+                      <small class="belief-time"><i>{{temp?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
+                      <p [innerHTML]="temp?.Comment | linky:{stripPrefix : true, truncate:15}"></p>
 
                     </div>
-                  </span>
+
+                    <span class="longform" *ngIf="temp?.LongForm!=null">
+                      <div class="row">
+
+                        <a class="collapseButton " data-toggle="collapse" [href]="['#'+temp?.Id]" role="button" aria-expanded="false"
+                           aria-controls="collapseExample">
+                          <img src="../../assets/images/detail.png" style="width: 24px; border: hidden;" />
+                        </a>
+
+                        <div class="collapse longform" [id]="[temp?.Id]">
+                          <div class="card card-body">
+                            <p [innerHTML]="temp?.LongForm | linky:{stripPrefix : true, truncate:15}"> </p>
+                          </div>
+                        </div>
+
+                      </div>
+                    </span>
 
 
 
@@ -142,20 +149,20 @@
                           <span class="emojiText">
                             &nbsp;{{temp?.LikesThoughtfulCount}}&nbsp;
                           </span>
+                        </span>
+                        <span>
+                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/factual.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
+                          <span class="emojiText">
+                            &nbsp;{{temp?.LikesFactualCount}}&nbsp;
                           </span>
-                          <span>
-                            <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/factual.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
-                            <span class="emojiText">
-                              &nbsp;{{temp?.LikesFactualCount}}&nbsp;
-                            </span>
-                            </span>
-                            <span>
-                              <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/funny.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
-                              <span class="emojiText">
-                                &nbsp;{{temp?.LikesFunnyCount}}&nbsp;
-                              </span>
-                              </span>
-</div>
+                        </span>
+                        <span>
+                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/funny.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
+                          <span class="emojiText">
+                            &nbsp;{{temp?.LikesFunnyCount}}&nbsp;
+                          </span>
+                        </span>
+                      </div>
                     </popover-content>
                   </div>
                   <div class="dummy2">
@@ -167,38 +174,38 @@
                       <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
 
                       <div *ngIf="!loading" class="emojis">
-                        <span  >
+                        <span>
                           <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/irrational.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" title="Irrational">
-                         <span class="emojiText" > &nbsp; {{temp?.DislikesIrrationalCount}}&nbsp;</span>
+                          <span class="emojiText"> &nbsp; {{temp?.DislikesIrrationalCount}}&nbsp;</span>
                         </span>
                         <span>
                           <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/fakenews.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)" title="Fake News">
                           <span class="emojiText">
                             &nbsp;{{temp?.DislikesFakeNewsCount}}&nbsp;
                           </span>
-                          </span>
+                        </span>
                         <span>
                           <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/offtopic.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)" title="Off Topic">
                           <span class="emojiText">
                             &nbsp; {{temp?.DislikesOffTopicCount}}&nbsp;
                           </span>
-                          </span>
+                        </span>
                       </div>
                     </popover-content>
                   </div>
-</span>
-            </span>
+                </span>
+              </span>
 
-            
 
-            <div class="cover_hello" *ngIf="Id">
-              <i class="fa fa-plus" aria-hidden="true" (click)="openBeliefModal()">&nbsp;New Belief</i> 
+
+              <div class="cover_hello" *ngIf="Id">
+                <i class="fa fa-plus" aria-hidden="true" (click)="openBeliefModal()">&nbsp;New Belief</i>
+              </div>
+
+
+
+
             </div>
-
-           
-
-
-          </div>
         </div>
       </div>
 
