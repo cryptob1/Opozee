@@ -2331,43 +2331,60 @@ namespace opozee.Controllers.API
 
             try
             {
-                db.Configuration.LazyLoadingEnabled = false;
-                DateTime from_date = DateTime.UtcNow.AddDays(-30).Date; //last 30 days hashtag
+                //db.Configuration.LazyLoadingEnabled = false;
+                //DateTime from_date = DateTime.UtcNow.AddDays(-30).Date; //last 30 days hashtag
 
-                var PopularHashTagsList = (from q in db.Questions //join u in db.Users on q.OwnerUserID equals u.UserID
-                                           where q.IsDeleted == false && q.HashTags != "" //&& q.CreationDate > from_date
-                                           select new
-                                           {
-                                               HashTag = q.HashTags,
-                                               QuestionId = q.Id
-                                           }).ToList();
+                //var PopularHashTagsList = (from q in db.Questions //join u in db.Users on q.OwnerUserID equals u.UserID
+                //                           where q.IsDeleted == false && q.HashTags != "" //&& q.CreationDate > from_date
+                //                           select new
+                //                           {
+                //                               HashTag = q.HashTags,
+                //                               QuestionId = q.Id
+                //                           }).ToList();
 
-                foreach (var item in PopularHashTagsList)
+
+                //List<String> tags = new List<String>();
+                string[] tags = { "isThisTrue", "Career", "Sports", "Crypto", "JEE" };
+
+                foreach (var tag in tags)
                 {
-                    var splitHastags = item.HashTag.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                    splitHastags.Remove("All");
+                    PopularTag _hashtag = new PopularTag();
+                    _hashtag.HashTag = tag;// Helper.FirstCharToUpper(tag).Replace("#","");
+                    _hashtag.Count = 1;
+                    TopPopularHashTags.Add(_hashtag);
 
-                    foreach (var tag in splitHastags)
-                    {
-                        PopularTag _hashtag = new PopularTag();
-                        _hashtag.HashTag = Helper.FirstCharToUpper(tag).Replace("#","");
-
-                        var existingTag = TopPopularHashTags.Where(x => x.HashTag == _hashtag.HashTag).FirstOrDefault();
-                        if (existingTag == null)
-                        {
-                            _hashtag.Count = 1;
-                            TopPopularHashTags.Add(_hashtag);
-                        }
-                        else
-                            existingTag.Count += 1;
-                    }
+ 
                 }
 
-                TopPopularHashTags = TopPopularHashTags.OrderByDescending(x => x.Count).Distinct().ToList();
-                if (TopPopularHashTags.Count >= 6)
-                {
-                    TopPopularHashTags = TopPopularHashTags.Take(6).ToList();
-                }
+                //foreach (var item in PopularHashTagsList)
+                //{
+                //    var splitHastags = tags.ToList();//item.HashTag.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                //    //splitHastags.Remove("All");
+
+                //    foreach (var tag in splitHastags)
+                //    {
+                //        PopularTag _hashtag = new PopularTag();
+                //        _hashtag.HashTag = tag;// Helper.FirstCharToUpper(tag).Replace("#","");
+
+                //        var existingTag = TopPopularHashTags.Where(x => x.HashTag == _hashtag.HashTag).FirstOrDefault();
+                //        if (existingTag == null)
+                //        {
+                //            _hashtag.Count = 1;
+                //            TopPopularHashTags.Add(_hashtag);
+                //        }
+                //        else
+                //            existingTag.Count += 1;
+                //    }
+                //}
+
+                //TopPopularHashTags = TopPopularHashTags.OrderByDescending(x => x.Count).Distinct().ToList();
+                //if (TopPopularHashTags.Count >= 6)
+                //{
+                //    TopPopularHashTags = TopPopularHashTags.Take(6).ToList();
+                //}
+
+
+
 
             }
             catch (Exception ex)
