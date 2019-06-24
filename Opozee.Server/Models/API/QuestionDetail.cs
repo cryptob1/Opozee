@@ -61,6 +61,7 @@ namespace Opozee.Models.API
         public Comments MostYesLiked { get; set; }
         public Comments MostNoLiked { get; set; }
         public bool? IsSlider { get; set; }
+        public List<Comments> Comments { get; set; }
     }
 
     public class PostQuestionDetailMobile

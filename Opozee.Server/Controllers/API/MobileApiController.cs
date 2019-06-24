@@ -1679,7 +1679,26 @@ namespace opozee.Controllers.API
                                                          TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
                                                          CreationDate = q.CreationDate,
                                                          YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
-                                                         NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count()
+                                                         NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
+                                                         Comments = (from e in db.Opinions
+                                                                     join t in db.Users on e.CommentedUserId equals t.UserID
+                                                                     where e.QuestId == q.Id
+                                                                     select new Comments
+                                                                     {
+                                                                         Id = e.Id,
+                                                                         Comment = e.Comment,
+                                                                         CommentedUserId = t.UserID,
+                                                                         Name = t.FirstName + " " + t.LastName,
+                                                                         UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                                         LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                                         DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                                         Likes = db.Notifications.Where(p => p.CommentedUserId == q.OwnerUserID && p.CommentId == e.Id).Select(b => b.Like.HasValue ? b.Like.Value : false).FirstOrDefault(),
+                                                                         DisLikes = db.Notifications.Where(p => p.CommentedUserId == q.OwnerUserID && p.CommentId == e.Id).Select(b => b.Dislike.HasValue ? b.Dislike.Value : false).FirstOrDefault(),
+                                                                         CommentedUserName = t.UserName,
+                                                                         IsAgree = e.IsAgree,
+                                                                         CreationDate = e.CreationDate
+                                                                     }).ToList()
+
                                                      }).OrderByDescending(p => p.CreationDate).ToPagedList(Pageindex - 1, Pagesize).ToList();
 
                 return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "GetBookmarkQuestion"));
@@ -2361,7 +2380,7 @@ namespace opozee.Controllers.API
 
 
                 //List<String> tags = new List<String>();
-                string[] tags = { "isThisTrue", "Career", "Sports", "Crypto", "JEE" };
+                string[] tags = { "IsThisTrue", "Career", "Sports", "Crypto", "JEE" };
 
                 foreach (var tag in tags)
                 {
