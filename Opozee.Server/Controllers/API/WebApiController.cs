@@ -3596,8 +3596,8 @@ namespace opozee.Controllers.API
             }
             catch (Exception exp)
             {
-
-                throw;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exp);
+                //throw;
             }
             return Request.CreateResponse(HttpStatusCode.Created);
         }
