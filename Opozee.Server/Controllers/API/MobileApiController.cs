@@ -804,7 +804,24 @@ namespace opozee.Controllers.API
 
                                                          //TotalRecordcount = 1,
                                                          LastActivityTime = (DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
-
+                                                         Comments = (from e in db.Opinions
+                                                                     join t in db.Users on e.CommentedUserId equals t.UserID
+                                                                     where e.QuestId == q.Id
+                                                                     select new Comments
+                                                                     {
+                                                                         Id = e.Id,
+                                                                         Comment = e.Comment,
+                                                                         CommentedUserId = t.UserID,
+                                                                         Name = t.FirstName + " " + t.LastName,
+                                                                         UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
+                                                                         LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
+                                                                         DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
+                                                                         Likes = db.Notifications.Where(p => p.CommentedUserId == q.OwnerUserID && p.CommentId == e.Id).Select(b => b.Like.HasValue ? b.Like.Value : false).FirstOrDefault(),
+                                                                         DisLikes = db.Notifications.Where(p => p.CommentedUserId == q.OwnerUserID && p.CommentId == e.Id).Select(b => b.Dislike.HasValue ? b.Dislike.Value : false).FirstOrDefault(),
+                                                                         CommentedUserName = t.UserName,
+                                                                         IsAgree = e.IsAgree,
+                                                                         CreationDate = e.CreationDate
+                                                                     }).ToList()
                                                      }).ToList(); //.OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
 
 
