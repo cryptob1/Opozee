@@ -81,6 +81,10 @@ export class EditProfileComponent implements OnInit {
         this.imageUrl = data.ImageURL;
         this.isSocialLogin = data.IsSocialLogin;
         this.formControlOnSocialLogin(data.IsSocialLogin);
+
+        let profile = JSON.parse(localStorage.getItem('currentUser'));
+        profile.ImageUrl = this.imageUrl;
+        localStorage.setItem('currentUser', profile)
       }, error => {
         console.log('error: ', error);
         this.loading = false;
