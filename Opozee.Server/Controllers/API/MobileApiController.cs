@@ -1495,6 +1495,52 @@ namespace opozee.Controllers.API
                 return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "UserProfile"));
             }
         }
+
+        [HttpPost]
+        [Route("api/WebApi/UploadProfileWeb")]
+        public HttpResponseMessage UploadProfileWeb()
+        {
+            string imageName = null;
+            string _SiteRoot = WebConfigurationManager.AppSettings["SiteImgPath"];
+            string _SiteURL = WebConfigurationManager.AppSettings["SiteImgURL"];
+
+            var httpRequest = HttpContext.Current.Request;
+            //Upload Image
+            var postedFile = httpRequest.Files["Image"];
+            int UserId = Convert.ToInt32(httpRequest["userId"]);
+            //Create custom filename
+            try
+            {
+
+                imageName = new String(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
+                string guid = Guid.NewGuid().ToString();
+                imageName = imageName + guid + Path.GetExtension(postedFile.FileName);
+                var filePath = HttpContext.Current.Server.MapPath("~/Content/upload/ProfileImage/" + imageName);
+                postedFile.SaveAs(filePath);
+                // ResizeImage.Resize_Image_Thumb(filePath, filePath, "_T_" + filePath, 400, 400);
+                
+                // Save to DB
+                User Entry = null;
+                using (OpozeeDbEntities db = new OpozeeDbEntities())
+                {
+                    Entry = db.Users.Where(x => x.UserID == UserId).FirstOrDefault();
+
+                    Entry.ImageURL = _SiteURL + "/ProfileImage/" + imageName;
+                    db.Entry(Entry).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    //int userID = entity.UserID;
+                    //entity = db.Users.Find(userID);
+
+                }
+            }
+            catch (Exception exp)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exp);
+                //throw;
+            }
+            return Request.CreateResponse(HttpStatusCode.Created);
+        }
+
         #endregion
 
 
