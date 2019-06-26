@@ -134,19 +134,19 @@ section.section_second {
 
 .cover_questions .cover_analysis .left .anlysis_slider {
   width: 100%;
-  height: 15px;
+  height: 10px;
   float: left;
   /*background-image: url('../images/redline.png');*/
   background-color: #FAC7C7;
   border-radius: 5px;
   position: relative;
-  border: 1px solid #333;
+  border: 1px solid #8e9094;
 }
 
 
   .cover_questions .cover_analysis .left .anlysis_slider .color {
     float: left;
-    height: 14px;
+    height: 9px;
     width: 50%;
     background-color: #D2F3C8;
     /*background-image: url('../images/greenline.png');*/
@@ -155,7 +155,7 @@ section.section_second {
     left: 0px;
     top: 0px;
     border-radius: 5px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #8e9094;
   }
 
 .anlysis_slider .percentage_yes {
