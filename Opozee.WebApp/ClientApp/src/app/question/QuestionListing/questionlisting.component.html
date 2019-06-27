@@ -21,8 +21,8 @@
                     <div class="question_box">
 
                       <strong>
-                        <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', bounty?.QuestionId] :['/qid/', bounty?.QuestionId]">
-                          <span class="message-container" [innerHTML]="'Q: ' + bounty?.PostQuestion | linky:{stripPrefix : true, truncate:15}  | emojis"></span>
+                        <a href="javascript:void(0)" [routerLink]="localStorageUser ? ['/questiondetail/', bounty?.QuestionId] :['/qid/', bounty?.QuestionId]">
+                          <span  style="font-size: 18px;" class="message-container" [innerHTML]= "bounty?.PostQuestion | linky:{stripPrefix : true, truncate:15}  | emojis"></span>
                         </a>
                         <ng-container *ngFor="let tag of bounty?.HashTags?.split(',')">
                           <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></small>
@@ -149,7 +149,7 @@
             <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
               <div class="question_box">
                 <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
-                  <span class="icon"><img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
+                  <span class="user_icon"><img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
                   <span class="username" [title]="temp?.OwnerUserName">
                     @{{temp?.OwnerUserName}}
                   </span>
@@ -163,8 +163,8 @@
                 </div>
 
                 <strong>
-                  <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
-                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | linky:{stripPrefix : true, truncate:15} | emojis"></div>
+                  <a href="javascript:void(0)" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
+                    <div    class="message-container  mb-0 question-text" [innerHTML]=" temp?.Question | linky:{stripPrefix : true, truncate:15} | emojis"></div>
                   </a>
                 </strong>
 
@@ -260,16 +260,15 @@
             <div class="cover_questions image_question" style="cursor:pointer" *ngFor="let temp of PostQuestionDetailList" [routerLink]="['/questiondetail/', temp?.Id]">
               <div class="question_box">
                 <div class="user_left" [routerLink]="['/viewprofile/',temp.OwnerUserID]">
-                  <span class="icon"><img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
+                  <span class="user_icon"><img src="{{temp.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" /></span>
                   <span class="username">
                     @{{temp.OwnerUserName}}
                   </span>
                 </div>
                 <div class="user_right">
                   <div *ngIf="temp.LastActivityTime " class="date">
-                    <i>{{temp?.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
-                    <br />
-                    <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
+                    <i>{{temp?.LastActivityTime + 'Z'| date:"medium" |timeAgo }} &middot;  {{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}} reactions <b style="font-size:12px;padding-right:4px;"></b></i>
+
                   </div>
 
                   <br />
@@ -279,7 +278,7 @@
 
                 <strong>
                   <a href="javascript:void(0)" style="font-size: 18px;color:#000;" [routerLink]="['/questiondetail/', temp?.Id]">
-                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | linky:{stripPrefix : true, truncate:15} "></div>
+                    <div class="message-container  mb-0 question-text" [innerHTML]=" temp?.Question | linky:{stripPrefix : true, truncate:15} "></div>
                   </a>
 
 
@@ -360,64 +359,13 @@
 
       </div>
 
-      <!--<div class="navigation_cover" *ngIf="isRecordLoaded && PostQuestionDetailList?.length>1">
-
-        <div class="container">
-          <div class="text-center" style="cursor:pointer">
-            <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-              <li [ngClass]="{disabled:pager.currentPage === 1}">
-                <a (click)="setPage(pager.currentPage - 1)">Previous</a>
-              </li>
-              <li *ngFor="let page of pager.pages;index as i" [ngClass]="{active:pager.currentPage === page}">
-                <a (click)="setPage( page)">{{page}}</a>
-              </li>
-              <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-                <a (click)="setPage(pager.currentPage + 1)">Next</a>
-              </li>
-
-            </ul>
-          </div>
-        </div>
-
-      </div>-->
-
+      
     </div>
-
-    <!--<tweet url="{{shareUrl}}{{temp.Id}}" text="{{temp.Question}}{{sharetext}}"></tweet>-->
+     
 
   </section>
 
-
-
-  <!--<div *ngIf="showPopup" class="popup-container">
-    <div class="popup-content">
-      <span class="popup-text">
-       <h5> Welcome to Opozee!</h5>
-        <p>
-          Our mission is to build a decentralized open-source social network that helps users converge to <b>shared beliefs</b> and promotes <b>conversation health</b>. <br />
-
-        </p>
-        <h5>How Opozee works:</h5>
-        <div class="popup-step">
-          <div class="step-items">
-            <strong>Step 1:</strong> Sign up and join the community!
-          </div>
-          <div class="step-items">
-            <strong>Step 2:</strong> Post a “yes/no” question or your beliefs in response to existing questions.
-          </div>
-          <div class="step-items">
-            <strong>Step 3:</strong> Earn Opozee Coins (OPZ) when people up-vote your beliefs.
-          </div>
-        </div>
-        <h5>What’s in it for me:</h5>
-        <p>
-          500 Opozee Coins (OPZ) for signing up and earn more as you participate in the network. <br /><br /> Every OPZ coin holder is a <b>shareholder</b> in the network with a claim on the network's growth and profitability. As the value of the network increases, so will the value of OPZ coins.
-        </p>
-      </span>
-      <span class="popup-close" (click)="hidePopup()">X</span>
-    </div>
-  </div>-->
-
+   
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 

@@ -18,7 +18,7 @@
           <div class="cover_profile">
             <span class="profile_left">
 
-              <span class="img" [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
+              <span class="img " [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
                 <img src="{{PostQuestionDetailModel?.postQuestionDetail?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user">
               </span>
 
@@ -81,7 +81,7 @@
                     </p>
                   </div>
 
-                  <span class="longform" *ngIf="temp?.LongForm!=null">
+                  <div class="longform" *ngIf="temp?.LongForm!=null">
                     <div class="row">
 
                       <a class="collapseButton " data-toggle="collapse" [href]="['#'+temp?.Id]" role="button" aria-expanded="false"
@@ -96,18 +96,18 @@
                       </div>
 
                     </div>
-                  </span>
+                  </div>
 
 
 
                   <div class="row">
                     <span class="profile_bottom_cover">
                       <div class="col-sm-8 text-left">
-                        <span class="opinionsList" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                          <span class="small_icon">
+                        <span class="opinionsList" >
+                          <span class="small_icon" style="cursor:pointer"  [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
                             <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
                           </span>
-                          <span class="small_username">@{{temp?.CommentedUserName}}</span>
+                          <span style="cursor:pointer"  class="small_username"[routerLink]="['/viewprofile/', temp?.CommentedUserId]">@{{temp?.CommentedUserName}}</span>
                         </span>
                       </div>
 
