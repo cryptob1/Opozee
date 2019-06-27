@@ -332,7 +332,7 @@ footer {
   padding: 25px 0px 0px 0px
 }
 
-  footer ul {
+  /* footer ul {
     padding: 0px;
     margin: 0px;
   }
@@ -344,8 +344,19 @@ footer {
       padding: 0px;
       margin: 0px;
       float: left;
-    }
-
+    } */
+    footer ul {
+      padding: 0px;
+      margin: 0px auto;
+      width: 322px;
+  }
+    footer ul li {
+     display: inline-block;
+      text-align: center;
+      padding: 0px 25px;
+      margin: 0px;
+      float: left;
+  }
       footer ul li a {
         color: #fff;
         font-size: 16px;
@@ -920,3 +931,4 @@ span.bell-icon i {
     padding: 0!important
   }
 }
+
