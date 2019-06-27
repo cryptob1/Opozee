@@ -173,14 +173,17 @@
                           </popover-content>
                         </div>
 
-                        <div class="like_images">
+                        <div class="thumbs">
+                            
+              
 
-                          <span class="like" style="cursor:pointer">
+
+                          <span alt="like" style="cursor:pointer">
                             <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like"
                                  [popover]="myPopoverLikes">{{temp?.LikesCount}}
                           </span>
 
-                          <span class="like" style="cursor:pointer">
+                          <span alt="like" style="cursor:pointer">
                             <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like"
                                  [popover]="PopoverDislikes" />{{temp?.DislikesCount}}
                           </span>

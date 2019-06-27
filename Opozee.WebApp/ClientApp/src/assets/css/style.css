@@ -598,6 +598,8 @@ span.bell-icon i {
 
   .profile_bottom_cover .like_images {
     width: 100% !important;
+    float: unset;
+    padding-left: 2em;
   }
 
   .profile_bottom_cover .date_like {
