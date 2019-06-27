@@ -35,7 +35,7 @@
                 <p class="message-container mb-0" [innerHTML]="'Q: '+PostQuestionDetailModel?.postQuestionDetail?.Question| linky:{stripPrefix : true, truncate:15}  | emojis"></p>
                 <p class="mb-30">
                   <small *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question" style="float: left">
-                    
+
                   </small>
                 </p>
               </div>
@@ -47,70 +47,71 @@
                   </ng-container>
                 </span>
               </div>
-              <div class="opiniuns">
+              <div class="cover_analysis">
                 <div class="left">
                   <span> </span>
                   <div class="anlysis_slider" *ngIf="((PostQuestionDetailModel.postQuestionDetail?.YesCount)>0 || (PostQuestionDetailModel.postQuestionDetail?.NoCount)>0) ">
                     <span [style.width.%]="percentage | number:'1.0-0'" class="color yes_div"></span>
-                    <!--<span [style.width.%]="(PostQuestionDetailModel.postQuestionDetail?.YesCount /  (PostQuestionDetailModel.postQuestionDetail?.YesCount + PostQuestionDetailModel.postQuestionDetail?.NoCount) * 100) | number:'1.0-0'" class="color yes_div"></span>-->
-                    <!--<span class="percentage" *ngIf="PostQuestionDetailModel.postQuestionDetail?.NoCount > 0"> No : {{(PostQuestionDetailModel.postQuestionDetail.NoCount /  (PostQuestionDetailModel.postQuestionDetail.YesCount + PostQuestionDetailModel.postQuestionDetail.NoCount) * 100) | number:'1.0-0'}} %</span>-->
                     <span class="percentage_yes" *ngIf="PostQuestionDetailModel.postQuestionDetail?.YesCount > 0 || PostQuestionDetailModel.postQuestionDetail?.NoCount>0"> Yes : {{percentage | number:'1.0-0'}}  %</span>
-                    <div *ngIf="PostQuestionDetailModel.postQuestionDetail?.YesCount == 0 && PostQuestionDetailModel.postQuestionDetail?.NoCount ==0">
-                      <!--<span class="percentage">NO : 0 %</span>-->
-                      <span class="empty_space"></span>
-                    </div>
+
                   </div>
                 </div>
               </div>
             </span>
 
-      
-                <div class="col"   >
-                  &nbsp;
-                  <tweet style="margin-left:-80px;position:absolute" url={{shareUrl}} text={{sharetext}}></tweet>
-                  <fb-like style="margin-top: -2px; margin-left:-10px;position: absolute" url={{shareUrl}}></fb-like>
-                </div>
-                
 
-              <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
-                <span class="profile_bottom" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
+            <div class="col">
+              &nbsp;
+              <tweet style="margin-left:-80px;position:absolute" url={{shareUrl}} text={{sharetext}}></tweet>
+              <fb-like style="margin-top: -2px; margin-left:-10px;position: absolute" url={{shareUrl}}></fb-like>
+            </div>
 
-                  <div [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']">
 
-                    <div ExternalLink>
-                      <h1>{{temp?.IsAgree ? 'Yes' : 'No'}}</h1>
-                      <small class="belief-time"><i>{{temp?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
-                      <p [innerHTML]="temp?.Comment | linky:{stripPrefix : true, truncate:15}"></p>
+            <span class="cover_yes_no_feedback" *ngIf="PostQuestionDetailModel?.comments?.length > 0">
+              <div class="liked_ones clearfix" *ngFor="let temp of PostQuestionDetailModel?.comments let index = index">
+
+                <div [class]="[temp?.IsAgree ? 'yes_feedback' : 'no_feedback']">
+
+                  <div ExternalLink>
+                    <div [class]="[temp?.IsAgree ? 'feedback-badge badge-yes' : 'feedback-badge badge-no']">
+                      {{temp?.IsAgree ? 'Yes' : 'No'}}
+                    </div>
+                    <small class="belief-time"><i>{{temp?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
+                    <p class="message-container" [innerHTML]="temp?.Comment | linky:{stripPrefix : true, truncate:15} ">
+                    </p>
+                  </div>
+
+                  <span class="longform" *ngIf="temp?.LongForm!=null">
+                    <div class="row">
+
+                      <a class="collapseButton " data-toggle="collapse" [href]="['#'+temp?.Id]" role="button" aria-expanded="false"
+                         aria-controls="collapseExample">
+                        <img src="../../assets/images/detail.png" style="width: 24px; border: hidden;" />
+                      </a>
+
+                      <div class="collapse longform" [id]="[temp?.Id]">
+                        <div class="card card-body">
+                          <p [innerHTML]="temp?.LongForm | linky:{stripPrefix : true, truncate:15}"> </p>
+                        </div>
+                      </div>
 
                     </div>
-
-                    <span class="longform" *ngIf="temp?.LongForm!=null">
-                      <div class="row">
-
-                        <a class="collapseButton " data-toggle="collapse" [href]="['#'+temp?.Id]" role="button" aria-expanded="false"
-                           aria-controls="collapseExample">
-                          <img src="../../assets/images/detail.png" style="width: 24px; border: hidden;" />
-                        </a>
-
-                        <div class="collapse longform" [id]="[temp?.Id]">
-                          <div class="card card-body">
-                            <p [innerHTML]="temp?.LongForm | linky:{stripPrefix : true, truncate:15}"> </p>
-                          </div>
-                        </div>
-
-                      </div>
-                    </span>
+                  </span>
 
 
 
-                    <div class="row">
-                      <span class="profile_bottom_cover">
-
-                        <span class="user_left" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                          <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
-                          <span class="username1">@{{temp?.CommentedUserName}}</span>
+                  <div class="row">
+                    <span class="profile_bottom_cover">
+                      <div class="col-sm-8 text-left">
+                        <span class="opinionsList" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
+                          <span class="small_icon">
+                            <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
+                          </span>
+                          <span class="small_username">@{{temp?.CommentedUserName}}</span>
                         </span>
+                      </div>
 
+                      <div class="col-sm-4 text-center">
                         <div class="like_images">
 
                           <span class="like" style="cursor:pointer">
@@ -124,88 +125,84 @@
                           </span>
 
                         </div>
+                      </div>
+                    </span>
+                  </div>
+                </div>
 
 
+                <div class="dummy1">
+                  <popover-content #myPopoverLikes
+                                   placement="top"
+                                   [animation]="true"
+                                   [closeOnClickOutside]="true">
 
+                    <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
 
-
-
+                    <div *ngIf="!loading" class="emojis">
+                      <span>
+                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/thoughtful.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,1,myPopoverLikes)" title="Thoughtful">
+                        <span class="emojiText">
+                          &nbsp;{{temp?.LikesThoughtfulCount}}&nbsp;
+                        </span>
+                      </span>
+                      <span>
+                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/factual.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
+                        <span class="emojiText">
+                          &nbsp;{{temp?.LikesFactualCount}}&nbsp;
+                        </span>
+                      </span>
+                      <span>
+                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/funny.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
+                        <span class="emojiText">
+                          &nbsp;{{temp?.LikesFunnyCount}}&nbsp;
+                        </span>
                       </span>
                     </div>
-                  </div>
+                  </popover-content>
+                </div>
+                <div class="dummy2">
+                  <popover-content #PopoverDislikes
+                                   placement="top"
+                                   [animation]="true"
+                                   [closeOnClickOutside]="true">
 
+                    <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
 
-                  <div class="dummy1">
-                    <popover-content #myPopoverLikes
-                                     placement="top"
-                                     [animation]="true"
-                                     [closeOnClickOutside]="true">
-
-                      <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-
-                      <div *ngIf="!loading" class="emojis">
-                        <span>
-                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/thoughtful.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,1,myPopoverLikes)" title="Thoughtful">
-                          <span class="emojiText">
-                            &nbsp;{{temp?.LikesThoughtfulCount}}&nbsp;
-                          </span>
+                    <div *ngIf="!loading" class="emojis">
+                      <span>
+                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/irrational.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" title="Irrational">
+                        <span class="emojiText"> &nbsp; {{temp?.DislikesIrrationalCount}}&nbsp;</span>
+                      </span>
+                      <span>
+                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/fakenews.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)" title="Fake News">
+                        <span class="emojiText">
+                          &nbsp;{{temp?.DislikesFakeNewsCount}}&nbsp;
                         </span>
-                        <span>
-                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/factual.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
-                          <span class="emojiText">
-                            &nbsp;{{temp?.LikesFactualCount}}&nbsp;
-                          </span>
+                      </span>
+                      <span>
+                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/offtopic.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)" title="Off Topic">
+                        <span class="emojiText">
+                          &nbsp; {{temp?.DislikesOffTopicCount}}&nbsp;
                         </span>
-                        <span>
-                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/funny.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
-                          <span class="emojiText">
-                            &nbsp;{{temp?.LikesFunnyCount}}&nbsp;
-                          </span>
-                        </span>
-                      </div>
-                    </popover-content>
-                  </div>
-                  <div class="dummy2">
-                    <popover-content #PopoverDislikes
-                                     placement="top"
-                                     [animation]="true"
-                                     [closeOnClickOutside]="true">
+                      </span>
+                    </div>
+                  </popover-content>
+                </div>
 
-                      <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-
-                      <div *ngIf="!loading" class="emojis">
-                        <span>
-                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/irrational.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" title="Irrational">
-                          <span class="emojiText"> &nbsp; {{temp?.DislikesIrrationalCount}}&nbsp;</span>
-                        </span>
-                        <span>
-                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/fakenews.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)" title="Fake News">
-                          <span class="emojiText">
-                            &nbsp;{{temp?.DislikesFakeNewsCount}}&nbsp;
-                          </span>
-                        </span>
-                        <span>
-                          <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/offtopic.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)" title="Off Topic">
-                          <span class="emojiText">
-                            &nbsp; {{temp?.DislikesOffTopicCount}}&nbsp;
-                          </span>
-                        </span>
-                      </div>
-                    </popover-content>
-                  </div>
-                </span>
-              </span>
-
-
-
-              <div class="cover_hello" *ngIf="Id">
-                <i class="fa fa-plus" aria-hidden="true" (click)="openBeliefModal()">&nbsp;New Belief</i>
               </div>
+            </span>
 
 
 
-
+            <div class="cover_hello" *ngIf="Id">
+              <i class="fa fa-plus" aria-hidden="true" (click)="openBeliefModal()">&nbsp;New Belief</i>
             </div>
+
+
+
+
+          </div>
         </div>
       </div>
 
@@ -235,9 +232,9 @@
 
               <div class="user_right" style="width:45%">
                 <div class="date">
-                  <i>{{temp.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
-                  <br />
-                  <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
+
+                  <i>{{temp?.LastActivityTime + 'Z'| date:"medium" |timeAgo }} &middot;  {{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}} reactions <b style="font-size:12px;padding-right:4px;"></b></i>
+
                 </div>
 
                 <br />
@@ -258,81 +255,17 @@
                   <span> </span>
                   <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
                     <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
-                    <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
-                    <!--<span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>-->
                     <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
-                    <div *ngIf="temp.YesCount == 0 && temp.NoCount ==0">
-                      <!--<span class="percentage">NO : 0 %</span>-->
-                      <!--<span class="percentage_yes"> - </span>-->
-                      <span class="empty_space"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              <!--<div class="liked_ones clearfix yes_feedback" *ngIf="temp.MostYesLiked">
-
-              <div ExternalLink>
-                <h1>  Yes</h1>
-                <p class="message-container" [innerHTML]=" temp.MostYesLiked.Comment "></p>
-
-              </div>
-
-
-              <div class="row">
-                <div class="col-sm-6 text-left">
-                  <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
-
-                    <span class="icon"><img src="{{temp.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
-                    <span class="username">
-                      @ {{temp.MostYesLiked?.CommentedUserName}}
-                    </span>
-                  </div>
-                </div>
-                <div class="col-sm-6 text-right">
-                  <div class="thumbs">
-                    <span><img src="../../../assets/images/like.png" alt="user">{{temp.MostYesLiked?.LikesCount}}</span>
-                    <span><img src="../../../assets/images/unlike.png" alt="user">{{temp.MostYesLiked?.DislikesCount}}</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
-              <div ExternalLink>
-                <h1>  No</h1>
-                <p class="message-container" [innerHTML]="  temp.MostNoLiked.Comment "></p>
-              </div>
 
-
-              <div class="row">
-
-
-                <div class="col-sm-6 text-left">
-                  <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostNoLiked?.CommentedUserId]">
-
-                    <span class="icon"><img src="{{temp.MostNoLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';"></span>
-
-                    <span class="username">
-                      @
-                      {{temp.MostNoLiked?.CommentedUserName}}
-                    </span>
-                  </div>
-                </div>
-
-                <div class="col-sm-6 text-right">
-                  <div class="thumbs">
-                    <span><img src="../../../assets/images/like.png" alt="user"> {{temp.MostNoLiked?.LikesCount}}</span>
-                    <span><img src="../../../assets/images/unlike.png" alt="user"> {{temp.MostNoLiked?.DislikesCount}}</span>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>-->
-            </div>
           </div>
+
+
 
         </li>
       </ul>
@@ -353,8 +286,6 @@
           <!--<li>    <a href="javascript:void(0)" (click)="popup()">Help</a></li>-->
           <!--<li>   <a [routerLink]="['/faq/']">FAQ</a></li>
           <li>   <a [routerLink]="['/aboutus/']">About Us</a></li>-->
-
-
           <!--<li><a href="mailto:contactus@opozee.com">Contact Us</a></li>-->
           <!--<li >   <a [routerLink]="['/aboutus/']">About Us</a></li>-->
         </ul>

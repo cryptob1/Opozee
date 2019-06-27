@@ -117,6 +117,7 @@ section.section_second {
 .cover_questions .cover_analysis {
   width: 100%;
   float: left;
+  padding-bottom: 6px;
 }
 
   .cover_questions .cover_analysis .left {
@@ -138,7 +139,7 @@ section.section_second {
   float: left;
   /*background-image: url('../images/redline.png');*/
   background-color: #FAC7C7;
-  border-radius: 5px;
+  border-radius: 2px;
   position: relative;
   border: 1px solid #8e9094;
 }
@@ -154,7 +155,7 @@ section.section_second {
     position: absolute;
     left: 0px;
     top: 0px;
-    border-radius: 5px;
+    border-radius: 2px;
     border-bottom: 1px solid #8e9094;
   }
 
@@ -167,6 +168,7 @@ section.section_second {
   font-size: 13px;
   float: left;
   background: #D2F3C8;
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );
   /*filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#10b1a9', endColorstr='#D2F3C8',GradientType=1 );*/
   color: #000;
   font-weight: 500;
@@ -224,7 +226,7 @@ section.section_second {
 .cover_questions .user_left {
   width: 50%;
   float: left;
-  padding-bottom: 5px;
+  padding-bottom: 10px;
 }
 
   .cover_questions .user_left .icon {
@@ -586,14 +588,37 @@ span.bell-icon i {
   float: left;
 }
 
+.badge-yes {
+  background: #d2f3c8;
+  color: #69a982;
+  border: 1px solid #86d8a6;
+}
+
+.feedback-badge {
+  float: left;
+  text-transform: uppercase;
+  padding:  3px 12px 3px 12px;
+  position: absolute;
+ 
+   
+}
+
+.badge-no {
+  background: #ffcfcf;
+  color: #c98484;
+  border: 1px solid #e1abab;
+}
+
+
+
 
 .yes_feedback, .no_feedback {
   width: 100% !important;
   float: left !important;
   /*border: 2px solid #D2F3C8;*/
-  border: 3px solid #D2F3C8;
-  border-radius: 10px;
-  padding: 15px !important;
+  /*border: 3px solid #D2F3C8;
+  border-radius: 10px;*/
+ 
   margin-top: 16px;
   object-fit: contain;
  
@@ -602,7 +627,7 @@ span.bell-icon i {
 .no_feedback {
   float: left !important;
   /*border: 2px solid #FAC7C7;*/
-  border: 3px solid #FAC7C7;
+  /*border: 3px solid #FAC7C7;*/
 }
   .no_feedback img {
     height: 50%;
@@ -625,12 +650,12 @@ span.bell-icon i {
 
 
 .cover_questions.image_question span.icon {
-  width: 29px !important;
-  height: 29px !important;
+  width: 43px !important;
+  height: 44px !important;
 }
 
 .cover_questions.image_question .username {
-  padding-top: 3px !important;
+  padding-top: 10px !important;
   font-weight: 400 !important;
 }
 
@@ -812,7 +837,7 @@ span.bell-icon i {
   }
   .user_left {
     width: 100%;
-    margin-bottom: 20px;
+ 
   }
 
   .profile_bottom_cover .like_images {

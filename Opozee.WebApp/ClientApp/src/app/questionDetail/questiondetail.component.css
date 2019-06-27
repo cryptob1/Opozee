@@ -104,89 +104,7 @@ span.profile_left p {
       color: #02bd0f;
     }
 
-.anlysis_slider {
  
-  width: 100%;
-  height: 10px;
-  float: left;
-  /*background-image: url('../images/redline.png');*/
-  background-color: #FAC7C7;
-  border-radius: 5px;
-  position: relative;
-  border: 1px solid #8e9094;
-}
-
-  .anlysis_slider .color {
-    float: left;
-    height: 9px;
-    width: 50%;
-    background-color: #D2F3C8;
-    /*background-image: url('../images/greenline.png');*/
-    /*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );*/
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    border-radius: 5px;
-    border-bottom: 1px solid #8e9094;
- 
-  }
-
-  .anlysis_slider .percentage {
-    position: absolute;
-    right: 0px;
-    width: auto;
-    top: -29px;
-    padding: 3px 3px;
-    font-size: 13px;
-    float: left;
-    background: #FAC7C7;
-    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );
-    color: #000;
-    font-weight: 500;
-    border-radius: 3px;
-  }
-  .anlysis_slider .percentage_yes {
-    position: absolute;
-    left: 0px;
-    width: auto;
-    top: -29px;
-    padding: 3px 3px;
-    font-size: 13px;
-    float: left;
-    background: #D2F3C8;
-    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0c82dc', endColorstr='#10b1a9',GradientType=1 );
-    color: #000;
-    font-weight: 500;
-    border-radius: 3px;
-  }
-
-  .anlysis_slider .percentage:before {
-    width: 0;
-    height: 0;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 5px solid #FAC7C7;
-    float: left;
-    content: "";
-    position: absolute;
-    top: 23px;
-    left: 50%;
-    margin-left: -4px;
-  }
-  .anlysis_slider .percentage_yes:before {
-    width: 0;
-    height: 0;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 5px solid #D2F3C8;
-    # float: left;
-    content: "";
-    position: absolute;
-    top: 23px;
-    left: 50%;
-    margin-left: -4px;
-  }
-
 .profile_bottom {
   width: 100%;
   float: left;
@@ -222,7 +140,7 @@ span.profile_left p {
   margin-top: 35px !important;
   width: 100%;
   float: left;
-  padding: 24px 15px;
+  padding:  24px 15px 0px 15px;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
   background-color: #fff;
 }
@@ -252,9 +170,12 @@ span.profile_left p {
     font-size: 14px;
   }
 
+
+   
+
 .profile_bottom_cover .like_images {
   width: 30%;
-  float: left;
+  float: right;
   border: 0px;
   
 }
@@ -485,7 +406,7 @@ span.profile_left p {
   color: grey;
   padding: 0px 0px 0px 0px;
   float: right;
-  margin-top: -12px;
+  margin-top: -16px;
 
 }
 
@@ -514,7 +435,7 @@ span.profile_left p {
 
   .profile_bottom_cover .like_images {
     width: 30%;
-    float: none;
+   
     border: 0px;
   }
 

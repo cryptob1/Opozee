@@ -39,23 +39,25 @@
 
                       <!--<span class="percentage_yes" *ngIf="bounty?.YesCount >0 || bounty?.NoCount>0">Yes : {{bounty?.percentage | number:'1.0-0'}}  %</span>-->
 
-                      <div class="liked_ones clearfix yes_feedback" *ngIf="bounty?.MostYesLiked">
-                        <div ExternalLink>
-                          <h1>  Yes</h1>
-                          <b>@{{bounty?.MostYesLiked?.CommentedUserName}}:</b>
-                          <small class="message-container" [innerHTML]="bounty?.MostYesLiked.Comment | linky:{stripPrefix : true, truncate:15} | emojis"></small>
-                          <small><sup>{{bounty?.MostYesLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</sup></small>
-                        </div>
+                    <div class="liked_ones clearfix yes_feedback" *ngIf="bounty?.MostYesLiked">
+                      <div class="feedback-badge badge-yes">Yes</div>
+                      <div ExternalLink>
+                        <h1>  Yes</h1>
+                        <b>@{{bounty?.MostYesLiked?.CommentedUserName}}:</b>
+                        <small class="message-container" [innerHTML]="bounty?.MostYesLiked.Comment | linky:{stripPrefix : true, truncate:15} | emojis"></small>
+                        <small><sup>{{bounty?.MostYesLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</sup></small>
                       </div>
+                    </div>
 
-                      <div class="liked_ones clearfix no_feedback" *ngIf="bounty?.MostNoLiked">
-                        <div ExternalLink>
-                          <h1>  No</h1>
-                          <b>@{{bounty?.MostNoLiked?.CommentedUserName}}:</b>
-                          <small class="message-container" [innerHTML]="bounty?.MostNoLiked.Comment | linky:{stripPrefix : true, truncate:15} | emojis "></small>
-                          <small><sup>{{bounty?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</sup></small>
-                        </div>
+                    <div class="liked_ones clearfix no_feedback" *ngIf="bounty?.MostNoLiked">
+                      <div class="feedback-badge badge-no">No</div>
+                      <div ExternalLink>
+                        <h1>  No</h1>
+                        <b>@{{bounty?.MostNoLiked?.CommentedUserName}}:</b>
+                        <small class="message-container" [innerHTML]="bounty?.MostNoLiked.Comment | linky:{stripPrefix : true, truncate:15} | emojis "></small>
+                        <small><sup>{{bounty?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</sup></small>
                       </div>
+                    </div>
 
                     </div>
                   </div>
@@ -154,9 +156,7 @@
                 </div>
                 <div class="user_right">
                   <div *ngIf="temp?.LastActivityTime" class="date">
-                    <i>{{temp?.LastActivityTime + 'Z'| date:"medium" |timeAgo }}</i>
-                    <br />
-                    <i> Reactions: <b style="font-size:12px;padding-right:4px;">{{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}}</b></i>
+                    <i>{{temp?.LastActivityTime + 'Z'| date:"medium" |timeAgo }} &middot;  {{temp?.TotalLikes + temp?.TotalDisLikes + temp?.YesCount +temp?.NoCount}} reactions <b style="font-size:12px;padding-right:4px;"></b></i>
                   </div>
 
                   <br />
@@ -180,17 +180,9 @@
                       <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
 
 
+                        <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
 
-                     
-                        <!--<span class="percentage" *ngIf="temp.NoCount > 0">NO : {{((temp.NoCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}} %</span>-->
-                      <!--<span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{((temp.YesCount) / (temp.YesCount + temp.NoCount)*100) | number:'1.0-0'}}  %</span>-->
-                      <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
-
-                      <div *ngIf="temp.YesCount == 0 && temp.NoCount ==0">
-                        <!--<span class="percentage">NO : 0 %</span>-->
-                        <!--<span class="percentage_yes"> - </span>-->
-                        <span class="empty_space"></span>
-                      </div>
+                      
                     </div>
                   </div>
                 </div>
@@ -199,22 +191,23 @@
                 <div class="liked_ones clearfix yes_feedback" *ngIf="temp?.MostYesLiked">
 
                   <div ExternalLink>
-                    <h1>  Yes</h1>
+                
+                    <div class="feedback-badge badge-yes">Yes</div>
                     <small class="belief-time"><i>{{temp?.MostYesLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
-                    <p class="message-container" [innerHTML]=" temp?.MostYesLiked?.Comment"></p>
+                    <p class="message-container" [innerHTML]=" temp?.MostYesLiked?.Comment | linky:{stripPrefix : true, truncate:15} | emojis  "></p>
                   </div>
 
                   <div class="row">
-                    <div class="col-sm-6 text-left">
-                      <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
+                    <div class="col-sm-8 text-left">
+                      <div class="opinionsList" >
 
-                        <span class="icon"><img src="{{temp?.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
-                        <span class="username">
-                          @ {{temp?.MostYesLiked?.CommentedUserName}}
+                        <span class="small_icon" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]"><img src="{{temp?.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
+                        <span class="small_username" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
+                          @{{temp?.MostYesLiked?.CommentedUserName}}
                         </span>
                       </div>
                     </div>
-                    <div class="col-sm-6 text-right">
+                    <div class="col-sm-4 text-center">
                       <div class="thumbs">
                         <span><img src="../../../assets/images/like.png" alt="user">{{temp.MostYesLiked?.LikesCount}}</span>
                         <span><img src="../../../assets/images/unlike.png" alt="user">{{temp.MostYesLiked?.DislikesCount}}</span>
@@ -225,26 +218,26 @@
 
                 <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
                   <div ExternalLink>
-                    <h1>  No</h1>
+             
+                    <div class="feedback-badge badge-no">No</div>
                     <small class="belief-time"><i>{{temp?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
-                    <p class="message-container" [innerHTML]="temp?.MostNoLiked?.Comment"></p>
+                    <p class="message-container" [innerHTML]="temp?.MostNoLiked?.Comment | linky:{stripPrefix : true, truncate:15} | emojis   "></p>
                   </div>
 
                   <div class="row">
 
-                    <div class="col-sm-6 text-left">
+                    <div class="col-sm-8 text-left">
                       <div class="opinionsList" [routerLink]="['/viewprofile/', temp?.MostNoLiked?.CommentedUserId]">
 
-                        <span class="icon"><img src="{{temp.MostNoLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';"></span>
+                        <span class="small_icon"><img src="{{temp.MostNoLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';"></span>
                         <!--<span class="icon"><img src="./images/user.png" alt=""></span>-->
-                        <span class="username">
-                          @
-                          {{temp.MostNoLiked?.CommentedUserName}}
+                        <span class="small_username">
+                          @{{temp.MostNoLiked?.CommentedUserName}}
                         </span>
                       </div>
                     </div>
 
-                    <div class="col-sm-6 text-right">
+                    <div class="col-sm-4  text-center">
                       <div class="thumbs">
                         <span><img src="../../../assets/images/like.png" alt="user"> {{temp.MostNoLiked?.LikesCount}}</span>
                         <span><img src="../../../assets/images/unlike.png" alt="user"> {{temp.MostNoLiked?.DislikesCount}}</span>
@@ -282,9 +275,11 @@
                   <br />
                 </div>
 
+ 
+
                 <strong>
-                  <a href="javascript:void(0)" style="font-size: 18px;" [routerLink]="['/questiondetail/', temp?.Id]">
-                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | emojis  | linky:{stripPrefix : true, truncate:15}"></div>
+                  <a href="javascript:void(0)" style="font-size: 18px;color:#000;" [routerLink]="['/questiondetail/', temp?.Id]">
+                    <div class="message-container  mb-0" [innerHTML]="'Q: ' + temp?.Question | linky:{stripPrefix : true, truncate:15} "></div>
                   </a>
 
 
@@ -301,37 +296,46 @@
                     <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
                       <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
                       <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
-                      <div *ngIf="temp.YesCount == 0 && temp.NoCount ==0">
-
-                        <span class="empty_space"></span>
-                      </div>
+                       
                     </div>
                   </div>
                 </div>
 
                 <span class="cover_yes_no_feedback" *ngIf="temp?.comments?.length > 0">
 
-                  <span class="liked_ones clearfix  " *ngFor="let temp1 of temp?.comments let index = index">
+                  <div class="liked_ones clearfix  " *ngFor="let temp1 of temp?.comments let index = index">
 
                     <div [class]="[temp1?.IsAgree ? 'yes_feedback' : 'no_feedback']">
 
                       <div ExternalLink>
-                        <h1>{{temp1?.IsAgree ? 'Yes' : 'No'}}</h1>
-                        <p style=" font-family: 'Poppins', sans-serif;  font-size: 16px;" [innerHTML]="temp1?.Comment ">
+                        <div [class]="[temp1?.IsAgree ? 'feedback-badge badge-yes' : 'feedback-badge badge-no']">
+                          {{temp1?.IsAgree ? 'Yes' : 'No'}}
+                        </div>
+                        <small class="belief-time"><i>{{temp1?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
+                        <p class="message-container" [innerHTML]="temp1?.Comment | linky:{stripPrefix : true, truncate:15} ">
                         </p>
                       </div>
+
 
                       <div class="row">
                         <span class="profile_bottom_cover">
 
-                          <div class="col-sm-6 text-left">
-                            <span class="icon" [routerLink]="['/viewprofile/', temp1?.CommentedUserId]">
-                              <img src="{{temp1?.UserImage}}" style="width:23px;" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
-                              <span style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" class="username">@{{temp1?.CommentedUserName}}</span>
-                            </span>
+                          <div class="col-sm-8 text-left">
+                            <div class="opinionsList" [routerLink]="['/viewprofile/', temp1?.CommentedUserId]">
+
+                              <span class="small_icon">
+                              <img src="{{temp1?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';">
+                              </span>
+                              <!--<span class="icon"><img src="./images/user.png" alt=""></span>-->
+                              <span class="small_username">
+                                @{{temp1?.CommentedUserName}}
+                              </span>
+                            </div>
+
+
                           </div>
 
-                          <div class="col-sm-6 text-right">
+                          <div class="col-sm-4 text-center">
                             <div class="thumbs">
                               <span><img src="../../assets/images/{{'like.png'}}" alt="like" (click)="saveLikeclick(temp1?.Likes,index)">{{temp1?.LikesCount}}</span>
                               <span><img src="../../assets/images/{{'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp1?.DisLikes,index)" />{{temp1?.DislikesCount}}</span>
@@ -342,7 +346,7 @@
                       </div>
                     </div>
 
-                  </span>
+                  </div>
                 </span>
 
               </div>

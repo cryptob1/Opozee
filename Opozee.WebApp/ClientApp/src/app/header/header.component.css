@@ -202,7 +202,7 @@ header .container-fluid {
   .banner_search-form {
     margin-left: 10px;
     width: 15%;
-    margin-left: 90px;
+    margin-left: 20px;
   }
  
   .nav > li > a {
@@ -364,7 +364,7 @@ header .container-fluid {
   left: 0;
   right: 0;
   margin: 0 auto 10px auto;
-  border: 1px solid #e9ebeeeee;
+  border: 1px solid #e9ebee;
 }
 
 .popup-close {
@@ -411,7 +411,7 @@ header .container-fluid {
   flex: 0 0 60%;
   padding: 10px;
   /*text-align: center;*/
-  background: #e9ebee;
+  background: #f0f0f0;
   border-radius: 5px;
 }
 
