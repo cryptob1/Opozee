@@ -291,9 +291,8 @@
   font-size: 20px;
 }
 
-.nav-fill {
-  padding: 10px;
-  padding-top: 2px;
+.nav-fill{
+  padding: 2px 5px 10px 0px;
 }
 
   .nav-fill a, .nav-fill a:hover {
