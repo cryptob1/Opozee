@@ -18,7 +18,7 @@
           <div class="cover_profile">
             <span class="profile_left">
 
-              <span class="img" [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
+              <span class="img " [routerLink]="['/viewprofile/', PostQuestionDetailModel?.postQuestionDetail?.OwnerUserID]">
                 <img src="{{PostQuestionDetailModel?.postQuestionDetail?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user">
               </span>
 
@@ -81,7 +81,7 @@
                     </p>
                   </div>
 
-                  <span class="longform" *ngIf="temp?.LongForm!=null">
+                  <div class="longform" *ngIf="temp?.LongForm!=null">
                     <div class="row">
 
                       <a class="collapseButton " data-toggle="collapse" [href]="['#'+temp?.Id]" role="button" aria-expanded="false"
@@ -96,30 +96,94 @@
                       </div>
 
                     </div>
-                  </span>
+                  </div>
 
 
 
                   <div class="row">
                     <span class="profile_bottom_cover">
                       <div class="col-sm-8 text-left">
-                        <span class="opinionsList" [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
-                          <span class="small_icon">
+                        <span class="opinionsList" >
+                          <span class="small_icon" style="cursor:pointer"  [routerLink]="['/viewprofile/', temp?.CommentedUserId]">
                             <img src="{{temp?.UserImage}}" onerror="this.onerror=null;this.src='../assets/images/user.png';" alt="user" />
                           </span>
-                          <span class="small_username">@{{temp?.CommentedUserName}}</span>
+                          <span style="cursor:pointer"  class="small_username"[routerLink]="['/viewprofile/', temp?.CommentedUserId]">@{{temp?.CommentedUserName}}</span>
                         </span>
                       </div>
 
                       <div class="col-sm-4 text-center">
-                        <div class="like_images">
 
-                          <span class="like" style="cursor:pointer">
+                        <div class="dummy1">
+                          <popover-content #myPopoverLikes
+                                           placement="top"
+                                           [animation]="true"
+                                           [closeOnClickOutside]="true">
+
+                            <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+
+                            <div *ngIf="!loading" class="emojis">
+                              <span>
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/thoughtful.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,1,myPopoverLikes)" title="Thoughtful">
+                                <span class="emojiText">
+                                  &nbsp;{{temp?.LikesThoughtfulCount}}&nbsp;
+                                </span>
+                              </span>
+                              <span>
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/factual.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
+                                <span class="emojiText">
+                                  &nbsp;{{temp?.LikesFactualCount}}&nbsp;
+                                </span>
+                              </span>
+                              <span>
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/funny.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
+                                <span class="emojiText">
+                                  &nbsp;{{temp?.LikesFunnyCount}}&nbsp;
+                                </span>
+                              </span>
+                            </div>
+                          </popover-content>
+                        </div>
+
+                        <div class="dummy2">
+                          <popover-content #PopoverDislikes
+                                           placement="top"
+                                           [animation]="true"
+                                           [closeOnClickOutside]="true">
+
+                            <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+
+                            <div *ngIf="!loading" class="emojis">
+                              <span>
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/irrational.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" title="Irrational">
+                                <span class="emojiText"> &nbsp; {{temp?.DislikesIrrationalCount}}&nbsp;</span>
+                              </span>
+                              <span>
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/fakenews.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)" title="Fake News">
+                                <span class="emojiText">
+                                  &nbsp;{{temp?.DislikesFakeNewsCount}}&nbsp;
+                                </span>
+                              </span>
+                              <span>
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/offtopic.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)" title="Off Topic">
+                                <span class="emojiText">
+                                  &nbsp; {{temp?.DislikesOffTopicCount}}&nbsp;
+                                </span>
+                              </span>
+                            </div>
+                          </popover-content>
+                        </div>
+
+                        <div class="thumbs">
+                            
+              
+
+
+                          <span alt="like" style="cursor:pointer">
                             <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like"
                                  [popover]="myPopoverLikes">{{temp?.LikesCount}}
                           </span>
 
-                          <span class="like" style="cursor:pointer">
+                          <span alt="like" style="cursor:pointer">
                             <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like"
                                  [popover]="PopoverDislikes" />{{temp?.DislikesCount}}
                           </span>
@@ -130,65 +194,9 @@
                   </div>
                 </div>
 
-
-                <div class="dummy1">
-                  <popover-content #myPopoverLikes
-                                   placement="top"
-                                   [animation]="true"
-                                   [closeOnClickOutside]="true">
-
-                    <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-
-                    <div *ngIf="!loading" class="emojis">
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/thoughtful.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,1,myPopoverLikes)" title="Thoughtful">
-                        <span class="emojiText">
-                          &nbsp;{{temp?.LikesThoughtfulCount}}&nbsp;
-                        </span>
-                      </span>
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/factual.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
-                        <span class="emojiText">
-                          &nbsp;{{temp?.LikesFactualCount}}&nbsp;
-                        </span>
-                      </span>
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/funny.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
-                        <span class="emojiText">
-                          &nbsp;{{temp?.LikesFunnyCount}}&nbsp;
-                        </span>
-                      </span>
-                    </div>
-                  </popover-content>
-                </div>
-                <div class="dummy2">
-                  <popover-content #PopoverDislikes
-                                   placement="top"
-                                   [animation]="true"
-                                   [closeOnClickOutside]="true">
-
-                    <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-
-                    <div *ngIf="!loading" class="emojis">
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/irrational.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" title="Irrational">
-                        <span class="emojiText"> &nbsp; {{temp?.DislikesIrrationalCount}}&nbsp;</span>
-                      </span>
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/fakenews.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)" title="Fake News">
-                        <span class="emojiText">
-                          &nbsp;{{temp?.DislikesFakeNewsCount}}&nbsp;
-                        </span>
-                      </span>
-                      <span>
-                        <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/offtopic.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)" title="Off Topic">
-                        <span class="emojiText">
-                          &nbsp; {{temp?.DislikesOffTopicCount}}&nbsp;
-                        </span>
-                      </span>
-                    </div>
-                  </popover-content>
-                </div>
+                <!--div remove-->
+                
+                
 
               </div>
             </span>

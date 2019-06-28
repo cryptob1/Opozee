@@ -32,7 +32,7 @@ span.profile_left img {
     height:100%;
     padding: 0px;
     border-radius: 100%;
-    height:26px;
+ 
   }
 .mb-30 {
   margin-bottom: 30px !important;
@@ -173,14 +173,16 @@ span.profile_left p {
 
    
 
-.profile_bottom_cover .like_images {
-  width: 30%;
+.profile_bottom_cover .vote_images {
+  width: 100%;
   float: right;
   border: 0px;
+  border-radius: 0px;
+  
   
 }
 
-  .profile_bottom_cover .like_images span {
+  .profile_bottom_cover .vote_images span {
     width: 50%;
     float: left;
     text-align: left;
@@ -433,13 +435,13 @@ span.profile_left p {
   }
 
 
-  .profile_bottom_cover .like_images {
+  .profile_bottom_cover .vote_images {
     width: 30%;
    
     border: 0px;
   }
 
-    .profile_bottom_cover .like_images span {
+    .profile_bottom_cover .vote_images span {
       width: 20%;
       float: left;
       text-align: left;
