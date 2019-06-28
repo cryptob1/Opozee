@@ -141,7 +141,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     this.questionGetModel.Sort = 0;
     this.getAllQuestionlist(this.questionGetModel);
 
-    this.getBountyQuestionsByDates();
+    //this.getBountyQuestionsByDates();
 
   }
    

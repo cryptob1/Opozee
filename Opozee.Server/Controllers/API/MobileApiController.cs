@@ -1410,27 +1410,27 @@ namespace opozee.Controllers.API
             string Tag = "";
             if (like == true && dislike == false && comment == false)
             {
-                Tag = UserName + " Has Liked your opinion.";
+                Tag = UserName + " upvoted your opinion.";
             }
             else if (dislike == true && like == false && comment == false)
             {
-                Tag = UserName + " Has Disliked your opinion.";
+                Tag = UserName + " downvoted your opinion.";
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = UserName + " Has given opinion on your Question.";
+                Tag = UserName + " posted a belief on your Question.";
             }
             else if (like == true && dislike == false && comment == true)
             {
-                Tag = UserName + " Has Liked and given opinion on your Question.";
+                Tag = UserName + " upvoted and posted a belief on your Question.";
             }
             else if (dislike == true && like == false && comment == true)
             {
-                Tag = UserName + " Has Disliked and given opinion on your Question.";
+                Tag = UserName + " downvoted and posted a belief on your Question.";
             }
             else if (dislike == false && like == false && comment == false)
             {
-                Tag = UserName + " Has removed his/her Vote.";
+                Tag = UserName + " removed his/her Vote.";
             }
 
             return Tag;

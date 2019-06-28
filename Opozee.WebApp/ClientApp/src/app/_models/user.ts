@@ -98,6 +98,7 @@ export class Comments {
   LikesCount: number;
   Name: string;
   UserImage: string;
+  LongForm: string;
 
 }
 
