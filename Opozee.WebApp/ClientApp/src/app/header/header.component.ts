@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() save: EventEmitter<any> = new EventEmitter<any>();
 
   showPopup: boolean = false;
+  showPopup2: boolean = false;
   model: any = {};
   loading = false;
   returnUrl: string;
@@ -48,18 +49,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
     this.showPopup = true;
+    this.showPopup2 = false;
     //if (this.localStorageUser != null) {//
     if (localStorage.getItem('popupShown') ==null)  {
       this.showPopup = true;
       localStorage.setItem('popupShown', '1')
     }
     else if (JSON.parse(localStorage.getItem('popupShown')) == '1') {
-      this.showPopup = true;
+      this.showPopup2 = true;
+      this.showPopup = false;
+
       localStorage.setItem('popupShown', '2')
     }
     else {
       this.showPopup = false;
-      }
+      this.showPopup2 = false;
+
+    }
+ 
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -163,5 +170,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.renderer.addClass(this.document.body, 'popup-backdrop')
     //document.getElementById('popup-container').classList.add('show'); 
   }
- 
+
+
+  hidePopup2() {
+    this.showPopup2 = false;
+    this.renderer.removeClass(this.document.body, 'popup-backdrop')
+  }
+
+  popup2() {
+    this.showPopup2 = true;
+    window.scroll(0, 0);
+    this.renderer.addClass(this.document.body, 'popup-backdrop')
+    //document.getElementById('popup-container').classList.add('show'); 
+  }
 }
