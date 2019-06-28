@@ -70,11 +70,13 @@ export class DialogPostBelief implements OnInit {
 
   public keyUp(event: any) {
     let text = this.postBeliefForm.get('Comment').value;
- 
-    if (text.length > 400) {
- 
-      event.preventDefault();
-      event.stopPropagation();
+
+    if (text!=null) {
+      if (text.length > 400) {
+
+        event.preventDefault();
+        event.stopPropagation();
+      }
     }
 
   
@@ -82,7 +84,7 @@ export class DialogPostBelief implements OnInit {
 
 
   public onPaste(e) {
-    e.preventDefault;
+    e.preventDefault();
     e.stopPropagation();
     let texto = e.clipboardData.getData('text/plain');
     this.document.execCommand('insertText', false, texto);
@@ -184,7 +186,7 @@ export class DialogPostBelief implements OnInit {
           //this.alertService.error(error);
         });
   }
-
+   
   logout() {
     localStorage.removeItem('currentUser');
     window.location.reload();
