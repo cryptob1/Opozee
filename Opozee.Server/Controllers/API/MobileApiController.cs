@@ -319,6 +319,7 @@ namespace opozee.Controllers.API
                     opinion.QuestId = postAnswer.QuestId;
                     opinion.CommentedUserId = postAnswer.CommentedUserId;
                     opinion.ModifiedDate = DateTime.Now;
+                    
                     db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                     int opinionID = opinion.Id;
@@ -354,7 +355,8 @@ namespace opozee.Controllers.API
                     opinion.QuestId = postAnswer.QuestId;
                     opinion.CommentedUserId = postAnswer.CommentedUserId;
                     opinion.IsAgree = postAnswer.OpinionAgreeStatus;
-
+                    opinion.Likes = postAnswer.Likes;
+                    opinion.Dislikes = postAnswer.Dislikes;
                     opinion.CreationDate = DateTime.Now;
                     db.Opinions.Add(opinion);
                     db.SaveChanges();
