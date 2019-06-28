@@ -1620,18 +1620,40 @@ namespace opozee.Controllers.API
                     entity.ModifiedDate = DateTime.Now;
                     if (HttpContext.Current.Request.Files.Count > 0)
                     {
-                        ImageResponse imgResponse = MultipartFiles.GetMultipartImage(HttpContext.Current.Request.Files, "Image", "profileimage", _Imagethumbsize, _Imagethumbsize, _imageSize, _imageSize, true, true, true, "profileimage");
+                        ////ImageResponse imgResponse = MultipartFiles.GetMultipartImage(HttpContext.Current.Request.Files, "Image", "profileimage", _Imagethumbsize, _Imagethumbsize, _imageSize, _imageSize, true, true, true, "profileimage");
 
-                        if (imgResponse.IsSuccess == true)
-                        {
-                            //entity.ThumbnailURL = imgResponse.ThumbnailURL;
-                            entity.ImageURL = imgResponse.ImageURL;
-                        }
-                        else
-                        {
-                            return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Info, imgResponse.ResponseMessage));
-                        }
+                        ////if (imgResponse.IsSuccess == true)
+                        ////{
+                        ////    //entity.ThumbnailURL = imgResponse.ThumbnailURL;
+                        ////    entity.ImageURL = imgResponse.ImageURL;
+                        ////}
+                        ////else
+                        ////{
+                        ////    return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Info, imgResponse.ResponseMessage));
+                        ////}
                         // _UsersRepo.Repository.Update(entity);
+
+                        var httpRequest = HttpContext.Current.Request;
+                        //Upload Image
+                        var postedFile = httpRequest.Files[0];
+                        int UserId = entity.UserID;
+                        //Create custom filename
+                        try
+                        {
+                            var imageName = new String(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
+                            string guid = Guid.NewGuid().ToString();
+                            imageName = imageName + guid + Path.GetExtension(postedFile.FileName);
+                            var filePath = HttpContext.Current.Server.MapPath("~/Content/upload/ProfileImage/" + imageName);
+                            postedFile.SaveAs(filePath);
+                            // ResizeImage.Resize_Image_Thumb(filePath, filePath, "_T_" + filePath, 400, 400);
+
+                            entity.ImageURL = _SiteURL + "/ProfileImage/" + imageName;                            
+                        }
+                        catch (Exception exp)
+                        {
+                            return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, exp.Message);
+                            //throw;
+                        }
                     }
                     else
                     {
