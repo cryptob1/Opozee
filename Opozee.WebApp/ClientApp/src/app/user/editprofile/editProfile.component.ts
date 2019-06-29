@@ -84,7 +84,7 @@ export class EditProfileComponent implements OnInit {
 
         let profile = JSON.parse(localStorage.getItem('currentUser'));
         profile.ImageUrl = this.imageUrl;
-        localStorage.setItem('currentUser', profile)
+        localStorage.setItem('currentUser', JSON.stringify(profile));
       }, error => {
         console.log('error: ', error);
         this.loading = false;

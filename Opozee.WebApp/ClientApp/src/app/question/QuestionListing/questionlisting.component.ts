@@ -198,7 +198,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
           if (this.qid != -1) {
             this.PostQuestionDetailList[0].comments = data[0]['Comments'];
           }
-          console.log('page=', questionGetModel.PageNumber, 'records=', this.PostQuestionDetailList.length)
+          //console.log('page=', questionGetModel.PageNumber, 'records=', this.PostQuestionDetailList.length)
 
           ////----Slider
           //this.sliderData = [];
@@ -452,7 +452,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
           //----------------------------------
           this.PercentageCalc(this.PostQuestionDetailList);
 
-          console.log('onScroll page=', this.questionGetModel.PageNumber, 'records=', this.PostQuestionDetailList.length)
+          //console.log('onScroll page=', this.questionGetModel.PageNumber, 'records=', this.PostQuestionDetailList.length)
 
           // this.setPageonpageLoad(this.questionGetModel.PageNumber, this.questionGetModel.TotalRecords)
           //this.isRecordLoaded = true
