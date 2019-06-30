@@ -53,7 +53,7 @@ export class Questiondetail implements OnInit {
   name: string;
   countReactionScore: number;
   PostQuestionDetail: any;
-  sharetext: string = '';//'Hey I’d like get your take on this question –';
+  tweetText: string = '';//'Hey I’d like get your take on this question –';
   shareUrl: string;
   public _emitter: EventEmitter<any> = new EventEmitter();
   encoder: HttpUrlEncodingCodec = new HttpUrlEncodingCodec();
@@ -188,9 +188,9 @@ export class Questiondetail implements OnInit {
       this.PostQuestionDetailModel.postQuestionDetail = data['PostQuestionDetail'] as PostQuestionDetail;
 
       this.shareUrl = "https://opozee.com/qid/" + (this.PostQuestionDetailModel.postQuestionDetail.Id);
-      this.sharetext = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
+      this.tweetText = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
       
-
+      console.log(this.tweetText);
       
       this.meta.updateTag({ name: 'description', content: this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) });
 
@@ -565,7 +565,7 @@ export class Questiondetail implements OnInit {
     this.PostQuestionDetailModel.postQuestionDetail = data['PostQuestionDetail'] as PostQuestionDetail;
 
     this.shareUrl = "https://opozee.com/qid/" + (this.PostQuestionDetailModel.postQuestionDetail.Id);
-    this.sharetext = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
+    this.tweetText = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
 
   }
 
