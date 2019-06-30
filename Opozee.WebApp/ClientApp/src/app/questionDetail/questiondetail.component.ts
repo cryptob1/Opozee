@@ -14,6 +14,7 @@ import { MixpanelService } from '../_services/mixpanel.service';
 import { PopoverModule } from "ngx-popover";
 import { Observable } from 'rxjs';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { Meta } from '@angular/platform-browser';
 
 enum Reaction {
   Thoughtful = 1,
@@ -86,7 +87,8 @@ export class Questiondetail implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router, private location: Location,
     private toastr: ToastrService,
-    private mixpanelService: MixpanelService
+    private mixpanelService: MixpanelService,
+    private meta: Meta
   ) {
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
   
@@ -102,6 +104,8 @@ export class Questiondetail implements OnInit {
     if (this.localStorageUser != null) { 
       mixpanelService.init(this.localStorageUser['Email'])
     }
+    
+    
    // this.PostQuestionDetailModel.PostQuestionDetailModel = new PostQuestionDetail();
   }
   
@@ -186,6 +190,20 @@ export class Questiondetail implements OnInit {
       this.shareUrl = "https://opozee.com/qid/" + (this.PostQuestionDetailModel.postQuestionDetail.Id);
       this.sharetext = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
       
+
+      
+      this.meta.updateTag({ name: 'description', content: this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) });
+
+
+      // <!-- Facebook meta data -->
+      this.meta.addTags([
+        { property: 'og:title', content: this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) },
+        { property: 'og:url', content: this.shareUrl },
+      ]);
+ 
+
+
+
       //console.log(this.PostQuestionDetailModel);
       if (!fromLikeBtn)
         this.getAllSliderQuestionlist(this.Id, this.PostQuestionDetailModel.postQuestionDetail.HashTags);
