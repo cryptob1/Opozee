@@ -2489,25 +2489,34 @@ namespace opozee.Controllers.API
                     .SqlQuery<User>("SELECT * FROM [Users] WHERE [UserID] = @UserID", new SqlParameter("@UserID", userId))
                     .FirstOrDefault();
 
-                var _notification = db.Notifications.Where(x => x.CommentedUserId == user.UserID && x.CreationDate >= user.ModifiedDate).ToList();
-                if (_notification.Count == 0)
-                {
-                    _notification = (from q in db.Questions
-                                     join n in db.Notifications on q.Id equals n.questId
-                                     where q.OwnerUserID == user.UserID && q.IsDeleted == false
-                                     && n.CreationDate >= user.ModifiedDate
-                                     select n).ToList();
-                }
+                var _notification =(from q in db.Questions
+                 join o in db.Opinions on q.Id equals o.QuestId
+                 join n in db.Notifications on o.Id equals n.CommentId
+                 join u in db.Users on n.CommentedUserId equals u.UserID
+                 where ((q.OwnerUserID == user.UserID && o.CommentedUserId != user.UserID && n.Comment == true) || //someone left a comment
+                 (o.CommentedUserId == user.UserID && n.Comment != true)) && q.IsDeleted == false && //someone left a vote
+                   n.CreationDate >= user.ModifiedDate
+                                    select n).ToList();
 
-                if (_notification.Count == 0)
-                {
-                    _notification = (from q in db.Questions
-                                     join o in db.Opinions on q.Id equals o.QuestId
-                                     join n in db.Notifications on o.Id equals n.CommentId
-                                     where o.CommentedUserId == user.UserID && q.IsDeleted == false
-                                     && n.CreationDate >= user.ModifiedDate
-                                     select n).ToList();
-                }
+                //var _notification = db.Notifications.Where(x => x.CommentedUserId == user.UserID && x.CreationDate >= user.ModifiedDate).ToList();
+                //if (_notification.Count == 0)
+                //{
+                //    _notification = (from q in db.Questions
+                //                     join n in db.Notifications on q.Id equals n.questId
+                //                     where q.OwnerUserID == user.UserID && q.IsDeleted == false
+                //                     && n.CreationDate >= user.ModifiedDate
+                //                     select n).ToList();
+                //}
+
+                //if (_notification.Count == 0)
+                //{
+                //    _notification = (from q in db.Questions
+                //                     join o in db.Opinions on q.Id equals o.QuestId
+                //                     join n in db.Notifications on o.Id equals n.CommentId
+                //                     where o.CommentedUserId == user.UserID && q.IsDeleted == false
+                //                     && n.CreationDate >= user.ModifiedDate
+                //                     select n).ToList();
+                //}
 
                 _response.notification = _notification;
 
