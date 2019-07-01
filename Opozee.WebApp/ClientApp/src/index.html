@@ -1,10 +1,18 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 
   <meta name="keywords" content="Opozee.com is a decentralized and opensource social network for productive discussions. own your user data, earn tokens for creating content. Opozee coin. Crypto tokens. Free speech. Decentralization.">
   <meta name="description" content="Opozee is a decentralized, troll-free platform that crowdsources opposing viewpoints in 400 characters or less.">
   <meta name="robots" content="index, follow" />
+
+  <meta name="google-play-app" content="app-id=com.opozeeApp">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="assets/css/smart-app-banner.css" type="text/css" media="screen">
+ 
+  <link rel="android-touch-icon" href="android-icon.png" />
+
 
   <title>Opozee</title>
   <meta charset="utf-8">
@@ -43,8 +51,6 @@
       }
     })(document, window.mixpanel || []);
   </script><!-- end Mixpanel  mixpanel.init("410cd4187cb6b07c074955910e753010"); -->
-
-
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-140590699-1"></script>
   <script>
@@ -106,6 +112,28 @@
     }
   </script>
 
+
+  <script src="assets/js/smart-app-banner.js"></script>
+  <script type="text/javascript">
+    new SmartBanner({
+      daysHidden: 15,   // days to hide banner after close button is clicked (defaults to 15)
+      daysReminder: 90, // days to hide banner after "VIEW" button is clicked (defaults to 90)
+      appStoreLanguage: 'us', // language code for the App Store (defaults to user's browser language)
+      title: 'Opozee',
+      author: '',
+      button: 'VIEW',
+      store: { 
+        android: 'In Google Play'
+      },
+      price: {
+    
+        android: 'FREE' 
+      }
+      // , theme: '' // put platform type ('ios', 'android', etc.) here to force single theme on all device
+      // , icon: '' // full path to icon image if not using website icon image
+      // , force: 'ios' // Uncomment for platform emulation
+    });
+  </script>
 
 
 
