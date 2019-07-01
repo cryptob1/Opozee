@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 import { ISubscription } from 'rxjs/Subscription';
 import { MixpanelService } from '../../_services/mixpanel.service';
 import { AppConfigService } from '../../appConfigService';
- 
+import { Meta } from '@angular/platform-browser'; 
 
 @Component({
   selector: 'question-listing',
@@ -48,7 +48,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   endDate: any;
 
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router,
-    private location: Location, private mixpanelService: MixpanelService, private configService: AppConfigService) {
+    private location: Location, private mixpanelService: MixpanelService, private configService: AppConfigService, private meta: Meta) {
 
     this.startDate = this.configService.bountyStartDate;
     this.endDate = this.configService.bountyEndDate;
@@ -197,6 +197,17 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
           if (this.qid != -1) {
             this.PostQuestionDetailList[0].comments = data[0]['Comments'];
+
+            
+
+            this.meta.updateTag({ name: 'description', content: data[0]['Question']});
+
+
+            // <!-- Facebook meta data -->
+            this.meta.addTags([
+              { property: 'og:title', content: data[0]['Question']  },
+              
+            ]);
           }
           //console.log('page=', questionGetModel.PageNumber, 'records=', this.PostQuestionDetailList.length)
 
