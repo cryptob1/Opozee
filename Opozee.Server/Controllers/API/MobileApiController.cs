@@ -1475,6 +1475,7 @@ namespace opozee.Controllers.API
                                    ImageURL = u.ImageURL,
                                    BalanceToken = t.BalanceToken,
                                    TotalPostedQuestion = db.Questions.Where(p => p.OwnerUserID == viewUserId && p.IsDeleted == false).Count(),
+                                   TotalPostedBeliefs = db.Opinions.Where(x => x.CommentedUserId == u.UserID).ToList().Count(),
                                    TotalLikes = (from q in db.Questions
                                                  join o in db.Opinions on q.Id equals o.QuestId
                                                  where q.OwnerUserID == viewUserId && q.IsDeleted == false
