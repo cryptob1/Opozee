@@ -106,6 +106,14 @@ namespace opozee.Controllers.API
                     }
 
                     entity.UserName = input.UserName != null && input.UserName != "" ? input.UserName : entity.UserName;
+
+                    (bool IsExist, User _user) = this.CheckUserNameExist(entity.UserName);
+                    if (IsExist)
+                    {
+                        if (_user.SocialID != entity.SocialID)
+                            entity.UserName += Helper.Random4DigitGenerator();
+                    }
+
                     if (!string.IsNullOrEmpty(input.Password))
                     {
                         entity.Password = AesCryptography.Encrypt(input.Password);
@@ -153,6 +161,27 @@ namespace opozee.Controllers.API
                         entity.Password = AesCryptography.Encrypt(input.Password);
                     }
 
+
+                    if (CheckEmailExist(input.Email))
+                    {
+                        User e = db.Users.Where(p => p.Email == input.Email
+                                    && p.RecordStatus != RecordStatus.Deleted.ToString()).FirstOrDefault();
+
+                        if ( e.SocialType == null)
+                        {
+
+                            return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Email already registered. Please login with email/password.", "UserData"));
+                        }
+                        else
+                        {
+
+                            return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Email already registered. Please login with " + e.SocialType +".", "UserData"));
+
+                        }
+
+                    }
+
+
                     entity.DeviceType = input.DeviceType;
                     entity.DeviceToken = input.DeviceToken;
                     entity.CreatedDate = DateTime.Now;
@@ -171,29 +200,28 @@ namespace opozee.Controllers.API
                         entity.SocialType = ThirdPartyType.Twitter.ToString();
                     }
 
-                    //if (input.ImageURL != null && input.ImageURL != "")
-                    //{
-                    //    try
-                    //    {
-                    //        string strTempImageSave = OpozeeLibrary.Utilities.ResizeImage.Download_Image(input.ImageURL);
-                    //        string profileFilePath = _SiteURL + "/ProfileImage/" + strTempImageSave;
-                    //        strIamgeURLfordb = profileFilePath;
-                    //        entity.ImageURL = profileFilePath;
-                    //    }
-                    //    catch (Exception ex)
-                    //    {
-                    //        strThumbnailURLfordb = strThumbnailImage;
-                    //        strIamgeURLfordb = strThumbnailImage;
-                    //    }
-                    //}
-                    //else
-                    //{
+                    if (input.ImageURL != null && input.ImageURL != "")
+                    {
+                        try
+                        {
+                            string strTempImageSave = OpozeeLibrary.Utilities.ResizeImage.Download_Image(input.ImageURL);
+                            string profileFilePath = _SiteURL + "/ProfileImage/" + strTempImageSave;
+                            strIamgeURLfordb = profileFilePath;
+                            entity.ImageURL = profileFilePath;
+                        }
+                        catch (Exception ex)
+                        {
+                            strThumbnailURLfordb = strThumbnailImage;
+                            strIamgeURLfordb = strThumbnailImage;
+                        }
+                    }
+                    else
+                    {
 
-                    //    entity.ImageURL = _SiteURL + "/ProfileImage/opozee-profile.png";
-                    //    strIamgeURLfordb = entity.ImageURL;
-                    //}
-
-                    entity.ImageURL = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
+                        entity.ImageURL = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
+                        strIamgeURLfordb = entity.ImageURL;
+                    }
+                     
                     entity.ImageURL = strIamgeURLfordb;
                     db.Users.Add(entity);
                     db.SaveChanges();
