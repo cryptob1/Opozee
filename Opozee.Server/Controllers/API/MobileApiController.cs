@@ -1535,7 +1535,7 @@ namespace opozee.Controllers.API
         }
 
         [HttpPost]
-        [Route("api/WebApi/UploadProfileWeb")]
+        [Route("api/MobileApi/UploadProfileWeb")]
         public HttpResponseMessage UploadProfileWeb()
         {
             string imageName = null;
