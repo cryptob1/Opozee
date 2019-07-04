@@ -105,7 +105,7 @@ namespace opozee.Controllers.API
                         //return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Info, "User is not Active"));
                     }
 
-                    entity.UserName = input.UserName != null && input.UserName != "" ? input.UserName : entity.UserName;
+                    entity.UserName = entity.UserName != null && entity.UserName != "" ? entity.UserName : input.UserName;
 
                     (bool IsExist, User _user) = this.CheckUserNameExist(entity.UserName);
                     if (IsExist)
@@ -121,6 +121,10 @@ namespace opozee.Controllers.API
                     entity.DeviceType = input.DeviceType != null && input.DeviceType != "" ? input.DeviceType : entity.DeviceType;
                     entity.DeviceToken = input.DeviceToken != null && input.DeviceToken != "" ? input.DeviceToken : entity.DeviceToken;
                     entity.ImageURL = entity.ImageURL;
+
+                    if (entity.ReferralCode == null)
+                        entity.ReferralCode = Helper.GenerateReferralCode();
+
                     //if (input.ImageURL != null && input.ImageURL != "")
                     //{
                     //    try
@@ -221,7 +225,9 @@ namespace opozee.Controllers.API
                          
                         strIamgeURLfordb = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
                     }
- 
+
+                    entity.ReferralCode = Helper.GenerateReferralCode();
+                    entity.EmailConfirmed = true;
 
                     entity.ImageURL = strIamgeURLfordb;
                     db.Users.Add(entity);
