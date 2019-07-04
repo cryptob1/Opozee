@@ -184,7 +184,7 @@ namespace opozee.Controllers.API
 
                     entity.DeviceType = input.DeviceType;
                     entity.DeviceToken = input.DeviceToken;
-                    entity.CreatedDate = DateTime.Now;
+                    entity.CreatedDate = DateTime.UtcNow;
                     entity.RecordStatus = RecordStatus.Active.ToString();
                     entity.SocialID = input.ThirdPartyId;
                     if (input.ThirdPartyType == ThirdPartyType.Facebook)
@@ -218,10 +218,11 @@ namespace opozee.Controllers.API
                     else
                     {
 
-                        entity.ImageURL = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
-                        strIamgeURLfordb = entity.ImageURL;
+                         
+                        strIamgeURLfordb = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
                     }
-                     
+ 
+
                     entity.ImageURL = strIamgeURLfordb;
                     db.Users.Add(entity);
                     db.SaveChanges();
