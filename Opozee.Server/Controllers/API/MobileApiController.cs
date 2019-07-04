@@ -158,6 +158,14 @@ namespace opozee.Controllers.API
                     entity.LastName = input.LastName;
                     entity.Email = input.Email;
 
+                    (bool IsExist, User _user) = this.CheckUserNameExist(entity.UserName);
+                    if (IsExist)
+                    {
+
+                        entity.UserName += Helper.Random4DigitGenerator();
+                    }
+
+
                     bool Email = false;
                     Email = OpozeeLibrary.Utilities.Helper.IsValidEmail(input.Email);
                     if (!string.IsNullOrEmpty(input.Password))

@@ -4001,10 +4001,17 @@ namespace opozee.Controllers.API
                 else
                 {
                     entity = new User();
-                    entity.UserName = input.FirstName + input.LastName + Helper.Random4DigitGenerator();
+                    entity.UserName = input.FirstName + input.LastName;
                     entity.FirstName = input.FirstName;
                     entity.LastName = input.LastName;
                     entity.Email = input.Email;
+
+                    (bool IsExist, User _user) = this.CheckUserNameExist(entity.UserName);
+                    if (IsExist)
+                    {
+                        
+                            entity.UserName += Helper.Random4DigitGenerator();
+                    }
 
                     bool Email = false;
                     Email = OpozeeLibrary.Utilities.Helper.IsValidEmail(input.Email);
@@ -4018,6 +4025,26 @@ namespace opozee.Controllers.API
                         _response.success = false;
                         _response.message = "Email already exists.";
                         return _response;
+                    }
+
+                    if (CheckEmailExist(input.Email))
+                    {
+                        User e = db.Users.Where(p => p.Email == input.Email
+                                    && p.RecordStatus != RecordStatus.Deleted.ToString()).FirstOrDefault();
+
+                        if (e.SocialType == null)
+                        {
+                            _response.success = false;
+                            _response.message = "Email already registered. Please login with email/password.";
+                            return _response; 
+                        }
+                        else
+                        {
+                            _response.success = false;
+                            _response.message = "Email already registered. Please login with " + e.SocialType + ".";
+                            return _response; 
+                        }
+
                     }
 
                     entity.DeviceType = input.DeviceType;
