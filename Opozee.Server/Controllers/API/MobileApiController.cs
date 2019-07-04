@@ -1507,11 +1507,11 @@ namespace opozee.Controllers.API
                                    TotalPostedBeliefs = db.Opinions.Where(x => x.CommentedUserId == u.UserID).ToList().Count(),
                                    TotalLikes = (from q in db.Questions
                                                  join o in db.Opinions on q.Id equals o.QuestId
-                                                 where q.OwnerUserID == viewUserId && q.IsDeleted == false
+                                                 where o.CommentedUserId == viewUserId && q.IsDeleted == false
                                                  select o.Likes).Sum(),
                                    TotalDislikes = (from q in db.Questions
                                                     join o in db.Opinions on q.Id equals o.QuestId
-                                                    where q.OwnerUserID == viewUserId && q.IsDeleted == false
+                                                    where o.CommentedUserId == viewUserId && q.IsDeleted == false
                                                     select o.Dislikes).Sum(),
                                    Followers = db.Followers.Where(y => y.FollowedId == u.UserID && y.IsFollowing == true).ToList().Count(),
                                    Followings = db.Followers.Where(z => z.UserId == u.UserID && z.IsFollowing == true).ToList().Count(),
