@@ -1772,6 +1772,36 @@ namespace opozee.Controllers.API
         #endregion
 
 
+
+        #region "Delete My Belief" 
+        [HttpPost]
+        [Route("api/MobileApi/DeleteMyBelief")]
+        public HttpResponseMessage DeleteMyBelief(PostQuestionModel model)
+        {
+
+            Opinion _opinion = null;
+            try
+            {
+                _opinion = db.Opinions.Where(o => o.Id == model.Id && o.CommentedUserId == model.OwnerUserID).FirstOrDefault();
+                if (_opinion == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, "Belief Not Found", "DeleteMyBelief"));
+                }
+
+                db.Opinions.Remove(_opinion);
+                db.SaveChanges();
+
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, _opinion, "DeleteMyBelief"));
+            }
+            catch (Exception ex)
+            {
+                OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "DeleteMyBelief"));
+            }
+        }
+        #endregion
+
+
         #region "Get All BookMark By Id" 
         [HttpGet]
         [Route("api/MobileApi/GetAllBookMarkById")]
