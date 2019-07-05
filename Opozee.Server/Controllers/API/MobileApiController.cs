@@ -1517,6 +1517,7 @@ namespace opozee.Controllers.API
                                    Email = u.Email,
                                    ImageURL = u.ImageURL,
                                    BalanceToken = t.BalanceToken,
+                                   UserInfo = u.UserInfo,
                                    TotalPostedQuestion = db.Questions.Where(p => p.OwnerUserID == viewUserId && p.IsDeleted == false).Count(),
                                    TotalPostedBeliefs = db.Opinions.Where(x => x.CommentedUserId == u.UserID).ToList().Count(),
                                    TotalLikes = (from q in db.Questions
