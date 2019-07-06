@@ -56,7 +56,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       localStorage.setItem('popupShown', '1')
     }
     else if (JSON.parse(localStorage.getItem('popupShown')) == '1') {
-      this.showPopup2 = true;
+      this.showPopup2 = false;
       this.showPopup = false;
 
       localStorage.setItem('popupShown', '2')
