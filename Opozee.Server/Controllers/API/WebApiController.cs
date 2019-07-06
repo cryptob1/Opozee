@@ -1136,7 +1136,7 @@ namespace opozee.Controllers.API
             }
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         [Route("api/WebApi/GetProfileNotificationByUser")]
         public List<UserNotifications> GetProfileNotificationByUser(PagingModel Model)

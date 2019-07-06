@@ -33,31 +33,37 @@ export class ViewProfileComponent implements OnInit {
 
       this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
       this.onchangeTab('mybeliefs')
-      this.getTabOneNotification(this.PagingModel)
+      if (this.localStorageUser) {
+        this.PagingModel.UserId = this.Id;
+        this.getTabOneNotification(this.PagingModel)
+      }
     }
     this._follow = "Follow";
   }
 
   ngOnInit() {
-    this.getUserProfile();
-    this.PagingModel.UserId = this.Id;
+    if (localStorage.getItem('currentUser') == null) {
+      this.logout() 
+    }
+    else {
+      this.getUserProfile();
+      this.PagingModel.UserId = this.Id;
+    }
   }
 
   onFollowClick() {
-    debugger
+    
     this.followingModel.UserId = this.localStorageUser.Id;
     this.followingModel.IsFollowing = true;
     this.followingModel.Following = this.Id;
 
     this.userService.postFollowing(this.followingModel).pipe(first())
       .subscribe(followings => {
-      // debugger;
-      console.log(followings);
+        console.log(followings);
       },
       error => {
         if (error.status == 401) {
           this.logout();
-
           //this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
           //Observable.interval(1000)
           //  .subscribe((val) => {
@@ -85,10 +91,9 @@ export class ViewProfileComponent implements OnInit {
     //var Id = this.localStorageUser.Id;
     this.userService.getUserProfileWeb(this.Id).pipe(first())
       .subscribe(data => {
-      debugger;
       this.userProfiledata = data
       //console.log(data);
-    });
+      });
   }
     
   private getTabOneNotification(PagingModel) {
@@ -99,7 +104,7 @@ export class ViewProfileComponent implements OnInit {
     }, error => {
       if (error.status == 401) {
         this.logout();
-
+       
           //this.toastr.error('Please Login Again.', error.statusText, { timeOut: 5000 });
           //Observable.interval(1000)
           //  .subscribe((val) => {
@@ -112,8 +117,10 @@ export class ViewProfileComponent implements OnInit {
   
   logout() {
     localStorage.removeItem('currentUser');
-    window.location.reload();
+    this.router.navigate(['/login']);
+    //window.location.reload();
   }
+
   onFollowTab(tab) {
 
     this.PagingModel.UserId = this.Id;
