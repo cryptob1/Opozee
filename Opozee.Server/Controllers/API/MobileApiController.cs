@@ -78,17 +78,17 @@ namespace opozee.Controllers.API
                 User entity = null;
                 if (input.ThirdPartyType == ThirdPartyType.Facebook)
                 {
-                    entity = db.Users.Where(p => p.SocialID == input.ThirdPartyId
+                    entity = db.Users.Where(p => p.Email == input.Email && p.SocialType=="Facebook"
                                         && p.RecordStatus != RecordStatus.Deleted.ToString()).FirstOrDefault();
                 }
                 else if (input.ThirdPartyType == ThirdPartyType.Twitter)
                 {
-                    entity = db.Users.Where(p => p.SocialID == input.ThirdPartyId
+                    entity = db.Users.Where(p => p.SocialID == input.ThirdPartyId && p.SocialType == "Twitter"
                                         && p.RecordStatus != RecordStatus.Deleted.ToString()).FirstOrDefault();
                 }
                 else if (input.ThirdPartyType == ThirdPartyType.GooglePlus)
                 {
-                    entity = db.Users.Where(p => p.SocialID == input.ThirdPartyId
+                    entity = db.Users.Where(p => p.SocialID == input.ThirdPartyId && p.SocialType == "GooglePlus"
                                         && p.RecordStatus != RecordStatus.Deleted.ToString()).FirstOrDefault();
                 }
                 string strThumbnailURLfordb = null;
@@ -97,6 +97,7 @@ namespace opozee.Controllers.API
                 string _SiteURL = WebConfigurationManager.AppSettings["SiteImgURL"];
 
                 string strThumbnailImage = input.ImageURL;
+                //user already exists
                 if (entity != null)
                 {
 
@@ -107,12 +108,12 @@ namespace opozee.Controllers.API
 
                     entity.UserName = entity.UserName != null && entity.UserName != "" ? entity.UserName : input.UserName;
 
-                    (bool IsExist, User _user) = this.CheckUserNameExist(entity.UserName);
-                    if (IsExist)
-                    {
-                        if (_user.SocialID != entity.SocialID)
-                            entity.UserName += Helper.Random4DigitGenerator();
-                    }
+                    //(bool IsExist, User _user) = this.CheckUserNameExist(entity.UserName);
+                    //if (IsExist)
+                    //{
+                    //    if (_user.SocialID != entity.SocialID)
+                    //        entity.UserName += Helper.Random4DigitGenerator();
+                    //}
 
                     if (!string.IsNullOrEmpty(input.Password))
                     {
@@ -121,6 +122,7 @@ namespace opozee.Controllers.API
                     entity.DeviceType = input.DeviceType != null && input.DeviceType != "" ? input.DeviceType : entity.DeviceType;
                     entity.DeviceToken = input.DeviceToken != null && input.DeviceToken != "" ? input.DeviceToken : entity.DeviceToken;
                     entity.ImageURL = entity.ImageURL;
+                    entity.SocialID = input.ThirdPartyId;
 
                     if (entity.ReferralCode == null)
                         entity.ReferralCode = Helper.GenerateReferralCode();
@@ -149,7 +151,7 @@ namespace opozee.Controllers.API
                     entity = db.Users.Find(userID);
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, entity, "UserData"));
                 }
-                else
+                else //first time user
                 {
                     entity = new User();
                     Token token = new Token();
@@ -173,13 +175,15 @@ namespace opozee.Controllers.API
                         entity.Password = AesCryptography.Encrypt(input.Password);
                     }
 
+                    // if user logins in with another type of login (using same email) then ask them to user original login
+                    // ex- originally used FB, now logging with GP
 
                     if (CheckEmailExist(input.Email))
                     {
                         User e = db.Users.Where(p => p.Email == input.Email
                                     && p.RecordStatus != RecordStatus.Deleted.ToString()).FirstOrDefault();
 
-                        if ( e.SocialType == null)
+                        if (e.SocialType == null)
                         {
 
                             return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Email already registered. Please login with email/password.", "UserData"));
@@ -187,11 +191,12 @@ namespace opozee.Controllers.API
                         else
                         {
 
-                            return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Email already registered. Please login with " + e.SocialType +".", "UserData"));
+                            return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Email already registered. Please login with " + e.SocialType + ".", "UserData"));
 
                         }
 
                     }
+                     
 
 
                     entity.DeviceType = input.DeviceType;
