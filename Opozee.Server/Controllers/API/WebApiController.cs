@@ -1865,7 +1865,8 @@ namespace opozee.Controllers.API
                                               + db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count()),
 
                                           TotalRecordcount = db.Questions.Count(x => x.IsDeleted == false && x.PostQuestion.Contains(model.Search)),
-                                          LastActivityTime = (DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
+                                          LastActivityTime = (db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate))==null ? q.CreationDate:
+                                          ((DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate))),
                                           Comments = (from e in db.Opinions
                                                       join t in db.Users on e.CommentedUserId equals t.UserID
                                                       where e.QuestId == q.Id
@@ -1917,7 +1918,8 @@ namespace opozee.Controllers.API
                                               + db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count()),
 
                                           TotalRecordcount = 1,
-                                          LastActivityTime = (DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
+                                          LastActivityTime = (db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)) == null ? q.CreationDate :
+                                          ((DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate))),
                                           Comments = (from e in db.Opinions
                                                       join t in db.Users on e.CommentedUserId equals t.UserID
                                                       where e.QuestId == q.Id
@@ -1974,7 +1976,8 @@ namespace opozee.Controllers.API
                                               + db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count()),
 
                                           TotalRecordcount = db.Questions.Count(x => x.IsDeleted == false && x.PostQuestion.Contains(model.Search)),
-                                          LastActivityTime = (DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)),
+                                          LastActivityTime = (db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)) == null ? q.CreationDate :
+                                          ((DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate))),
                                           Comments = (from e in db.Opinions
                                                       join t in db.Users on e.CommentedUserId equals t.UserID
                                                       where e.QuestId == q.Id
