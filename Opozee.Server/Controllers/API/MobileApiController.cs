@@ -1610,6 +1610,7 @@ namespace opozee.Controllers.API
                 string firstname = "";
                 string lastname = "";
                 string username = "";
+                string userinfo = "";
 
                 if (httpContext.Request.Form["UserID"] == "")
                 {
@@ -1627,6 +1628,10 @@ namespace opozee.Controllers.API
                 if (httpContext.Request.Form["LastName"] != "" && httpContext.Request.Form["LastName"] != null)
                 {
                     lastname = httpContext.Request.Form["LastName"].ToString();
+                }
+                if (httpContext.Request.Form["UserInfo"] != "" && httpContext.Request.Form["UserInfo"] != null)
+                {
+                    userinfo = httpContext.Request.Form["UserInfo"].ToString();
                 }
 
                 //ViewModelUser User = new ViewModelUser();
@@ -1670,6 +1675,12 @@ namespace opozee.Controllers.API
                         entity.LastName = lastname;
                     else
                         entity.LastName = "";
+
+                    if (!string.IsNullOrEmpty(userinfo))
+                        entity.UserInfo = userinfo;
+                    else
+                        entity.UserInfo ="";
+
                     entity.UserName = username;
                     entity.ModifiedDate = DateTime.Now;
                     if (HttpContext.Current.Request.Files.Count > 0)
