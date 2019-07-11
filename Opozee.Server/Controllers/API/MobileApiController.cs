@@ -26,6 +26,7 @@ using Opozee.Server.Services;
 using System.IO;
 using Opozee.Server.Models.API;
 using Opozee.Server.Models;
+using System.Text.RegularExpressions;
 
 namespace opozee.Controllers.API
 {
@@ -630,6 +631,7 @@ namespace opozee.Controllers.API
                                                {
                                                    Id = e.Id,
                                                    Comment = e.Comment,
+                                                   LongForm = e.LongForm,
                                                    CommentedUserId = t.UserID,
                                                    Name = t.FirstName + " " + t.LastName,
                                                    UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
@@ -649,6 +651,12 @@ namespace opozee.Controllers.API
                                                    DislikesOffTopicCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true && p.ReactionType == 6).Count(),
                                                    SubReaction = db.Notifications.Where(p => p.CommentedUserId == userId && p.CommentId == e.Id).FirstOrDefault() == null ? 0 : db.Notifications.Where(p => p.CommentedUserId == userId && p.CommentId == e.Id).FirstOrDefault().ReactionType ?? 0
                                                }).OrderByDescending(p => p.CreationDate).ToPagedList(Pageindex - 1, Pagesize).ToList();
+
+                    foreach (var item in questionDetail.Comments)
+                    {
+                        if(!string.IsNullOrEmpty(item.LongForm))
+                        item.LongForm = Regex.Replace(item.LongForm, "<.*?>", String.Empty);                        
+                    }
 
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "AllOpinion"));
                 }
@@ -1677,11 +1685,11 @@ namespace opozee.Controllers.API
                         entity.LastName = "";
 
                     if (!string.IsNullOrEmpty(userinfo))
-                        entity.UserInfo = userinfo;
+                        entity.UserInfo = userinfo.Trim();
                     else
                         entity.UserInfo ="";
 
-                    entity.UserName = username;
+                    entity.UserName = username; 
                     entity.ModifiedDate = DateTime.Now;
                     if (HttpContext.Current.Request.Files.Count > 0)
                     {
