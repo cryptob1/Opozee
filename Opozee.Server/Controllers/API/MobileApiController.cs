@@ -441,7 +441,7 @@ namespace opozee.Controllers.API
                                         User data = db.Users.Find(items);
                                         if (data != null)
                                         {
-                                            string finalMessage1 = user.UserName + " has given opinion on question in which you're tagged in.";
+                                            string finalMessage1 = user.UserName + " has posted a belief on a question where you're tagged in.";
 
                                             pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", postAnswer.QuestId.ToString());
                                         }
@@ -462,7 +462,7 @@ namespace opozee.Controllers.API
                                     User data = db.Users.Find(items);
                                     if (data != null)
                                     {
-                                        string finalMessage = user.UserName + " has given opinion on question in which you're tagged in.";
+                                        string finalMessage = user.UserName + " has posted a belief on a question where you're tagged in.";
 
                                         pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage, "QD", postAnswer.QuestId.ToString());
                                     }
@@ -509,15 +509,15 @@ namespace opozee.Controllers.API
             string Tag = "";
             if (like == true && dislike == false && comment == false)
             {
-                Tag = UserName + " has liked your question's opinion.";
+                Tag = UserName + " has upvoted a belief on your question.";
             }
             else if (dislike == true && like == false && comment == false)
             {
-                Tag = UserName + " has disliked your question's opinion.";
+                Tag = UserName + " has downvoted a belief on your question.";
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = UserName + " has given opinion on your question.";
+                Tag = UserName + " has posted a belief on your question.";
             }
 
             return Tag;
@@ -527,15 +527,15 @@ namespace opozee.Controllers.API
             string Tag = "";
             if (like == true && dislike == false && comment == false)
             {
-                Tag = UserName + " has liked your opinion.";
+                Tag = UserName + " has upvoted your belief.";
             }
             else if (dislike == true && like == false && comment == false)
             {
-                Tag = UserName + " has disliked your opinion.";
+                Tag = UserName + " has downvoted your belief.";
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = UserName + " has given opinion on your question.";
+                Tag = UserName + " has posted a belief on your question.";
             }
 
             return Tag;
@@ -2502,16 +2502,8 @@ namespace opozee.Controllers.API
                 //                           }).ToList();
 
 
-
-                //List<String> tags = new List<String>();
+                ////List<String> tags = new List<String>();
                 //string[] tags = { "IsThisTrue", "Career", "Sports", "Crypto", "JEE" };
-
-                //foreach (var tag in tags)
-                //{
-                //    PopularTag _hashtag = new PopularTag();
-                //    _hashtag.HashTag = tag;// Helper.FirstCharToUpper(tag).Replace("#","");
-                //    _hashtag.Count = 1;
-                //    TopPopularHashTags.Add(_hashtag);
 
 
                 //}
