@@ -851,77 +851,41 @@ namespace opozee.Controllers.API
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
                 }
-
                 Search = string.IsNullOrEmpty(Search) ? "" : Search.ToLower() == "all" ? "" : Search;
-
-                questionDetail.PostQuestionDetail = (from q in db.Questions
-                                                     join u in db.Users on q.OwnerUserID equals u.UserID
-                                                     where q.IsDeleted == false && q.HashTags.Contains(Search)
-                                                     select new PostQuestionDetailMobile
-                                                     {
-                                                         Id = q.Id,
-                                                         Question = q.PostQuestion,
-                                                         OwnerUserID = q.OwnerUserID,
-                                                         OwnerUserName = u.UserName,
-                                                         Name = u.FirstName + " " + u.LastName,
-                                                         UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
-                                                         HashTags = q.HashTags,
-                                                         CreationDate = q.CreationDate,
-                                                         IsSlider = q.IsSlider,
-                                                         YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
-                                                         NoCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count(),
-                                                         TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
-                                                         TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
-
-                                                         ReactionSum = (db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count()
-                                                                 + db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == false).Count()
-                                                                 + db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count()
-                                                                 + db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count()),
-
-                                                         //TotalRecordcount = 1,
-                                                         
-                                                         LastActivityTime = (db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate)) == null ? q.CreationDate :
-                                          ((DateTime?)(db.Notifications.Where(o => o.questId == q.Id).Max(b => b.CreationDate))),
-                                                         Comments = (from e in db.Opinions
-                                                                     join t in db.Users on e.CommentedUserId equals t.UserID
-                                                                     where e.QuestId == q.Id
-                                                                     select new Comments
-                                                                     {
-                                                                         Id = e.Id,
-                                                                         Comment = e.Comment,
-                                                                         CommentedUserId = t.UserID,
-                                                                         Name = t.FirstName + " " + t.LastName,
-                                                                         UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
-                                                                         LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
-                                                                         DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
-                                                                         Likes = db.Notifications.Where(p => p.CommentedUserId == q.OwnerUserID && p.CommentId == e.Id).Select(b => b.Like.HasValue ? b.Like.Value : false).FirstOrDefault(),
-                                                                         DisLikes = db.Notifications.Where(p => p.CommentedUserId == q.OwnerUserID && p.CommentId == e.Id).Select(b => b.Dislike.HasValue ? b.Dislike.Value : false).FirstOrDefault(),
-                                                                         CommentedUserName = t.UserName,
-                                                                         IsAgree = e.IsAgree,
-                                                                         CreationDate = e.CreationDate
-                                                                     }).ToList()
-                                                     }).ToList(); //.OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
-
-
-
+                
+                questionDetail.PostQuestionDetail = db.Database.SqlQuery<PostQuestionDetailMobile>("SP_PostQuestionDetailMobile @Search",
+                     new SqlParameter("@Search", Search)).ToList();
+                foreach (var item in questionDetail.PostQuestionDetail)
+                {
+                    item.Comments = db.Database.SqlQuery<Comments>("SP_GetCommentsForMobile @Id,@OwnerUserID",
+                     new SqlParameter("@Id", item.Id),
+                     new SqlParameter("@OwnerUserID", item.OwnerUserID)).ToList();
+                }
+                foreach (var item in questionDetail.PostQuestionDetail)
+                {
+                    foreach (var itemInnerComment in item.Comments)
+                    {
+                        if (!string.IsNullOrEmpty(itemInnerComment.LongForm))
+                            itemInnerComment.LongForm = Regex.Replace(itemInnerComment.LongForm, "<.*?>", String.Empty);
+                    }
+                }
                 if (Sort == 0) //sort by last reaction time
                 {
                     questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderByDescending(p => p.LastActivityTime).ToPagedList(Pageindex - 1, Pagesize).ToList();
                 }
                 else if (Sort == 1) //sort by most reactions
                 {
-
                     questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderByDescending(p => p.ReactionSum).ToPagedList(Pageindex - 1, Pagesize).ToList();
                 }
-
                 else if (Sort == 2)// sort by least reactions
                 {
                     questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderBy(p => p.ReactionSum).ToPagedList(Pageindex - 1, Pagesize).ToList();
-
                 }
 
                 foreach (var data in questionDetail.PostQuestionDetail)
                 {
+                    int? countmaxYesLike = 0;
+                    int? countmaxNoLike = 0;
                     var opinionList = db.Opinions.Where(p => p.QuestId == data.Id).ToList();
                     if (opinionList.Count > 0)
                     {
@@ -931,92 +895,57 @@ namespace opozee.Controllers.API
                         //int? maxDislike = opinionList.Max(i => i.Dislikes);
                         if (maxYesLike != null && maxYesLike > 0)
                         {
-                            data.MostYesLiked = (from e in db.Opinions
-                                                 join t in db.Users on e.CommentedUserId equals t.UserID
-                                                 join n in db.Notifications on e.QuestId equals n.questId
-                                                 where e.IsAgree == true && e.QuestId == data.Id && n.Like == true
-                                                 select new Comments
-                                                 {
-                                                     Id = e.Id,
-                                                     Comment = e.Comment,
-                                                     CommentedUserId = t.UserID,
-                                                     Name = t.FirstName + " " + t.LastName,
-                                                     UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
-                                                     IsAgree = e.IsAgree,
-                                                     LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
-                                                     DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
-                                                     CommentedUserName = t.UserName,
-                                                     CreationDate = e.CreationDate
-                                                 }).OrderByDescending(s => s.LikesCount).ThenByDescending(s => s.CreationDate).FirstOrDefault();
+                            countmaxYesLike = maxYesLike;
+                            
+                            data.MostYesLiked = db.Database.SqlQuery<Comments>("SP_MostYesLikedForMobile @Id,@countmaxYesLike",
+                              new SqlParameter("@Id", data.Id),
+                               new SqlParameter("@countmaxYesLike", countmaxYesLike)
+                              ).OrderByDescending(s => s.LikesCount).ThenByDescending(s => s.CreationDate).FirstOrDefault();
 
+                            if (data.MostYesLiked!=null)
+                            data.MostYesLiked.LongForm = string.IsNullOrEmpty(data.MostYesLiked.LongForm) ? null : Regex.Replace(data.MostYesLiked.LongForm, "<.*?>", String.Empty);
                         }
                         else if (maxYesLike != null)
                         {
-                            // get the latest opinion with no votes
-                            data.MostYesLiked = (from e in db.Opinions
-                                                 join t in db.Users on e.CommentedUserId equals t.UserID
-                                                 join n in db.Notifications on e.QuestId equals n.questId
-                                                 where e.IsAgree == true && e.QuestId == data.Id
-                                                 select new Comments
-                                                 {
-                                                     Id = e.Id,
-                                                     Comment = e.Comment,
-                                                     CommentedUserId = t.UserID,
-                                                     Name = t.FirstName + " " + t.LastName,
-                                                     UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
-                                                     IsAgree = e.IsAgree,
-                                                     LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
-                                                     DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
-                                                     CommentedUserName = t.UserName,
-                                                     CreationDate = e.CreationDate
-                                                 }).OrderByDescending(s => s.CreationDate).FirstOrDefault();
+                            countmaxYesLike = maxYesLike;
+                            
 
+                            data.MostYesLiked = db.Database.SqlQuery<Comments>("SP_MostYesLikedForMobile @Id,@countmaxYesLike",
+                             new SqlParameter("@Id", data.Id),
+                              new SqlParameter("@countmaxYesLike", countmaxYesLike)
+                             ).OrderByDescending(s => s.CreationDate).FirstOrDefault();
+                            if (data.MostYesLiked != null)
+                                data.MostYesLiked.LongForm = string.IsNullOrEmpty(data.MostYesLiked.LongForm) ? null : Regex.Replace(data.MostYesLiked.LongForm, "<.*?>", String.Empty);
                         }
 
                         if (maxNoLike != null && maxNoLike > 0)
                         {
-                            data.MostNoLiked = (from e in db.Opinions
-                                                join t in db.Users on e.CommentedUserId equals t.UserID
-                                                join n in db.Notifications on e.QuestId equals n.questId
-                                                where e.IsAgree == false && e.QuestId == data.Id && n.Like == true
-                                                select new Comments
-                                                {
-                                                    Id = e.Id,
-                                                    Comment = e.Comment,
-                                                    CommentedUserId = t.UserID,
-                                                    Name = t.FirstName + " " + t.LastName,
-                                                    UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
-                                                    IsAgree = e.IsAgree,
-                                                    LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
-                                                    DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
-                                                    CommentedUserName = t.UserName,
-                                                    CreationDate = e.CreationDate
-                                                }).OrderByDescending(s => s.LikesCount).ThenByDescending(s => s.CreationDate).FirstOrDefault();
+                            countmaxNoLike = maxNoLike;
+                            
+                            data.MostNoLiked = db.Database.SqlQuery<Comments>("SP_MostNoLikedForMobile @Id,@countmaxNoLike",
+                           new SqlParameter("@Id", data.Id),
+                            new SqlParameter("@countmaxNoLike", countmaxNoLike)
+                           ).OrderByDescending(s => s.LikesCount).ThenByDescending(s => s.CreationDate).FirstOrDefault();
+
+                            if (data.MostNoLiked != null)
+                                data.MostNoLiked.LongForm = string.IsNullOrEmpty(data.MostNoLiked.LongForm) ? null : Regex.Replace(data.MostNoLiked.LongForm, "<.*?>", String.Empty);
                         }
                         else if (maxNoLike != null)
                         {
-                            data.MostNoLiked = (from e in db.Opinions
-                                                join t in db.Users on e.CommentedUserId equals t.UserID
-                                                join n in db.Notifications on e.QuestId equals n.questId
-                                                where e.IsAgree == false && e.QuestId == data.Id
-                                                select new Comments
-                                                {
-                                                    Id = e.Id,
-                                                    Comment = e.Comment,
-                                                    CommentedUserId = t.UserID,
-                                                    Name = t.FirstName + " " + t.LastName,
-                                                    UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
-                                                    IsAgree = e.IsAgree,
-                                                    LikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Like == true).Count(),
-                                                    DislikesCount = db.Notifications.Where(p => p.CommentId == e.Id && p.Dislike == true).Count(),
-                                                    CommentedUserName = t.UserName,
-                                                    CreationDate = e.CreationDate
-                                                }).OrderByDescending(s => s.CreationDate).FirstOrDefault();
+                            countmaxNoLike = maxNoLike;
+                            
+                            data.MostNoLiked = db.Database.SqlQuery<Comments>("SP_MostNoLikedForMobile @Id,@countmaxNoLike",
+                            new SqlParameter("@Id", data.Id),
+                            new SqlParameter("@countmaxNoLike", countmaxNoLike)
+                         ).OrderByDescending(s => s.CreationDate).FirstOrDefault();
+
+
+                            if (data.MostNoLiked != null)
+                            data.MostNoLiked.LongForm = string.IsNullOrEmpty(data.MostNoLiked.LongForm) ? null : Regex.Replace(data.MostNoLiked.LongForm, "<.*?>", String.Empty);
                         }
                     }
                 }
                 var data1 = questionDetail;
-
                 // return questionDetail; //.OrderByDescending(p=>p.LastActivityTime);
                 return Request.CreateResponse(JsonResponse.GetResponse(ResponseCode.Success, questionDetail, "AllUserQuestions"));
             }
@@ -2130,6 +2059,7 @@ namespace opozee.Controllers.API
                                                Id = belief.Id,
                                                questionId = belief.QuestId,
                                                beliefText = belief.Comment,
+                                               LongForm = belief.LongForm,
                                                userId = user.UserID,
                                                UserFullName = user.FirstName + " " + user.LastName,
                                                UserImage = string.IsNullOrEmpty(user.ImageURL) ? "" : user.ImageURL,
@@ -2140,6 +2070,12 @@ namespace opozee.Controllers.API
                                                CreationDate = belief.CreationDate,
                                                questionText = db.Questions.Where(question => question.Id == belief.QuestId).FirstOrDefault().PostQuestion
                                            }).OrderByDescending(p => p.CreationDate).ToList();
+
+                foreach (var item in beliefList)
+                {
+                    if (!string.IsNullOrEmpty(item.LongForm))
+                        item.LongForm = Regex.Replace(item.LongForm, "<.*?>", String.Empty);
+                }
 
                 return Request.CreateResponse(HttpStatusCode.OK, beliefList);
             }
@@ -2552,8 +2488,6 @@ namespace opozee.Controllers.API
         {
             dynamic _response = new ExpandoObject();
             List<PopularTag> TopPopularHashTags = new List<PopularTag>();
-            TopPopularHashTags.Add(new PopularTag { HashTag = "All", Count = 99999 });
-
             try
             {
                 //db.Configuration.LazyLoadingEnabled = false;
@@ -2568,18 +2502,26 @@ namespace opozee.Controllers.API
                 //                           }).ToList();
 
 
+
                 //List<String> tags = new List<String>();
-                string[] tags = { "IsThisTrue", "Career", "Sports", "Crypto", "JEE" };
+                //string[] tags = { "IsThisTrue", "Career", "Sports", "Crypto", "JEE" };
 
-                foreach (var tag in tags)
-                {
-                    PopularTag _hashtag = new PopularTag();
-                    _hashtag.HashTag = tag;// Helper.FirstCharToUpper(tag).Replace("#","");
-                    _hashtag.Count = 1;
-                    TopPopularHashTags.Add(_hashtag);
+                //foreach (var tag in tags)
+                //{
+                //    PopularTag _hashtag = new PopularTag();
+                //    _hashtag.HashTag = tag;// Helper.FirstCharToUpper(tag).Replace("#","");
+                //    _hashtag.Count = 1;
+                //    TopPopularHashTags.Add(_hashtag);
 
- 
-                }
+
+                //}
+
+                TopPopularHashTags.Add(new PopularTag { HashTag = "All", Count = 99999 });
+                TopPopularHashTags.Add(new PopularTag { HashTag = "IsThisTrue", Count = 1 });
+                TopPopularHashTags.Add(new PopularTag { HashTag = "Career", Count = 2 });
+                TopPopularHashTags.Add(new PopularTag { HashTag = "Sports", Count = 3 });
+                TopPopularHashTags.Add(new PopularTag { HashTag = "Crypto", Count = 4 });
+                TopPopularHashTags.Add(new PopularTag { HashTag = "JEE", Count = 5 });
 
                 //foreach (var item in PopularHashTagsList)
                 //{
