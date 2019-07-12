@@ -851,10 +851,19 @@ namespace opozee.Controllers.API
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.OK, ModelState);
                 }
-                Search = string.IsNullOrEmpty(Search) ? "" : Search.ToLower() == "all" ? "" : Search;
-                
-                questionDetail.PostQuestionDetail = db.Database.SqlQuery<PostQuestionDetailMobile>("SP_PostQuestionDetailMobile @Search",
-                     new SqlParameter("@Search", Search)).ToList();
+                Search = string.IsNullOrEmpty(Search) ? "all" : Search.ToLower() == "all" ? "all" : Search;
+
+
+                if (Search == "all")
+                {
+                    questionDetail.PostQuestionDetail = db.Database.SqlQuery<PostQuestionDetailMobile>("SP_PostQuestionDetailMobile ").ToList();
+                }
+                else
+                {
+                    questionDetail.PostQuestionDetail = db.Database.SqlQuery<PostQuestionDetailMobile>("SP_PostQuestionDetailMobile @Search",
+                         new SqlParameter("@Search", Search)).ToList();
+                }
+
                 foreach (var item in questionDetail.PostQuestionDetail)
                 {
                     item.Comments = db.Database.SqlQuery<Comments>("SP_GetCommentsForMobile @Id,@OwnerUserID",
