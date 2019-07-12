@@ -443,7 +443,7 @@ export class Questiondetail implements OnInit {
         }
         else {
           this.getQuestionDetail();
-          this.toastr.success('Data save successfully', '');
+          this.toastr.success('Posted!', '');
         }
        
         this.loading = false;

@@ -2854,7 +2854,7 @@ namespace opozee.Controllers.API
                 int _checkInsert = db.Database.ExecuteSqlCommand(
                                 "INSERT INTO Opinion (" +
                                 "QuestId,Comment,LongForm,CommentedUserId,CreationDate,Likes,IsAgree,Dislikes) " +
-                                " VALUES (@QuestId,@Comment,@LongForm,@CommentedUserId,@CreationDate,@Likes,@IsAgree,@Dislikes);SELECT SCOPE_IDENTITY();)",
+                                " VALUES (@QuestId,@Comment,@LongForm,@CommentedUserId,@CreationDate,@Likes,@IsAgree,@Dislikes);SELECT SCOPE_IDENTITY();",
                                 new SqlParameter("QuestId", Model.QuestId),
                                 new SqlParameter("Comment", Model.Comment),
                                 new SqlParameter("LongForm", Model.LongForm==null ? "" : Model.LongForm),
@@ -2864,6 +2864,7 @@ namespace opozee.Controllers.API
                                 new SqlParameter("IsAgree", Model.OpinionAgreeStatus),
                                 new SqlParameter("Dislikes", Model.Dislikes)
                             );
+                 
 
                 int CommentId = db.Opinions.Max(x => x.Id);
 
@@ -3923,7 +3924,7 @@ namespace opozee.Controllers.API
                 }
                 else if (input.ThirdPartyType == ThirdPartyType.GooglePlus)
                 {
-                    entity = db.Users.Where(p => p.SocialID == input.ThirdPartyId && p.SocialType == "GooglePlus"
+                    entity = db.Users.Where(p => p.Email == input.Email && p.SocialType == "GooglePlus"
                                         && p.RecordStatus != RecordStatus.Deleted.ToString()).FirstOrDefault();
                 }
 

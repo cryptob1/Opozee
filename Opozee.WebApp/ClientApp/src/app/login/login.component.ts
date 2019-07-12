@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
         if (data.Id != 0) {
 
           this.loading = false;
-          this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
+          this.toastr.success('Login', 'Ready to Opozee!', { timeOut: 1000 });
           this.dataSharingService.loginsetstate(data);
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(data));
@@ -122,7 +122,7 @@ export class LoginComponent implements OnInit {
         if (data.Id > 0) {
 
           this.loading = false;
-          this.toastr.success('', 'Login successfully!', { timeOut: 1000 });
+          this.toastr.success('', 'Ready to Opozee!', { timeOut: 1000 });
           this.dataSharingService.loginsetstate(data);
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(data));
@@ -169,7 +169,7 @@ export class LoginComponent implements OnInit {
               if (data) {
                 if (data.success) {
                   this.loading = false;
-                  this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
+                  this.toastr.success('Login', 'Ready to Opozee!', { timeOut: 1000 });
                     this.dataSharingService.loginsetstate(data.data);
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(data.data));
@@ -220,7 +220,7 @@ export class LoginComponent implements OnInit {
                 if (data.success) {
                   //console.log(data)
                   this.loading = false;
-                  this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
+                  this.toastr.success('Login', 'Ready to Opozee!', { timeOut: 1000 });
                     this.dataSharingService.loginsetstate(data.data);
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(data.data));
@@ -274,7 +274,7 @@ export class LoginComponent implements OnInit {
         if (data) {
           if (data.success) {
             this.loading = false;
-            this.toastr.success('Login', 'login successfully!', { timeOut: 1000 });
+            this.toastr.success('Login', 'Ready to Opozee!', { timeOut: 1000 });
               this.dataSharingService.loginsetstate(data.data);
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('currentUser', JSON.stringify(data.data));

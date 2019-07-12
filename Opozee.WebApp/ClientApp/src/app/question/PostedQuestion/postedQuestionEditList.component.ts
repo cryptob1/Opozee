@@ -95,7 +95,7 @@ export class PostedQuestionEditList implements OnInit {
       .subscribe(data => {
         debugger;
         if (data) {
-          this.toastr.success('record deleted', 'data save successfully.', { timeOut: 5000 });
+          this.toastr.success('record deleted', 'Gone for ever!', { timeOut: 5000 });
           this.getQuestionListEditPaging(this.questionGetModel);
 
         }

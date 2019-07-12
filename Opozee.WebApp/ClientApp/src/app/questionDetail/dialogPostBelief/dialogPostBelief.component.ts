@@ -167,7 +167,7 @@ export class DialogPostBelief implements OnInit {
         }
         else {
           this.save.emit();
-          this.toastr.success('Data save successfully', '');
+          this.toastr.success('Posted!', '');
           this.close();
           this.dataModel.Commment = '';
 
