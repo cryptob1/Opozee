@@ -2838,18 +2838,34 @@ namespace opozee.Controllers.API
                 {
                     return ObjToken;
                 }
-                    Token token = new Token();
-                    ObjOpinion.QuestId = Model.QuestId;
-                    ObjOpinion.Comment = Model.Comment;
-                    ObjOpinion.LongForm = Model.LongForm;
-                    ObjOpinion.CommentedUserId = Model.CommentedUserId;
-                    ObjOpinion.CreationDate = DateTime.Now.ToUniversalTime();
-                    ObjOpinion.Likes = Model.Likes;
-                    ObjOpinion.IsAgree = Model.OpinionAgreeStatus;
-                    ObjOpinion.Dislikes = Model.Dislikes;
-                    db.Opinions.Add(ObjOpinion);
-                    db.SaveChanges();
-                    int CommentId = ObjOpinion.Id;
+                    //Token token = new Token();
+                    //ObjOpinion.QuestId = Model.QuestId;
+                    //ObjOpinion.Comment = Model.Comment;
+                    //ObjOpinion.LongForm = Model.LongForm;
+                    //ObjOpinion.CommentedUserId = Model.CommentedUserId;
+                    //ObjOpinion.CreationDate = DateTime.Now.ToUniversalTime();
+                    //ObjOpinion.Likes = Model.Likes;
+                    //ObjOpinion.IsAgree = Model.OpinionAgreeStatus;
+                    //ObjOpinion.Dislikes = Model.Dislikes;
+                    //db.Opinions.Add(ObjOpinion);
+                    //db.SaveChanges();
+                    //int CommentId = ObjOpinion.Id;
+
+                int _checkInsert = db.Database.ExecuteSqlCommand(
+                                "INSERT INTO Opinion (" +
+                                "QuestId,Comment,LongForm,CommentedUserId,CreationDate,Likes,IsAgree,Dislikes) " +
+                                " VALUES (@QuestId,@Comment,@LongForm,@CommentedUserId,@CreationDate,@Likes,@IsAgree,@Dislikes);SELECT SCOPE_IDENTITY();)",
+                                new SqlParameter("QuestId", Model.QuestId),
+                                new SqlParameter("Comment", Model.Comment),
+                                new SqlParameter("LongForm", Model.LongForm==null ? "" : Model.LongForm),
+                                new SqlParameter("CommentedUserId", Model.CommentedUserId),
+                                new SqlParameter("CreationDate", DateTime.Now.ToUniversalTime()),
+                                new SqlParameter("Likes", Model.Likes),
+                                new SqlParameter("IsAgree", Model.OpinionAgreeStatus),
+                                new SqlParameter("Dislikes", Model.Dislikes)
+                            );
+
+                int CommentId = db.Opinions.Max(x => x.Id);
 
                 ObjOpinion = new Opinion();
                 ObjOpinion = db.Opinions.Find(CommentId);
