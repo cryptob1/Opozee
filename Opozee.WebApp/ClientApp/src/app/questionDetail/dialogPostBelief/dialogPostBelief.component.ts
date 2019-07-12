@@ -70,12 +70,15 @@ export class DialogPostBelief implements OnInit {
 
   public keyUp(event: any) {
     let text = this.postBeliefForm.get('Comment').value;
-
+    
     if (text!=null) {
-      if (text.length > 400) {
+      if (text.length >= 400) {
 
-        event.preventDefault();
-        event.stopPropagation();
+
+        if (event.key != 'Backspace') {
+          event.preventDefault();
+          event.stopPropagation();
+        }
       }
     }
 

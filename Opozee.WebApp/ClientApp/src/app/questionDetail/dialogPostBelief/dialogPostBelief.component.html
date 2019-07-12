@@ -41,7 +41,7 @@
 
             <div class="form-group">
               <!--<textarea class="form-control" placeholder="Share your belief.."
-    [(ngModel)]="dataModel.Comment" name="Comment" #Comment="ngModel" rows="4" ></textarea>-->
+  [(ngModel)]="dataModel.Comment" name="Comment" #Comment="ngModel" rows="4" ></textarea>-->
               <app-ngx-editor resizer="basic"
                               [config]="editorConfigModal"
                               formControlName="Comment"
@@ -50,6 +50,8 @@
                               
                               name="Comment">
               </app-ngx-editor>
+
+              <span *ngIf="postBeliefForm.controls.Comment.value" class="pull-right char"><em>{{ 400 - postBeliefForm?.controls.Comment?.value.length }} characters left</em></span>
 
               <div *ngIf="postBeliefForm.controls.Comment.errors && postBeliefForm.controls.Comment.touched" class="help-block clearfix mt-2">
                 <ul role="alert">
