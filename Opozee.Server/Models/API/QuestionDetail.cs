@@ -169,6 +169,7 @@ namespace Opozee.Models.API
         public int Id { get; set; }
         public int questionId { get; set; }
         public string beliefText { get; set; }
+        public string LongForm { get; set; }
         public int userId { get; set; }
         public string userName { get; set; }
         public string UserFullName { get; set; }
