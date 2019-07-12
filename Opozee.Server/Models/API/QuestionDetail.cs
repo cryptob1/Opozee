@@ -180,6 +180,8 @@ namespace Opozee.Models.API
         public bool? IsAgree { get; set; }
         public String questionText { get; set; }
 
+        public String LongForm { get; set; }
+
     }
 
 
