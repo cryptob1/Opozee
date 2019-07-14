@@ -866,7 +866,8 @@ namespace opozee.Controllers.API
 
                 foreach (var item in questionDetail.PostQuestionDetail)
                 {
-                    item.Comments = db.Database.SqlQuery<Comments>("SP_GetCommentsForMobile @Id,@OwnerUserID",
+                     
+                     item.Comments = db.Database.SqlQuery<Comments>("SP_GetCommentsForMobile @Id,@OwnerUserID",
                      new SqlParameter("@Id", item.Id),
                      new SqlParameter("@OwnerUserID", item.OwnerUserID)).ToList();
                 }
@@ -889,6 +890,11 @@ namespace opozee.Controllers.API
                 else if (Sort == 2)// sort by least reactions
                 {
                     questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderBy(p => p.ReactionSum).ToPagedList(Pageindex - 1, Pagesize).ToList();
+                }
+
+                else if (Sort == 3)// random    
+                {
+                    questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderBy(p => Guid.NewGuid()).ToPagedList(Pageindex - 1, Pagesize).ToList();
                 }
 
                 foreach (var data in questionDetail.PostQuestionDetail)

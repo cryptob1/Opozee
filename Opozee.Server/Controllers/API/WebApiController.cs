@@ -2017,6 +2017,12 @@ namespace opozee.Controllers.API
 
                 }
 
+                else if (model.Sort == 3)// sort by random
+                {
+                    questionDetail = questionDetail.OrderBy(p => Guid.NewGuid()).Skip(skip).Take(pageSize).ToList();
+
+                }
+
                 foreach (var data in questionDetail)
                 {
                     var opinionList = db.Opinions.Where(p => p.QuestId == data.Id).ToList();

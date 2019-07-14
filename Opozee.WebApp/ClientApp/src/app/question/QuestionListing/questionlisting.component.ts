@@ -34,7 +34,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
   isRecordLoaded: boolean = false;
   percentage: number = 0; 
-  questionGetModel = { 'UserId': 0, 'isHashTag': false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, 'qid': 0, 'Sort' :0 }
+  questionGetModel = { 'UserId': 0, 'isHashTag': false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, 'qid': 0, 'Sort' :3 }
 
   private allItems: any[];
   showSlider: boolean = false;
