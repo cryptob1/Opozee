@@ -2019,7 +2019,8 @@ namespace opozee.Controllers.API
 
                 else if (model.Sort == 3)// sort by random
                 {
-                    questionDetail = questionDetail.OrderBy(p => Guid.NewGuid()).Skip(skip).Take(pageSize).ToList();
+                    questionDetail = questionDetail.OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).OrderBy(p => Guid.NewGuid()).ToList();
+
 
                 }
 

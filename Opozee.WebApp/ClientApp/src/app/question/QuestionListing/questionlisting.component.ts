@@ -34,7 +34,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
   isRecordLoaded: boolean = false;
   percentage: number = 0; 
-  questionGetModel = { 'UserId': 0, 'isHashTag': false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, 'qid': 0, 'Sort' :3 }
+  questionGetModel = { 'UserId': 0, 'isHashTag': false, 'Search': '', 'PageNumber': 0, 'TotalRecords': 0, 'PageSize': 0, 'qid': 0, 'Sort' :0 }
 
   private allItems: any[];
   showSlider: boolean = false;
@@ -86,7 +86,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
   dropdownSort(kind: number) {
-    console.log(kind);
+    //console.log(kind);
     this.isRecordLoaded = false;
     //this.questionGetModel.PageNumber = localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
     this.questionGetModel.Sort = kind;
@@ -138,7 +138,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     this.questionGetModel.PageNumber = 1;
     this.questionGetModel.PageSize = 10;
     this.questionGetModel.TotalRecords = 5;
-    this.questionGetModel.Sort = 0;
+    this.questionGetModel.Sort = +localStorage.getItem('Sort');
     this.getAllQuestionlist(this.questionGetModel);
 
     //this.getBountyQuestionsByDates();
