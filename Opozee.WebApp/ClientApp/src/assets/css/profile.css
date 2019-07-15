@@ -223,7 +223,8 @@ span.upload_button {
       margin: 0px;
     }
 
-  
+
   .questions-section .questions-field {
     width: 100%;
+    word-break: break-all;
   }
