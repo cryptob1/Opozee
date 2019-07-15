@@ -285,15 +285,28 @@ namespace opozee.Controllers.API
                                        ).FirstOrDefault();
                 if (quest != null)
                 {
-                    quest.PostQuestion = postQuestion.PostQuestion;
-                    quest.OwnerUserID = postQuestion.OwnerUserID;
-                    quest.HashTags = postQuestion.HashTags;
-                    quest.TaggedUser = postQuestion.TaggedUser;
-                    quest.IsDeleted = false;
-                    quest.ModifiedDate = DateTime.Now;
-                    quest.IsSlider = false;
-                    db.Entry(quest).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    //quest.PostQuestion = postQuestion.PostQuestion;
+                    //quest.OwnerUserID = postQuestion.OwnerUserID;
+                    //quest.HashTags = postQuestion.HashTags;
+                    //quest.TaggedUser = postQuestion.TaggedUser;
+                    //quest.IsDeleted = false;
+                    //quest.ModifiedDate = DateTime.Now;
+                    //quest.IsSlider = false;
+                    //db.Entry(quest).State = System.Data.Entity.EntityState.Modified;
+                    //db.SaveChanges();
+
+                    int _checkUpdate = db.Database.ExecuteSqlCommand(
+                           "UPDATE Question SET PostQuestion = @PostQuestion,OwnerUserID = @OwnerUserID,HashTags = @HashTags,TaggedUser = @TaggedUser,IsDeleted = @IsDeleted,IsSlider = @IsSlider,ModifiedDate = @ModifiedDate WHERE Id = @Id",
+                           new SqlParameter("Id", postQuestion.Id),
+                           new SqlParameter("PostQuestion", postQuestion.PostQuestion == null ? "" : postQuestion.PostQuestion),
+                           new SqlParameter("OwnerUserID", postQuestion.OwnerUserID),
+                           new SqlParameter("HashTags", postQuestion.HashTags == null ? "" : postQuestion.HashTags),
+                           new SqlParameter("TaggedUser", postQuestion.TaggedUser == null ? "" : postQuestion.TaggedUser),
+                           new SqlParameter("IsDeleted", false),
+                           new SqlParameter("IsSlider", false),
+                           new SqlParameter("ModifiedDate", DateTime.Now)
+                       );
+
                     int questID = quest.Id;
                     quest = db.Questions.Find(questID);
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, quest, "Question"));
@@ -302,22 +315,39 @@ namespace opozee.Controllers.API
                 {
                     quest = new Question();
                     Token token = new Token();
-                    quest.PostQuestion = postQuestion.PostQuestion;
-                    quest.OwnerUserID = postQuestion.OwnerUserID;
-                    quest.HashTags = postQuestion.HashTags;
-                    quest.TaggedUser = postQuestion.TaggedUser;
-                    quest.IsDeleted = false;
-                    quest.IsSlider = false;
-                    quest.CreationDate = DateTime.Now;
-                    db.Questions.Add(quest);
-                    db.SaveChanges();
+                    //quest.PostQuestion = postQuestion.PostQuestion;
+                    //quest.OwnerUserID = postQuestion.OwnerUserID;
+                    //quest.HashTags = postQuestion.HashTags;
+                    //quest.TaggedUser = postQuestion.TaggedUser;
+                    //quest.IsDeleted = false;
+                    //quest.IsSlider = false;
+                    //quest.CreationDate = DateTime.Now;
+                    //db.Questions.Add(quest);
+                    //db.SaveChanges();
+
+                    int _checkInsert = db.Database.ExecuteSqlCommand(
+                              "INSERT INTO Question (" +
+                              "PostQuestion,OwnerUserID,HashTags,TaggedUser,IsDeleted,IsSlider,CreationDate) " +
+                              " VALUES (@PostQuestion,@OwnerUserID,@HashTags,@TaggedUser,@IsDeleted,@IsSlider,@CreationDates)",
+                              new SqlParameter("PostQuestion", postQuestion.PostQuestion == null ? "" : postQuestion.PostQuestion),
+                              new SqlParameter("OwnerUserID", postQuestion.OwnerUserID),
+                              new SqlParameter("HashTags", postQuestion.HashTags == null ? "" : postQuestion.HashTags),
+                              new SqlParameter("TaggedUser", postQuestion.TaggedUser == null ? "" : postQuestion.TaggedUser),
+                              new SqlParameter("IsDeleted", false),
+                              new SqlParameter("IsSlider", false),
+                              new SqlParameter("CreationDates", DateTime.Now)
+                          );
+
+                    int questID = db.Questions.Max(x => x.Id);
+
                     //token = db.Tokens.Where(p => p.UserId == postQuestion.OwnerUserID).FirstOrDefault();
                     //token.BalanceToken = token.BalanceToken - 1;
 
                     //db.Entry(token).State = System.Data.Entity.EntityState.Modified;
                     //db.SaveChanges();
-                    User questionOwner = db.Users.Find(quest.OwnerUserID);
-                    int questID = quest.Id;
+                    int questOwnerID = db.Questions.Where(x => x.Id == questID).FirstOrDefault().OwnerUserID;
+                    User questionOwner = db.Users.Find(questOwnerID);
+                    // int questID = quest.Id;
                     quest = db.Questions.Find(questID);
                     string taggedUser = postQuestion.TaggedUser;
 
@@ -364,13 +394,25 @@ namespace opozee.Controllers.API
                 opinion = db.Opinions.Where(p => p.Id == postAnswer.Id).FirstOrDefault();
                 if (opinion != null)
                 {
-                    opinion.Comment = postAnswer.Comment;
-                    opinion.QuestId = postAnswer.QuestId;
-                    opinion.CommentedUserId = postAnswer.CommentedUserId;
-                    opinion.ModifiedDate = DateTime.Now;
-                    
-                    db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    //opinion.Comment = postAnswer.Comment;
+                    //opinion.QuestId = postAnswer.QuestId;
+                    //opinion.CommentedUserId = postAnswer.CommentedUserId;
+                    //opinion.ModifiedDate = DateTime.Now;
+                    //db.Entry(opinion).State = System.Data.Entity.EntityState.Modified;
+                    //db.SaveChanges();
+
+                    int _checkupdate = db.Database.ExecuteSqlCommand(
+                            "UPDATE Opinion SET QuestId = @QuestId,Comment = @Comment,CommentedUserId = @CommentedUserId,ModifiedDate = @ModifiedDate WHERE Id = @Id",
+                             new SqlParameter("Id", postAnswer.Id),
+                            new SqlParameter("QuestId", postAnswer.QuestId),
+                            new SqlParameter("Comment", postAnswer.Comment),
+                            new SqlParameter("CommentedUserId", postAnswer.CommentedUserId),
+                            new SqlParameter("ModifiedDate", DateTime.Now.ToUniversalTime())
+                        //new SqlParameter("Likes", postAnswer.Likes),
+                        //new SqlParameter("IsAgree", postAnswer.OpinionAgreeStatus),
+                        //new SqlParameter("Dislikes", postAnswer.Dislikes)
+                        );
+
                     int opinionID = opinion.Id;
                     opinion = db.Opinions.Find(opinionID);
                     notification = db.Notifications.Where(p => p.CommentedUserId == postAnswer.CommentedUserId && p.CommentId == opinionID).FirstOrDefault();
@@ -400,21 +442,34 @@ namespace opozee.Controllers.API
                     PushNotifications pushNotifications = new PushNotifications();
                     opinion = new Opinion();
                     Token token = new Token();
-                    opinion.Comment = postAnswer.Comment;
-                    opinion.QuestId = postAnswer.QuestId;
-                    opinion.CommentedUserId = postAnswer.CommentedUserId;
-                    opinion.IsAgree = postAnswer.OpinionAgreeStatus;
-                    opinion.Likes = postAnswer.Likes;
-                    opinion.Dislikes = postAnswer.Dislikes;
-                    opinion.CreationDate = DateTime.Now;
-                    db.Opinions.Add(opinion);
-                    db.SaveChanges();
+                    //opinion.Comment = postAnswer.Comment;
+                    //opinion.QuestId = postAnswer.QuestId;
+                    //opinion.CommentedUserId = postAnswer.CommentedUserId;
+                    //opinion.IsAgree = postAnswer.OpinionAgreeStatus;
+                    //opinion.Likes = postAnswer.Likes;
+                    //opinion.Dislikes = postAnswer.Dislikes;
+                    //opinion.CreationDate = DateTime.Now;
+                    //db.Opinions.Add(opinion);
+                    //db.SaveChanges();
+                    int _checkInsert = db.Database.ExecuteSqlCommand(
+                             "INSERT INTO Opinion (" +
+                             "QuestId,Comment,CommentedUserId,CreationDate,Likes,IsAgree,Dislikes) " +
+                             " VALUES (@QuestId,@Comment,@CommentedUserId,@CreationDate,@Likes,@IsAgree,@Dislikes);SELECT SCOPE_IDENTITY();",
+                             new SqlParameter("QuestId", postAnswer.QuestId),
+                             new SqlParameter("Comment", postAnswer.Comment),
+                             new SqlParameter("CommentedUserId", postAnswer.CommentedUserId),
+                             new SqlParameter("CreationDate", DateTime.Now.ToUniversalTime()),
+                             new SqlParameter("Likes", postAnswer.Likes),
+                             new SqlParameter("IsAgree", postAnswer.OpinionAgreeStatus),
+                             new SqlParameter("Dislikes", postAnswer.Dislikes)
+                         );
                     //token = db.Tokens.Where(p => p.UserId == postAnswer.CommentedUserId).FirstOrDefault();
                     //token.BalanceToken = token.BalanceToken - 1;
 
                     //db.Entry(token).State = System.Data.Entity.EntityState.Modified;
                     //db.SaveChanges();
-                    int opinionID = opinion.Id;
+                    //int opinionID = opinion.Id;
+                    int opinionID = db.Opinions.Max(x => x.Id);
                     opinion = db.Opinions.Find(opinionID);
                     notification = db.Notifications.Where(p => p.CommentedUserId == postAnswer.CommentedUserId && p.CommentId == opinionID).FirstOrDefault();
                     Question quest = db.Questions.Find(postAnswer.QuestId);
