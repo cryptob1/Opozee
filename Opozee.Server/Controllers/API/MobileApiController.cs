@@ -89,7 +89,7 @@ namespace opozee.Controllers.API
                 }
                 else if (input.ThirdPartyType == ThirdPartyType.GooglePlus)
                 {
-                    entity = db.Users.Where(p => p.SocialID == input.ThirdPartyId && p.SocialType == "GooglePlus"
+                    entity = db.Users.Where(p => p.Email == input.Email && p.SocialType == "GooglePlus"
                                         && p.RecordStatus != RecordStatus.Deleted.ToString()).FirstOrDefault();
                 }
                 string strThumbnailURLfordb = null;
