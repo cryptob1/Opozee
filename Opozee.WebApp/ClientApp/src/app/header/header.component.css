@@ -454,8 +454,9 @@ header .container-fluid {
   }
 
   .popup-content {
-    width: calc(100% - 30px);
-    top: 35px;
+    width: calc(100% - 25px);
+    top: 95px;
+    padding: 10px;
   }
  
 }
