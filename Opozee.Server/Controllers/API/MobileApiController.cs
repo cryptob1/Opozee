@@ -919,21 +919,7 @@ namespace opozee.Controllers.API
                          new SqlParameter("@Search", Search)).ToList();
                 }
 
-                foreach (var item in questionDetail.PostQuestionDetail)
-                {
-                     
-                     item.Comments = db.Database.SqlQuery<Comments>("SP_GetCommentsForMobile @Id,@OwnerUserID",
-                     new SqlParameter("@Id", item.Id),
-                     new SqlParameter("@OwnerUserID", item.OwnerUserID)).ToList();
-                }
-                foreach (var item in questionDetail.PostQuestionDetail)
-                {
-                    foreach (var itemInnerComment in item.Comments)
-                    {
-                        if (!string.IsNullOrEmpty(itemInnerComment.LongForm))
-                            itemInnerComment.LongForm = Regex.Replace(itemInnerComment.LongForm, "<.*?>", String.Empty);
-                    }
-                }
+              
                 if (Sort == 0) //sort by last reaction time
                 {
                     questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderByDescending(p => p.LastActivityTime).ToPagedList(Pageindex - 1, Pagesize).ToList();
@@ -950,6 +936,23 @@ namespace opozee.Controllers.API
                 else if (Sort == 3)// random    
                 {
                     questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderByDescending(p => p.LastActivityTime).ToPagedList(Pageindex - 1, Pagesize).OrderByDescending(p => p.LastActivityTime).ToList();
+                }
+
+
+                foreach (var item in questionDetail.PostQuestionDetail)
+                {
+
+                    item.Comments = db.Database.SqlQuery<Comments>("SP_GetCommentsForMobile @Id,@OwnerUserID",
+                    new SqlParameter("@Id", item.Id),
+                    new SqlParameter("@OwnerUserID", item.OwnerUserID)).ToList();
+                }
+                foreach (var item in questionDetail.PostQuestionDetail)
+                {
+                    foreach (var itemInnerComment in item.Comments)
+                    {
+                        if (!string.IsNullOrEmpty(itemInnerComment.LongForm))
+                            itemInnerComment.LongForm = Regex.Replace(itemInnerComment.LongForm, "<.*?>", String.Empty);
+                    }
                 }
 
                 foreach (var data in questionDetail.PostQuestionDetail)
