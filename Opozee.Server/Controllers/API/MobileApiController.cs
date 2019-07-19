@@ -609,7 +609,7 @@ namespace opozee.Controllers.API
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = ActionUserName + " has given opinion on question in which you're tagged in";
+                Tag = ActionUserName + " has posted a belief on a question where you are tagged.";
             }
             //else if (like == true && dislike == false && comment == true)
             //{
