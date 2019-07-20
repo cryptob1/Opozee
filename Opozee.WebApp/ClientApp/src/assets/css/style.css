@@ -537,8 +537,8 @@ span.bell-icon i {
   }
 
   .cover_profile p {
-    font-size: 14px !important;
-    text-align: justify !important;
+    /*font-size: 14px !important;*/
+    /*text-align: justify !important;*/
   }
 
   .profile_bottom_cover .like_images {

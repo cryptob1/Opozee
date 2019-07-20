@@ -414,16 +414,20 @@
   display: inline-block;
   object-fit: cover;*/
     font-size: 10px;
-    /*background-color: lightblue;
-  border-radius: 0px;*/
     cursor: pointer;
     width: 50px;
     height: 30px;
     border: 1px solid rgb(255, 255, 255);
     justify-content: center;
+    color: darkslategray;
+    background-color: lightgray !important;
   }
 
-.inner_pages .thumbs1 i {
+  .thumbs .btn-info {
+    background-color: lightgray !important;
+  }
+
+    .inner_pages .thumbs1 i {
   font-size: 19px;
   border-radius: 30px;
   height: 30px;
