@@ -32,7 +32,7 @@
               <!--<p>{{PostQuestionDetailModel.postQuestionDetail.Question}}</p>-->
 
               <div ExternalLink *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question">
-                <p class="message-container mb-0" [innerHTML]="''+PostQuestionDetailModel?.postQuestionDetail?.Question| linky:{stripPrefix : true, truncate:15}  | emojis"></p>
+                <p class="message-container mb-0" style="font-size:18px" [innerHTML]="''+PostQuestionDetailModel?.postQuestionDetail?.Question| linky:{stripPrefix : true, truncate:15}  | emojis"></p>
                 <p class="mb-30">
                   <small *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question" style="float: left">
 
