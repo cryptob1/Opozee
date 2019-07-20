@@ -120,9 +120,38 @@ namespace opozee.Controllers.API
                     {
                         entity.Password = AesCryptography.Encrypt(input.Password);
                     }
+
+    
+                    if (entity.ImageURL == "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png")
+                    {
+                        if (input.ImageURL != null && input.ImageURL != "")
+                        {
+                            try
+                            {
+                                string strTempImageSave = OpozeeLibrary.Utilities.ResizeImage.Download_Image(input.ImageURL);
+                                string profileFilePath = _SiteURL + "/ProfileImage/" + strTempImageSave;
+                                strIamgeURLfordb = profileFilePath;
+                                entity.ImageURL = profileFilePath;
+                            }
+                            catch (Exception ex)
+                            {
+                                strThumbnailURLfordb = strThumbnailImage;
+                                strIamgeURLfordb = strThumbnailImage;
+                            }
+                        }
+                        else
+                        {
+
+
+                            entity.ImageURL = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
+                        }
+                       
+                    }
+ 
+
                     entity.DeviceType = input.DeviceType != null && input.DeviceType != "" ? input.DeviceType : entity.DeviceType;
                     entity.DeviceToken = input.DeviceToken != null && input.DeviceToken != "" ? input.DeviceToken : entity.DeviceToken;
-                    entity.ImageURL = entity.ImageURL;
+                    //entity.ImageURL = entity.ImageURL;
                     entity.SocialID = input.ThirdPartyId;
 
                     if (entity.ReferralCode == null)
