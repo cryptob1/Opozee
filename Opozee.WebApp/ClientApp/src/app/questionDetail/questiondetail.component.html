@@ -84,12 +84,27 @@
                   <div class="longform" *ngIf="temp?.LongForm!=null && temp?.LongForm!=''">
                     <div class="row" style="padding-left:0px;">
 
-                      <a class="collapseButton " data-toggle="collapse" [href]="['#'+temp?.Id]" role="button" aria-expanded="false"
+                      <!--<a class="collapseButton " data-toggle="collapse" [href]="['#'+temp?.Id]" role="button" aria-expanded="false"
                          aria-controls="collapseExample">
-                        <img src="../../assets/images/detail.png" style="width: 24px; border: hidden;" />
+                        <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                        
+                      </a>-->
+
+                      <!--<div class="collapse longform" [id]="[temp?.Id]">
+                        <div class="card card-body">
+                          <p [innerHTML]="temp?.LongForm | linky:{stripPrefix : true, truncate:15}"> </p>
+                        </div>
+                      </div>-->
+
+                      <a class="btn  btn-info btn-xs collapseButton" ng-model="expand"
+                        
+                         
+                         (click)="expand=!expand">
+                        <i [class]="[expand ? 'fa fa-minus-circle':  'fa fa-plus-circle']"></i>
+
                       </a>
 
-                      <div class="collapse longform" [id]="[temp?.Id]">
+                      <div class="longform" *ngIf="expand==true">
                         <div class="card card-body">
                           <p [innerHTML]="temp?.LongForm | linky:{stripPrefix : true, truncate:15}"> </p>
                         </div>
@@ -179,13 +194,22 @@
 
 
                           <span alt="like" style="cursor:pointer">
-                            <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like"
-                                 [popover]="myPopoverLikes">{{temp?.LikesCount}}
-                          </span>
+
+                            <a type="button" class="btn  btn-info" [popover]="myPopoverLikes">
+                              <!--<img [attr.disabled]="loading" src="../../assets/images/{{(temp?.Likes == true)  ? 'like-active.png' : 'like.png'}}" alt="like">{{temp?.LikesCount}}-->
+                              <i [class]="[temp?.Likes  ? 'fa fa-thumbs-up fa-lg' : 'fa fa-thumbs-o-up fa-lg' ]" aria-hidden="true">&nbsp;{{ temp?.LikesCount}}</i>
+
+
+                            </a>
+                            </span>
 
                           <span alt="like" style="cursor:pointer">
-                            <img [attr.disabled]="loading" src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like"
-                                 [popover]="PopoverDislikes" />{{temp?.DislikesCount}}
+                            <a type="button" class="btn  btn-info" [popover]="PopoverDislikes">
+                              <i [class]="[temp?.DisLikes  ? 'fa fa-thumbs-down fa-lg' : 'fa fa-thumbs-o-down fa-lg' ]" aria-hidden="true">&nbsp;{{ temp?.DislikesCount}}</i>
+
+
+                              <!--<img [attr.disabled]="loading" src="../../assets/images/{{(temp?.DisLikes == true)  ? 'unlike-active.png' : 'unlike.png'}}" alt="like" />{{temp?.DislikesCount}}-->
+                            </a>
                           </span>
 
                         </div>

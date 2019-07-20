@@ -160,7 +160,11 @@ export class LoginComponent implements OnInit {
           this.thirdPartyModel.ThirdPartyId = userData.id;
           this.thirdPartyModel.FirstName = userData.name.split(' ')[0];
           this.thirdPartyModel.LastName = userData.name.split(' ')[1];
-          this.thirdPartyModel.Email = userData.email;
+          if (userData.email == null || userData.email == "") {
+            this.thirdPartyModel.Email = userData.id+'@fb.com';
+          } else {
+            this.thirdPartyModel.Email = userData.email;
+          }
           this.thirdPartyModel.ThirdPartyType = 0;
 
           this.authenticationService.loginWithFacebook(this.thirdPartyModel)

@@ -48,7 +48,7 @@ export class Questiondetail implements OnInit {
   submitted: boolean = false;
   imageShowLike: number = -1;
   imageShowDislike: number = -1;
- 
+  expand: boolean = false;
   animal: string;
   name: string;
   countReactionScore: number;

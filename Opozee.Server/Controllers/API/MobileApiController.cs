@@ -935,7 +935,9 @@ namespace opozee.Controllers.API
 
                 else if (Sort == 3)// random    
                 {
-                    questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderByDescending(p => p.LastActivityTime).ToPagedList(Pageindex - 1, Pagesize).OrderByDescending(p => p.LastActivityTime).ToList();
+                    questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderByDescending(p => p.LastActivityTime).ToPagedList(Pageindex - 1, Pagesize).OrderBy(p => Guid.NewGuid()).ToList(); ;
+
+
                 }
 
 

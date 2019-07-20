@@ -165,7 +165,7 @@
 
                 <strong>
                   <a href="javascript:void(0)" [routerLink]="localStorageUser ? ['/questiondetail/', temp?.Id] :['/qid/', temp?.Id]">
-                    <div    class="message-container  mb-0 question-text" [innerHTML]=" temp?.Question | linky:{stripPrefix : true, truncate:15} | emojis"></div>
+                    <div class="message-container  mb-0 question-text" [innerHTML]=" temp?.Question | linky:{stripPrefix : true, truncate:15} | emojis"></div>
                   </a>
                 </strong>
 
@@ -176,14 +176,14 @@
                 <div class="cover_analysis">
                   <div class="left">
                     <span> </span>
-                  
+
                     <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
                       <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
 
 
-                        <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
+                      <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
 
-                      
+
                     </div>
                   </div>
                 </div>
@@ -192,7 +192,7 @@
                 <div class="liked_ones clearfix yes_feedback" *ngIf="temp?.MostYesLiked">
 
                   <div ExternalLink>
-                
+
                     <div class="feedback-badge badge-yes">Yes</div>
                     <small class="belief-time"><i>{{temp?.MostYesLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
                     <p class="message-container" [innerHTML]=" temp?.MostYesLiked?.Comment | linky:{stripPrefix : true, truncate:15} | emojis  "></p>
@@ -200,7 +200,7 @@
 
                   <div class="row">
                     <div class="col-sm-8 text-left">
-                      <div class="opinionsList" >
+                      <div class="opinionsList">
 
                         <span class="small_icon" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]"><img src="{{temp?.MostYesLiked?.UserImage}}" onerror="this.onerror=null;this.src='../../assets/images/user.png';" alt="user"></span>
                         <span class="small_username" [routerLink]="['/viewprofile/', temp?.MostYesLiked?.CommentedUserId]">
@@ -210,16 +210,30 @@
                     </div>
                     <div class="col-sm-4 text-center">
                       <div class="thumbs">
-                        <span><img src="../../../assets/images/like.png" alt="user">{{temp.MostYesLiked?.LikesCount}}</span>
-                        <span><img src="../../../assets/images/unlike.png" alt="user">{{temp.MostYesLiked?.DislikesCount}}</span>
+                        <span alt="like">
+                          <a class="btn  btn-info" > 
+                            <i class="fa fa-thumbs-o-up fa-lg"  aria-hidden="true">&nbsp;{{temp.MostYesLiked?.LikesCount}}</i>
+
+                          </a>
+                    
+                        </span >
+                        <span alt="like">
+                          <a class="btn  btn-info">
+                            <i class="fa fa-thumbs-o-down fa-lg "  aria-hidden="true">&nbsp;{{temp.MostYesLiked?.DislikesCount}}</i>
+
+                          </a>
+                          
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
 
+ 
+
                 <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
                   <div ExternalLink>
-             
+
                     <div class="feedback-badge badge-no">No</div>
                     <small class="belief-time"><i>{{temp?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
                     <p class="message-container" [innerHTML]="temp?.MostNoLiked?.Comment | linky:{stripPrefix : true, truncate:15} | emojis   "></p>
@@ -239,11 +253,23 @@
                     </div>
 
                     <div class="col-sm-4  text-center">
+              
                       <div class="thumbs">
-                        <span><img src="../../../assets/images/like.png" alt="user"> {{temp.MostNoLiked?.LikesCount}}</span>
-                        <span><img src="../../../assets/images/unlike.png" alt="user"> {{temp.MostNoLiked?.DislikesCount}}</span>
-                      </div>
+                        <span alt="like">
+                          <a class="btn  btn-info">
+                            <i class="fa fa-thumbs-o-up fa-lg" aria-hidden="true">&nbsp;{{temp.MostYesLiked?.LikesCount}}</i>
 
+                          </a>
+
+                        </span>
+                        <span alt="like">
+                          <a class="btn  btn-info">
+                            <i class="fa fa-thumbs-o-down fa-lg " aria-hidden="true">&nbsp;{{temp.MostYesLiked?.DislikesCount}}</i>
+
+                          </a>
+
+                        </span>
+                      </div>
                     </div>
 
                   </div>
@@ -336,11 +362,27 @@
                           </div>
 
                           <div class="col-sm-4 text-center">
-                            <div class="thumbs">
+                            <!--<div class="thumbs">
                               <span><img src="../../assets/images/{{'like.png'}}" alt="like" (click)="saveLikeclick(temp1?.Likes,index)">{{temp1?.LikesCount}}</span>
                               <span><img src="../../assets/images/{{'unlike.png'}}" alt="like" (click)="saveDislikeclick(temp1?.DisLikes,index)" />{{temp1?.DislikesCount}}</span>
-                            </div>
+                            </div>-->
 
+                            <div class="thumbs">
+                              <span alt="like">
+                                <a class="btn  btn-info" (click)="saveLikeclick(temp1?.Likes,index)">
+                                  <i class="fa fa-thumbs-o-up fa-lg" aria-hidden="true">&nbsp;{{temp1?.LikesCount}}</i>
+
+                                </a>
+
+                              </span>
+                              <span alt="like" >
+                                <a class="btn  btn-info" saveDislikeclick(temp1?.DisLikes,index)>
+                                  <i class="fa fa-thumbs-o-down fa-lg " aria-hidden="true">&nbsp;{{temp1?.LikesCount}}</i>
+
+                                </a>
+
+                              </span>
+                            </div>
                           </div>
                         </span>
                       </div>
