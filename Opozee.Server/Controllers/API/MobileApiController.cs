@@ -135,8 +135,7 @@ namespace opozee.Controllers.API
                             }
                             catch (Exception ex)
                             {
-                                strThumbnailURLfordb = strThumbnailImage;
-                                strIamgeURLfordb = strThumbnailImage;
+                                entity.ImageURL = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
                             }
                         }
                         else
@@ -147,7 +146,7 @@ namespace opozee.Controllers.API
                         }
                        
                     }
- 
+    
 
                     entity.DeviceType = input.DeviceType != null && input.DeviceType != "" ? input.DeviceType : entity.DeviceType;
                     entity.DeviceToken = input.DeviceToken != null && input.DeviceToken != "" ? input.DeviceToken : entity.DeviceToken;
@@ -254,12 +253,11 @@ namespace opozee.Controllers.API
                             string strTempImageSave = OpozeeLibrary.Utilities.ResizeImage.Download_Image(input.ImageURL);
                             string profileFilePath = _SiteURL + "/ProfileImage/" + strTempImageSave;
                             strIamgeURLfordb = profileFilePath;
-                            entity.ImageURL = profileFilePath;
+                            
                         }
                         catch (Exception ex)
                         {
-                            strThumbnailURLfordb = strThumbnailImage;
-                            strIamgeURLfordb = strThumbnailImage;
+                            strIamgeURLfordb = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
                         }
                     }
                     else
@@ -269,18 +267,22 @@ namespace opozee.Controllers.API
                         strIamgeURLfordb = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
                     }
 
+
+                    entity.ImageURL = strIamgeURLfordb;
+
                     entity.ReferralCode = Helper.GenerateReferralCode();
                     entity.EmailConfirmed = true;
 
-                    entity.ImageURL = strIamgeURLfordb;
+                    
                     db.Users.Add(entity);
                     db.SaveChanges();
-
+ 
                     int userID = entity.UserID;
                     token.TotalToken = 500;
                     token.BalanceToken = 500;
                     token.UserId = userID;
                     db.Tokens.Add(token);
+                     
                     db.SaveChanges();
                     entity = db.Users.Find(userID);
 
@@ -291,7 +293,7 @@ namespace opozee.Controllers.API
             {
                 OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
 
-                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ex.Message, "UserData"));
+                return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, ""+ ex.ToString() + ex.InnerException + ex.GetType() , "UserData"));
             }
         }
         #endregion
