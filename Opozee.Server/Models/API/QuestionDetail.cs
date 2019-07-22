@@ -161,6 +161,7 @@ namespace Opozee.Models.API
         public int DislikesOffTopicCount { get; set; }
 
         public int SubReaction { get; set; }
+        public string BeliefImage { get; set; }
     }
 
 
@@ -179,8 +180,9 @@ namespace Opozee.Models.API
         public DateTime? CreationDate { get; set; }
         public bool? IsAgree { get; set; }
         public String questionText { get; set; }
+        public string BeliefImage { get; set; }
 
-        
+
 
     }
 

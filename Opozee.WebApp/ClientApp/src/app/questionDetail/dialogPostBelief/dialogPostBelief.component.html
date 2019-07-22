@@ -65,9 +65,9 @@
               <li  style="padding-right:5px; padding-left:5px;">
                 <!--<button class="btn btn-primary " type="button">Add Image</button>-->
 
-                <div *ngIf="url">
+                <div *ngIf="ImageUrl">
                   <div class="margin-bottom-20">
-                    <img style="max-width:300px; max-height: 300px" class="thumbnail box-center margin-top-20 upload-image" alt="No image" [src]="url"  >
+                    <img style="max-width:300px; max-height: 250px" class="thumbnail box-center margin-top-20 upload-image" alt="No image" [src]="ImageUrl">
                   </div>
 
 
@@ -75,7 +75,7 @@
                 <!--<input style="content:'Add Image'" class="form-control-file" type='file' value="Add Image" (change)="onSelectFile($event)">-->
 
                 <label class="btn  btn-primary btn-file">
-                  Add Image <input type="file" style="display: none;" (change)="onSelectFile($event)">
+                  Add Image <input type="file" #Image accept="image/*" style="display: none;" (change)="onSelectFile($event.target.files)">
                 </label>
 
                 <!--<div class="custom-file">

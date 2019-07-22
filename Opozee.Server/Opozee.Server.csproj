@@ -2094,6 +2094,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Controller\" />
+    <Folder Include="Content\upload\BeliefImages\" />
     <Folder Include="Content\vendor\chartist\css\" />
     <Folder Include="Content\vendor\chartist\js\" />
     <Folder Include="Content\vendor\chartist\map\" />

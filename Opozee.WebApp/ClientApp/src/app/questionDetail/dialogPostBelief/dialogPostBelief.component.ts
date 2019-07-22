@@ -19,7 +19,8 @@ export class DialogPostBelief implements OnInit {
   postBeliefForm: FormGroup;
   dataModel: any;
   loading: boolean = false;
-  url: string;
+  ImageUrl: string;
+  fileToUpload: File = null;
 
   //formdata;
   editorConfigModal = {
@@ -59,6 +60,7 @@ export class DialogPostBelief implements OnInit {
     this.postBeliefForm = this.formBuilder.group({
       Comment: ['', [Validators.required, Validators.maxLength(400)]],
       LongForm: [''],
+      ImageUrl:[''],
       OpinionAgreeStatus: [this.dataModel.OpinionAgreeStatus],
       QuestId: [this.dataModel.QuestId],
       CommentedUserId: [this.dataModel.CommentedUserId]
@@ -108,6 +110,7 @@ export class DialogPostBelief implements OnInit {
   close() {
     this.dataModel.Comment = '';
     this.dataModel.LongForm = '';
+    this.dataModel.ImageUrl = '';
     this.dialogPostBelief.hide();
   }
 
@@ -116,9 +119,11 @@ export class DialogPostBelief implements OnInit {
     this.postBeliefForm.patchValue({
       OpinionAgreeStatus: this.dataModel.OpinionAgreeStatus,
       QuestId: this.dataModel.QuestId,
-      CommentedUserId: this.dataModel.CommentedUserId
+      CommentedUserId: this.dataModel.CommentedUserId,
+      //ImageUrl: this.fileToUpload
    });
-    
+
+    let getImage = this.postBeliefForm.get('ImageUrl').value;
     let getComment = this.postBeliefForm.get('Comment').value;
     if (getComment == '' || getComment == undefined) {
       this.toastr.error('ERROR', 'Please enter belief.');
@@ -133,30 +138,31 @@ export class DialogPostBelief implements OnInit {
       this.userService.CheckDuplicateBelief(this.postBeliefForm.value)
         .pipe(first())
         .subscribe(data => {
+         
           if (data) {
             this.toastr.error('', 'You already have posted this belief.', { timeOut: 3000 });
             this.loading = false;
             return;
           }
           else {
-            this.saveOpinionPost(this.postBeliefForm.value);
+            this.saveOpinionPost(this.postBeliefForm.value, this.fileToUpload);
             this.mixpanelService.track('Posted Belief');
           }
 
         },
           error => {
-            this.saveOpinionPost(this.postBeliefForm.value);
+            this.saveOpinionPost(this.postBeliefForm.value, this.fileToUpload);
             this.mixpanelService.track('Posted Belief');
           });
     }
   }
 
 
-  saveOpinionPost(model) {
-    
+  saveOpinionPost(model,fileUpload) {
+    debugger
     this.loading = true;
     //console.log(model);
-    this.userService.saveOpinionPost(model)
+    this.userService.saveOpinionPost(model,fileUpload)
       .pipe(first())
       .subscribe(data => {
         
@@ -191,21 +197,40 @@ export class DialogPostBelief implements OnInit {
           //this.alertService.error(error);
         });
   }
-
+  //onSelectFile(event) {
+  //  debugger
+  //  if (event.target.files.length > 0) {
+  //    const file = event.target.files[0];
+  //    this.postBeliefForm.get('ImageUrl').setValue(file);
+  //  }
+  //}
   
-  onSelectFile(event) { // called each time file input changes
-      if (event.target.files && event.target.files[0]) {
-        var reader = new FileReader();
+  onSelectFile(file: FileList) { // called each time file input changes
+    debugger
 
-        reader.readAsDataURL(event.target.files[0]); // read file as data url
+    this.fileToUpload = file.item(0);
 
-        reader.onload = (event) => { // called once readAsDataURL is completed
-          
-          this.url = event.target.result;
-          console.log(this.url);
-        }
-      }
+    //Show image preview
+    var reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.ImageUrl = event.target.result;
+    }
+    reader.readAsDataURL(this.fileToUpload);
+
+
+
+      //if (event.target.files && event.target.files[0]) {
+      //  var reader = new FileReader();
+      //  reader.readAsDataURL(event.target.files[0]); // read file as data url
+      //  reader.onload = (event) => { // called once readAsDataURL is completed         
+      //    //this.ImageUrl = event.target.result;
+      //    this.ImageUrl = reader.result.toString();
+      //    console.log(this.ImageUrl);
+      //  }
+      //}
   }
+
+
    
   logout() {
     localStorage.removeItem('currentUser');

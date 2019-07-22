@@ -175,7 +175,7 @@ export class BookmarkQuestion implements OnInit {
 
 
     this.loading = true;
-    this.userService.saveOpinionPost(this.dataModel)
+    this.userService.saveOpinionPost(this.dataModel, null)
       .pipe(first())
       .subscribe(data => {
         debugger;

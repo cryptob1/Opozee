@@ -62,7 +62,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="QuestId" Type="int" Nullable="false" />
-          <Property Name="Comment" Type="varchar(max)" Nullable="false" />
+          <Property Name="Comment" Type="nvarchar(max)" />
           <Property Name="CommentedUserId" Type="int" Nullable="false" />
           <Property Name="IsAgree" Type="bit" />
           <Property Name="Likes" Type="int" />
@@ -70,7 +70,8 @@
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="ReactionType" Type="int" />
-          <Property Name="LongForm" Type="varchar(max)" />
+          <Property Name="LongForm" Type="nvarchar(max)" />
+          <Property Name="ImageUrl" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -157,7 +158,6 @@
         <EntityContainer Name="OpozeeDbEntities" annotation:LazyLoadingEnabled="true">
           <FunctionImport Name="SP_GetTopLikes" ReturnType="Collection(oposeeDbModel.SP_GetTopLikes_Result)" />
           <EntitySet Name="BookMarks" EntityType="oposeeDbModel.BookMark" />
-          <EntitySet Name="Opinions" EntityType="oposeeDbModel.Opinion" />
           <EntitySet Name="Questions" EntityType="oposeeDbModel.Question" />
           <EntitySet Name="Tokens" EntityType="oposeeDbModel.Token" />
           <EntitySet Name="Users" EntityType="oposeeDbModel.User" />
@@ -175,6 +175,7 @@
           <EntitySet Name="Notifications" EntityType="oposeeDbModel.Notification" />
           <EntitySet Name="Referrals" EntityType="oposeeDbModel.Referral" />
           <EntitySet Name="Followers" EntityType="oposeeDbModel.Follower" />
+          <EntitySet Name="Opinions" EntityType="oposeeDbModel.Opinion" />
           </EntityContainer>
         <ComplexType Name="SP_GetTopLikes_Result">
           <Property Type="Int32" Name="questid" Nullable="false" />
@@ -201,22 +202,6 @@
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="CreationDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="Opinion">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="QuestId" Type="Int32" Nullable="false" />
-          <Property Name="Comment" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="CommentedUserId" Type="Int32" Nullable="false" />
-          <Property Name="IsAgree" Type="Boolean" />
-          <Property Name="Likes" Type="Int32" />
-          <Property Name="Dislikes" Type="Int32" />
-          <Property Name="CreationDate" Type="DateTime" Precision="3" />
-          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
-          <Property Name="ReactionType" Type="Int32" />
-          <Property Name="LongForm" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -337,6 +322,23 @@
           <Property Name="CreationDate" Type="DateTime" Precision="3" />
           <Property Name="IsFollowing" Type="Boolean" />
         </EntityType>
+        <EntityType Name="Opinion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestId" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CommentedUserId" Type="Int32" Nullable="false" />
+          <Property Name="IsAgree" Type="Boolean" />
+          <Property Name="Likes" Type="Int32" />
+          <Property Name="Dislikes" Type="Int32" />
+          <Property Name="CreationDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ReactionType" Type="Int32" />
+          <Property Name="LongForm" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -351,23 +353,6 @@
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="IsBookmark" ColumnName="IsBookmark" />
                 <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Opinions">
-            <EntityTypeMapping TypeName="oposeeDbModel.Opinion">
-              <MappingFragment StoreEntitySet="Opinion">
-                <ScalarProperty Name="LongForm" ColumnName="LongForm" />
-                <ScalarProperty Name="ReactionType" ColumnName="ReactionType" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
-                <ScalarProperty Name="Dislikes" ColumnName="Dislikes" />
-                <ScalarProperty Name="Likes" ColumnName="Likes" />
-                <ScalarProperty Name="IsAgree" ColumnName="IsAgree" />
-                <ScalarProperty Name="CommentedUserId" ColumnName="CommentedUserId" />
-                <ScalarProperty Name="Comment" ColumnName="Comment" />
-                <ScalarProperty Name="QuestId" ColumnName="QuestId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -499,6 +484,24 @@
                 <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
                 <ScalarProperty Name="FollowedId" ColumnName="FollowedId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Opinions">
+            <EntityTypeMapping TypeName="oposeeDbModel.Opinion">
+              <MappingFragment StoreEntitySet="Opinion">
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+                <ScalarProperty Name="LongForm" ColumnName="LongForm" />
+                <ScalarProperty Name="ReactionType" ColumnName="ReactionType" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+                <ScalarProperty Name="Dislikes" ColumnName="Dislikes" />
+                <ScalarProperty Name="Likes" ColumnName="Likes" />
+                <ScalarProperty Name="IsAgree" ColumnName="IsAgree" />
+                <ScalarProperty Name="CommentedUserId" ColumnName="CommentedUserId" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="QuestId" ColumnName="QuestId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

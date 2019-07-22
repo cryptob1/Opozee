@@ -503,8 +503,8 @@ namespace opozee.Controllers.API
 
                             try
                             {
-                                //string _apiURL = "http://localhost:61545/";
-                                string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
+                                string _apiURL = "http://localhost:61545/";
+                                //string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
 
                                 var client = new RestClient($"{_apiURL}OpozeeGrantResourceOwnerCredentialSecret");
                                 var request = new RestRequest(Method.POST);
@@ -2825,70 +2825,115 @@ namespace opozee.Controllers.API
         [Authorize]
         [HttpPost]
         [Route("api/WebApi/PostOpinionWeb")]
-        public Token PostOpinionWeb(PostAnswerWeb Model)
+        public Token PostOpinionWeb()
         {
+            //PostAnswerWeb Model;
+            string imageName = null;
+            string imagePath = null;
+            string _SiteRoot = WebConfigurationManager.AppSettings["SiteImgPath"];
+            string _SiteURL = WebConfigurationManager.AppSettings["SiteImgURL"];
+
+
+            var httpRequest = HttpContext.Current.Request;
+            var postedFile = httpRequest.Files["ImageUrl"];
+            var Comment = httpRequest.Form["Comment"];
+            var CommentedUserId = httpRequest.Form["CommentedUserId"];
+            var LongForm = httpRequest.Form["LongForm"];
+            var OpinionAgreeStatus = httpRequest.Form["OpinionAgreeStatus"];
+            var QuestId = httpRequest.Form["QuestId"];
+
+            int _commentedUserId;
+            int _opinionAgreeStatus;
+            int _questId;
+            int.TryParse(CommentedUserId, out _commentedUserId);
+            int.TryParse(OpinionAgreeStatus, out _opinionAgreeStatus);
+            int.TryParse(QuestId, out _questId);
+            int likes = 0;
+            int dislikes = 0;
+            if (postedFile != null && postedFile.ContentLength > 0)
+            {
+
+                imageName = new String(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
+                string guid = Guid.NewGuid().ToString();
+                imageName = imageName + guid + Path.GetExtension(postedFile.FileName);
+                var filePath = HttpContext.Current.Server.MapPath("~/Content/upload/BeliefImages/" + imageName);
+                postedFile.SaveAs(filePath);
+                imagePath = _SiteURL + "/BeliefImages/" + imageName;
+            }
+            else
+            {
+                imagePath = null;
+            }
             Token ObjToken = null;
             Opinion ObjOpinion = new Opinion();
             Notification notification = null;
             PushNotifications pushNotifications = new PushNotifications();
+
             try
             {
-                var user = db.Users.Where(x => x.UserID == Model.CommentedUserId && x.EmailConfirmed == true).FirstOrDefault();
+                var user = db.Users.Where(x => x.UserID == _commentedUserId && x.EmailConfirmed == true).FirstOrDefault();
                 if (user == null)
                 {
                     ObjToken.BalanceToken = -2;
                     return ObjToken;
                 }
 
-                ObjToken = db.Tokens.Where(x => x.UserId == Model.CommentedUserId).FirstOrDefault();
+                ObjToken = db.Tokens.Where(x => x.UserId == _commentedUserId).FirstOrDefault();
                 if (ObjToken.BalanceToken <= 0)
                 {
                     return ObjToken;
                 }
-                    //Token token = new Token();
-                    //ObjOpinion.QuestId = Model.QuestId;
-                    //ObjOpinion.Comment = Model.Comment;
-                    //ObjOpinion.LongForm = Model.LongForm;
-                    //ObjOpinion.CommentedUserId = Model.CommentedUserId;
-                    //ObjOpinion.CreationDate = DateTime.Now.ToUniversalTime();
-                    //ObjOpinion.Likes = Model.Likes;
-                    //ObjOpinion.IsAgree = Model.OpinionAgreeStatus;
-                    //ObjOpinion.Dislikes = Model.Dislikes;
-                    //db.Opinions.Add(ObjOpinion);
-                    //db.SaveChanges();
-                    //int CommentId = ObjOpinion.Id;
+                #region Old Code
+                //Token token = new Token();
+                //ObjOpinion.QuestId = Model.QuestId;
+                //ObjOpinion.Comment = Model.Comment;
+                //ObjOpinion.LongForm = Model.LongForm;
+                //ObjOpinion.CommentedUserId = Model.CommentedUserId;
+                //ObjOpinion.CreationDate = DateTime.Now.ToUniversalTime();
+                //ObjOpinion.Likes = Model.Likes;
+                //ObjOpinion.IsAgree = Model.OpinionAgreeStatus;
+                //ObjOpinion.Dislikes = Model.Dislikes;
+                //db.Opinions.Add(ObjOpinion);
+                //db.SaveChanges();
+                //int CommentId = ObjOpinion.Id;
+                #endregion
 
                 int _checkInsert = db.Database.ExecuteSqlCommand(
-                                "INSERT INTO Opinion (" +
-                                "QuestId,Comment,LongForm,CommentedUserId,CreationDate,Likes,IsAgree,Dislikes) " +
-                                " VALUES (@QuestId,@Comment,@LongForm,@CommentedUserId,@CreationDate,@Likes,@IsAgree,@Dislikes);SELECT SCOPE_IDENTITY();",
-                                new SqlParameter("QuestId", Model.QuestId),
-                                new SqlParameter("Comment", Model.Comment),
-                                new SqlParameter("LongForm", Model.LongForm==null ? "" : Model.LongForm),
-                                new SqlParameter("CommentedUserId", Model.CommentedUserId),
+                                "INSERT INTO Opinion (QuestId,Comment,LongForm,CommentedUserId,CreationDate,IsAgree,ImageUrl,Likes,Dislikes)" +
+                                            " VALUES (@QuestId,@Comment,@LongForm,@CommentedUserId,@CreationDate,@IsAgree,@ImageUrl,@Likes,@Dislikes);",
+                                new SqlParameter("QuestId", _questId),
+                                new SqlParameter("Comment", Comment == null ? "" : Comment),
+                                new SqlParameter("LongForm", LongForm == null ? "" : LongForm),
+                                new SqlParameter("CommentedUserId", _commentedUserId),
                                 new SqlParameter("CreationDate", DateTime.Now.ToUniversalTime()),
-                                new SqlParameter("Likes", Model.Likes),
-                                new SqlParameter("IsAgree", Model.OpinionAgreeStatus),
-                                new SqlParameter("Dislikes", Model.Dislikes)
+                                new SqlParameter("IsAgree", _opinionAgreeStatus > 0 ? true : false),
+                                new SqlParameter("ImageUrl", imagePath== null?"": imagePath),
+                                new SqlParameter("Likes", likes),
+                                new SqlParameter("Dislikes", dislikes)
                             );
-                 
+
+               
+
 
                 int CommentId = db.Opinions.Max(x => x.Id);
 
+
                 ObjOpinion = new Opinion();
                 ObjOpinion = db.Opinions.Find(CommentId);
-                notification = db.Notifications.Where(p => p.CommentedUserId == Model.CommentedUserId && p.CommentId == CommentId).FirstOrDefault();
-                Question quest = db.Questions.Find(Model.QuestId);
+                ObjOpinion.Likes = ObjOpinion.Dislikes = 0;
+                
+                notification = db.Notifications.Where(p => p.CommentedUserId == _commentedUserId && p.CommentId == CommentId).FirstOrDefault();
+                Question quest = db.Questions.Find(_questId);
                 User questOwner = db.Users.Where(u => u.UserID == quest.OwnerUserID).FirstOrDefault();
-                User user1 = db.Users.Where(u => u.UserID == Model.CommentedUserId).FirstOrDefault();
+                User user1 = db.Users.Where(u => u.UserID == _commentedUserId).FirstOrDefault();
                 if (questOwner != null)
                 {
-                    if (quest.OwnerUserID != Model.CommentedUserId)
+                    if (quest.OwnerUserID != _commentedUserId)
                     {
                         //***** Notification to question owner
                         string finalMessage = GenerateTagsForQuestionWeb(false, false, true, user.UserName);
 
-                        pushNotifications.SendNotification_Android(questOwner.DeviceToken, finalMessage, "QD", Model.QuestId.ToString());
+                        pushNotifications.SendNotification_Android(questOwner.DeviceToken, finalMessage, "QD", _questId.ToString());
                         //***** Notification to Tagged Users
                         string taggedUser = quest.TaggedUser;
 
@@ -2897,20 +2942,20 @@ namespace opozee.Controllers.API
                             var roleIds = taggedUser.Split(',').Select(s => int.Parse(s));
                             foreach (int items in roleIds)
                             {
-                                if (Model.CommentedUserId != items)
+                                if (_commentedUserId != items)
                                 {
                                     User data = db.Users.Find(items);
                                     if (data != null)
                                     {
                                         string finalMessage1 = user.UserName + " has posted a belief on a question where you are tagged.";
 
-                                        pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", Model.QuestId.ToString());
+                                        pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", _questId.ToString());
                                     }
                                 }
                             }
                         }
                     }
-                    else if (quest.OwnerUserID == Model.CommentedUserId)
+                    else if (quest.OwnerUserID == _commentedUserId)
                     {
                         //in this block notification will send to tagged users
                         string taggedUser = quest.TaggedUser;
@@ -2925,7 +2970,7 @@ namespace opozee.Controllers.API
                                 {
                                     string finalMessage = user.UserName + " has posted a belief on a question where you are tagged.";
 
-                                    pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage, "QD", Model.QuestId.ToString());
+                                    pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage, "QD", _questId.ToString());
                                 }
                             }
                         }
@@ -2934,9 +2979,9 @@ namespace opozee.Controllers.API
 
                 if (notification != null)
                 {
-                    notification.CommentedUserId = Model.CommentedUserId;
+                    notification.CommentedUserId = _commentedUserId;
                     notification.CommentId = CommentId;
-                    notification.questId = Model.QuestId;
+                    notification.questId = _questId;
                     notification.Comment = true;
                     notification.Dislike = false;
                     notification.Like = false;
@@ -2947,9 +2992,9 @@ namespace opozee.Controllers.API
                 else
                 {
                     notification = new Notification();
-                    notification.CommentedUserId = Model.CommentedUserId;
+                    notification.CommentedUserId = _commentedUserId;
                     notification.CommentId = CommentId;
-                    notification.questId = Model.QuestId;
+                    notification.questId = _questId;
                     notification.Comment = true;
                     notification.Dislike = false;
                     notification.Like = false;
@@ -4154,8 +4199,8 @@ namespace opozee.Controllers.API
 
                     try
                     {
-                        //string _apiURL = "http://localhost:61545/";
-                        string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
+                        // string _apiURL = "http://localhost:61545/";
+                          string _apiURL = WebConfigurationManager.AppSettings["WebPath"];
 
                         var client = new RestClient($"{_apiURL}OpozeeGrantResourceOwnerCredentialSecret");
                         var request = new RestRequest(Method.POST);

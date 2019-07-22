@@ -301,8 +301,20 @@ export class UserService {
     }
 
 
-  saveOpinionPost(Model) {
-    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/PostOpinionWeb', Model, {
+  saveOpinionPost(Model, fileToUpload: File) {
+    debugger
+    const formData: FormData = new FormData();
+    formData.append('Comment', Model.Comment);
+    formData.append('CommentedUserId', Model.CommentedUserId);
+    formData.append('LongForm', Model.LongForm);
+    formData.append('OpinionAgreeStatus', Model.OpinionAgreeStatus);
+    formData.append('QuestId', Model.QuestId);
+    formData.append('ImageUrl', fileToUpload, fileToUpload.name);
+    //formData.append('Model', Model);
+
+
+
+    return this.http.post<any>(this.myAppUrl + 'opozee/api/WebApi/PostOpinionWeb', formData, {
       headers: new HttpHeaders({
         'Authorization': this._authorizationHeader ? this._authorizationHeader : this.getAuthorizationHeader()
       })
