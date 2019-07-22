@@ -1874,7 +1874,7 @@ namespace opozee.Controllers.API
                                                       {
                                                           Id = e.Id,
                                                           Comment = e.Comment,
-                                                    
+                                                          BeliefImage = string.IsNullOrEmpty(e.ImageUrl) ? "" : e.ImageUrl,
                                                           CommentedUserId = t.UserID,
                                                           Name = t.FirstName + " " + t.LastName,
                                                           UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
@@ -1927,6 +1927,7 @@ namespace opozee.Controllers.API
                                                       {
                                                           Id = e.Id,
                                                           Comment = e.Comment,
+                                                          BeliefImage = string.IsNullOrEmpty(e.ImageUrl) ? "" : e.ImageUrl,
                                                           CommentedUserId = t.UserID,
                                                           Name = t.FirstName + " " + t.LastName,
                                                           UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
@@ -1985,6 +1986,7 @@ namespace opozee.Controllers.API
                                                       {
                                                           Id = e.Id,
                                                           Comment = e.Comment,
+                                                          BeliefImage = string.IsNullOrEmpty(e.ImageUrl) ? "" : e.ImageUrl,
                                                           CommentedUserId = t.UserID,
                                                           Name = t.FirstName + " " + t.LastName,
                                                           UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
@@ -2043,6 +2045,7 @@ namespace opozee.Controllers.API
                                                  {
                                                      Id = e.Id,
                                                      Comment = e.Comment,
+                                                     BeliefImage = string.IsNullOrEmpty(e.ImageUrl) ? "" : e.ImageUrl,
                                                      CommentedUserId = t.UserID,
                                                      Name = t.FirstName + " " + t.LastName,
                                                      UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
@@ -2065,6 +2068,7 @@ namespace opozee.Controllers.API
                                                  {
                                                      Id = e.Id,
                                                      Comment = e.Comment,
+                                                     BeliefImage = string.IsNullOrEmpty(e.ImageUrl) ? "" : e.ImageUrl,
                                                      CommentedUserId = t.UserID,
                                                      Name = t.FirstName + " " + t.LastName,
                                                      UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
@@ -2087,6 +2091,7 @@ namespace opozee.Controllers.API
                                                 {
                                                     Id = e.Id,
                                                     Comment = e.Comment,
+                                                    BeliefImage = string.IsNullOrEmpty(e.ImageUrl) ? "" : e.ImageUrl,
                                                     CommentedUserId = t.UserID,
                                                     Name = t.FirstName + " " + t.LastName,
                                                     UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,
@@ -2107,6 +2112,7 @@ namespace opozee.Controllers.API
                                                 {
                                                     Id = e.Id,
                                                     Comment = e.Comment,
+                                                    BeliefImage = string.IsNullOrEmpty(e.ImageUrl) ? "" : e.ImageUrl,
                                                     CommentedUserId = t.UserID,
                                                     Name = t.FirstName + " " + t.LastName,
                                                     UserImage = string.IsNullOrEmpty(t.ImageURL) ? "" : t.ImageURL,

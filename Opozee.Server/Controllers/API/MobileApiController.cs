@@ -545,6 +545,7 @@ namespace opozee.Controllers.API
                     //int opinionID = opinion.Id;
                     int opinionID = db.Opinions.Max(x => x.Id);
                     opinion = db.Opinions.Find(opinionID);
+                    opinion.LongForm = string.IsNullOrEmpty(opinion.LongForm) ? "" : opinion.LongForm.Contains("null") ? "" : opinion.LongForm;
                     notification = db.Notifications.Where(p => p.CommentedUserId == _commentedUserId && p.CommentId == opinionID).FirstOrDefault();
                     Question quest = db.Questions.Find(_questId);
                     User questOwner = db.Users.Where(u => u.UserID == quest.OwnerUserID).FirstOrDefault();

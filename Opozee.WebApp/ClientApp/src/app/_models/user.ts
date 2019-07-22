@@ -99,6 +99,7 @@ export class Comments {
   Name: string;
   UserImage: string;
   LongForm: string;
+  BeliefImage: string;
 
 }
 

@@ -79,31 +79,32 @@
                     <small class="belief-time"><i>{{temp?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
                     <p class="message-container" [innerHTML]="temp?.Comment | linky:{stripPrefix : true, truncate:15} ">
                     </p>
+                    
+                    <div class="image_belief" *ngIf="temp?.BeliefImage!=null && temp?.BeliefImage!=''">
+                      <img src="{{ temp?.BeliefImage}}" style="border-radius: 4px;width: 100%; max-height: 250px;" />
+                    </div>
                   </div>
 
-                  <div class="longform" *ngIf="temp?.LongForm!=null && temp?.LongForm!=''">
+                  <div class="longform" *ngIf="temp?.LongForm!=null && temp?.LongForm!='' && temp?.LongForm!='null'">
                     <div class="row" style="padding-left:0px;">
 
                       <!--<a class="collapseButton " data-toggle="collapse" [href]="['#'+temp?.Id]" role="button" aria-expanded="false"
-                         aria-controls="collapseExample">
-                        <i class="fa fa-plus-square-o" aria-hidden="true"></i>
-                        
-                      </a>-->
+     aria-controls="collapseExample">
+    <i class="fa fa-plus-square-o" aria-hidden="true"></i>
 
+  </a>-->
                       <!--<div class="collapse longform" [id]="[temp?.Id]">
-                        <div class="card card-body">
-                          <p [innerHTML]="temp?.LongForm | linky:{stripPrefix : true, truncate:15}"> </p>
-                        </div>
-                      </div>-->
+    <div class="card card-body">
+      <p [innerHTML]="temp?.LongForm | linky:{stripPrefix : true, truncate:15}"> </p>
+    </div>
+  </div>-->
 
                       <a class="btn  btn-info btn-xs collapseButton" ng-model="expand"
-                        
-                         
                          (click)="expand=!expand">
                         <i [class]="[expand ? 'fa fa-minus-circle':  'fa fa-plus-circle']"></i>
 
                       </a>
-
+                     
                       <div class="longform" *ngIf="expand==true">
                         <div class="card card-body">
                           <p [innerHTML]="temp?.LongForm | linky:{stripPrefix : true, truncate:15}"> </p>
