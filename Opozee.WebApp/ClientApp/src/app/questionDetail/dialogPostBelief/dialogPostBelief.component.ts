@@ -19,6 +19,8 @@ export class DialogPostBelief implements OnInit {
   postBeliefForm: FormGroup;
   dataModel: any;
   loading: boolean = false;
+  url: string;
+
   //formdata;
   editorConfigModal = {
     "editable": true,
@@ -188,6 +190,21 @@ export class DialogPostBelief implements OnInit {
           this.loading = false;
           //this.alertService.error(error);
         });
+  }
+
+  
+  onSelectFile(event) { // called each time file input changes
+      if (event.target.files && event.target.files[0]) {
+        var reader = new FileReader();
+
+        reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+        reader.onload = (event) => { // called once readAsDataURL is completed
+          
+          this.url = event.target.result;
+          console.log(this.url);
+        }
+      }
   }
    
   logout() {

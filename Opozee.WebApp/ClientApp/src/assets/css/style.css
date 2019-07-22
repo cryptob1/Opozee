@@ -573,7 +573,6 @@ span.bell-icon i {
   }
 
     .profile_bottom_cover .date_like i {
-      text-align: left;
       width: 100%;
     }
 
@@ -626,8 +625,8 @@ span.bell-icon i {
 
 @media screen and (max-width: 480px) {
  .section_second .container-fluid {
-    padding-right: 15px !important;
-    padding-left: 15px !important;
+    /*padding-right: 15px !important;
+    padding-left: 15px !important;*/
   }
   }
 /*@media screen and (max-width: 767px) {

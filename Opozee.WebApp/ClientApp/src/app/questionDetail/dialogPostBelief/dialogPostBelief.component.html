@@ -41,13 +41,12 @@
 
             <div class="form-group">
               <!--<textarea class="form-control" placeholder="Share your belief.."
-  [(ngModel)]="dataModel.Comment" name="Comment" #Comment="ngModel" rows="4" ></textarea>-->
+    [(ngModel)]="dataModel.Comment" name="Comment" #Comment="ngModel" rows="4" ></textarea>-->
               <app-ngx-editor resizer="basic"
                               [config]="editorConfigModal"
                               formControlName="Comment"
                               (paste)="onPaste($event)"
                               (keydown)="keyUp($event)"
-                              
                               name="Comment">
               </app-ngx-editor>
 
@@ -61,11 +60,40 @@
             </div>
 
 
+            <ul style="display:inline-flex; align-items:flex-end">
 
-            <button  class="btn btn-primary" type="button" data-toggle="collapse" data-target="#details" >Add details</button> <br />
+              <li  style="padding-right:5px; padding-left:5px;">
+                <!--<button class="btn btn-primary " type="button">Add Image</button>-->
+
+                <div *ngIf="url">
+                  <div class="margin-bottom-20">
+                    <img style="max-width:300px; max-height: 300px" class="thumbnail box-center margin-top-20 upload-image" alt="No image" [src]="url"  >
+                  </div>
 
 
-            <app-ngx-editor  id="details" class="collapse" height="100px" minHeight="100px" resizer="basic" [spellcheck]="true"
+                </div>
+                <!--<input style="content:'Add Image'" class="form-control-file" type='file' value="Add Image" (change)="onSelectFile($event)">-->
+
+                <label class="btn  btn-primary btn-file">
+                  Add Image <input type="file" style="display: none;" (change)="onSelectFile($event)">
+                </label>
+
+                <!--<div class="custom-file">
+      <input type="file" class="custom-file-input" (change)="onSelectFile($event)" id="validatedCustomFile" required>
+      <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+
+    </div>-->
+
+              </li>
+              <li>
+                <button class="btn btn-primary pull-right" type="button" data-toggle="collapse" data-target="#details">Add details</button>
+
+              </li>
+            </ul>
+
+
+
+            <app-ngx-editor id="details" class="collapse" height="100px" minHeight="100px" resizer="basic" [spellcheck]="true"
                             [showToolbar]="false"
                             [placeholder]="'More details..'"
                             formControlName="LongForm"

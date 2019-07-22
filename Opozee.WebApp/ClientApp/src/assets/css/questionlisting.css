@@ -1,4 +1,5 @@
 .inner_pages {
+
 }
 
   .inner_pages header {
@@ -73,6 +74,11 @@
     object-fit: cover;
     /*border: 1px solid #444;*/
     border-radius: 6px;
+    max-height: 400px;
+    max-width: 400px;
+    object-fit: contain;
+    margin: auto;
+    display: block;
   }
 
 
@@ -83,6 +89,11 @@
   object-fit: cover;
   /*border: 1px solid #444;*/
   border-radius: 6px;
+  max-height: 400px;
+  max-weight: 400px;
+  object-fit: contain;
+  margin: auto;
+  display: block;
 }
 
 
@@ -100,6 +111,9 @@
 
 .inner_pages .section_second {
   padding-top: 50px;
+  max-width: 800px !important;
+  margin: 0 auto;
+  display: flex;
 }
 
 
@@ -596,4 +610,10 @@
     font-size: 18px;
     font-size: 18px;
   }
+}
+
+.upload-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
