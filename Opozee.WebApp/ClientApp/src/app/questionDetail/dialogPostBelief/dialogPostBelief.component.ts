@@ -58,14 +58,28 @@ export class DialogPostBelief implements OnInit {
         
     this.editorConfigModal;
     this.postBeliefForm = this.formBuilder.group({
-      Comment: ['', [Validators.required, Validators.maxLength(400)]],
+      Comment: ['', [ Validators.maxLength(400)]],
       LongForm: [''],
       ImageUrl:[''],
       OpinionAgreeStatus: [this.dataModel.OpinionAgreeStatus],
       QuestId: [this.dataModel.QuestId],
       CommentedUserId: [this.dataModel.CommentedUserId]
 
-    });
+    }, {
+        validator: (formControl) => {
+        var commentCtrl = formControl.controls.Comment;
+        var imageCtrl = formControl.controls.ImageUrl;
+
+
+        if (commentCtrl != undefined && this.ImageUrl != undefined)
+
+          if ((commentCtrl.value || this.ImageUrl!=""))
+              return { invalid: true };
+        }
+      }
+
+
+    );
    
   }
 
@@ -111,6 +125,7 @@ export class DialogPostBelief implements OnInit {
     this.dataModel.Comment = '';
     this.dataModel.LongForm = '';
     this.dataModel.ImageUrl = '';
+    this.ImageUrl = '';
     this.dialogPostBelief.hide();
   }
 
@@ -123,13 +138,13 @@ export class DialogPostBelief implements OnInit {
       //ImageUrl: this.fileToUpload
    });
 
-    let getImage = this.postBeliefForm.get('ImageUrl').value;
+    let getImage = this.ImageUrl; //this.postBeliefForm.get('ImageUrl').value;
     let getComment = this.postBeliefForm.get('Comment').value;
-    if (getComment == '' || getComment == undefined) {
+    if (getImage == null && (getComment == '' || getComment == undefined )) {
       this.toastr.error('ERROR', 'Please enter belief.');
       return;
     }
-    else if(getComment.trim() == '') {
+    else if (getImage == null &&  getComment.trim() == '') {
       this.toastr.error('ERROR', 'Please enter belief.');
       return;
     }
@@ -161,6 +176,12 @@ export class DialogPostBelief implements OnInit {
   saveOpinionPost(model,fileUpload) {
     debugger
     this.loading = true;
+
+    if (model.Comment == null) {
+      model.Comment = "";
+      model.LongForm = "";
+    }
+
     //console.log(model);
     this.userService.saveOpinionPost(model,fileUpload)
       .pipe(first())
@@ -214,6 +235,7 @@ export class DialogPostBelief implements OnInit {
     var reader = new FileReader();
     reader.onload = (event: any) => {
       this.ImageUrl = event.target.result;
+      //this.postBeliefForm.get('ImageUrl').value = this.ImageUrl
     }
     reader.readAsDataURL(this.fileToUpload);
 

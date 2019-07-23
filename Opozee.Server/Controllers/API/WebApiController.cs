@@ -853,11 +853,11 @@ namespace opozee.Controllers.API
             {
                 if (!string.IsNullOrEmpty(Model.Comment))
                 {
-                    var _dbComment = db.Opinions.Any(x => x.Comment == null ? false : x.Comment.Contains(Model.Comment) && x.CommentedUserId == Model.CommentedUserId);
+                    var _dbComment = db.Opinions.Any(x => x.Comment == null ? false : x.Comment.Contains(Model.Comment) && x.CommentedUserId == Model.CommentedUserId && x.QuestId==Model.QuestId);
                     if (_dbComment) return true;
 
                     var _Comment = Regex.Replace(Model.Comment, @"<[^>]+>| ", "").TrimStart();
-                    return db.Opinions.Any(x => x.Comment == null ? false : x.Comment.Contains(_Comment) && x.CommentedUserId == Model.CommentedUserId);
+                    return db.Opinions.Any(x => x.Comment == null ? false : x.Comment.Contains(_Comment) && x.CommentedUserId == Model.CommentedUserId && x.QuestId == Model.QuestId);
                 }
                 return false;
             }

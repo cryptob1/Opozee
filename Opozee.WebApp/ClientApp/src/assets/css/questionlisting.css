@@ -409,7 +409,7 @@
 
 .thumbs {
   float:right;
-  padding-right: 40px;
+  padding-right: 4px;
 }
 
   .thumbs img {
@@ -535,6 +535,7 @@
     .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
       background-color: transparent;
     }
+ 
 }
  
 

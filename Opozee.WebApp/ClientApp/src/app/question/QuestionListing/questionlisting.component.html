@@ -25,7 +25,7 @@
                           <span  style="font-size: 18px;" class="message-container" [innerHTML]= "bounty?.PostQuestion | linky:{stripPrefix : true, truncate:15}  | emojis"></span>
                         </a>
                         <ng-container *ngFor="let tag of bounty?.HashTags?.split(',')">
-                          <small class="hash_tag"><a href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></small>
+                          <small class="hash_tag"><a  href="javascript:void(0)" (click)="searchForTag(tag)">#{{tag}}&nbsp;</a></small>
                         </ng-container>
                         
                       </strong>
@@ -122,6 +122,7 @@
             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
               <ng-container *ngFor="let tag of popularhastags;let i=index">
                 <a href="javascript:void(0)" class="nav-item nav-link " id="nav-home-tab" [ngClass]="(i==tabIndex)?'active':''"
+                   [style.color]="tag.HashTag=='Career' ? 'rgba(225, 77, 18, 0.5);' : '' "
                    role="tab" aria-controls="nav-home" aria-selected="true" data-toggle="tag.HashTag" (click)="switchTab(tag.HashTag,i)">#{{tag.HashTag}}</a>
                 <span> &nbsp; </span>
               </ng-container>

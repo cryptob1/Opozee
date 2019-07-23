@@ -96,7 +96,12 @@ export class Questiondetail implements OnInit {
     if (this.route.snapshot.params["Id"]) {
       this.Id = this.route.snapshot.params["Id"];
     }
-    this.shareUrl = window.location.origin + this.location.path();
+
+
+    this.shareUrl = "https://opozee.com/qid/" + (this.Id);
+   // this.tweetText = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
+
+    //this.shareUrl = window.location.origin + this.location.path();
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
@@ -157,6 +162,8 @@ export class Questiondetail implements OnInit {
       
       this.PostQuestionDetailModel = data as BookMarkQuestionVM;
       this.PostQuestionDetailModel.comments = data['Comments'] as Comments[];
+
+      console.log(this.PostQuestionDetailModel.comments);
  
       let scoreYes = 0;
       let scoreNo = 0;
