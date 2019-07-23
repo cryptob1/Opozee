@@ -348,7 +348,9 @@
                         <small class="belief-time"><i>{{temp1?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
                         <p class="message-container" [innerHTML]="temp1?.Comment | linky:{stripPrefix : true, truncate:15} ">
                         </p>
-
+                        <div class="image_belief" *ngIf="temp1?.beliefimage">
+                          <img src="{{temp1?.beliefimage}}" style="border-radius: 8px;width: 100%; max-height: 450px; margin-top:24px; margin-bottom:10px;" onerror="this.src='../../../assets/images/no-image-found.jpg'" alt="user" />
+                        </div>
                     
 
                       </div>

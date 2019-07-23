@@ -10,6 +10,7 @@ import { config } from 'process';
 import { AppConfigService } from '../appConfigService';
 import { Notification, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+//import { FILE } from 'dns';
 
 @Injectable()
 export class UserService {
@@ -309,7 +310,9 @@ export class UserService {
     formData.append('LongForm', Model.LongForm);
     formData.append('OpinionAgreeStatus', Model.OpinionAgreeStatus);
     formData.append('QuestId', Model.QuestId);
-    formData.append('ImageUrl', fileToUpload, fileToUpload.name);
+    if (fileToUpload != null) {
+      formData.append('ImageUrl', fileToUpload, fileToUpload.name);
+    }
     //formData.append('Model', Model);
 
 

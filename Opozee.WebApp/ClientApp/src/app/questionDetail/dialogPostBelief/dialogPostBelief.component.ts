@@ -177,7 +177,7 @@ export class DialogPostBelief implements OnInit {
     debugger
     this.loading = true;
 
-    if (model.Comment == null) {
+    if (model.Comment == null || model.Comment== undefined) {
       model.Comment = "";
       model.LongForm = "";
     }

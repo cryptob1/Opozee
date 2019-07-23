@@ -1,5 +1,5 @@
 <section class="section_second">
-  <div class="container" style="padding-left:2px;padding-right:2px">
+  <div class="container" style="padding-left:2px;padding-right:2px; max-width:800px" >
     <div class="cover_heading">
 
       <h3>
@@ -138,20 +138,20 @@
                             <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
 
                             <div *ngIf="!loading" class="emojis1">
-                              <span class="btn btn-primary btn-block"  title="Thoughtful">
-                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/thoughtful.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,1,myPopoverLikes)" title="Thoughtful">
+                              <span class="btn btn-primary btn-block"  title="Thoughtful" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,1,myPopoverLikes)">
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/thoughtful.png" alt="like"  title="Thoughtful">
                                 <span class=" badge">
                                   &nbsp;{{temp?.LikesThoughtfulCount}}&nbsp;
                                 </span>
                               </span>
-                              <span class="btn btn-primary btn-block" title="Factual">
-                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/factual.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)" title="Factual">
+                              <span class="btn btn-primary btn-block" title="Factual" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,2,myPopoverLikes)">
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/factual.png" alt="like"  title="Factual">
                                 <span class=" badge">
                                   &nbsp;{{temp?.LikesFactualCount}}&nbsp;
                                 </span>
                               </span>
-                              <span class="btn btn-primary btn-block"  title="Funny">
-                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/funny.png" alt="like" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)" title="Funny">
+                              <span class="btn btn-primary btn-block"  title="Funny" (click)="!loading && saveLikeclick(temp?.Likes,index,temp,3,myPopoverLikes)">
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/funny.png" alt="like"   title="Funny">
                                 <span class=" badge">
                                   &nbsp;{{temp?.LikesFunnyCount}}&nbsp;
                                 </span>
@@ -169,18 +169,18 @@
                             <div *ngIf="loading" class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
 
                             <div *ngIf="!loading" class="emojis1">
-                              <span class="btn btn-primary btn-block" title="Irrational">
-                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/irrational.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" title="Irrational">
+                              <span class="btn btn-primary btn-block" title="Irrational" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,4,PopoverDislikes)" >
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/irrational.png" alt="Dislike" title="Irrational">
                                 <span class="badge"> &nbsp; {{temp?.DislikesIrrationalCount}}&nbsp;</span>
                               </span>
-                              <span class="btn btn-primary btn-block" title="Fake News">
-                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/fakenews.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)" title="Fake News">
+                              <span class="btn btn-primary btn-block" title="Fake News" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,5,PopoverDislikes)">
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/fakenews.png" alt="Dislike"  title="Fake News">
                                 <span class="badge">
                                   &nbsp;{{temp?.DislikesFakeNewsCount}}&nbsp;
                                 </span>
                               </span>
-                              <span class="btn btn-primary btn-block" title="Off Topic">
-                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/offtopic.png" alt="Dislike" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)" title="Off Topic">
+                              <span class="btn btn-primary btn-block" title="Off Topic" (click)="!loading && saveDislikeclick(temp?.DisLikes,index,temp,6,PopoverDislikes)">
+                                <img style="width:30px" [attr.disabled]="loading" src="../../assets/images/offtopic.png" alt="Dislike"  title="Off Topic">
                                 <span class="badge">
                                   &nbsp; {{temp?.DislikesOffTopicCount}}&nbsp;
                                 </span>
