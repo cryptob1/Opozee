@@ -2905,24 +2905,20 @@ namespace opozee.Controllers.API
                 #endregion
 
                 int _checkInsert = db.Database.ExecuteSqlCommand(
-                                "INSERT INTO Opinion (QuestId,Comment,CommentedUserId,CreationDate,IsAgree,ImageUrl,Likes,Dislikes)" +
-                                            " VALUES (@QuestId,@Comment,@CommentedUserId,@CreationDate,@IsAgree,@ImageUrl,@Likes,@Dislikes);",
+                                "INSERT INTO Opinion (QuestId,Comment,LongForm,CommentedUserId,CreationDate,IsAgree,ImageUrl,Likes,Dislikes)" +
+                                            " VALUES (@QuestId,@Comment,@LongForm,@CommentedUserId,@CreationDate,@IsAgree,@ImageUrl,@Likes,@Dislikes);",
                                 new SqlParameter("QuestId", _questId),
                                 new SqlParameter("Comment", Comment == null ? "" : Comment),
-                                //new SqlParameter("LongForm", LongForm == null ? "" : LongForm),
+                                new SqlParameter("LongForm", LongForm ?? (object)DBNull.Value),
                                 new SqlParameter("CommentedUserId", _commentedUserId),
                                 new SqlParameter("CreationDate", DateTime.Now.ToUniversalTime()),
                                 new SqlParameter("IsAgree", _opinionAgreeStatus > 0 ? true : false),
-                                new SqlParameter("ImageUrl", imagePath== null?"": imagePath),
+                                new SqlParameter("ImageUrl", imagePath ?? (object)DBNull.Value),
                                 new SqlParameter("Likes", likes),
                                 new SqlParameter("Dislikes", dislikes)
-                            );
-
-               
-
+                            ); 
 
                 int CommentId = db.Opinions.Max(x => x.Id);
-
 
                 ObjOpinion = new Opinion();
                 ObjOpinion = db.Opinions.Find(CommentId);
