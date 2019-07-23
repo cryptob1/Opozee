@@ -402,4 +402,15 @@
   }
 
 }
+.image_belief {
+  float: none;
+  margin: 0 auto;
+  width: 300px;
+  height: 250px;
+}
+  .image_belief img {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+  }
 

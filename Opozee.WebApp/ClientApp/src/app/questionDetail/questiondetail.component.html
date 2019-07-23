@@ -81,7 +81,7 @@
                     </p>
                     
                     <div class="image_belief" *ngIf="temp?.BeliefImage!=null && temp?.BeliefImage!=''">
-                      <img src="{{ temp?.BeliefImage}}" style="border-radius: 4px;width: 100%; max-height: 250px;" />
+                      <img src="{{ temp?.BeliefImage}}" style="border-radius: 4px;width: 100%; max-height: 250px;"onError="this.src='../../../assets/images/No-image-found.jpg'" alt="user" />
                     </div>
                   </div>
 

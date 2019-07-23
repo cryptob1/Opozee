@@ -2905,11 +2905,11 @@ namespace opozee.Controllers.API
                 #endregion
 
                 int _checkInsert = db.Database.ExecuteSqlCommand(
-                                "INSERT INTO Opinion (QuestId,Comment,LongForm,CommentedUserId,CreationDate,IsAgree,ImageUrl,Likes,Dislikes)" +
-                                            " VALUES (@QuestId,@Comment,@LongForm,@CommentedUserId,@CreationDate,@IsAgree,@ImageUrl,@Likes,@Dislikes);",
+                                "INSERT INTO Opinion (QuestId,Comment,CommentedUserId,CreationDate,IsAgree,ImageUrl,Likes,Dislikes)" +
+                                            " VALUES (@QuestId,@Comment,@CommentedUserId,@CreationDate,@IsAgree,@ImageUrl,@Likes,@Dislikes);",
                                 new SqlParameter("QuestId", _questId),
                                 new SqlParameter("Comment", Comment == null ? "" : Comment),
-                                new SqlParameter("LongForm", LongForm == null ? "" : LongForm),
+                                //new SqlParameter("LongForm", LongForm == null ? "" : LongForm),
                                 new SqlParameter("CommentedUserId", _commentedUserId),
                                 new SqlParameter("CreationDate", DateTime.Now.ToUniversalTime()),
                                 new SqlParameter("IsAgree", _opinionAgreeStatus > 0 ? true : false),
