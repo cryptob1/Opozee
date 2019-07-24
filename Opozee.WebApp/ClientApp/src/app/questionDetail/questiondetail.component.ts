@@ -163,7 +163,7 @@ export class Questiondetail implements OnInit {
       this.PostQuestionDetailModel = data as BookMarkQuestionVM;
       this.PostQuestionDetailModel.comments = data['Comments'] as Comments[];
 
-      console.log(this.PostQuestionDetailModel.comments);
+      //console.log(this.PostQuestionDetailModel.comments);
  
       let scoreYes = 0;
       let scoreNo = 0;
@@ -197,7 +197,7 @@ export class Questiondetail implements OnInit {
       this.shareUrl = "https://opozee.com/qid/" + (this.PostQuestionDetailModel.postQuestionDetail.Id);
       this.tweetText = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
       
-      console.log(this.tweetText);
+      //console.log(this.tweetText);
       
       this.meta.updateTag({ name: 'description', content: this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) });
 
