@@ -764,8 +764,9 @@ namespace opozee.Controllers.API
                                                select new Comments
                                                {
                                                    Id = e.Id,
-                                                   Comment = e.Comment,
-                                                   LongForm = e.LongForm,
+                                                   Comment = string.IsNullOrEmpty(e.Comment) ? "" : e.Comment,
+                                                    
+                                                   LongForm = string.IsNullOrEmpty(e.LongForm) ? "" : e.LongForm,
                                                    BeliefImage = string.IsNullOrEmpty(e.ImageUrl) ? "" : e.ImageUrl,
                                                    CommentedUserId = t.UserID,
                                                    Name = t.FirstName + " " + t.LastName,
@@ -1034,6 +1035,7 @@ namespace opozee.Controllers.API
                     {
                         if (!string.IsNullOrEmpty(itemInnerComment.LongForm))
                             itemInnerComment.LongForm = Regex.Replace(itemInnerComment.LongForm, "<.*?>", String.Empty);
+
                     }
                 }
 
