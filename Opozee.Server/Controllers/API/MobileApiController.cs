@@ -2666,9 +2666,9 @@ namespace opozee.Controllers.API
 
 
                 //}
-
+                TopPopularHashTags.Add(new PopularTag { HashTag = "DailyFive", Count = 0 });
                 TopPopularHashTags.Add(new PopularTag { HashTag = "All", Count = 99999 });
-                TopPopularHashTags.Add(new PopularTag { HashTag = "IsThisTrue", Count = 1 });
+
                 TopPopularHashTags.Add(new PopularTag { HashTag = "Career", Count = 2 });
                 TopPopularHashTags.Add(new PopularTag { HashTag = "Crypto", Count = 3 });
                 TopPopularHashTags.Add(new PopularTag { HashTag = "Sports", Count = 4 });

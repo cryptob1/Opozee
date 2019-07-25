@@ -21,8 +21,8 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   private paramsSub: Subscription;
   currentUser: User;
   localStorageUser: LocalStorageUser;
-  search: string;
-  hashTag: boolean = false;
+  search: string ;
+  hashTag: boolean =false;
   qid = -1;
   tabIndex = 0;
 
@@ -56,7 +56,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     this.showSlider = this.location.path() ? false : true;
 
     this.localStorageUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.hashTag = false;
+    //this.hashTag = false;
 
     if (this.localStorageUser != null) {
       mixpanelService.init(this.localStorageUser['Email'])
@@ -71,9 +71,18 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     else if (this.route.snapshot.params["tag"]) {
       this.hashTag = true;
       this.search = this.route.snapshot.params["tag"];
+
     }
     else if (this.route.snapshot.params["qid"]) {
       this.qid = this.route.snapshot.params["qid"];
+    }
+    else {
+  //default to dailyfive
+      this.questionGetModel.isHashTag = true;
+      this.hashTag = true;
+
+      this.search = 'DailyFive';
+      this.questionGetModel.Search = this.search;
     }
 
     this.paramsSub = route.params.subscribe(params => {
@@ -161,10 +170,12 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
         return arr;
       }, []);
 
-      this.popularhastags = this.popularhastags.slice(0, 5);
+      this.popularhastags = this.popularhastags.slice(0, 1);
       
-      this.popularhastags.unshift({ 'HashTag': 'All' });
+      this.popularhastags.push({ 'HashTag': 'All' });
        
+      console.log(this.popularhastags);
+
     });
   }
 

@@ -2807,7 +2807,7 @@ namespace opozee.Controllers.API
             //    OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
             //}
 
-            string[] tags = { "Trending",  "isThisTrue",  "Career",  "Crypto", "Sports" };
+            string[] tags = { "DailyFive" };
 
             foreach (var tag in tags)
             {
@@ -2829,7 +2829,7 @@ namespace opozee.Controllers.API
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost, System.Web.Mvc.ValidateInput(false)]
         [Route("api/WebApi/PostOpinionWeb")]
         public Token PostOpinionWeb()
         {
