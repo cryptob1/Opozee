@@ -55,28 +55,17 @@ export class DialogPostBelief implements OnInit {
   }  
 
   ngOnInit() {
-        
+
     this.editorConfigModal;
     this.postBeliefForm = this.formBuilder.group({
-      Comment: ['', [ Validators.maxLength(400)]],
+      Comment: ['', [Validators.required, Validators.maxLength(400)]],
       LongForm: [''],
-      ImageUrl:[''],
+      ImageUrl: [''],
       OpinionAgreeStatus: [this.dataModel.OpinionAgreeStatus],
       QuestId: [this.dataModel.QuestId],
       CommentedUserId: [this.dataModel.CommentedUserId]
 
-    }, {
-        validator: (formControl) => {
-        var commentCtrl = formControl.controls.Comment;
-        var imageCtrl = formControl.controls.ImageUrl;
-
-
-        if (commentCtrl != undefined && this.ImageUrl != undefined)
-
-          if ((commentCtrl.value || this.ImageUrl!=""))
-              return { invalid: true };
-        }
-      }
+    }
 
 
     );
@@ -227,7 +216,7 @@ export class DialogPostBelief implements OnInit {
   //}
   
   onSelectFile(file: FileList) { // called each time file input changes
-    debugger
+ 
 
     this.fileToUpload = file.item(0);
 
