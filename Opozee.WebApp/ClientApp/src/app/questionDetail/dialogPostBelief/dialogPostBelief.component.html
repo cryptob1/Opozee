@@ -50,7 +50,7 @@
                               name="Comment">
               </app-ngx-editor>
 
-              <span *ngIf="postBeliefForm.controls.Comment.value" class="pull-right char"><em>{{ 400 - postBeliefForm?.controls.Comment?.value.length }} characters left</em></span>
+              <span *ngIf="postBeliefForm.controls.Comment.value" class="pull-right char"><em>{{ 400 - getLength(postBeliefForm?.controls.Comment?.value) }} characters left</em></span>
 
               <div *ngIf="postBeliefForm.controls.Comment.errors && postBeliefForm.controls.Comment.touched" class="help-block clearfix mt-2">
                 <ul role="alert">
