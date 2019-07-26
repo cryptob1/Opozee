@@ -8,7 +8,8 @@ import { first, retry } from 'rxjs/operators';
 import { MixpanelService } from '../../_services/mixpanel.service';
 import { DOCUMENT } from '@angular/platform-browser';
 import { Observable } from 'rxjs';
-
+import { MaxLengthValidator } from 'ngx-editor';
+ 
 @Component({
   selector: 'dialog-post-belief',
   templateUrl: './dialogPostBelief.component.html',
@@ -33,6 +34,7 @@ export class DialogPostBelief implements OnInit {
     "translate": "yes",
     "enableToolbar": true,
     "showToolbar": false,
+ 
     "placeholder": "Share your belief in 400 characters or less..",
     "imageEndPoint": "",
     "toolbar": [
@@ -55,28 +57,17 @@ export class DialogPostBelief implements OnInit {
   }  
 
   ngOnInit() {
-        
+
     this.editorConfigModal;
     this.postBeliefForm = this.formBuilder.group({
-      Comment: ['', [ Validators.maxLength(400)]],
+      Comment: ['', [Validators.required, MaxLengthValidator(400, { excludeLineBreaks: true, concatWhiteSpaces: true, excludeWhiteSpaces: true }) ]],
       LongForm: [''],
-      ImageUrl:[''],
+      ImageUrl: [''],
       OpinionAgreeStatus: [this.dataModel.OpinionAgreeStatus],
       QuestId: [this.dataModel.QuestId],
       CommentedUserId: [this.dataModel.CommentedUserId]
 
-    }, {
-        validator: (formControl) => {
-        var commentCtrl = formControl.controls.Comment;
-        var imageCtrl = formControl.controls.ImageUrl;
-
-
-        if (commentCtrl != undefined && this.ImageUrl != undefined)
-
-          if ((commentCtrl.value || this.ImageUrl!=""))
-              return { invalid: true };
-        }
-      }
+    }
 
 
     );
@@ -90,7 +81,7 @@ export class DialogPostBelief implements OnInit {
     let text = this.postBeliefForm.get('Comment').value;
     
     if (text!=null) {
-      if (text.length >= 400) {
+      if (text.length > 400 && this.getLength(text) >= 400) {
 
 
         if (event.key != 'Backspace') {
@@ -227,7 +218,7 @@ export class DialogPostBelief implements OnInit {
   //}
   
   onSelectFile(file: FileList) { // called each time file input changes
-    debugger
+ 
 
     this.fileToUpload = file.item(0);
 
@@ -252,7 +243,16 @@ export class DialogPostBelief implements OnInit {
       //}
   }
 
+  getLength(innerText) {
 
+    if (innerText != null) {
+       
+      return innerText.replace(/<[^>]*>/g, '').length;
+    }
+    else return 0;
+      
+    
+  }
    
   logout() {
     localStorage.removeItem('currentUser');

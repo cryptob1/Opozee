@@ -36,8 +36,8 @@ export class EditProfileComponent implements OnInit {
   ngOnInit() {
     this.edtiProfileForm = this.formBuilder.group({
       userName: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: [''],
+      lastName: [''],
       email: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       userInfo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(200)]],
