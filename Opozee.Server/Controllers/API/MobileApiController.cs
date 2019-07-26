@@ -92,11 +92,13 @@ namespace opozee.Controllers.API
                     entity = db.Users.Where(p => p.Email == input.Email && p.SocialType == "GooglePlus"
                                         && p.RecordStatus != RecordStatus.Deleted.ToString()).FirstOrDefault();
                 }
+
                 string strThumbnailURLfordb = null;
                 string strIamgeURLfordb = null;
                 string _SiteRoot = WebConfigurationManager.AppSettings["SiteImgPath"];
                 string _SiteURL = WebConfigurationManager.AppSettings["SiteImgURL"];
-
+                HttpPostedFileBase file;
+                string imageName = "";
                 string strThumbnailImage = input.ImageURL;
                 //user already exists
                 if (entity != null)
@@ -121,10 +123,58 @@ namespace opozee.Controllers.API
                         entity.Password = AesCryptography.Encrypt(input.Password);
                     }
 
-    
-                    if (entity.ImageURL == "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png")
+
+                    //if (entity.ImageURL.Contains("ProfileImage/opozee-profile.png"))
+                    //{
+                    //    if (input.ImageURL != null && input.ImageURL != "")
+                    //    {
+                    //        try
+                    //        {
+                    //            string strTempImageSave = OpozeeLibrary.Utilities.ResizeImage.Download_Image(input.ImageURL);
+                    //            string profileFilePath = _SiteURL + "/ProfileImage/" + strTempImageSave;
+                    //            strIamgeURLfordb = profileFilePath;
+
+                    //            //imageName = new String(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
+                    //            //string guid = Guid.NewGuid().ToString();
+                    //            //imageName = imageName + guid + Path.GetExtension(postedFile.FileName);
+                    //            //var filePath = HttpContext.Current.Server.MapPath("~/Content/upload/ProfileImage/" + imageName);
+                    //            //postedFile.SaveAs(filePath);
+
+                    //            entity.ImageURL = profileFilePath;
+                    //        }
+                    //        catch (Exception ex)
+                    //        {
+                    //            entity.ImageURL = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+
+
+                    //        entity.ImageURL = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
+                    //    }
+
+                    //}
+
+                    if (input.ImageURL != null && input.ImageURL != "")
                     {
-                        if (input.ImageURL != null && input.ImageURL != "")
+                        if (entity.ImageURL != null)
+                        {
+                            if (entity.ImageURL.Contains("ProfileImage/opozee-profile.png") || entity.ImageURL.Contains("ProfileImage/oposee-profile.png"))
+                            {
+                                try
+                                {
+                                    string strTempImageSave = OpozeeLibrary.Utilities.ResizeImage.Download_Image(input.ImageURL);
+                                    string profileFilePath = _SiteURL + "/ProfileImage/" + strTempImageSave;
+                                    strIamgeURLfordb = profileFilePath;
+                                    entity.ImageURL = profileFilePath;
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+                            }
+                        }
+                        else
                         {
                             try
                             {
@@ -135,18 +185,14 @@ namespace opozee.Controllers.API
                             }
                             catch (Exception ex)
                             {
-                                entity.ImageURL = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
                             }
                         }
-                        else
-                        {
-
-
-                            entity.ImageURL = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
-                        }
-                       
                     }
-    
+                    else
+                    {
+                        entity.ImageURL = _SiteURL + "/ProfileImage/opozee-profile.png";
+                    }
+
 
                     entity.DeviceType = input.DeviceType != null && input.DeviceType != "" ? input.DeviceType : entity.DeviceType;
                     entity.DeviceToken = input.DeviceToken != null && input.DeviceToken != "" ? input.DeviceToken : entity.DeviceToken;
@@ -156,24 +202,7 @@ namespace opozee.Controllers.API
                     if (entity.ReferralCode == null)
                         entity.ReferralCode = Helper.GenerateReferralCode();
 
-                    //if (input.ImageURL != null && input.ImageURL != "")
-                    //{
-                    //    try
-                    //    {
-                    //        string strTempImageSave = OpozeeLibrary.Utilities.ResizeImage.Download_Image(input.ImageURL);
-                    //        string profileFilePath = _SiteURL + "/ProfileImage/" + strTempImageSave;
-                    //        strIamgeURLfordb = profileFilePath;
-                    //        entity.ImageURL = profileFilePath;
-                    //    }
-                    //    catch (Exception ex)
-                    //    {
-
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    entity.ImageURL = _SiteURL + "/ProfileImage/opozee-profile.png";
-                    //}
+                    
                     db.Entry(entity).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                     int userID = entity.UserID;
@@ -214,18 +243,13 @@ namespace opozee.Controllers.API
 
                         if (e.SocialType == null)
                         {
-
                             return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Email already registered. Please login with email/password.", "UserData"));
                         }
                         else
                         {
-
                             return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Failure, "Email already registered. Please login with " + e.SocialType + ".", "UserData"));
-
                         }
-
-                    }
-                     
+                    }                    
 
 
                     entity.DeviceType = input.DeviceType;
@@ -254,25 +278,30 @@ namespace opozee.Controllers.API
                             string profileFilePath = _SiteURL + "/ProfileImage/" + strTempImageSave;
                             strIamgeURLfordb = profileFilePath;
                             
+
+                            //imageName = new String(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
+                            //string guid = Guid.NewGuid().ToString();
+                            //imageName = imageName + guid + Path.GetExtension(postedFile.FileName);
+                            //var filePath = HttpContext.Current.Server.MapPath("~/Content/upload/ProfileImage/" + strTempImageSave);
+                            //postedFile.SaveAs(filePath);
+
                         }
                         catch (Exception ex)
                         {
-                            strIamgeURLfordb = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
+                            //strIamgeURLfordb = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
+                            strIamgeURLfordb = _SiteURL + "/ProfileImage/opozee-profile.png";
                         }
                     }
                     else
-                    {
-
-                         
-                        strIamgeURLfordb = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
+                    {                         
+                        //strIamgeURLfordb = "https://opozee.com:81/Content/Upload/ProfileImage/opozee-profile.png";
+                        strIamgeURLfordb = _SiteURL + "/ProfileImage/opozee-profile.png";
                     }
-
 
                     entity.ImageURL = strIamgeURLfordb;
 
                     entity.ReferralCode = Helper.GenerateReferralCode();
                     entity.EmailConfirmed = true;
-
                     
                     db.Users.Add(entity);
                     db.SaveChanges();

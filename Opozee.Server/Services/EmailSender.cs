@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Web.Configuration;
+using System.Net;
+using System.Net.Mail;
 
 namespace Opozee.Server.Services
 {
@@ -30,7 +32,7 @@ namespace Opozee.Server.Services
 
             return await SendEmailAsync(from, new MailboxAddress[] { to }, subject, body, config, isHtml);
         }
-        
+
         public static async Task<(bool success, string errorMsg)> SendEmailAsync(MailboxAddress sender, MailboxAddress[] recepients, string subject, string body, SmtpConfig config = null, bool isHtml = true)
         {
             MimeMessage message = new MimeMessage();
@@ -43,50 +45,51 @@ namespace Opozee.Server.Services
             try
             {
 
-                using (var client = new SmtpClient())
-                {
-                    if (!config.UseSSL)
-                        client.ServerCertificateValidationCallback = (object sender2, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) => true;
-
-                    await client.ConnectAsync(config.Host, config.Port, config.UseSSL).ConfigureAwait(false);
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
-
-                    if (!string.IsNullOrWhiteSpace(config.Username))
-                        await client.AuthenticateAsync(config.Username, config.Password).ConfigureAwait(false);
-
-                    await client.SendAsync(message).ConfigureAwait(false);
-                    await client.DisconnectAsync(true).ConfigureAwait(false);
-                }
-
-                //using (System.Net.Mail.SmtpClient smtpClient = new System.Net.Mail.SmtpClient())
-                //{
-                //    var basicCredential = new NetworkCredential(config.EmailAddress, config.Password);
-                //    using (MailMessage message = new MailMessage(config.EmailAddress, recepients[0].Address))
+                //    using (var client = new MailKit.Net.Smtp.SmtpClient())
                 //    {
-                //        var from = new MailAddress(config.EmailAddress, config.Name);
+                //        if (!config.UseSSL)
+                //            client.ServerCertificateValidationCallback = (object sender2, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) => true;
 
-                //        smtpClient.Host = config.Host;
-                //        smtpClient.UseDefaultCredentials = false;
-                //        smtpClient.Credentials = basicCredential;
-                //        smtpClient.Port = config.Port;
-                //        smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                //        await client.ConnectAsync(config.Host, config.Port, config.UseSSL).ConfigureAwait(false);
+                //        client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-                //        //message.From = from;
-                //        //message.To.Add(recepients[0].Address);
-                //        message.Subject = subject;
-                //        message.IsBodyHtml = true;
-                //        message.Body = body;
+                //        if (!string.IsNullOrWhiteSpace(config.Username))
+                //            await client.AuthenticateAsync(config.Username, config.Password).ConfigureAwait(false);
 
-                //        try
-                //        {
-                //            smtpClient.Send(message);
-                //        }
-                //        catch (Exception ex)
-                //        {
-                //            return (false, ex.Message);
-                //        }
+                //        await client.SendAsync(message).ConfigureAwait(false);
+                //        await client.DisconnectAsync(true).ConfigureAwait(false);
                 //    }
-                //}
+
+
+                using (System.Net.Mail.SmtpClient smtpClient = new System.Net.Mail.SmtpClient())
+                {
+                    var basicCredential = new NetworkCredential(config.EmailAddress, config.Password);
+                    using (MailMessage _message = new MailMessage(config.EmailAddress, recepients[0].Address))
+                    {
+                        var from = new MailAddress(config.EmailAddress, config.Name);
+
+                        smtpClient.Host = config.Host;
+                        smtpClient.UseDefaultCredentials = false;
+                        smtpClient.Credentials = basicCredential;
+                        smtpClient.Port = config.Port;
+                        smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        smtpClient.EnableSsl = true;
+                        //_message.From = from;
+                        //_message.To.Add(recepients[0].Address);
+                        _message.Subject = subject;
+                        _message.IsBodyHtml = true;
+                        _message.Body = body;
+
+                        try
+                        {
+                            smtpClient.Send(_message);
+                        }
+                        catch (Exception ex)
+                        {
+                            return (false, ex.Message);
+                        }
+                    }
+                }
 
                 return (true, null);
             }
@@ -96,7 +99,6 @@ namespace Opozee.Server.Services
             }
         }
     }
-
 
 
     public class SmtpConfig
