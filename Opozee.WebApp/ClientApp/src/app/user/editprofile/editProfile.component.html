@@ -43,8 +43,8 @@
                 <label for="userinfo">Background</label>
                 <p class="text-info small text-left" style="font-size: 10px; margin-bottom: 0px"> Example- Developer @ Opozee.com , Worked @ FB, Google, Apple.</p>
                 <input type="text" formControlName="userInfo" class="form-control form-control pl-5" [ngClass]="{ 'is-invalid': submitted && f.userInfo.errors }" placeholder="Enter profile" />
-                <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-                  <div *ngIf="f.email.errors.required">*User Profile Required</div>
+                <div *ngIf="submitted && f.userInfo.errors" class="invalid-feedback">
+                  <div *ngIf="f.userInfo.errors.required">*User Profile Required</div>
                 </div>
 
               </div>
