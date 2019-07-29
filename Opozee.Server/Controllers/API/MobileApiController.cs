@@ -1019,9 +1019,13 @@ namespace opozee.Controllers.API
                 Search = string.IsNullOrEmpty(Search) ? "all" : Search.ToLower() == "all" ? "all" : Search;
 
 
-                if (Search == "all")
+                if (Search.ToLower() == "all")
                 {
-                    questionDetail.PostQuestionDetail = db.Database.SqlQuery<PostQuestionDetailMobile>("SP_PostQuestionDetailMobile ").ToList();
+
+                
+                questionDetail.PostQuestionDetail = db.Database.SqlQuery<PostQuestionDetailMobile>("SP_PostQuestionDetailMobile @Search,@NotLike",
+                        new SqlParameter("@Search", ""),
+                        new SqlParameter("@NotLike", "DailyFive")).ToList();
                 }
                 else
                 {
@@ -1029,8 +1033,12 @@ namespace opozee.Controllers.API
                          new SqlParameter("@Search", Search)).ToList();
                 }
 
+                if (Search.ToLower() == "dailyfive") //sort by posted time
+                {
+                    questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderByDescending(p => p.CreationDate).ToPagedList(Pageindex - 1, Pagesize).ToList();
+                }
               
-                if (Sort == 0) //sort by last reaction time
+                else if (Sort == 0) //sort by last reaction time
                 {
                     questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderByDescending(p => p.LastActivityTime).ToPagedList(Pageindex - 1, Pagesize).ToList();
                 }
