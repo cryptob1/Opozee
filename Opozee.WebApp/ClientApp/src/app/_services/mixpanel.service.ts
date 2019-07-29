@@ -15,7 +15,7 @@ export class MixpanelService {
     mixpanel.identify(userToken);
     mixpanel.people.set({
       "$email": userToken,    // only special properties need the $
-
+      "$name": userToken
       //"$created": "2011-03-16 16:53:54",
       //"$last_login": new Date(),         // properties can be dates...
 
