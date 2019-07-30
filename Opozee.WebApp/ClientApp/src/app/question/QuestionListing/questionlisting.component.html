@@ -199,7 +199,7 @@
                     <p class="message-container" [innerHTML]=" temp?.MostYesLiked?.Comment | linky:{stripPrefix : true, truncate:15} | emojis  "></p>
                    
                     <div class="image_belief" *ngIf="temp?.MostYesLiked?.BeliefImage">
-                      <img src="{{temp?.MostYesLiked?.BeliefImage}}" style="border-radius: 8px;width: 100%; max-height: 450px; margin-top:24px; margin-bottom:10px;"onError="this.src='../../../assets/images/No-image-found.jpg'" alt="user" />
+                      <img src="{{temp?.MostYesLiked?.BeliefImage}}" style="border-radius: 8px;width: 100%; max-height: 250px; margin-top:24px; margin-bottom:10px;"onError="this.src='../../../assets/images/No-image-found.jpg'" alt="user" />
                     </div>
                   </div>
 
@@ -243,7 +243,7 @@
                     <small class="belief-time"><i>{{temp?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
                     <p class="message-container" [innerHTML]="temp?.MostNoLiked?.Comment | linky:{stripPrefix : true, truncate:15} | emojis   "></p>
                     <div class="image_belief" *ngIf="temp?.MostNoLiked?.BeliefImage">
-                      <img src="{{temp?.MostNoLiked?.BeliefImage}}"style="border-radius: 8px;width: 100%; max-height: 450px; margin-top:24px; margin-bottom:10px;" onError="this.src='../../../assets/images/No-image-found.jpg'" alt="user" />
+                      <img src="{{temp?.MostNoLiked?.BeliefImage}}"style="border-radius: 8px;width: 100%; max-height: 250px; margin-top:24px; margin-bottom:10px;" onError="this.src='../../../assets/images/No-image-found.jpg'" alt="user" />
                     </div>
                   </div>
 
@@ -349,7 +349,7 @@
                         <p class="message-container" [innerHTML]="temp1?.Comment | linky:{stripPrefix : true, truncate:15} ">
                         </p>
                         <div class="image_belief" *ngIf="temp1?.beliefimage">
-                          <img src="{{temp1?.beliefimage}}" style="border-radius: 8px;width: 100%; max-height: 450px; margin-top:24px; margin-bottom:10px;" onerror="this.src='../../../assets/images/no-image-found.jpg'" alt="user" />
+                          <img src="{{temp1?.beliefimage}}" style="border-radius: 8px;width: 100%; max-height: 250px; margin-top:24px; margin-bottom:10px;" onerror="this.src='../../../assets/images/no-image-found.jpg'" alt="user" />
                         </div>
                     
 
