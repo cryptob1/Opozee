@@ -310,8 +310,8 @@ header .container-fluid {
 
   .header-ddl .dropdown-menu a {
     width: 100%;
-    float: left;
-    padding: 6px 15px !important;
+    /*float: left;*/
+    padding: 4px 15px !important;
   }
 
 
