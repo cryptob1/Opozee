@@ -62,7 +62,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="QuestId" Type="int" Nullable="false" />
-          <Property Name="Comment" Type="nvarchar(max)" />
+          <Property Name="Comment" Type="varchar(max)" Nullable="false" />
           <Property Name="CommentedUserId" Type="int" Nullable="false" />
           <Property Name="IsAgree" Type="bit" />
           <Property Name="Likes" Type="int" />
@@ -70,8 +70,8 @@
           <Property Name="CreationDate" Type="datetime" />
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="ReactionType" Type="int" />
-          <Property Name="LongForm" Type="nvarchar(max)" />
-          <Property Name="ImageUrl" Type="varchar(max)" />
+          <Property Name="LongForm" Type="varchar(max)" />
+          <Property Name="ImageURL" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Question">
           <Key>
@@ -87,6 +87,7 @@
           <Property Name="ModifiedDate" Type="datetime" />
           <Property Name="IsSlider" Type="bit" />
           <Property Name="Detail" Type="varchar(max)" />
+          <Property Name="Link" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Referral">
           <Key>
@@ -120,7 +121,7 @@
           <Property Name="IsAdmin" Type="bit" />
           <Property Name="SocialID" Type="varchar" MaxLength="50" />
           <Property Name="SocialType" Type="varchar" MaxLength="50" />
-          <Property Name="ImageURL" Type="varchar" MaxLength="300" />
+          <Property Name="ImageURL" Type="varchar" MaxLength="1000" />
           <Property Name="DeviceType" Type="varchar" MaxLength="50" />
           <Property Name="DeviceToken" Type="varchar" MaxLength="200" />
           <Property Name="RecordStatus" Type="varchar" MaxLength="20" />
@@ -217,6 +218,7 @@
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="IsSlider" Type="Boolean" />
           <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Link" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Token">
           <Key>
@@ -240,7 +242,7 @@
           <Property Name="IsAdmin" Type="Boolean" />
           <Property Name="SocialID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="SocialType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ImageURL" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="ImageURL" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="DeviceType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="DeviceToken" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="RecordStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
@@ -328,7 +330,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="QuestId" Type="Int32" Nullable="false" />
-          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CommentedUserId" Type="Int32" Nullable="false" />
           <Property Name="IsAgree" Type="Boolean" />
           <Property Name="Likes" Type="Int32" />
@@ -336,7 +338,7 @@
           <Property Name="CreationDate" Type="DateTime" Precision="3" />
           <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
           <Property Name="ReactionType" Type="Int32" />
-          <Property Name="LongForm" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LongForm" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
@@ -360,6 +362,7 @@
           <EntitySetMapping Name="Questions">
             <EntityTypeMapping TypeName="oposeeDbModel.Question">
               <MappingFragment StoreEntitySet="Question">
+                <ScalarProperty Name="Link" ColumnName="Link" />
                 <ScalarProperty Name="Detail" ColumnName="Detail" />
                 <ScalarProperty Name="IsSlider" ColumnName="IsSlider" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
@@ -491,7 +494,7 @@
           <EntitySetMapping Name="Opinions">
             <EntityTypeMapping TypeName="oposeeDbModel.Opinion">
               <MappingFragment StoreEntitySet="Opinion">
-                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageURL" />
                 <ScalarProperty Name="LongForm" ColumnName="LongForm" />
                 <ScalarProperty Name="ReactionType" ColumnName="ReactionType" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />

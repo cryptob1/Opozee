@@ -24,6 +24,11 @@
   text-decoration: none;
 }
 
+.question-link .a{
+  padding-top: 4px;
+  font-size: 10px;
+  float: left;
+}
 .cover_questions .cover_analysis .left > span {
   width: 10%;
   float: left;

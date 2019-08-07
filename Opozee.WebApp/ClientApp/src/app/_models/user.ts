@@ -107,6 +107,7 @@ export class PostQuestionDetail {
   BookmarkId: number;
   CreationDate: Date;
   HashTags: string;
+  Link: string;
   Id: number;
   IsBookmark: boolean;
   IsUserPosted: boolean;
@@ -124,6 +125,7 @@ export class PostQuestionDetail {
   comments: Comments[] = [];
   percentage: number;
   LastActivityTime: Date;
+
   constructor() {
     //this.IsBookmark = false;
   }

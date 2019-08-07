@@ -33,12 +33,9 @@
 
               <div ExternalLink *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question">
                 <p class="message-container mb-0" style="font-size:18px" [innerHTML]="''+PostQuestionDetailModel?.postQuestionDetail?.Question| linky:{stripPrefix : true, truncate:15}  | emojis"></p>
-                <p class="mb-30">
-                  <small *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Question" style="float: left">
-
-                  </small>
-                </p>
+                <p class="message-container mb-30" style="font-size:12px;float: left" *ngIf="PostQuestionDetailModel?.postQuestionDetail?.Link"  [innerHTML]="''+PostQuestionDetailModel?.postQuestionDetail?.Link| linky:{stripPrefix : true, truncate:30}"></p>
               </div>
+               
 
               <div class="hash_tag">
                 <span>

@@ -70,15 +70,16 @@ export class PostQuestionComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    
     //this.loadAllUsers();
     this.questionPostForm = this.formBuilder.group({
       postQuestion: ['', [Validators.required, Validators.maxLength(299)]],
       hashtags: [''],
+      link: ['', [Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')]],
       ownerUserId: this.localStorageUser.Id 
     });
 
-
+   
     this.GetAllTaggedDrop(); // Tag dropdown bind
 
     //test
@@ -115,17 +116,18 @@ export class PostQuestionComponent implements OnInit {
     debugger;
     // stop here if form is invalid
     if (this.questionPostForm.invalid) {
-      this.toastr.error('', 'please Fill all Field !', { timeOut: 2000 });
+      this.toastr.error('', 'Please fill all fields.', { timeOut: 2000 });
       return;
     }
     let postQuestionTemp = this.questionPostForm.value.postQuestion.trim();
     let UsertagsTemp = this.Usertags.trim();
     this.questionPostForm.value.hashtags = this.questionPostForm.value.hashtags.trim().replace(/, /g, ',').replace(/ ,/g, ',').replace(/\s/g,',').replace(/#/g,'').toLowerCase();
     let taggedUserTemp = this.Usertags
-    
+     
+
     if (postQuestionTemp == '') {
       postQuestionTemp = 0;
-      this.toastr.error('', 'please Fill all Field', { timeOut: 2000 });
+      this.toastr.error('', 'Please fill all fields.', { timeOut: 2000 });
       return
     }
 
@@ -160,7 +162,7 @@ export class PostQuestionComponent implements OnInit {
     debugger;
     // stop here if form is invalid
     if (this.questionPostForm.invalid) {
-      this.toastr.error('', 'please Fill all Field !', { timeOut: 2000 });
+      this.toastr.error('', 'Please fill all fields.', { timeOut: 2000 });
       return;
     }
     let postQuestionTemp = this.questionPostForm.value.postQuestion.trim();
@@ -170,7 +172,7 @@ export class PostQuestionComponent implements OnInit {
        
     if (  postQuestionTemp == '') {
       postQuestionTemp = 0;
-      this.toastr.error('', 'please Fill all Field', { timeOut: 2000 });
+      this.toastr.error('', 'Please fill all fields.', { timeOut: 2000 });
       return
     }
 

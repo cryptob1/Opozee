@@ -24,6 +24,8 @@ namespace Opozee.Models.API
         public int Id { get; set; }
         public string OwnerUserName { get; set; }
         public string Question { get; set; }
+        public string Link { get; set; }
+
         public string HashTags { get; set; }
         public int Like { get; set; }
         public string ImageURL { get; set; }
@@ -69,6 +71,7 @@ namespace Opozee.Models.API
     {
         public int Id { get; set; }
         public string Question { get; set; }
+        public string Link { get; set; }
         public int OwnerUserID { get; set; }
 
         public string OwnerUserName { get; set; }
@@ -138,6 +141,7 @@ namespace Opozee.Models.API
         public Nullable<bool> IsDeleted { get; set; }
         public string TaggedUser { get; set; }
         public string HashTags { get; set; }
+        public string Link { get; set; }
     }
 
 

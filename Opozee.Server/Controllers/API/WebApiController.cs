@@ -724,6 +724,7 @@ namespace opozee.Controllers.API
                                  OwnerUserID = q.OwnerUserID,
                                  OwnerUserName = u.UserName,
                                  HashTags = q.HashTags,
+                                 Link = q.Link,
                                  CreationDate = q.CreationDate,
                                  TotalLikes = (from o in db.Opinions
                                                where o.QuestId == q.Id
@@ -781,6 +782,7 @@ namespace opozee.Controllers.API
                     objitem.OwnerUserName = reader["UserName"].ToString();
                     objitem.Question = reader["PostQuestion"].ToString();
                     objitem.HashTags = reader["HashTags"].ToString();
+                    objitem.Link = reader["Link"].ToString();
                     objitem.ImageURL = string.IsNullOrEmpty(reader["ImageURL"].ToString()) ? "" : reader["ImageURL"].ToString();
                     objitem.UserID = Convert.ToInt32(reader["UserID"]);
 
@@ -921,6 +923,7 @@ namespace opozee.Controllers.API
                 quest.PostQuestion = postQuestion.PostQuestion;
                 quest.OwnerUserID = postQuestion.OwnerUserID;
                 quest.HashTags = postQuestion.HashTags;
+                quest.Link= postQuestion.Link;
                 quest.IsDeleted = false;
                 quest.CreationDate = DateTime.Now.ToUniversalTime();
                 quest.TaggedUser = postQuestion.TaggedUser;
@@ -1013,6 +1016,7 @@ namespace opozee.Controllers.API
                                                 QuestionId = q.Id,
                                                 Question = q.PostQuestion,
                                                 HashTags = q.HashTags,
+                                                Link = q.Link,
                                                 OpinionId = o.Id,
                                                 Opinion = o.Comment,
                                                 Image = u.ImageURL,
@@ -1099,6 +1103,7 @@ namespace opozee.Controllers.API
                                                   QuestionId = q.Id,
                                                   Question = q.PostQuestion,
                                                   HashTags = q.HashTags,
+                                                  Link = q.Link,
                                                   OpinionId = o.Id,
                                                   Opinion = o.Comment,
                                                   Image = u.ImageURL,
@@ -1176,6 +1181,7 @@ namespace opozee.Controllers.API
                                             QuestionId = q.Id,
                                             Question = q.PostQuestion,
                                             HashTags = q.HashTags,
+                                            Link= q.Link,
                                             OpinionId = o.Id,
                                             OpinionList = (from p in db.Opinions where p.QuestId == q.Id && p.CommentedUserId == Model.UserId select p.Comment).ToList(),
                                             Image = u.ImageURL,
@@ -1236,6 +1242,7 @@ namespace opozee.Controllers.API
                                             QuestionId = q.Id,
                                             Question = q.PostQuestion,
                                             HashTags = q.HashTags,
+                                            Link= q.Link,
                                             OpinionId = 0,//o == null ? 0 : o.Id,
                                             //OpinionList = null,//o == null ? null : (from p in db.Opinions where p.QuestId == q.Id select p.Comment).ToList(),
                                             Image = u.ImageURL,
@@ -1415,6 +1422,7 @@ namespace opozee.Controllers.API
                                       Name = u.FirstName + " " + u.LastName,
                                       UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
                                       HashTags = q.HashTags,
+                                      Link = q.Link,
                                       CreationDate = q.CreationDate,
                                       IsSlider = q.IsSlider,
                                       YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
@@ -1532,6 +1540,7 @@ namespace opozee.Controllers.API
                         _bQuestion.BountyCreatedOn = bq.BountyCreatedOn;
                         _bQuestion.PostQuestion = bq.PostQuestion;
                         _bQuestion.HashTags = bq.HashTags;
+                        //_bQuestion.Link= bq.Link;
                         _bQuestion.TaggedUser = bq.TaggedUser;
                         _bQuestion.QuestionCreatedOn = bq.QuestionCreatedOn;
                         _bQuestion.UserId = bq.UserId;
@@ -1852,6 +1861,7 @@ namespace opozee.Controllers.API
                                           Name = u.FirstName + " " + u.LastName,
                                           UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
                                           HashTags = q.HashTags,
+                                          Link= q.Link,
                                           CreationDate = q.CreationDate,
                                           IsSlider = q.IsSlider,
                                           YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
@@ -1905,6 +1915,7 @@ namespace opozee.Controllers.API
                                           Name = u.FirstName + " " + u.LastName,
                                           UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
                                           HashTags = q.HashTags,
+                                          Link = q.Link,
                                           CreationDate = q.CreationDate,
                                           IsSlider = q.IsSlider,
                                           YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
@@ -1964,6 +1975,7 @@ namespace opozee.Controllers.API
                                           Name = u.FirstName + " " + u.LastName,
                                           UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
                                           HashTags = q.HashTags,
+                                          Link = q.Link,
                                           CreationDate = q.CreationDate,
                                           IsSlider = q.IsSlider,
                                           YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
@@ -2020,6 +2032,7 @@ namespace opozee.Controllers.API
                                           Name = u.FirstName + " " + u.LastName,
                                           UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
                                           HashTags = q.HashTags,
+                                          Link= q.Link,
                                           CreationDate = q.CreationDate,
                                           IsSlider = q.IsSlider,
                                           YesCount = db.Opinions.Where(o => o.QuestId == q.Id && o.IsAgree == true).Count(),
@@ -2906,6 +2919,7 @@ namespace opozee.Controllers.API
             var Comment = httpRequest.Form["Comment"];
             var CommentedUserId = httpRequest.Form["CommentedUserId"];
             var LongForm = httpRequest.Form["LongForm"];
+
             var OpinionAgreeStatus = httpRequest.Form["OpinionAgreeStatus"];
             var QuestId = httpRequest.Form["QuestId"];
 
@@ -4429,6 +4443,7 @@ namespace opozee.Controllers.API
                 //quest = new Question();
                 quest.PostQuestion = postQuestion.PostQuestion;
                 quest.HashTags = postQuestion.HashTags;
+                quest.Link = postQuestion.Link;
                 quest.ModifiedDate = DateTime.Now.ToUniversalTime();
                 db.Entry(quest).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();

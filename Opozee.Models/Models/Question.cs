@@ -24,5 +24,6 @@ namespace Opozee.Models.Models
         public Nullable<System.DateTime> ModifiedDate { get; set; }
         public Nullable<bool> IsSlider { get; set; }
         public string Detail { get; set; }
+        public string Link { get; set; }
     }
 }

@@ -52,6 +52,7 @@ namespace Opozee.Models.API
         public string OwnerUserName { get; set; }
         public string Name { get; set; }
         public string UserImage { get; set; }
+        public string Link { get; set; }
         public string HashTags { get; set; }
         public int? TotalLikes { get; set; }
         public int YesCount { get; set; }
@@ -103,6 +104,7 @@ namespace Opozee.Models.API
         public int YesCount { get; set; }
         public int NoCount { get; set; }
         public DateTime? CreationDate { get; set; }
+        public string Link { get; set; }
         public bool? IsBookmark { get; set; }
         public int BookmarkId { get; set; }
         public bool IsUserPosted { get; set; }

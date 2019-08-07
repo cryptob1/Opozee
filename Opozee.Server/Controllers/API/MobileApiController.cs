@@ -356,11 +356,12 @@ namespace opozee.Controllers.API
                     //db.SaveChanges();
 
                     int _checkUpdate = db.Database.ExecuteSqlCommand(
-                           "UPDATE Question SET PostQuestion = @PostQuestion,OwnerUserID = @OwnerUserID,HashTags = @HashTags,TaggedUser = @TaggedUser,IsDeleted = @IsDeleted,IsSlider = @IsSlider,ModifiedDate = @ModifiedDate WHERE Id = @Id",
+                           "UPDATE Question SET PostQuestion = @PostQuestion,OwnerUserID = @OwnerUserID,HashTags = @HashTags,TaggedUser = @TaggedUser,IsDeleted = @IsDeleted,IsSlider = @IsSlider,ModifiedDate = @ModifiedDate, Link=@Link WHERE Id = @Id",
                            new SqlParameter("Id", postQuestion.Id),
                            new SqlParameter("PostQuestion", postQuestion.PostQuestion == null ? "" : postQuestion.PostQuestion),
                            new SqlParameter("OwnerUserID", postQuestion.OwnerUserID),
                            new SqlParameter("HashTags", postQuestion.HashTags == null ? "" : postQuestion.HashTags),
+                           new SqlParameter("Link", postQuestion.Link == null ? "" : postQuestion.Link),
                            new SqlParameter("TaggedUser", postQuestion.TaggedUser == null ? "" : postQuestion.TaggedUser),
                            new SqlParameter("IsDeleted", false),
                            new SqlParameter("IsSlider", false),
@@ -387,11 +388,12 @@ namespace opozee.Controllers.API
 
                     int _checkInsert = db.Database.ExecuteSqlCommand(
                               "INSERT INTO Question (" +
-                              "PostQuestion,OwnerUserID,HashTags,TaggedUser,IsDeleted,IsSlider,CreationDate) " +
-                              " VALUES (@PostQuestion,@OwnerUserID,@HashTags,@TaggedUser,@IsDeleted,@IsSlider,@CreationDates)",
+                              "PostQuestion,OwnerUserID,HashTags,TaggedUser,IsDeleted,IsSlider,CreationDate,Link) " +
+                              " VALUES (@PostQuestion,@OwnerUserID,@HashTags,@TaggedUser,@IsDeleted,@IsSlider,@CreationDates, @Link)",
                               new SqlParameter("PostQuestion", postQuestion.PostQuestion == null ? "" : postQuestion.PostQuestion),
                               new SqlParameter("OwnerUserID", postQuestion.OwnerUserID),
                               new SqlParameter("HashTags", postQuestion.HashTags == null ? "" : postQuestion.HashTags),
+                              new SqlParameter("Link", postQuestion.Link == null ? "" : postQuestion.Link),
                               new SqlParameter("TaggedUser", postQuestion.TaggedUser == null ? "" : postQuestion.TaggedUser),
                               new SqlParameter("IsDeleted", false),
                               new SqlParameter("IsSlider", false),
@@ -770,6 +772,7 @@ namespace opozee.Controllers.API
                                                              OwnerUserName = u.UserName,
                                                              UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
                                                              HashTags = q.HashTags,
+                                                             Link = q.Link,
                                                              Name = u.FirstName + " " + u.LastName,
                                                              IsBookmark = db.BookMarks.Where(b => b.UserId == userId && b.QuestionId == id).Select(b => b.IsBookmark.HasValue ? b.IsBookmark.Value : false).FirstOrDefault(),
                                                              IsSlider = q.IsSlider,
@@ -1987,6 +1990,7 @@ namespace opozee.Controllers.API
                                                          OwnerUserName = u.UserName,
                                                          UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
                                                          HashTags = q.HashTags,
+                                                         Link = q.Link,
                                                          Name = u.FirstName + " " + u.LastName,
                                                          TotalLikes = db.Notifications.Where(o => o.questId == q.Id && o.Like == true).Count(),
                                                          TotalDisLikes = db.Notifications.Where(o => o.questId == q.Id && o.Dislike == true).Count(),
