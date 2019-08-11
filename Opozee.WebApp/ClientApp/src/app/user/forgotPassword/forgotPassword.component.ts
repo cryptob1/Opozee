@@ -30,7 +30,7 @@ export class ForgotPassword implements OnInit {
     "translate": "yes",
     "enableToolbar": true,
     "showToolbar": true,
-    "placeholder": "Share your belief..",
+    "placeholder": "Share your views..",
     "imageEndPoint": "",
     "toolbar": [
       ["bold", "italic", "underline", "fontSize", "color"],

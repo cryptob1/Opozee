@@ -1310,23 +1310,23 @@ namespace opozee.Controllers.API
             string Tag = "";
             if (like == true && dislike == false && comment == false)
             {
-                Tag = UserName + " Has upvoted your belief.";
+                Tag = UserName + " Has upvoted your viewpoint.";
             }
             else if (dislike == true && like == false && comment == false)
             {
-                Tag = UserName + " Has downvoted your belief.";
+                Tag = UserName + " Has downvoted your viewpoint.";
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = UserName + " Has posted a belief for your Question.";
+                Tag = UserName + " Has posted a viewpoint for your post.";
             }
             else if (like == true && dislike == false && comment == true)
             {
-                Tag = UserName + " Has Liked and posted a belief for your Question.";
+                Tag = UserName + " Has Liked and posted a viewpoint for your post.";
             }
             else if (dislike == true && like == false && comment == true)
             {
-                Tag = UserName + " Has Disliked and posted a belief for your Question.";
+                Tag = UserName + " Has Disliked and posted a viewpoint for your post.";
             }
             else if (dislike == false && like == false && comment == false)
             {
@@ -1343,23 +1343,23 @@ namespace opozee.Controllers.API
             if (yours) { addStr = "your"; }
             if (like == true && dislike == false && comment == false)
             {
-                Tag = " up-voted " + addStr + " belief:";
+                Tag = " up-voted " + addStr + " viewpoint:";
             }
             else if (dislike == true && like == false && comment == false)
             {
-                Tag = " down-voted " + addStr + " belief:";
+                Tag = " down-voted " + addStr + " viewpoint:";
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = " posted a belief to answer " + addStr + " question:";
+                Tag = " posted a viewpoint to answer " + addStr + " post:";
             }
             else if (like == true && dislike == false && comment == true)
             {
-                Tag = " posted a belief and up-voted.";
+                Tag = " posted a viewpoint and up-voted.";
             }
             else if (dislike == true && like == false && comment == true)
             {
-                Tag = " posted a belief and down-voted.";
+                Tag = " posted a viewpoint and down-voted.";
             }
 
 
@@ -3024,7 +3024,7 @@ namespace opozee.Controllers.API
                                     User data = db.Users.Find(items);
                                     if (data != null)
                                     {
-                                        string finalMessage1 = user.UserName + " has posted a belief on a question where you are tagged.";
+                                        string finalMessage1 = user.UserName + " has posted a viewpoint on a post where you are tagged.";
 
                                         pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", _questId.ToString());
                                     }
@@ -3045,7 +3045,7 @@ namespace opozee.Controllers.API
                                 User data = db.Users.Find(items);
                                 if (data != null)
                                 {
-                                    string finalMessage = user.UserName + " has posted a belief on a question where you are tagged.";
+                                    string finalMessage = user.UserName + " has posted a viewpoint on a post where you are tagged.";
 
                                     pushNotifications.SendNotification_Android(data.DeviceToken, finalMessage, "QD", _questId.ToString());
                                 }
@@ -3223,7 +3223,7 @@ namespace opozee.Controllers.API
                                         User data = db.Users.Find(items);
                                         if (data != null)
                                         {
-                                            string finalMessage1 = user.UserName + " has " + action + " question in which you're tagged in.";
+                                            string finalMessage1 = user.UserName + " has " + action + " post in which you're tagged in.";
 
                                             pNoty.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", questId.ToString());
                                         }
@@ -3244,7 +3244,7 @@ namespace opozee.Controllers.API
                                     User data = db.Users.Find(items);
                                     if (data != null)
                                     {
-                                        string finalMessage = user.UserName + " has " + action + " question in which you're tagged in.";
+                                        string finalMessage = user.UserName + " has " + action + " post in which you're tagged in.";
 
                                         pNoty.SendNotification_Android(data.DeviceToken, finalMessage, "QD", questId.ToString());
                                     }
@@ -3426,7 +3426,7 @@ namespace opozee.Controllers.API
                                         User data = db.Users.Find(items);
                                         if (data != null)
                                         {
-                                            string finalMessage1 = user.UserName + " has " + action + " question in which you're tagged in.";
+                                            string finalMessage1 = user.UserName + " has " + action + " post in which you're tagged in.";
 
                                             pNoty.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", questId.ToString());
                                         }
@@ -3447,7 +3447,7 @@ namespace opozee.Controllers.API
                                     User data = db.Users.Find(items);
                                     if (data != null)
                                     {
-                                        string finalMessage = user.UserName + " has " + action + " question in which you're tagged in.";
+                                        string finalMessage = user.UserName + " has " + action + " post in which you're tagged in.";
 
                                         pNoty.SendNotification_Android(data.DeviceToken, finalMessage, "QD", questId.ToString());
                                     }
@@ -3663,7 +3663,7 @@ namespace opozee.Controllers.API
                                     User data = db.Users.Find(items);
                                     if (data != null)
                                     {
-                                        string finalMessage1 = user.UserName +" has " + action + " question in which you're tagged in.";
+                                        string finalMessage1 = user.UserName +" has " + action + " post in which you're tagged in.";
 
                                         pNoty.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", questId.ToString());
                                     }
@@ -3684,7 +3684,7 @@ namespace opozee.Controllers.API
                                 User data = db.Users.Find(items);
                                 if (data != null)
                                 {
-                                    string finalMessage = user.UserName + " has " + action + " question in which you're tagged in.";
+                                    string finalMessage = user.UserName + " has " + action + " post in which you're tagged in.";
 
                                     pNoty.SendNotification_Android(data.DeviceToken, finalMessage, "QD", questId.ToString());
                                 }
@@ -3761,7 +3761,7 @@ namespace opozee.Controllers.API
                                     User data = db.Users.Find(items);
                                     if (data != null)
                                     {
-                                        string finalMessage1 = user.UserName + " has " + action + " question in which you're tagged in.";
+                                        string finalMessage1 = user.UserName + " has " + action + " post in which you're tagged in.";
 
                                         pNoty.SendNotification_Android(data.DeviceToken, finalMessage1, "QD", questId.ToString());
                                     }
@@ -3782,7 +3782,7 @@ namespace opozee.Controllers.API
                                 User data = db.Users.Find(items);
                                 if (data != null)
                                 {
-                                    string finalMessage = user.UserName +  " has " + action + " question in which you're tagged in.";
+                                    string finalMessage = user.UserName +  " has " + action + " post in which you're tagged in.";
 
                                     pNoty.SendNotification_Android(data.DeviceToken, finalMessage, "QD", questId.ToString());
                                 }
@@ -3808,15 +3808,15 @@ namespace opozee.Controllers.API
             string Tag = "";
             if (like == true && dislike == false && comment == false)
             {
-                Tag = UserName + " has upvoted your question's opinion.";
+                Tag = UserName + " has upvoted a viewpoint on your post.";
             }
             else if (dislike == true && like == false && comment == false)
             {
-                Tag = UserName + " has downvoted your question's opinion.";
+                Tag = UserName + " has downvoted a viewpoint on your posts.";
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = UserName + " has posted a belief on your question.";
+                Tag = UserName + " has posted a viewpoint on your post.";
             }
 
             return Tag;
@@ -3826,15 +3826,15 @@ namespace opozee.Controllers.API
             string Tag = "";
             if (like == true && dislike == false && comment == false)
             {
-                Tag = UserName + " has upvoted your belief.";
+                Tag = UserName + " has upvoted your viewpoint.";
             }
             else if (dislike == true && like == false && comment == false)
             {
-                Tag = UserName + " has downvoted your belief.";
+                Tag = UserName + " has downvoted your viewpoint.";
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = UserName + " has posted a belief on your question.";
+                Tag = UserName + " has posted a belief on your post.";
             }
 
             return Tag;
@@ -3849,19 +3849,19 @@ namespace opozee.Controllers.API
             }
             else if (dislike == true && like == false && comment == false)
             {
-                Tag = ActionUserName + " has disliked question's opinion in which you're tagged in";
+                Tag = ActionUserName + " has disliked question's opinion in which you are tagged in";
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = ActionUserName + " has given opinion on question in which you're tagged in";
+                Tag = ActionUserName + " has left a viewpoint on a post where you are tagged in";
             }
             //else if (like == true && dislike == false && comment == true)
             //{
-            //    Tag = UserName + " Has Liked and given opinion on your Question.";
+            //    Tag = UserName + " Has Liked and given opinion on your post.";
             //}
             //else if (dislike == true && like == false && comment == true)
             //{
-            //    Tag = UserName + " Has Disliked and given opinion on your Question.";
+            //    Tag = UserName + " Has Disliked and given opinion on your post.";
             //}
 
             return Tag;

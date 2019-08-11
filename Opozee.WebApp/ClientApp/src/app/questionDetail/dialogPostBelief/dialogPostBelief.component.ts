@@ -35,7 +35,7 @@ export class DialogPostBelief implements OnInit {
     "enableToolbar": true,
     "showToolbar": false,
  
-    "placeholder": "Share your belief in 400 characters or less..",
+    "placeholder": "Share your views in 400 characters or less..",
     "imageEndPoint": "",
     "toolbar": [
       ["bold", "italic", "underline", "fontSize", "color"],

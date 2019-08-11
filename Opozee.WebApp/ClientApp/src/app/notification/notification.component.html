@@ -56,19 +56,19 @@
 
                   <span class="cover_ntfctn_border questions-field" *ngIf="!temp?.RefferalStatus">
                     <strong>
-                      <a data-title="Q" [routerLink]="['/questiondetail/', temp.QuestionId]">
+                      <a data-title="P" [routerLink]="['/questiondetail/', temp.QuestionId]">
                         <div class="message-container" [innerHTML]="temp?.Question "></div>
                       </a>
                     </strong>
                     <div *ngIf="temp?.IsAgree">
                       <strong class="text-success">
-                        <a data-title="B" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="'@<b>'+temp?.Name+':</b> '+temp?.Opinion "></a>
+                        <a data-title="Y" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="'@<b>'+temp?.Name+':</b> '+temp?.Opinion "></a>
                       </strong>
                     </div>
 
                     <div *ngIf="!temp?.IsAgree">
                       <strong class="text-danger">
-                        <a data-title="B" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="'@<b>'+temp?.Name+':</b> '+temp?.Opinion ">
+                        <a data-title="N" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="'@<b>'+temp?.Name+':</b> '+temp?.Opinion ">
                         </a>
                       </strong>
                     </div>

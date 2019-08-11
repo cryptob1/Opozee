@@ -772,7 +772,7 @@ namespace opozee.Controllers.API
                                                              OwnerUserName = u.UserName,
                                                              UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
                                                              HashTags = q.HashTags,
-                                                             Link = q.Link,
+                                                             //Link = q.Link,
                                                              Name = u.FirstName + " " + u.LastName,
                                                              IsBookmark = db.BookMarks.Where(b => b.UserId == userId && b.QuestionId == id).Select(b => b.IsBookmark.HasValue ? b.IsBookmark.Value : false).FirstOrDefault(),
                                                              IsSlider = q.IsSlider,
@@ -1596,23 +1596,23 @@ namespace opozee.Controllers.API
             string Tag = "";
             if (like == true && dislike == false && comment == false)
             {
-                Tag = UserName + " upvoted your opinion.";
+                Tag = UserName + " upvoted your viewpoint.";
             }
             else if (dislike == true && like == false && comment == false)
             {
-                Tag = UserName + " downvoted your opinion.";
+                Tag = UserName + " downvoted your viewpoint.";
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = UserName + " posted a belief on your Question.";
+                Tag = UserName + " posted a viewpoint on your Post.";
             }
             else if (like == true && dislike == false && comment == true)
             {
-                Tag = UserName + " upvoted and posted a belief on your Question.";
+                Tag = UserName + " upvoted and posted a viewpoint on your Post.";
             }
             else if (dislike == true && like == false && comment == true)
             {
-                Tag = UserName + " downvoted and posted a belief on your Question.";
+                Tag = UserName + " downvoted and posted a viewpoint on your Post.";
             }
             else if (dislike == false && like == false && comment == false)
             {
@@ -1947,7 +1947,7 @@ namespace opozee.Controllers.API
                 _opinion = db.Opinions.Where(o => o.Id == model.Id && o.CommentedUserId == model.OwnerUserID).FirstOrDefault();
                 if (_opinion == null)
                 {
-                    return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, "Belief Not Found", "DeleteMyBelief"));
+                    return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, "Viewpoint Not Found", "DeleteMyBelief"));
                 }
 
                 db.Opinions.Remove(_opinion);

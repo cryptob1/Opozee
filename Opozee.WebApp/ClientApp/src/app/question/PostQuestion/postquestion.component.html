@@ -17,8 +17,8 @@
                 <div class="text-left">
 
                   <div class="form-group" style="width:100%">
-                    <label for="postQuestion">Question</label>
-                    <div class="bg-warning QuestionComment">Opozee is designed to answer questions in a yes or no format.</div>
+                    <label for="postQuestion">Start a Post</label>
+                    <div class="bg-warning QuestionComment">Keeps your posts short and specific.</div>
 
                     <!-- <app-ngx-editor resizer="basic"
                     formControlName="postQuestion"
@@ -64,7 +64,7 @@
 
                   <div class="form-group" style="width:100%">
                     <label for="links">Link </label>
-                    <label style="font-size: 11px">(Source link ) </label>
+                    <label style="font-size: 11px">( Reference link ) </label>
 
                     <input type="text" style="padding-left: 15px;" formControlName="link" class="form-control form-control pl-5" />
 
@@ -81,10 +81,10 @@
                 </div>
 
                 <div class="form-group">
-                  <button [disabled]="loading" class="btns bg-primary border-0 w-100 rounded color-white mt-3">Submit yes or no question.</button>
+                  <button [disabled]="loading" class="btns bg-primary border-0 w-100 rounded color-white mt-3">Post</button>
                   <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                 </div>
-                <div class="bg-warning small text-left"> Questions can be deleted from your profile page within 30 minutes of posting.</div>
+                <div class="bg-warning small text-left"> Posts can be deleted from your profile page within 30 minutes of posting.</div>
                 <!--<button (click)="openConfirmationDialog()" type="button" class="btn btn-primary">Open dialog</button>-->
 
               </form>
