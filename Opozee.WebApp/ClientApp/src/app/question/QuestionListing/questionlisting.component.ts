@@ -89,7 +89,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       this.initialize();
     });
 
-    this.questionGetModel.PageNumber = 1;// +localStorage.getItem('PageNumber');
+    this.questionGetModel.PageNumber = 1;//+localStorage.getItem('PageNumber');
 
     this.questionGetModel.Sort = +localStorage.getItem('Sort');
   }
@@ -128,6 +128,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
   initialize() {
+    console.log("initialize");
     this.getHastagsRecords();
     this.questionGetModel.isHashTag = this.hashTag;
     this.questionGetModel.qid = this.qid;
@@ -148,8 +149,19 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     this.questionGetModel.PageSize = 10;
     this.questionGetModel.TotalRecords = 5;
     this.questionGetModel.Sort = +localStorage.getItem('Sort');
-    this.getAllQuestionlist(this.questionGetModel);
 
+    let savedht = localStorage.getItem('savedtab');
+
+    console.log(savedht);
+    if (savedht == undefined || savedht == "" || savedht == null) {
+
+      this.getAllQuestionlist(this.questionGetModel);
+
+    }
+    else {
+      console.log("switch tab");
+      this.switchTab(savedht, +localStorage.getItem('savedtabindex'));
+    }
     //this.getBountyQuestionsByDates();
 
   }
@@ -174,7 +186,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       
       this.popularhastags.push({ 'HashTag': 'All' });
        
-      console.log(this.popularhastags);
+      //console.log(this.popularhastags);
 
     });
   }
@@ -340,6 +352,16 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
 
   switchTab(ht, index) {
+
+    if (ht != "DailyFive") {
+      localStorage.setItem('savedtab', ht);
+      localStorage.setItem('savedtabindex', index);
+    }
+    else {
+      localStorage.setItem('savedtab', '');
+      localStorage.setItem('savedtabindex', "0");
+    }
+
     this.isRecordLoaded = false;
 
     this.questionGetModel.PageNumber = 1;
