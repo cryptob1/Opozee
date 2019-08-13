@@ -123,6 +123,7 @@ namespace Opozee.Models.API
         public string UserImage { get; set; }
         public string Name { get; set; }
         public string HashTags { get; set; }
+        public string Link { get; set; }
         public int? TotalLikes { get; set; }
         public int? TotalDisLikes { get; set; }
         public int YesCount { get; set; }

@@ -772,7 +772,7 @@ namespace opozee.Controllers.API
                                                              OwnerUserName = u.UserName,
                                                              UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
                                                              HashTags = q.HashTags,
-                                                             //Link = q.Link,
+                                                             Link = q.Link,
                                                              Name = u.FirstName + " " + u.LastName,
                                                              IsBookmark = db.BookMarks.Where(b => b.UserId == userId && b.QuestionId == id).Select(b => b.IsBookmark.HasValue ? b.IsBookmark.Value : false).FirstOrDefault(),
                                                              IsSlider = q.IsSlider,

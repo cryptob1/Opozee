@@ -198,7 +198,8 @@ export class Questiondetail implements OnInit {
       this.tweetText = this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) + " - See opposing views at ";
       
       //console.log(this.tweetText);
-      
+      this.meta.addTag({ name: 'description', content: this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) });
+
       this.meta.updateTag({ name: 'description', content: this.html2text(this.PostQuestionDetailModel.postQuestionDetail.Question) });
 
 

@@ -209,9 +209,11 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
           if (this.qid != -1) {
             this.PostQuestionDetailList[0].comments = data[0]['Comments'];
 
-            
+            this.meta.addTag({ name: 'description', content: data[0]['Question'] });
 
-            this.meta.updateTag({ name: 'description', content: data[0]['Question']});
+            this.meta.updateTag({ content: data[0]['Question'] }, 'name="description"');
+
+            //this.meta.updateTag({ name: 'description', content: data[0]['Question']});
 
 
             // <!-- Facebook meta data -->
