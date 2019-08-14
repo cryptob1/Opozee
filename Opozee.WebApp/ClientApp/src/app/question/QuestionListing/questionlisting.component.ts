@@ -78,11 +78,11 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     }
     else {
   //default to dailyfive
-      this.questionGetModel.isHashTag = true;
-      this.hashTag = true;
+      //this.questionGetModel.isHashTag = true;
+      //this.hashTag = true;
 
-      this.search = 'DailyFive';
-      this.questionGetModel.Search = this.search;
+      //this.search = 'DailyFive';
+      //this.questionGetModel.Search = this.search;
     }
 
     this.paramsSub = route.params.subscribe(params => {
@@ -97,7 +97,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   dropdownSort(kind: number) {
     //console.log(kind);
     this.isRecordLoaded = false;
-    //this.questionGetModel.PageNumber = localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
+    this.questionGetModel.PageNumber = 1;//localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
     this.questionGetModel.Sort = kind;
     localStorage.setItem('Sort', kind.toString());
     this.getAllQuestionlist(this.questionGetModel);
@@ -128,7 +128,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
   initialize() {
-    console.log("initialize");
+    
     this.getHastagsRecords();
     this.questionGetModel.isHashTag = this.hashTag;
     this.questionGetModel.qid = this.qid;
@@ -141,11 +141,11 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     else {
       this.questionGetModel.UserId = 0;
     }
+ 
+
+    this.questionGetModel.PageNumber = 1; //localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
+
     //this.questionGetModel.PageNumber = 1;
-
-    //this.questionGetModel.PageNumber = localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
-
-    this.questionGetModel.PageNumber = 1;
     this.questionGetModel.PageSize = 10;
     this.questionGetModel.TotalRecords = 5;
     this.questionGetModel.Sort = +localStorage.getItem('Sort');
@@ -153,7 +153,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     let savedht = localStorage.getItem('savedtab');
 
     console.log(savedht);
-    if (savedht == undefined || savedht == "" || savedht == null) {
+    if (savedht == undefined || savedht == "" || savedht == null || savedht == "All") {
 
       this.getAllQuestionlist(this.questionGetModel);
 
@@ -183,8 +183,12 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
       }, []);
 
       this.popularhastags = this.popularhastags.slice(0, 1);
-      
-      this.popularhastags.push({ 'HashTag': 'All' });
+
+       
+      this.popularhastags.unshift({ 'HashTag': 'All' });
+
+
+     // this.popularhastags.push({ 'HashTag': 'All' });
        
       //console.log(this.popularhastags);
 
@@ -209,12 +213,12 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
   private getAllQuestionlist(questionGetModel) {
-    
+    console.log(questionGetModel);
     this.userService.getAllQuestionlist(questionGetModel).subscribe(data => {
 
       if (data) {
         if (data.length > 0) {
-
+          console.log("got more results");
           this.PostQuestionDetailList = this.responseData(data, questionGetModel.PageSize);
           this.questionGetModel.TotalRecords = data[0].TotalRecordcount
 
@@ -318,26 +322,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     }
     catch (err) { }
   }
-
-  private getAllQuestionlistPaging(questionGetModel) {
-
-    this.userService.getAllQuestionlist(questionGetModel).subscribe(data => {
-
-      if (data) {
-        if (data.length > 0) {
-          this.PostQuestionDetailList = data;
-          this.questionGetModel.TotalRecords = data[0].TotalRecordcount;
-          this.PercentageCalc(data);
-        }
-        this.isRecordLoaded = true
-      }
-      this.isRecordLoaded = true
-
-    }, error => {
-      this.isRecordLoaded = false;
-    });
-  }
-
+   
    
 
   goToqDetail() {
@@ -353,18 +338,14 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
   switchTab(ht, index) {
 
-    if (ht != "DailyFive") {
-      localStorage.setItem('savedtab', ht);
-      localStorage.setItem('savedtabindex', index);
-    }
-    else {
-      localStorage.setItem('savedtab', '');
-      localStorage.setItem('savedtabindex', "0");
-    }
+    localStorage.setItem('savedtab', ht);
+    localStorage.setItem('savedtabindex', index);
+    
 
     this.isRecordLoaded = false;
 
-    this.questionGetModel.PageNumber = 1;
+
+    this.questionGetModel.PageNumber = 1;//localStorage.getItem('PageNumber') ? +localStorage.getItem('PageNumber') : 1;
     this.questionGetModel.PageSize = 10;
     this.questionGetModel.TotalRecords = 5;
 
@@ -384,93 +365,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     //console.log(this.questionGetModel);
     this.getAllQuestionlist(this.questionGetModel);
   }
-
-
-
-    //this.questionGetModel.isHashTag = this.hashTag;
-    //this.router.navigateByUrl('/questionlistings/' + hashtag, { skipLocationChange: true }).then(() =>
-    //  this.router.navigate(['/questions/', hashtag]));
-    //this.router.navigate(['/questions'], { queryParams: { tag: 1 } });
-  
-
-  PagingPagesload(PageNumber, PageSize) {
-
-    this.questionGetModel.Search = this.search;
-    this.questionGetModel.PageNumber = PageNumber;
-    this.questionGetModel.PageSize = PageSize
-    this.getAllQuestionlistPaging(this.questionGetModel);
-    localStorage.setItem('PageNumber', PageNumber);
-  }
-
-  //setPageonpageLoad(page, TotalRecords) {
-  //  this.pager = this.getPager(TotalRecords, page);
-  //}
-
-  //setPage(page, TotalRecords) {
-
-  //  this.isRecordLoaded = false;
-  //  localStorage.setItem('PageNumber', page);
-  //  this.pager = this.getPager(this.questionGetModel.TotalRecords, page);
-
-  //  if (this.pager.totalPages >= page) {
-  //    this.PagingPagesload(this.pager.currentPage, this.pager.pageSize);
-  //  }
-
-  //  this.isRecordLoaded = true;
-  //  //window.scrollTo(0, 0);
-  //}
-
-  //getPager(totalItems: number, currentPage: number = 1, pageSize: number = 10) {
-  //  // calculate total pages
-
-  //  let totalPages = Math.ceil(totalItems / pageSize);
-
-  //  // ensure current page isn't out of range
-  //  if (currentPage < 1) {
-  //    currentPage = 1;
-  //  } else if (currentPage > totalPages) {
-  //    currentPage = totalPages;
-  //  }
-
-  //  let startPage: number, endPage: number;
-  //  if (totalPages <= 10) {
-  //    // less than 10 total pages so show all
-  //    startPage = 1;
-  //    endPage = totalPages;
-  //  } else {
-  //    // more than 10 total pages so calculate start and end pages
-  //    if (currentPage <= 6) {
-  //      startPage = 1;
-  //      endPage = 10;
-  //    } else if (currentPage + 4 >= totalPages) {
-  //      startPage = totalPages - 9;
-  //      endPage = totalPages;
-  //    } else {
-  //      startPage = currentPage - 5;
-  //      endPage = currentPage + 4;
-  //    }
-  //  }
-
-  //  // calculate start and end item indexes
-  //  let startIndex = (currentPage - 1) * pageSize;
-  //  let endIndex = Math.min(startIndex + pageSize - 1, totalItems - 1);
-
-  //  // create an array of pages to ng-repeat in the pager control
-  //  let pages = Array.from(Array((endPage + 1) - startPage).keys()).map(i => startPage + i);
-
-  //  // return object with all pager properties required by the view
-  //  return {
-  //    totalItems: totalItems,
-  //    currentPage: currentPage,
-  //    pageSize: pageSize,
-  //    totalPages: totalPages,
-  //    startPage: startPage,
-  //    endPage: endPage,
-  //    startIndex: startIndex,
-  //    endIndex: endIndex,
-  //    pages: pages
-  //  };
-  //}
+   
  
   onScroll(event) {
 
@@ -479,6 +374,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     //console.log(window.pageYOffset);
     this.questionGetModel.PageNumber += 1;
     this.questionGetModel.PageSize = 10;
+    localStorage.setItem('PageNumber', ""+this.questionGetModel.PageNumber );
 
     //debugger
     this.userService.getAllQuestionlist(this.questionGetModel).subscribe(data => {
