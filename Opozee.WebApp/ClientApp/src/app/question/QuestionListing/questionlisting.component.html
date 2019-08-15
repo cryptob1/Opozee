@@ -315,14 +315,14 @@
                   <br />
                 </div>
 
-                <div *ngIf="temp?.Link" class="message-container  mb-0 question-link" [innerHTML]="'Link:'+temp?.Link | linky:{stripPrefix : true, truncate:15}">
-                </div>
-
+             
                 <strong>
                   <a href="javascript:void(0)" style="font-size: 18px;color:#000;" [routerLink]="['/questiondetail/', temp?.Id]">
                     <div class="message-container  mb-0 question-text" [innerHTML]=" temp?.Question | linky:{stripPrefix : true, truncate:15}| emojis "></div>
                   </a>
 
+                  <div *ngIf="temp?.Link" class="message-container  mb-0 question-link" [innerHTML]="''+temp?.Link | linky:{stripPrefix : true, truncate:15}">
+                  </div>
 
                 </strong>
 
