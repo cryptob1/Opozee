@@ -71,7 +71,7 @@
 
                   <div ExternalLink>
                     <div [class]="[temp?.IsAgree ? 'feedback-badge badge-yes' : 'feedback-badge badge-no']">
-                      {{temp?.IsAgree ? 'Yes' : 'No'}}
+                      {{temp?.IsAgree ? 'Agree' : 'Oppose'}}
                     </div>
                     <small class="belief-time"><i>{{temp?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
                     <p class="message-container" [innerHTML]="temp?.Comment | linky:{stripPrefix : true, truncate:15} ">
@@ -285,7 +285,7 @@
                   <span> </span>
                   <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
                     <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
-                    <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
+                    <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Agree : {{temp.percentage | number:'1.0-0'}}  %</span>
 
                   </div>
                 </div>

@@ -40,7 +40,7 @@
                       <!--<span class="percentage_yes" *ngIf="bounty?.YesCount >0 || bounty?.NoCount>0">Yes : {{bounty?.percentage | number:'1.0-0'}}  %</span>-->
 
                     <div class="liked_ones clearfix yes_feedback" *ngIf="bounty?.MostYesLiked">
-                      <div class="feedback-badge badge-yes">Yes</div>
+                      <div class="feedback-badge badge-yes">Agree</div>
                       <div ExternalLink>
                         <h1>  Yes</h1>
                         <b>@{{bounty?.MostYesLiked?.CommentedUserName}}:</b>
@@ -50,9 +50,9 @@
                     </div>
 
                     <div class="liked_ones clearfix no_feedback" *ngIf="bounty?.MostNoLiked">
-                      <div class="feedback-badge badge-no">No</div>
+                      <div class="feedback-badge badge-no">Oppose</div>
                       <div ExternalLink>
-                        <h1>  No</h1>
+                        <h1>  Oppose</h1>
                         <b>@{{bounty?.MostNoLiked?.CommentedUserName}}:</b>
                         <small class="message-container" [innerHTML]="bounty?.MostNoLiked.Comment | linky:{stripPrefix : true, truncate:15} | emojis "></small>
                         <small><sup>{{bounty?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</sup></small>
@@ -188,7 +188,7 @@
                       <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
 
 
-                      <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
+                      <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Agree : {{temp.percentage | number:'1.0-0'}}  %</span>
 
 
                     </div>
@@ -200,7 +200,7 @@
 
                   <div ExternalLink>
 
-                    <div class="feedback-badge badge-yes">Yes</div>
+                    <div class="feedback-badge badge-yes">Agree</div>
                     <small class="belief-time"><i>{{temp?.MostYesLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
                     <p class="message-container" [innerHTML]=" temp?.MostYesLiked?.Comment | linky:{stripPrefix : true, truncate:15} | emojis  "></p>
 
@@ -245,7 +245,7 @@
                 <div class="liked_ones clearfix no_feedback" *ngIf="temp.MostNoLiked">
                   <div ExternalLink>
 
-                    <div class="feedback-badge badge-no">No</div>
+                    <div class="feedback-badge badge-no">Oppose</div>
                     <small class="belief-time"><i>{{temp?.MostNoLiked?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
                     <p class="message-container" [innerHTML]="temp?.MostNoLiked?.Comment | linky:{stripPrefix : true, truncate:15} | emojis   "></p>
                     <div class="image_belief" *ngIf="temp?.MostNoLiked?.BeliefImage">
@@ -336,7 +336,7 @@
                     <span> </span>
                     <div class="anlysis_slider" style="width:100%;   " *ngIf="((temp.YesCount)>0 || (temp.NoCount)>0) ">
                       <span [style.width.%]="temp.percentage | number:'1.0-0'" class="color yes_div"></span>
-                      <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Yes : {{temp.percentage | number:'1.0-0'}}  %</span>
+                      <span class="percentage_yes" *ngIf="temp.YesCount >0 || temp.NoCount>0">Agree : {{temp.percentage | number:'1.0-0'}}  %</span>
 
                     </div>
                   </div>
