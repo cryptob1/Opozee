@@ -1965,7 +1965,7 @@ namespace opozee.Controllers.API
 
                     questionDetail = (from q in db.Questions
                                       join u in db.Users on q.OwnerUserID equals u.UserID
-                                      where q.IsDeleted == false && !q.HashTags.Contains("DailyFive")
+                                      where q.IsDeleted == false && !q.HashTags.Contains("DailyFive") && !q.HashTags.Contains("Deals")
                                       select new PostQuestionDetailWebModel
                                       {
                                           Id = q.Id,
@@ -2072,7 +2072,7 @@ namespace opozee.Controllers.API
                                       }).ToList(); //.OrderByDescending(p => p.LastActivityTime).Skip(skip).Take(pageSize).ToList();
                 }
 
-                if (model.Search.ToLower() == "dailyfive") //sort by posted time
+                if (model.Search.ToLower() == "dailyfive" || model.Search.ToLower() == "deals") //sort by posted time
                 {
                     questionDetail = questionDetail.OrderByDescending(p => p.CreationDate).Skip(skip).Take(pageSize).ToList();
                 }
@@ -2881,7 +2881,7 @@ namespace opozee.Controllers.API
             //    OpozeeLibrary.Utilities.LogHelper.CreateLog3(ex, Request);
             //}
 
-            string[] tags = { "DailyFive" };
+            string[] tags = { "DailyFive", "Deals" };
 
             foreach (var tag in tags)
             {

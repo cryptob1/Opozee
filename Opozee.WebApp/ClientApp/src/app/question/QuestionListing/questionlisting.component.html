@@ -350,7 +350,7 @@
 
                       <div ExternalLink>
                         <div [class]="[temp1?.IsAgree ? 'feedback-badge badge-yes' : 'feedback-badge badge-no']">
-                          {{temp1?.IsAgree ? 'Yes' : 'No'}}
+                          {{temp1?.IsAgree ? 'Agree' : 'Oppose'}}
                         </div>
                         <small class="belief-time"><i>{{temp1?.CreationDate + 'Z'| date:"medium" | timeAgo }}</i></small>
                         <p class="message-container" [innerHTML]="temp1?.Comment | linky:{stripPrefix : true, truncate:15} ">

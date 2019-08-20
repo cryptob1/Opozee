@@ -34,36 +34,39 @@
                 <thead>
                     <tr>
                         @*<th>
-                                @Html.DisplayNameFor(model => model.Question)
-                            </th>*@
+            @Html.DisplayNameFor(model => model.Question)
+        </th>*@
                         <th>
                             @Html.ActionLink("Question", "Index", new { userId = ViewBag.UserId, sortOrder = ViewBag.QuestionSortParm, currentFilter = ViewBag.CurrentFilter })
                         </th>
                         @*<th>
-                                @Html.DisplayNameFor(model => model.OwnerUserName)
-                            </th>*@
+            @Html.DisplayNameFor(model => model.OwnerUserName)
+        </th>*@
                         <th>
                             @Html.ActionLink("UserName", "Index", new { userId = ViewBag.UserId, sortOrder = ViewBag.UserNameSortParm, currentFilter = ViewBag.CurrentFilter })
                         </th>
                         @*<th>
-                                @Html.DisplayNameFor(model => model.HashTags)
-                            </th>*@
+            @Html.DisplayNameFor(model => model.HashTags)
+        </th>*@
                         <th>
                             @Html.ActionLink("HashTags", "Index", new { userId = ViewBag.UserId, sortOrder = ViewBag.HashSortParm, currentFilter = ViewBag.CurrentFilter })
                         </th>
                         @*<th>
-                                @Html.DisplayNameFor(model => model.OwnerUserName)
-                            </th>*@
+            @Html.DisplayNameFor(model => model.OwnerUserName)
+        </th>*@
                         @*<th>
-                                @Html.DisplayNameFor(model => model.CreationDate)
-                            </th>*@
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </th>*@
+                        <th>
+                            @Html.ActionLink("Link", "Index", new { userId = ViewBag.UserId, sortOrder = ViewBag.LinkSortParm, currentFilter = ViewBag.CurrentFilter })
+                        </th>
+ 
                         <th>
                             @Html.ActionLink("CreationDate", "Index", new { userId = ViewBag.UserId, sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
                         </th>
-
                         @*<th>
-                                @Html.DisplayNameFor(model => model.ModifiedDate)
-                            </th>*@
+            @Html.DisplayNameFor(model => model.ModifiedDate)
+        </th>*@
                         <th>Actions</th>
                     </tr>
                 </thead>

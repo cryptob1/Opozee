@@ -22,6 +22,9 @@ namespace opozee.Controllers.Admin
             ViewBag.QuestionSortParm = String.IsNullOrEmpty(sortOrder) ? "question_desc" : "";
             ViewBag.HashSortParm = String.IsNullOrEmpty(sortOrder) ? "hashtags_desc" : "";
             ViewBag.UserNameSortParm = String.IsNullOrEmpty(sortOrder) ? "user_desc" : "";
+            ViewBag.LinkSortParm = String.IsNullOrEmpty(sortOrder) ? "link_desc" : "";
+            ViewBag.DetailSortParm = String.IsNullOrEmpty(sortOrder) ? "link_desc" : "";
+
             ViewBag.UserId = userId;
             ViewBag.DateSortParm = sortOrder == "date" ? "date_desc" : "date";
             if (searchString != null)
@@ -48,7 +51,9 @@ namespace opozee.Controllers.Admin
                                  OwnerUserName = u.UserName,
                                  //UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
                                  HashTags = q.HashTags,
-                                 CreationDate = q.CreationDate
+                                 CreationDate = q.CreationDate,
+                                 Link= q.Link
+                                 
                              }).ToList();
             }
             else
@@ -63,7 +68,8 @@ namespace opozee.Controllers.Admin
                                  OwnerUserName = u.UserName,
                                  //UserImage = string.IsNullOrEmpty(u.ImageURL) ? "" : u.ImageURL,
                                  HashTags = q.HashTags,
-                                 CreationDate = q.CreationDate
+                                 CreationDate = q.CreationDate,
+                                 Link=q.Link
                              }).ToList();
             }
 
@@ -95,6 +101,10 @@ namespace opozee.Controllers.Admin
                 case "date_desc":
                     questList = questList.OrderByDescending(s => s.CreationDate).ToList();
                     break;
+                case "link_desc":
+                    questList = questList.OrderByDescending(s => s.Link).ToList();
+                    break;
+               
                 default:  // Name ascending 
                     questList = questList.OrderBy(s => s.Question).ToList();
                     break;
@@ -199,7 +209,9 @@ namespace opozee.Controllers.Admin
                                          Question = q.PostQuestion,
                                          OwnerUserID = q.OwnerUserID,
                                          OwnerUserName = u.UserName,
-                                         HashTags = q.HashTags
+                                         HashTags = q.HashTags,
+                                         Link=q.Link,
+                                         Detail=q.Detail
                                      }).FirstOrDefault();
             if (question == null)
             {
@@ -223,6 +235,8 @@ namespace opozee.Controllers.Admin
                 question.Id = postQuestion.Id;
                 question.ModifiedDate = DateTime.Now;
                 question.OwnerUserID = postQuestion.OwnerUserID;
+                question.Detail= postQuestion.Detail;
+                question.Link = postQuestion.Link;
 
                 db.Entry(question).State = EntityState.Modified;
                 db.SaveChanges();

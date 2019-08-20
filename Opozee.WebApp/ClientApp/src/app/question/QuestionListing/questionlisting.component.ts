@@ -152,14 +152,14 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
     let savedht = localStorage.getItem('savedtab');
 
-    console.log(savedht);
+    //console.log(savedht);
     if (savedht == undefined || savedht == "" || savedht == null || savedht == "All") {
 
       this.getAllQuestionlist(this.questionGetModel);
 
     }
     else {
-      console.log("switch tab");
+      //console.log("switch tab");
       this.switchTab(savedht, +localStorage.getItem('savedtabindex'));
     }
     //this.getBountyQuestionsByDates();
@@ -182,13 +182,13 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
         return arr;
       }, []);
 
-      this.popularhastags = this.popularhastags.slice(0, 1);
+      //this.popularhastags = this.popularhastags.slice(0, 1);
 
        
-      this.popularhastags.unshift({ 'HashTag': 'All' });
+      //this.popularhastags.unshift({ 'HashTag': 'All' });
 
 
-     // this.popularhastags.push({ 'HashTag': 'All' });
+      this.popularhastags.push({ 'HashTag': 'All' });
        
       //console.log(this.popularhastags);
 
@@ -218,7 +218,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
       if (data) {
         if (data.length > 0) {
-          console.log("got more results");
+          
           this.PostQuestionDetailList = this.responseData(data, questionGetModel.PageSize);
           this.questionGetModel.TotalRecords = data[0].TotalRecordcount
 

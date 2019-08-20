@@ -62,13 +62,13 @@
                     </strong>
                     <div *ngIf="temp?.IsAgree">
                       <strong class="text-success">
-                        <a data-title="Y" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="'@<b>'+temp?.Name+':</b> '+temp?.Opinion "></a>
+                        <a data-title="A" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="'@<b>'+temp?.Name+':</b> '+temp?.Opinion "></a>
                       </strong>
                     </div>
 
                     <div *ngIf="!temp?.IsAgree">
                       <strong class="text-danger">
-                        <a data-title="N" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="'@<b>'+temp?.Name+':</b> '+temp?.Opinion ">
+                        <a data-title="O" style=" font-family: 'Poppins', sans-serif;  font-size: 14px;" [routerLink]="['/questiondetail/', temp.QuestionId]" [innerHTML]="'@<b>'+temp?.Name+':</b> '+temp?.Opinion ">
                         </a>
                       </strong>
                     </div>

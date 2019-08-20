@@ -16,6 +16,11 @@ namespace Opozee.Models.API
         public string HashTags { get; set; }
         public string CreationDate { get; set; }
         public string ModifiedDate { get; set; }
+
+        public Nullable<bool> IsSlider { get; set; }
+        public string Detail { get; set; }
+        public string Link { get; set; }
+
         ////public List<UsersList> User { get; set; }
         //[Required]
         //[Display(Name = "User")]
