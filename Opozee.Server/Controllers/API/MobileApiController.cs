@@ -1029,7 +1029,7 @@ namespace opozee.Controllers.API
                 questionDetail.PostQuestionDetail = db.Database.SqlQuery<PostQuestionDetailMobile>("SP_PostQuestionDetailMobile @Search,@NotLike",
                         new SqlParameter("@Search", ""),
                         new SqlParameter("@NotLike", "DailyFive"),
-                        new SqlParameter("@NotLike", "Deals")).ToList();
+                        new SqlParameter("@NotLike1", "Deals")).ToList();
                 }
                 else
                 {

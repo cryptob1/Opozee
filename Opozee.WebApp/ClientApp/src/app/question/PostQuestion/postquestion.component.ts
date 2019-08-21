@@ -72,10 +72,15 @@ export class PostQuestionComponent implements OnInit {
   ngOnInit() {
     
     //this.loadAllUsers();
+    const reg = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi
+      //'@^(https?|ftp)://[^\s/$.?#].[^\s]*$@iS';
+
+      //'(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+
     this.questionPostForm = this.formBuilder.group({
       postQuestion: ['', [Validators.required, Validators.maxLength(299)]],
       hashtags: [''],
-      link: ['', [Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')]],
+      link: ['', [Validators.pattern(reg)]],
       ownerUserId: this.localStorageUser.Id 
     });
 
