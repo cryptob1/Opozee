@@ -27,6 +27,8 @@ using System.IO;
 using Opozee.Server.Models.API;
 using Opozee.Server.Models;
 using System.Text.RegularExpressions;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace opozee.Controllers.API
 {
@@ -652,6 +654,25 @@ namespace opozee.Controllers.API
                         db.Notifications.Add(notification);
                         db.SaveChanges();
                     }
+
+
+
+                    //create and store an image of the view that can be used to share later
+                    var filePath = HttpContext.Current.Server.MapPath("~/Content/upload/ShareImages/" + opinionID + ".png");
+                    var template = "";
+                    if (OpinionAgreeStatus == "0")
+                    {
+                        template = HttpContext.Current.Server.MapPath("~/Content/upload/ShareImages/template-oppose.png");
+                    }
+                    else
+                    {
+                        template = HttpContext.Current.Server.MapPath("~/Content/upload/ShareImages/template-agree.png");
+                    }
+                    DrawText(quest.PostQuestion, Regex.Replace(Comment, @"<a\b[^>]+>([^<]*(?:(?!</a)<[^<]*)*)</a>", "$1"), filePath, template);
+
+
+
+
                     return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, opinion, "Opinion"));
                 }
             }
@@ -664,10 +685,83 @@ namespace opozee.Controllers.API
         }
 
 
-
-
-
         #endregion
+
+        public MatchCollection SplitToLines(string stringToSplit, int maximumLineLength)
+        {
+            return Regex.Matches(stringToSplit, @"(.{1," + maximumLineLength + @"})(?:\s|$)");
+        }
+
+        private void DrawText(String post, String viewpoint, string filePath, string template)
+        {
+
+
+            FontFamily fontFamily = new FontFamily("Arial");
+            Font font = new Font(
+               fontFamily,
+               16,
+               FontStyle.Regular,
+               GraphicsUnit.Pixel);
+
+
+            Color textColor = Color.White;
+            Color backColor = Color.Black;
+
+            //first, create a dummy bitmap just to get a graphics object
+            Image img = (Bitmap)Image.FromFile(template);//load the image file;
+            Graphics drawing = Graphics.FromImage(img);
+
+            PointF firstLocation = new PointF(78f, 60f);
+            PointF secondLocation = new PointF(78f, 300f);
+
+
+            using (Graphics graphics = Graphics.FromImage(img))
+            {
+                using (Font arialFont = new Font("Arial", 36))
+                {
+                    foreach (Match match in SplitToLines(post, 35))
+                    {
+                        GroupCollection groups = match.Groups;
+
+                        graphics.DrawString(groups[0].Value, arialFont, Brushes.Black, firstLocation);
+                        firstLocation.Y = firstLocation.Y + 50f;
+                    }
+                }
+                //secondLocation.Y = firstLocation.Y;
+                using (Font arialFont = new Font("Arial", 20))
+                {
+                    foreach (Match match in SplitToLines(WebUtility.HtmlDecode(viewpoint), 50))
+                    {
+                        GroupCollection groups = match.Groups;
+
+                        graphics.DrawString(groups[0].Value, arialFont, Brushes.Black, secondLocation);
+                        secondLocation.Y = secondLocation.Y + 40f;
+                    }
+
+                }
+
+
+            }
+
+            using (MemoryStream memory = new MemoryStream())
+            {
+                using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    img.Save(memory, ImageFormat.Jpeg);
+                    byte[] bytes = memory.ToArray();
+                    fs.Write(bytes, 0, bytes.Length);
+                }
+            }
+
+
+            //textBrush.Dispose();
+            drawing.Dispose();
+            img.Dispose();
+
+
+        }
+
+
 
         public string GenerateTagsForQuestion(bool? like, bool? dislike, bool? comment, string UserName)
         {

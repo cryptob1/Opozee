@@ -947,9 +947,15 @@ namespace opozee.Controllers.API
                 int questID = quest.Id;
                 quest = db.Questions.Find(questID);
 
+
+
+
                 //return ObjToken;
                 return Request.CreateResponse(HttpStatusCode.OK, JsonResponse.GetResponse(ResponseCode.Success, quest.Id, "Question"));
                 //}
+
+
+
             }
             catch (Exception ex)
             {
@@ -960,6 +966,8 @@ namespace opozee.Controllers.API
         }
 
         #endregion
+
+
 
         [Authorize]
         [HttpPost]
@@ -2945,6 +2953,9 @@ namespace opozee.Controllers.API
             {
                 imagePath = null;
             }
+
+
+
             Token ObjToken = null;
             Opinion ObjOpinion = new Opinion();
             Notification notification = null;
@@ -3080,12 +3091,146 @@ namespace opozee.Controllers.API
                     db.SaveChanges();
                 }
 
+
+                //create and store an image of the view that can be used to share later
+                var filePath = HttpContext.Current.Server.MapPath("~/Content/upload/ShareImages/" + CommentId + ".png");
+                var template ="";
+                if (OpinionAgreeStatus=="0")
+                {
+                    template= HttpContext.Current.Server.MapPath("~/Content/upload/ShareImages/template-oppose.png");
+                }
+                else
+                {
+                    template = HttpContext.Current.Server.MapPath("~/Content/upload/ShareImages/template-agree.png");
+                }
+                DrawText(quest.PostQuestion, Regex.Replace(Comment, @"<a\b[^>]+>([^<]*(?:(?!</a)<[^<]*)*)</a>", "$1") , filePath, template);
+
+             
+                     
+
+
             }
             catch (Exception ex)
             {
 
             }
             return ObjToken;
+        }
+
+
+        public MatchCollection SplitToLines(string stringToSplit, int maximumLineLength)
+        {
+            return Regex.Matches(stringToSplit, @"(.{1," + maximumLineLength + @"})(?:\s|$)");
+        }
+
+        
+
+        private void DrawText(String post, String viewpoint, string filePath, string template )
+        {
+
+          
+            FontFamily fontFamily = new FontFamily("Arial");
+            Font font = new Font(
+               fontFamily,
+               16,
+               FontStyle.Regular,
+               GraphicsUnit.Pixel);
+
+            
+            Color textColor= Color.White;
+            Color backColor = Color.Black;
+
+            //first, create a dummy bitmap just to get a graphics object
+            Image img = (Bitmap)Image.FromFile(template);//load the image file;
+            Graphics drawing = Graphics.FromImage(img);
+
+            PointF firstLocation = new PointF(78f, 60f);
+            PointF secondLocation = new PointF(78f, 340f);
+            
+
+            using (Graphics graphics = Graphics.FromImage(img))
+            {
+                using (Font arialFont = new Font("Arial", 36))
+                {
+                    foreach (Match match in SplitToLines(post, 35)){
+                        GroupCollection groups = match.Groups;
+
+                        graphics.DrawString(groups[0].Value, arialFont, Brushes.Black, firstLocation);
+                        firstLocation.Y = firstLocation.Y + 50f;
+                    }
+                }
+                //secondLocation.Y = firstLocation.Y;
+                using (Font arialFont = new Font("Arial", 20))
+                {
+                    foreach (Match match in SplitToLines( WebUtility.HtmlDecode(viewpoint), 50))
+                    {
+                        GroupCollection groups = match.Groups;
+
+                        graphics.DrawString(groups[0].Value, arialFont, Brushes.Black, secondLocation);
+                        secondLocation.Y = secondLocation.Y + 40f;
+                    }
+ 
+                }
+
+               
+            }
+
+            ////measure the string to see how big the image needs to be
+            //SizeF textSize = drawing.MeasureString(post+viewpoint+"                     ", font);
+
+            ////free up the dummy image and old graphics object
+            //img.Dispose();
+            //drawing.Dispose();
+            //int row = 12;
+
+            ////create a new image of the right size
+            //img = new Bitmap((int)textSize.Width, (int)textSize.Height);
+
+            //drawing = Graphics.FromImage(img);
+
+            ////paint the background
+            //drawing.Clear(backColor);
+
+            ////create a brush for the text
+            //Brush textBrush = new SolidBrush(textColor);
+
+            //drawing.DrawString(post, font, textBrush, 0, 0);
+
+
+            //drawing.DrawString(viewpoint, font, textBrush, 0, 0);
+
+            //drawing.Save();
+
+
+            using (MemoryStream memory = new MemoryStream())
+            {
+                using (FileStream fs = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    img.Save(memory, ImageFormat.Jpeg);
+                    byte[] bytes = memory.ToArray();
+                    fs.Write(bytes, 0, bytes.Length);
+                }
+            }
+
+
+            //textBrush.Dispose();
+            drawing.Dispose();
+            img.Dispose();
+
+
+        }
+
+        private static ImageCodecInfo GetEncoderInfo(String mimeType)
+        {
+            int j;
+            ImageCodecInfo[] encoders;
+            encoders = ImageCodecInfo.GetImageEncoders();
+            for (j = 0; j < encoders.Length; ++j)
+            {
+                if (encoders[j].MimeType == mimeType)
+                    return encoders[j];
+            }
+            return null;
         }
 
         public Opinion GetOpinionById(int CommentId)
