@@ -3103,10 +3103,11 @@ namespace opozee.Controllers.API
                 {
                     template = HttpContext.Current.Server.MapPath("~/Content/upload/ShareImages/template-agree.png");
                 }
-                DrawText(quest.PostQuestion, Regex.Replace(Comment, @"<a\b[^>]+>([^<]*(?:(?!</a)<[^<]*)*)</a>", "$1") , filePath, template);
+                DrawText(Regex.Replace(quest.PostQuestion, @"<a\b[^>]+>([^<]*(?:(?!</a)<[^<]*)*)</a>", "$1"), Regex.Replace(Comment, @"<a\b[^>]+>([^<]*(?:(?!</a)<[^<]*)*)</a>", "$1"), filePath, template);
 
-             
-                     
+
+
+
 
 
             }
@@ -3150,9 +3151,9 @@ namespace opozee.Controllers.API
 
             using (Graphics graphics = Graphics.FromImage(img))
             {
-                using (Font arialFont = new Font("Arial", 36))
+                using (Font arialFont = new Font("Arial", 30))
                 {
-                    foreach (Match match in SplitToLines(post, 35)){
+                    foreach (Match match in SplitToLines(post, 38)){
                         GroupCollection groups = match.Groups;
 
                         graphics.DrawString(groups[0].Value, arialFont, Brushes.Black, firstLocation);
@@ -3162,7 +3163,7 @@ namespace opozee.Controllers.API
                 //secondLocation.Y = firstLocation.Y;
                 using (Font arialFont = new Font("Arial", 20))
                 {
-                    foreach (Match match in SplitToLines( WebUtility.HtmlDecode(viewpoint), 50))
+                    foreach (Match match in SplitToLines(WebUtility.HtmlDecode(viewpoint).Replace("</div>","").Replace("<div>",""), 65))
                     {
                         GroupCollection groups = match.Groups;
 
