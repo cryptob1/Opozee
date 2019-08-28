@@ -128,7 +128,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
   initialize() {
-    
+    console.log('initialize()');
     this.getHastagsRecords();
     this.questionGetModel.isHashTag = this.hashTag;
     this.questionGetModel.qid = this.qid;
@@ -151,10 +151,13 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     this.questionGetModel.Sort = +localStorage.getItem('Sort');
 
     let savedht = localStorage.getItem('savedtab');
-
+    let savedtabindex = localStorage.getItem('savedtabindex');
+      
     //console.log(savedht);
     if (savedht == undefined || savedht == "" || savedht == null || savedht == "All") {
-
+      if (savedtabindex != ""){
+        this.tabIndex = +savedtabindex;
+      }
       this.getAllQuestionlist(this.questionGetModel);
 
     }
