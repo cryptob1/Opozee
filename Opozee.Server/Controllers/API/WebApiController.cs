@@ -3151,9 +3151,11 @@ namespace opozee.Controllers.API
 
             using (Graphics graphics = Graphics.FromImage(img))
             {
-                using (Font arialFont = new Font("Arial", 30))
+
+                using (Font arialFont = new Font("Arial", 28))
                 {
-                    foreach (Match match in SplitToLines(post, 38)){
+                    foreach (Match match in SplitToLines(post, 40))
+                    {
                         GroupCollection groups = match.Groups;
 
                         graphics.DrawString(groups[0].Value, arialFont, Brushes.Black, firstLocation);

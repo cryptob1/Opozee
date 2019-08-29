@@ -715,11 +715,13 @@ namespace opozee.Controllers.API
             PointF secondLocation = new PointF(78f, 340f);
 
 
+           
+
             using (Graphics graphics = Graphics.FromImage(img))
             {
-                using (Font arialFont = new Font("Arial", 30))
+                using (Font arialFont = new Font("Arial", 28))
                 {
-                    foreach (Match match in SplitToLines(post, 38)) {
+                    foreach (Match match in SplitToLines(post, 40)) {
                         GroupCollection groups = match.Groups;
 
                         graphics.DrawString(groups[0].Value, arialFont, Brushes.Black, firstLocation);
@@ -767,15 +769,15 @@ namespace opozee.Controllers.API
             string Tag = "";
             if (like == true && dislike == false && comment == false)
             {
-                Tag = UserName + " has upvoted a belief on your question.";
+                Tag = UserName + " has upvoted a viewpoint on your post.";
             }
             else if (dislike == true && like == false && comment == false)
             {
-                Tag = UserName + " has downvoted a belief on your question.";
+                Tag = UserName + " has downvoted a viewpoint on your post.";
             }
             else if (comment == true && like == false && dislike == false)
             {
-                Tag = UserName + " has posted a belief on your question.";
+                Tag = UserName + " has posted a viewpoint on your post.";
             }
 
             return Tag;

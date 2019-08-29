@@ -128,7 +128,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
   }
 
   initialize() {
-    console.log('initialize()');
+    
     this.getHastagsRecords();
     this.questionGetModel.isHashTag = this.hashTag;
     this.questionGetModel.qid = this.qid;
