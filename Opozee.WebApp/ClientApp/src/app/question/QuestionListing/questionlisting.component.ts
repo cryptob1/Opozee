@@ -151,17 +151,21 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     this.questionGetModel.Sort = +localStorage.getItem('Sort');
 
     let savedht = localStorage.getItem('savedtab');
-
-    //console.log(savedht);
-    if (savedht == undefined || savedht == "" || savedht == null || savedht == "All") {
-
+    let savedtabindex = +localStorage.getItem('savedtabindex');
+    if (savedht == 'All') {
       this.getAllQuestionlist(this.questionGetModel);
 
     }
-    else {
-      //console.log("switch tab");
-      this.switchTab(savedht, +localStorage.getItem('savedtabindex'));
+    //console.log(savedht);
+    if (savedht == undefined || savedht == "" || savedht == null ) {
+      savedht = 'DailyFive';
+      savedtabindex = 0;
+     
     }
+
+    this.switchTab(savedht, savedtabindex );
+
+    
     //this.getBountyQuestionsByDates();
 
   }
