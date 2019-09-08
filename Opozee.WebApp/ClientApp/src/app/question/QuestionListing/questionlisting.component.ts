@@ -151,21 +151,20 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
     this.questionGetModel.Sort = +localStorage.getItem('Sort');
 
     let savedht = localStorage.getItem('savedtab');
-    let savedtabindex = +localStorage.getItem('savedtabindex');
-    if (savedht == 'All') {
+    let savedtabindex = localStorage.getItem('savedtabindex');
+      
+    //console.log(savedht);
+    if (savedht == undefined || savedht == "" || savedht == null || savedht == "All") {
+      if (savedtabindex != ""){
+        this.tabIndex = +savedtabindex;
+      }
       this.getAllQuestionlist(this.questionGetModel);
 
     }
-    //console.log(savedht);
-    if (savedht == undefined || savedht == "" || savedht == null ) {
-      savedht = 'DailyFive';
-      savedtabindex = 0;
-     
+    else {
+      //console.log("switch tab");
+      this.switchTab(savedht, +localStorage.getItem('savedtabindex'));
     }
-
-    this.switchTab(savedht, savedtabindex );
-
-    
     //this.getBountyQuestionsByDates();
 
   }
@@ -228,6 +227,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
 
           if (this.qid != -1) {
             this.PostQuestionDetailList[0].comments = data[0]['Comments'];
+
 
             this.meta.addTag({ name: 'description', content: data[0]['Question'] });
 
@@ -330,6 +330,7 @@ export class QuestionListingComponent implements OnInit, OnDestroy {
    
 
   goToqDetail() {
+    
     this.router.navigate(['/questiondetail/', this.qid]);
   }
 
