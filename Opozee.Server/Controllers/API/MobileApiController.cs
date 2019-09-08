@@ -1123,8 +1123,8 @@ namespace opozee.Controllers.API
                 
                 questionDetail.PostQuestionDetail = db.Database.SqlQuery<PostQuestionDetailMobile>("SP_PostQuestionDetailMobile @Search,@NotLike",
                         new SqlParameter("@Search", ""),
-                        new SqlParameter("@NotLike", "DailyFive"),
-                        new SqlParameter("@NotLike1", "Deals")).ToList();
+                        new SqlParameter("@NotLike", "TrendingIndia"),
+                        new SqlParameter("@NotLike1", "TrendingUSA")).ToList();
                 }
                 else
                 {
@@ -1132,7 +1132,7 @@ namespace opozee.Controllers.API
                          new SqlParameter("@Search", Search)).ToList();
                 }
 
-                if (Search.ToLower() == "dailyfive" || Search.ToLower() == "deals") //sort by posted time
+                if (Search.ToLower() == "TrendingUSA" || Search.ToLower() == "TrendingIndia") //sort by posted time
                 {
                     questionDetail.PostQuestionDetail = questionDetail.PostQuestionDetail.OrderByDescending(p => p.CreationDate).ToPagedList(Pageindex - 1, Pagesize).ToList();
                 }
@@ -2803,8 +2803,8 @@ namespace opozee.Controllers.API
 
 
                 //}
-                TopPopularHashTags.Add(new PopularTag { HashTag = "DailyFive", Count = 0 });
-                TopPopularHashTags.Add(new PopularTag { HashTag = "Deals", Count = 1 });
+                TopPopularHashTags.Add(new PopularTag { HashTag = "TrendingUSA", Count = 0 });
+                TopPopularHashTags.Add(new PopularTag { HashTag = "TrendingIndia", Count = 1 });
                 TopPopularHashTags.Add(new PopularTag { HashTag = "All", Count = 99999 });
 
 
