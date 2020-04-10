@@ -28,7 +28,7 @@
     "angular-linky": "^1.2.2",
     "angular5-social-login": "^1.0.9",
     "aspnet-prerendering": "^3.0.1",
-    "auth0-js": "^9.10.1",
+    "auth0-js": "^9.13.2",
     "bootstrap": "^3.3.7",
     "connect": "^3.6.6",
     "core-js": "^2.4.1",
